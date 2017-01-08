@@ -25,7 +25,10 @@ build/
 hs_err_pid*
 
 # IntelliJ files
-.idea/
-*.iml
+*.iws
+.idea/libraries
+.idea/tasks.xml
+.idea/vcs.xml
+.idea/workspace.xml
 
 sysProps.xml
