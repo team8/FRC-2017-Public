@@ -72,9 +72,6 @@ public class DriveTimeRoutine extends Routine {
 			break;
 		case DRIVING:
 			if(drive.controllerOnTarget()) {
-//				setpoints.timer_drive_time_setpoint = RobotSetpoints.m_nullopt;
-//				setpoints.drive_velocity_setpoint = RobotSetpoints.m_nullopt;
-//				cancel();
 				new_state = DriveTimeRoutineStates.DONE;
 			}
 			break;
@@ -88,7 +85,6 @@ public class DriveTimeRoutine extends Routine {
 		m_is_new_state = false;
 		if(new_state != m_state) {
 			m_state = new_state;
-			//m_timer.resetController();
 			m_is_new_state = true;
 		}
 		return commands;
