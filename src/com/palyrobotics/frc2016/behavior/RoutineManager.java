@@ -93,9 +93,6 @@ public class RoutineManager implements Tappable {
 		} else if (commands.routine_request == Commands.Routines.TIMER_DRIVE && !(m_cur_routine instanceof DriveTimeRoutine)) {
 			System.out.println("Setting routine");
 			addNewRoutine(new DriveTimeRoutine(3, 0.5));
-		} else if (commands.routine_request == Commands.Routines.AUTO_ALIGN && !(m_cur_routine instanceof AutoAlignmentRoutine)) {
-//			System.out.println("Auto align activated");
-			addNewRoutine(new AutoAlignmentRoutine());
 		} else if (commands.routine_request == Commands.Routines.TURN_ANGLE && !(m_cur_routine instanceof TurnAngleRoutine)) {
 			System.out.println("Turn angle activated");
 			addNewRoutine(new TurnAngleRoutine(45, 0.3));

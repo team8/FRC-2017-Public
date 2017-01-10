@@ -1,7 +1,5 @@
 package com.palyrobotics.frc2016.behavior.routines;
 
-import java.util.Optional;
-
 import com.palyrobotics.frc2016.behavior.Routine;
 import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
@@ -66,17 +64,14 @@ public class DriveTimeRoutine extends Routine {
 			if(m_is_new_state) {
 				m_timer.reset();
 				m_timer.start();
-				setpoints.timer_drive_time_setpoint = Commands.Setpoints.m_nullopt;
-				setpoints.drive_velocity_setpoint = Commands.Setpoints.m_nullopt;
+				drive.setTimerDriveSetpoint(m_velocity_setpoint, m_time_setpoint);
 			}
 
 			setpoints.currentRoutine = Commands.Routines.TIMER_DRIVE;
 			new_state = DriveTimeRoutineStates.DRIVING;
 			break;
 		case DRIVING:
-			setpoints.timer_drive_time_setpoint = Optional.of(m_time_setpoint);
-			setpoints.drive_velocity_setpoint = Optional.of(m_velocity_setpoint);
-			if(m_timer.get() >= m_time_setpoint) {
+			if(drive.controllerOnTarget()) {
 //				setpoints.timer_drive_time_setpoint = RobotSetpoints.m_nullopt;
 //				setpoints.drive_velocity_setpoint = RobotSetpoints.m_nullopt;
 //				cancel();
@@ -87,8 +82,6 @@ public class DriveTimeRoutine extends Routine {
 			drive.resetController();
 			System.out.println("DONE called");
 			setpoints.currentRoutine = Commands.Routines.NONE;
-			setpoints.timer_drive_time_setpoint = Commands.Setpoints.m_nullopt;
-			setpoints.drive_velocity_setpoint = Commands.Setpoints.m_nullopt;
 			break;
 		}
 

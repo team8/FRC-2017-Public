@@ -17,8 +17,7 @@ public class DriveTimeRoutine extends Routine {
 	private Timer timer = new Timer();
 	
 	private double runTime;
-	private double leftSpeed = 0.5;
-	private double rightSpeed = 0.5;
+	private double speed = 0.5;
 	
 	/**
 	 * Drives forward at (0.5, 0.5) for a specified number of seconds.
@@ -36,15 +35,14 @@ public class DriveTimeRoutine extends Routine {
 	 * @param leftSpeed the speed of the left motor
 	 * @param rightSpeed the speed of the right motor
 	 */
-	public DriveTimeRoutine(double runTime, double leftSpeed, double rightSpeed) {
+	public DriveTimeRoutine(double runTime, double speed) {
 		this.runTime = runTime;
-		this.leftSpeed = leftSpeed;
-		this.rightSpeed = rightSpeed;
+		this.speed = speed;
 	}
 	
 	@Override
 	public boolean isFinished() {
-		if(timer.get() < runTime) {
+		if(timer.get() < runTime && !drive.controllerOnTarget()) {
 			return false;
 		}
 		else return true;
@@ -68,7 +66,7 @@ public class DriveTimeRoutine extends Routine {
 		System.out.println("Starting TimerDriveForwardAction");
 		timer.reset();
 		timer.start();
-		drive.setOpenLoop(new DriveSignal(leftSpeed, rightSpeed*.95));
+		drive.setTimerDriveSetpoint(speed, runTime);
 	}
 
 	@Override
