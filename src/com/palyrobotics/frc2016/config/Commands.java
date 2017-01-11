@@ -12,7 +12,7 @@ import com.palyrobotics.frc2016.config.Commands.JoystickInput.XboxInput;
  *
  */
 public class Commands {
-	static Commands commands = new Commands();
+	static final Commands commands = new Commands();
 	
 	public static synchronized Commands getInstance() {
 		return commands;

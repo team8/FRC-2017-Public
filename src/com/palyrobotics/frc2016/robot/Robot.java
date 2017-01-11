@@ -25,8 +25,8 @@ public class Robot extends IterativeRobot {
 		return mRobotState;
 	}
 
-	private static OperatorInterface mOperatorInterface = OperatorInterface.getInstance();
 	private static HardwareAdapter mHardwareAdapter = HardwareAdapter.getInstance();
+	private static OperatorInterface mOperatorInterface = OperatorInterface.getInstance();
 	// Instantiate separate thread controls
 	private SubsystemLooper subsystem_looper = new SubsystemLooper();
 	private RoutineManager routineManager = new RoutineManager();
@@ -84,6 +84,7 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		System.out.println("Start teleopInit()");
 		mRobotState.gamePeriod = RobotState.GamePeriod.TELEOP;
+		mOperatorInterface.updateCommands();
 		subsystem_looper.start();
 		System.out.println("End teleopInit()");
 	}

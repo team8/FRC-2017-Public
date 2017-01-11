@@ -14,7 +14,7 @@ import com.palyrobotics.frc2016.robot.team254.lib.util.Latch;
  *
  */
 public class OperatorInterface {
-	private static OperatorInterface mInstance = new OperatorInterface();
+	private static final OperatorInterface mInstance = new OperatorInterface();
 
 	public static OperatorInterface getInstance() {
 		return mInstance;

@@ -247,7 +247,4 @@ public class HardwareAdapter {
 	public static HardwareAdapter getInstance() {
 		return mInstance;
 	}
-
-	private HardwareAdapter() {
-	}
 }
