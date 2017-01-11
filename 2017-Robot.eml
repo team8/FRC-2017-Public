@@ -3,7 +3,7 @@
 	<exclude-output/>
 	<contentEntry url="file://$MODULE_DIR$"/>
 	<lib name="networktables" scope="COMPILE">
-		<srcroot url="file://$networktables.sources$"/>
+		<srcroot url="jar://$networktables.sources$!/"/>
 	</lib>
 	<lib name="json-simple-1.1.1.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/json-simple-1.1.1.jar!/"/>
@@ -12,9 +12,12 @@
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/guava-18.0.jar!/"/>
 	</lib>
 	<lib name="opencv" scope="COMPILE">
-		<srcroot url="file://$opencv.sources$"/>
+		<srcroot url="jar://$opencv.sources$!/"/>
 	</lib>
 	<lib name="cscore" scope="COMPILE">
-		<srcroot url="file://$cscore.sources$"/>
+		<srcroot url="jar://$cscore.sources$!/"/>
+	</lib>
+	<lib name="wpilib" scope="COMPILE">
+		<srcroot url="jar://$wpilib.sources$!/"/>
 	</lib>
 </component>
