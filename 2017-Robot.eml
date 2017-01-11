@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component jdk="1.8" jdk_type="JavaSDK">
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$"/>
+	<lib name="networktables" scope="COMPILE">
+		<srcroot url="file://$networktables.sources$"/>
+	</lib>
+	<lib name="json-simple-1.1.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/json-simple-1.1.1.jar!/"/>
+	</lib>
+	<lib name="guava-18.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/guava-18.0.jar!/"/>
+	</lib>
+	<lib name="opencv" scope="COMPILE">
+		<srcroot url="file://$opencv.sources$"/>
+	</lib>
+	<lib name="cscore" scope="COMPILE">
+		<srcroot url="file://$cscore.sources$"/>
+	</lib>
+</component>
