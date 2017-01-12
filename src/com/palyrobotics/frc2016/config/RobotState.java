@@ -1,6 +1,7 @@
 package com.palyrobotics.frc2016.config;
 
 import com.palyrobotics.frc2016.subsystems.Drive.DriveGear;
+import com.palyrobotics.frc2016.robot.team254.lib.util.ADXRS453_Gyro;
 import com.palyrobotics.frc2016.robot.team254.lib.util.Pose;
 
 /**
@@ -10,6 +11,7 @@ import com.palyrobotics.frc2016.robot.team254.lib.util.Pose;
  *
  */
 public class RobotState {
+	
 	public enum GamePeriod {
 		AUTO, TELEOP, DISABLED
 	}
@@ -24,11 +26,10 @@ public class RobotState {
 
 	// Collects drivetrain sensor data into {@link Pose}
 	public Pose getDrivePose() {
-		return new Pose(0, 0, 0, 0, 0, 0);
+		return m_pose;
 	}
 
-	// DIO Values
-	public double left_encoder;
-	public double right_encoder;
+	// Pose stores encoder and gyro data for drivetrain
+	public Pose m_pose = new Pose(0,0,0,0,0,0);
 	public double shooter_potentiometer;
 }

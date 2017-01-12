@@ -5,6 +5,7 @@ import com.palyrobotics.frc2016.config.RobotState;
 import com.palyrobotics.frc2016.robot.Robot;
 import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
 import com.palyrobotics.frc2016.robot.team254.lib.util.Pose;
+import com.palyrobotics.frc2016.subsystems.controllers.BangBangTurnAngleController;
 import com.palyrobotics.frc2016.subsystems.controllers.EncoderTurnAngleController;
 import com.palyrobotics.frc2016.subsystems.controllers.GyroTurnAngleController;
 import com.palyrobotics.frc2016.subsystems.controllers.team254.DriveFinishLineController;
@@ -98,6 +99,9 @@ public class Drive extends Subsystem implements SubsystemLoop {
 
 		if(m_controller==null && m_cached_robot_state.gamePeriod==RobotState.GamePeriod.TELEOP && commands.routine_request == Commands.Routines.NONE) {
 			setDriveOutputs(cdh.cheesyDrive(commands, m_cached_robot_state));
+		}
+		else if (m_controller==null) {
+			setDriveOutputs(DriveSignal.NEUTRAL);
 		}
 		else {
 			setDriveOutputs(m_controller.update(getPhysicalPose()));
@@ -204,6 +208,10 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	public void setGyroTurnAngleSetpoint(double heading, double maxVel) {
 		m_controller = new GyroTurnAngleController(getPoseToContinueFrom(true), heading, maxVel);
 	}
+	
+	public void setBangBangTurnAngleSetpoint(double heading, double maxVel) {
+		m_controller = new BangBangTurnAngleController(getPoseToContinueFrom(true), heading, maxVel);
+	}
 
 	// Wipes current controller
 	public void resetController() {
@@ -241,6 +249,10 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	 * @return The pose according to the current sensor state
 	 */
 	public Pose getPhysicalPose() {
+		// If drivetrain has not had first update yet, return initial robot pose of 0,0,0,0,0,0
+		if(m_cached_robot_state == null) {
+			return new Pose(0,0,0,0,0,0);
+		}
 		m_cached_pose = m_cached_robot_state.getDrivePose();
 		return m_cached_pose;
 	}
