@@ -14,7 +14,7 @@ import com.palyrobotics.frc2016.robot.team254.lib.util.Latch;
  *
  */
 public class OperatorInterface {
-	private static final OperatorInterface instance = new OperatorInterface();
+	private static OperatorInterface instance = new OperatorInterface();
 
 	public static OperatorInterface getInstance() {
 		return instance;
@@ -43,12 +43,13 @@ public class OperatorInterface {
 //	}
 	
 	public void updateCommands() {
-		if(mOperatorStick.getRawButton(4)) {
-			mCommands.routineRequest = Commands.Routines.ENCODER_DRIVE;
-		}
-		else {
-			mCommands.routineRequest = Commands.Routines.NONE;
-		}
+		// TODO: Change how routines are commanded
+//		if(mOperatorStick.getRawButton(4)) {
+//			mCommands.routineRequest = Commands.Routines.ENCODER_DRIVE;
+//		}
+//		else {
+//			mCommands.routineRequest = Commands.Routines.NONE;
+//		}
 		mCommands.operatorStickInput = new XboxInput(mOperatorStick.getX(), mOperatorStick.getY(), mOperatorStick.getX(), mOperatorStick.getY());
 		// Left Stick trigger cancels current routine
 		mCommands.cancelCurrentRoutine = mLeftStick.getTrigger();

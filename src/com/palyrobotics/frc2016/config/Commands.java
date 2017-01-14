@@ -3,6 +3,7 @@ package com.palyrobotics.frc2016.config;
 import java.util.Optional;
 
 import com.palyrobotics.frc2016.config.Commands.JoystickInput.XboxInput;
+import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
 
 /**
  * Commands represent the desired setpoints and subsystem states for the robot. <br />
@@ -12,24 +13,31 @@ import com.palyrobotics.frc2016.config.Commands.JoystickInput.XboxInput;
  *
  */
 public class Commands {
-	static final Commands commands = new Commands();
+	private static Commands commands = new Commands();
 	
 	public static synchronized Commands getInstance() {
 		return commands;
 	}
-	
+
+	// Store WantedStates for each subsystem state machine
+	public enum WantedDriveState {
+		NONE, ROUTINE, CHEESY
+	}
+	public WantedDriveState wantedDriveState = WantedDriveState.NONE;
 	/**
-	 * Stores all the subsystem setpoints, including what the currently running Routine is
+	 * Stores numeric setpoints
 	 * @author Nihar
 	 */
 	public static class Setpoints {
 		public static final Optional<Double> NULLOPT = Optional.empty();
 		
-		public Routines currentRoutine;
+		public Optional<DriveSignal> drivePowerSetpoint = Optional.empty();
+
 		/**
 		 * Resets all the setpoints
 		 */
 		public void reset() {
+			drivePowerSetpoint = Optional.empty();
 		}
 	}
 	// All robot setpoints
@@ -60,13 +68,7 @@ public class Commands {
 	public JoystickInput leftStickInput;
 	public JoystickInput rightStickInput;
 	public XboxInput operatorStickInput;
-	// Routine Request
-	public static enum Routines {
-		TIMER_DRIVE, ENCODER_DRIVE, TURN_ANGLE, NONE
-	}
-	// Routine requests
-	public Routines routineRequest = Routines.NONE;
-	
-	// Allows you to cancel routine
+
+	// Allows you to cancel all running routines
 	public boolean cancelCurrentRoutine = false;
 }
