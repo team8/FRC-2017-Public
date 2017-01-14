@@ -18,7 +18,6 @@ public class CheesyDriveHelper {
 	private DriveSignal signal = new DriveSignal(0, 0);
 
 	public DriveSignal cheesyDrive(Commands commands, RobotState robotState) {
-//		System.out.println("Gyro Angle: " + drive.m_gyro.getAngle());
 		double throttle = -commands.leftStickInput.y;
 		double wheel = commands.rightStickInput.x;
 		boolean isQuickTurn = commands.rightStickInput.triggerPressed;

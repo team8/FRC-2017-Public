@@ -25,8 +25,8 @@ public class Robot extends IterativeRobot {
 		return mRobotState;
 	}
 
-	private static OperatorInterface mOperatorInterface = OperatorInterface.getInstance();
 	private static HardwareAdapter mHardwareAdapter = HardwareAdapter.getInstance();
+	private static OperatorInterface mOperatorInterface = OperatorInterface.getInstance();
 	// Instantiate separate thread controls
 	private SubsystemLooper subsystem_looper = new SubsystemLooper();
 	private RoutineManager routineManager = new RoutineManager();
@@ -48,6 +48,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		System.out.println("Start robotInit()");
+		// Gyro initialization
+		HardwareAdapter.getInstance().getDrivetrain().kGyro.calibrate();
 		subsystem_looper.register(mDrive);
 		mHardwareUpdater = new HardwareUpdater(mDrive);
 		//        SystemManager.getInstance().add(routineManager);
@@ -77,6 +79,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		routineManager.update();
 		mDashboard.update();
+		mHardwareUpdater.updateSensors();
 		mHardwareUpdater.updateSubsystems();
 	}
 
@@ -84,6 +87,8 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		System.out.println("Start teleopInit()");
 		mRobotState.gamePeriod = RobotState.GamePeriod.TELEOP;
+		routineManager.reset();
+		mOperatorInterface.updateCommands();
 		subsystem_looper.start();
 		System.out.println("End teleopInit()");
 	}
@@ -102,8 +107,8 @@ public class Robot extends IterativeRobot {
 		mHardwareUpdater.updateSubsystems();
 		
 		// Update sensorTable with encoder distances
-		sensorTable.putString("left", String.valueOf(mRobotState.left_encoder));
-		sensorTable.putString("right", String.valueOf(mRobotState.right_encoder));
+		sensorTable.putString("left", String.valueOf(mRobotState.getDrivePose().getLeftDistance()));
+		sensorTable.putString("right", String.valueOf(mRobotState.getDrivePose().getRightDistance()));
 		mDashboard.update();
 	}
 

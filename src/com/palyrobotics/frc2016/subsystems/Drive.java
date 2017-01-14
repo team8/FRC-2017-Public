@@ -5,11 +5,13 @@ import com.palyrobotics.frc2016.config.RobotState;
 import com.palyrobotics.frc2016.robot.Robot;
 import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
 import com.palyrobotics.frc2016.robot.team254.lib.util.Pose;
+import com.palyrobotics.frc2016.subsystems.controllers.BangBangTurnAngleController;
 import com.palyrobotics.frc2016.subsystems.controllers.EncoderTurnAngleController;
 import com.palyrobotics.frc2016.subsystems.controllers.GyroTurnAngleController;
 import com.palyrobotics.frc2016.subsystems.controllers.team254.DriveFinishLineController;
 import com.palyrobotics.frc2016.subsystems.controllers.team254.DrivePathController;
 import com.palyrobotics.frc2016.subsystems.controllers.team254.DriveStraightController;
+import com.palyrobotics.frc2016.subsystems.controllers.team254.TimedOpenLoopController;
 import com.palyrobotics.frc2016.subsystems.controllers.team254.TurnInPlaceController;
 import com.palyrobotics.frc2016.util.CheesyDriveHelper;
 import com.palyrobotics.frc2016.config.Constants;
@@ -94,13 +96,12 @@ public class Drive extends Subsystem implements SubsystemLoop {
 		// Call methods associated with any setpoints that are present
 		// Encoder drive distance routine
 //		setpoints.encoder_drive_setpoint.ifPresent(this.setDistanceSetpoint(setpoints.encoder_drive_setpoint));
-		// Timer based routine
-		setpoints.timer_drive_time_setpoint.ifPresent((Double t)->setOpenLoop(new DriveSignal(setpoints.drive_velocity_setpoint.get(), setpoints.drive_velocity_setpoint.get())));
-		// Auto-align setpoint passed along
-		setpoints.auto_align_setpoint.ifPresent(this::setAutoAlignSetpoint);
 
 		if(m_controller==null && m_cached_robot_state.gamePeriod==RobotState.GamePeriod.TELEOP && commands.routine_request == Commands.Routines.NONE) {
 			setDriveOutputs(cdh.cheesyDrive(commands, m_cached_robot_state));
+		}
+		else if (m_controller==null) {
+			setDriveOutputs(DriveSignal.NEUTRAL);
 		}
 		else {
 			setDriveOutputs(m_controller.update(getPhysicalPose()));
@@ -170,9 +171,23 @@ public class Drive extends Subsystem implements SubsystemLoop {
 		}
 	}
 
+	public void setTimerDriveSetpoint(double velocity, double time) {
+		m_controller = (DriveController) new TimedOpenLoopController(velocity, time, 0, 1.5);
+	}
+	
+	public void setTimerDriveSetpoint(double velocity, double time, double decel_time) {
+		m_controller = (DriveController) new TimedOpenLoopController(velocity, time, 0, decel_time);
+	}
+	
+	public void setTimerDriveSetpoint(double start_power, double time_full_on, double end_power, double time_to_decel) {
+		m_controller = (DriveController) new TimedOpenLoopController(start_power, time_full_on, end_power, time_to_decel);
+		
+	}
+	
 	public void setTurnSetpoint(double heading) {
 		setTurnSetpoint(heading, Constants.kTurnMaxSpeedRadsPerSec);
 	}
+	
 	public void setTurnSetpoint(double heading, double velocity) {
 		velocity = Math.min(Constants.kTurnMaxSpeedRadsPerSec, Math.max(velocity, 0));
 		m_controller = new TurnInPlaceController(getPoseToContinueFrom(true), heading, velocity);
@@ -181,6 +196,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	public void setEncoderTurnAngleSetpoint(double heading) {
 		setEncoderTurnAngleSetpoint(heading, 1);
 	}
+	
 	public void setEncoderTurnAngleSetpoint(double heading, double maxVel) {
 		m_controller = new EncoderTurnAngleController(getPoseToContinueFrom(true), heading, maxVel);
 	}
@@ -188,8 +204,13 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	public void setGyroTurnAngleSetpoint(double heading) {
 		setGyroTurnAngleSetpoint(heading, 0.7);
 	}
+	
 	public void setGyroTurnAngleSetpoint(double heading, double maxVel) {
 		m_controller = new GyroTurnAngleController(getPoseToContinueFrom(true), heading, maxVel);
+	}
+	
+	public void setBangBangTurnAngleSetpoint(double heading) {
+		m_controller = new BangBangTurnAngleController(getPoseToContinueFrom(true), heading);
 	}
 
 	// Wipes current controller
@@ -228,6 +249,10 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	 * @return The pose according to the current sensor state
 	 */
 	public Pose getPhysicalPose() {
+		// If drivetrain has not had first update yet, return initial robot pose of 0,0,0,0,0,0
+		if(m_cached_robot_state == null) {
+			return new Pose(0,0,0,0,0,0);
+		}
 		m_cached_pose = m_cached_robot_state.getDrivePose();
 		return m_cached_pose;
 	}

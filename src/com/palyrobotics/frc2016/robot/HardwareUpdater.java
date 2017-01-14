@@ -25,9 +25,14 @@ class HardwareUpdater {
 	 * Updates all the sensor data taken from the hardware
 	 */
 	void updateSensors() {
+		System.out.println("Gyro "+HardwareAdapter.DrivetrainHardware.getInstance().kGyro.getAngle());
 		RobotState robotState = Robot.getRobotState();
-		robotState.left_encoder = HardwareAdapter.DrivetrainHardware.getInstance().kLeftDriveEncoder.get();
-		robotState.right_encoder = HardwareAdapter.DrivetrainHardware.getInstance().kRightDriveEncoder.get();
+		robotState.m_pose.m_heading = HardwareAdapter.DrivetrainHardware.getInstance().kGyro.getAngle();
+		robotState.m_pose.m_heading_velocity = HardwareAdapter.DrivetrainHardware.getInstance().kGyro.getRate();
+		robotState.m_pose.m_left_distance = HardwareAdapter.DrivetrainHardware.getInstance().kLeftDriveEncoder.get();
+		robotState.m_pose.m_left_velocity = HardwareAdapter.DrivetrainHardware.getInstance().kLeftDriveEncoder.getRate();
+		robotState.m_pose.m_right_distance = HardwareAdapter.DrivetrainHardware.getInstance().kRightDriveEncoder.get();
+		robotState.m_pose.m_right_velocity = HardwareAdapter.DrivetrainHardware.getInstance().kRightDriveEncoder.getRate();
 	}
 
 	/**

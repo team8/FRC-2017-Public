@@ -11,6 +11,7 @@ import java.util.*;
 public class RoutineManager implements Tappable {
 	// Routines that are being run
 	ArrayList<Routine> mRunningRoutines = new ArrayList<Routine>();
+	ArrayList<Routine> mRemovalRoutines = new ArrayList<Routine>();
 
 	private Routine m_cur_routine = null;
 	private Commands.Setpoints m_setpoints;
@@ -74,16 +75,24 @@ public class RoutineManager implements Tappable {
 //			System.out.println("Routine cancel called");
 //			setNewRoutine(null);
 //		}
+		mRemovalRoutines = new ArrayList<Routine>();
 		
 		for(Routine routine : mRunningRoutines) {
 			if(routine != null && routine.isFinished()) {
 				System.out.println("Routine cancel called");
 				commands = routine.cancel(commands);
+				mRemovalRoutines.add(routine);
 			} else {
+				System.out.println("Updating routine: "+routine.getName());
 				commands = routine.update(commands);
 			}
 		}
-
+		
+		for(Routine routine : mRemovalRoutines) {
+			System.out.println("Removing routine: "+routine.getName());
+			mRunningRoutines.remove(routine);
+		}
+		
 		// Set TROUT routine_request
 		if (commands.cancel_current_routine) {
 			System.out.println("Cancel routine button");
@@ -93,9 +102,6 @@ public class RoutineManager implements Tappable {
 		} else if (commands.routine_request == Commands.Routines.TIMER_DRIVE && !(m_cur_routine instanceof DriveTimeRoutine)) {
 			System.out.println("Setting routine");
 			addNewRoutine(new DriveTimeRoutine(3, 0.5));
-		} else if (commands.routine_request == Commands.Routines.AUTO_ALIGN && !(m_cur_routine instanceof AutoAlignmentRoutine)) {
-//			System.out.println("Auto align activated");
-			addNewRoutine(new AutoAlignmentRoutine());
 		} else if (commands.routine_request == Commands.Routines.TURN_ANGLE && !(m_cur_routine instanceof TurnAngleRoutine)) {
 			System.out.println("Turn angle activated");
 			addNewRoutine(new TurnAngleRoutine(45, 0.3));

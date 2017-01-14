@@ -99,18 +99,14 @@ public class EncoderDriveRoutine extends Routine {
 			m_timer.start();
 			// Only set the setpoint the first time the state is START 
 			if(m_is_new_state) {
-				setpoints.encoder_drive_setpoint = Optional.of(m_distance);
-				setpoints.drive_velocity_setpoint = Optional.of(m_velocity_setpoint);
+				drive.setDistanceSetpoint(m_distance, m_velocity_setpoint);
 			}
 
 			setpoints.currentRoutine = Commands.Routines.ENCODER_DRIVE;
 			new_state = EncoderDriveRoutineStates.DRIVING;
-			drive.setDistanceSetpoint(setpoints.encoder_drive_setpoint.get());
 			break;
 		case DRIVING:
-			setpoints.encoder_drive_setpoint = Optional.of(m_distance);
-			setpoints.drive_velocity_setpoint = Optional.of(m_velocity_setpoint);
-			if(drive.getPhysicalPose().getRightDistance() > m_distance) {
+			if(drive.controllerOnTarget()) {
 				new_state = EncoderDriveRoutineStates.DONE;
 			}
 			if(m_timer.get() > m_timeout) {

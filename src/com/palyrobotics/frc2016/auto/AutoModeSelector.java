@@ -4,6 +4,7 @@ import org.json.simple.JSONArray;
 
 import com.palyrobotics.frc2016.auto.modes.DoNothingAutoMode;
 import com.palyrobotics.frc2016.auto.modes.DriveForwardAutoMode;
+import com.palyrobotics.frc2016.auto.modes.TestAutoMode;
 import com.palyrobotics.frc2016.auto.modes.TrajectoryAutoMode;
 import com.palyrobotics.frc2016.auto.modes.WaitForwardBackwardAutoMode;
 import com.palyrobotics.frc2016.util.Dashboard;
@@ -16,7 +17,7 @@ public class AutoModeSelector {
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
-	int selectedIndex = 0;
+	int selectedIndex = 1;
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
 			instance = new AutoModeSelector();
@@ -34,6 +35,7 @@ public class AutoModeSelector {
 
 	public AutoModeSelector() {
 		registerAutonomous(new DoNothingAutoMode());
+		registerAutonomous(new TestAutoMode());
 	}
 
 	/**
@@ -50,6 +52,8 @@ public class AutoModeSelector {
 	 * @return AutoMode at specified index
 	 */
 	public AutoMode getAutoMode(int index) {
+		// Assumes future selections will be the same auto mode
+		selectedIndex = index;
 		return autoModes.get(index);
 	}
 
