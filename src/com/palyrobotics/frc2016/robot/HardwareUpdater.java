@@ -1,5 +1,6 @@
 package com.palyrobotics.frc2016.robot;
 
+import com.ctre.CANTalon;
 import com.palyrobotics.frc2016.config.RobotState;
 import com.palyrobotics.frc2016.subsystems.Drive;
 
@@ -41,11 +42,13 @@ class HardwareUpdater {
 	void updateSubsystems() {
 		updateDrivetrain();
 	}
-	
+
 	private void updateDrivetrain() {
-		HardwareAdapter.getInstance().getDrivetrain().kLeftDriveMotor.set(mDrive.getDriveSignal().leftMotor);
-		// Need to invert right side motor
-		HardwareAdapter.getInstance().getDrivetrain().kRightDriveMotor.set(-mDrive.getDriveSignal().rightMotor);
+		HardwareAdapter.getInstance().getDrivetrain().kLeftFrontDriveMotor.set(mDrive.getDriveSignal().leftMotor);
+		HardwareAdapter.getInstance().getDrivetrain().kLeftBackDriveMotor.set(mDrive.getDriveSignal().leftMotor);
+		// Need to invert right side motors
+		HardwareAdapter.getInstance().getDrivetrain().kRightFrontDriveMotor.set(-mDrive.getDriveSignal().rightMotor);
+		HardwareAdapter.getInstance().getDrivetrain().kRightBackDriveMotor.set(-mDrive.getDriveSignal().rightMotor);
 	}
 	
 

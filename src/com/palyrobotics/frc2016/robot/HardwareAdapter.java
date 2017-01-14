@@ -29,8 +29,11 @@ public class HardwareAdapter {
 			return mInstance;
 		}
 
-		public final CheesySpeedController kLeftDriveMotor;
-		public final CheesySpeedController kRightDriveMotor;
+		public final CANTalon kLeftFrontDriveMotor;
+		public final CANTalon kLeftBackDriveMotor;
+		public final CANTalon kRightFrontDriveMotor;
+		public final CANTalon kRightBackDriveMotor;
+
 		public final Encoder kLeftDriveEncoder;
 		public final Encoder kRightDriveEncoder;
 		public final ADXRS450_Gyro kGyro;
@@ -38,14 +41,10 @@ public class HardwareAdapter {
 
 		private DrivetrainHardware() {
 			if (Constants.kRobotName == Constants.RobotName.TYR) {
-				kLeftDriveMotor = new CheesySpeedController(
-						new SpeedController[]{new CANTalon(Constants.kTyrLeftDriveFrontMotorDeviceID),
-								new CANTalon(Constants.kTyrLeftDriveBackMotorDeviceID)},
-						new int[]{Constants.kTyrLeftDriveFrontMotorPDP, Constants.kTyrLeftDriveBackMotorPDP});
-				kRightDriveMotor = new CheesySpeedController(
-						new SpeedController[]{new CANTalon(Constants.kTyrRightDriveFrontMotorDeviceID),
-								new CANTalon(Constants.kTyrRightDriveBackMotorDeviceID)},
-						new int[]{Constants.kTyrRightDriveBackMotorPDP, Constants.kTyrRightDriveBackMotorPDP});
+				kLeftFrontDriveMotor = new CANTalon(Constants.kTyrLeftDriveFrontMotorDeviceID);
+				kLeftBackDriveMotor = new CANTalon(Constants.kTyrLeftDriveBackMotorDeviceID);
+				kRightFrontDriveMotor = new CANTalon(Constants.kTyrRightDriveFrontMotorDeviceID);
+				kRightBackDriveMotor = new CANTalon(Constants.kTyrRightDriveBackMotorDeviceID);
 				kLeftDriveEncoder = new Encoder(
 						Constants.kTyrLeftDriveEncoderDIOA, Constants.kTyrLeftDriveEncoderDIOB);
 				kRightDriveEncoder = new Encoder(
@@ -54,20 +53,14 @@ public class HardwareAdapter {
 				kShifterSolenoid = new DoubleSolenoid(
 						Constants.kTyrDriveSolenoidExtend, Constants.kTyrDriveSolenoidRetract);
 			} else {
-				CANTalon leftDriveBackMotor = new CANTalon(Constants.kDericaLeftDriveBackMotorDeviceID);
-				leftDriveBackMotor.enableBrakeMode(true);
-				CANTalon leftDriveFrontMotor = new CANTalon(Constants.kDericaLeftDriveFrontMotorDeviceID);
-				leftDriveFrontMotor.enableBrakeMode(true);
-				CANTalon rightDriveBackMotor = new CANTalon(Constants.kDericaRightDriveBackMotorDeviceID);
-				rightDriveBackMotor.enableBrakeMode(true);
-				CANTalon rightDriveFrontMotor = new CANTalon(Constants.kDericaRightDriveFrontMotorDeviceID);
-				rightDriveFrontMotor.enableBrakeMode(true);
-				kLeftDriveMotor = new CheesySpeedController(
-						new SpeedController[]{leftDriveFrontMotor, leftDriveBackMotor},
-						new int[]{Constants.kDericaLeftDriveFrontMotorPDP, Constants.kDericaLeftDriveBackMotorPDP});
-				kRightDriveMotor = new CheesySpeedController(
-						new SpeedController[]{rightDriveFrontMotor, rightDriveBackMotor},
-						new int[]{Constants.kDericaRightDriveBackMotorPDP, Constants.kDericaRightDriveBackMotorPDP});
+				kLeftBackDriveMotor = new CANTalon(Constants.kDericaLeftDriveBackMotorDeviceID);
+				kLeftBackDriveMotor.enableBrakeMode(true);
+				kLeftFrontDriveMotor = new CANTalon(Constants.kDericaLeftDriveFrontMotorDeviceID);
+				kLeftFrontDriveMotor.enableBrakeMode(true);
+				kRightBackDriveMotor = new CANTalon(Constants.kDericaRightDriveBackMotorDeviceID);
+				kRightBackDriveMotor.enableBrakeMode(true);
+				kRightFrontDriveMotor = new CANTalon(Constants.kDericaRightDriveFrontMotorDeviceID);
+				kRightFrontDriveMotor.enableBrakeMode(true);
 				kLeftDriveEncoder = new Encoder(
 						Constants.kDericaLeftDriveEncoderDIOA, Constants.kDericaLeftDriveEncoderDIOB, true);
 				kRightDriveEncoder = new Encoder(
