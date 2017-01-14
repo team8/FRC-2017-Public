@@ -12,7 +12,8 @@ public class TestAutoMode extends AutoMode {
 
 	@Override
 	protected void routine() throws AutoModeEndedException {
-		drive.setBangBangTurnAngleSetpoint(20,0.2);
+		drive.setBangBangTurnAngleSetpoint(90);
+//		drive.setDistanceSetpoint(1);
 	}
 
 	@Override

@@ -14,7 +14,6 @@ public class BBTurnAngleRoutine extends Routine {
 	}
 	
 	private double angle;
-	private double maxVel;
 	
 	private States m_state = States.START;
 	
@@ -22,9 +21,8 @@ public class BBTurnAngleRoutine extends Routine {
 		START, TURNING, DONE
 	}
 	
-	public BBTurnAngleRoutine(double angle, double maxVel) {
+	public BBTurnAngleRoutine(double angle) {
 		this.angle = angle;
-		this.maxVel = maxVel;
 	}
 	
 	@Override
@@ -40,7 +38,7 @@ public class BBTurnAngleRoutine extends Routine {
 		switch(m_state) {
 		case START:
 			System.out.println("Set setpoint: "+angle);
-			drive.setBangBangTurnAngleSetpoint(angle, maxVel);
+			drive.setBangBangTurnAngleSetpoint(angle);
 			
 			setpoints.currentRoutine = Commands.Routines.TURN_ANGLE;
 			m_state = States.TURNING;

@@ -209,8 +209,8 @@ public class Drive extends Subsystem implements SubsystemLoop {
 		m_controller = new GyroTurnAngleController(getPoseToContinueFrom(true), heading, maxVel);
 	}
 	
-	public void setBangBangTurnAngleSetpoint(double heading, double maxVel) {
-		m_controller = new BangBangTurnAngleController(getPoseToContinueFrom(true), heading, maxVel);
+	public void setBangBangTurnAngleSetpoint(double heading) {
+		m_controller = new BangBangTurnAngleController(getPoseToContinueFrom(true), heading);
 	}
 
 	// Wipes current controller

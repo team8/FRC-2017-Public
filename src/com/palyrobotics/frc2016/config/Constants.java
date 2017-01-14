@@ -35,7 +35,7 @@ public class Constants extends ConstantsBase {
 	public static double kDrivePositionKv = 0.008;
 	public static double kDrivePositionKa = 0.0017;
 	// PID Tuning for turning to straighten
-	public static double kDriveStraightKp = 2.0;
+	public static double kDriveStraightKp = 00;
 	public static double kDriveStraightKi = 0;
 	public static double kDriveStraightKd = 0.04;
 	public static double kDriveOnTargetError = 1.5;
@@ -47,14 +47,15 @@ public class Constants extends ConstantsBase {
 	public static double kEncoderTurnKd = 0.007;
 	public static double kTyrDegreeToDistance = 0;
 	public static double kDericaDegreeToDistance = 0.209;
-	public static double kAcceptableEncoderTurnError = 4;
+	public static double kAcceptableEncoderTurnError = 2;
 	
 	// Gyro Turn in Place controller gains
 	public static double kGyroTurnKp = 0.195E-1;
 	public static double kGyroTurnKi = 0.04;
 	public static double kGyroTurnKd = 0.014E-1;
-	public static double kAcceptableGyroTurnError = 2.5;
+	public static double kAcceptableGyroTurnError = 2;
 	public static double kAcceptableGyroTurnStopSpeed = 1.2;
+	public static double kTurnAngleSpeed = .35;
 
 	
 	// TurnInPlaceController gains
