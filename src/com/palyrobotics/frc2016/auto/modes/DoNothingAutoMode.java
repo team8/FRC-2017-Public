@@ -11,11 +11,11 @@ public class DoNothingAutoMode extends AutoMode {
 
 	@Override
 	public void prestart() {
-		System.out.println("Starting Do Nothing Auto Mode");
+		System.out.println("Starting DoNothingAutoMode");
 	}
 
 	@Override
 	public String toString() {
-		return "Do_Nothing";
+		return "DoNothing";
 	}
 }

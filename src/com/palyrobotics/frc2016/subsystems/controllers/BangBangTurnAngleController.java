@@ -12,15 +12,15 @@ import com.palyrobotics.frc2016.robot.team254.lib.util.Pose;
  */
 public class BangBangTurnAngleController implements Drive.DriveController {
 	
-	private double maxVel;
-	private double heading;
-	private Pose currentPose;
+	private double mMaxVel;
+	private double mHeading;
+	private Pose mCurrentPose;
 	
 	public BangBangTurnAngleController(Pose currentPose, double heading) {
-		this.maxVel = Constants.kTurnAngleSpeed;
-		this.currentPose = currentPose;
-		this.heading = this.currentPose.m_heading + heading;
-		System.out.println("Starting Heading" + this.currentPose.m_heading);
+		this.mMaxVel = Constants.kTurnAngleSpeed;
+		this.mCurrentPose = currentPose;
+		this.mHeading = this.mCurrentPose.heading + heading;
+		System.out.println("Starting Heading" + this.mCurrentPose.heading);
 	}
 	
 	@Override
@@ -28,23 +28,23 @@ public class BangBangTurnAngleController implements Drive.DriveController {
 		if (this.onTarget()) {
 			return new DriveSignal(0,0);
 		}
-		currentPose = pose;
-		System.out.println("Current Pose: " + currentPose.m_heading);
-		if (pose.m_heading < heading) {
-			return new DriveSignal(this.maxVel, -(this.maxVel+.05));
+		mCurrentPose = pose;
+		System.out.println("Current Pose: " + mCurrentPose.heading);
+		if (pose.heading < mHeading) {
+			return new DriveSignal(this.mMaxVel, -(this.mMaxVel+.05));
 		}
-		return new DriveSignal(-(this.maxVel+.05), this.maxVel);
+		return new DriveSignal(-(this.mMaxVel + .05), this.mMaxVel);
 	}
 
 	@Override
 	public Pose getCurrentSetpoint() {
-		currentPose.m_heading = heading;
-		return currentPose;
+		mCurrentPose.heading = mHeading;
+		return mCurrentPose;
 	}
 
 	@Override
 	public boolean onTarget() {
-		return Math.abs(currentPose.m_heading-heading) < Constants.kAcceptableGyroTurnError;
+		return Math.abs(mCurrentPose.heading - mHeading) < Constants.kAcceptableGyroTurnError;
 	}
 
 }

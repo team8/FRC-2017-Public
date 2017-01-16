@@ -3,7 +3,6 @@ package com.palyrobotics.frc2016.util;
 import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.config.Constants;
 import com.palyrobotics.frc2016.config.RobotState;
-import com.palyrobotics.frc2016.robot.OperatorInterface;
 import com.palyrobotics.frc2016.robot.Robot;
 import com.palyrobotics.frc2016.robot.team254.lib.util.CrashTrackingRunnable;
 import com.palyrobotics.frc2016.robot.team254.lib.util.Looper;
@@ -22,65 +21,65 @@ public class SubsystemLooper {
 	// SubsystemLoop update rate
 	private final double kPeriod = Constants.kSubsystemLooperDt;
 
-	private boolean running_;
+	private boolean mRunning;
 
-	private final Notifier notifier_;
-	private final List<SubsystemLoop> loops_;
-	private final Object taskRunningLock_ = new Object();
-	private double timestamp_ = 0;
-	private double dt_ = 0;
+	private final Notifier mNotifier;
+	private final List<SubsystemLoop> mLoops;
+	private final Object mTaskRunningLock = new Object();
+	private double mTimeStamp = 0;
+	private double mDt = 0;
 	// Main method that is run at the update rate
-	private final CrashTrackingRunnable runnable_ = new CrashTrackingRunnable() {
+	private final CrashTrackingRunnable mRunnable = new CrashTrackingRunnable() {
 		@Override
 		public void runCrashTracked() {
-			synchronized (taskRunningLock_) {
-				if (running_) {
+			synchronized (mTaskRunningLock) {
+				if (mRunning) {
 					double now = Timer.getFPGATimestamp();
 					Commands commands = Commands.getInstance();
 					RobotState robotState = Robot.getRobotState();
-					for (SubsystemLoop loop : loops_) {
+					for (SubsystemLoop loop : mLoops) {
 						loop.update(commands, robotState);
 					}
-					dt_ = now - timestamp_;
-					timestamp_ = now;
+					mDt = now - mTimeStamp;
+					mTimeStamp = now;
 				}
 			}
 		}
 	};
 
 	public SubsystemLooper() {
-		notifier_ = new Notifier((Runnable) runnable_);
-		running_ = false;
-		loops_ = new ArrayList<>();
+		mNotifier = new Notifier((Runnable) mRunnable);
+		mRunning = false;
+		mLoops = new ArrayList<>();
 	}
 
 	public synchronized void register(SubsystemLoop loop) {
-		synchronized (taskRunningLock_) {
-			loops_.add(loop);
+		synchronized (mTaskRunningLock) {
+			mLoops.add(loop);
 		}
 	}
 
 	public synchronized void start() {
-		if (!running_) {
+		if (!mRunning) {
 			System.out.println("Starting loops");
-			synchronized (taskRunningLock_) {
-				timestamp_ = Timer.getFPGATimestamp();
-				for (SubsystemLoop loop : loops_) {
+			synchronized (mTaskRunningLock) {
+				mTimeStamp = Timer.getFPGATimestamp();
+				for (SubsystemLoop loop : mLoops) {
 					loop.start();
 				}
-				running_ = true;
+				mRunning = true;
 			}
-			notifier_.startPeriodic(kPeriod);
+			mNotifier.startPeriodic(kPeriod);
 		}
 	}
 
 	public synchronized void stop() {
-		if (running_) {
+		if (mRunning) {
 			System.out.println("Stopping loops");
-			notifier_.stop();
-			synchronized (taskRunningLock_) {
-				running_ = false;
-				for (SubsystemLoop loop : loops_) {
+			mNotifier.stop();
+			synchronized (mTaskRunningLock) {
+				mRunning = false;
+				for (SubsystemLoop loop : mLoops) {
 					System.out.println("Stopping " + loop.toString());
 					loop.stop();
 				}
@@ -89,6 +88,6 @@ public class SubsystemLooper {
 	}
 
 	public void outputToSmartDashboard() {
-		SmartDashboard.putNumber("looper_dt", dt_);
+		SmartDashboard.putNumber("looper_dt", mDt);
 	}
 }

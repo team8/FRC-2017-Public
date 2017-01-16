@@ -8,21 +8,21 @@ import com.palyrobotics.frc2016.robot.team254.lib.util.Pose;
  *
  */
 public class WaitForDriveDistanceRoutine extends TimeoutRoutine {
-    public double m_distance;
-    public boolean m_positive;
+    public double distance;
+    public boolean positive;
 
     public WaitForDriveDistanceRoutine(double distance, boolean positive, double timeout) {
         super(timeout);
-        m_distance = distance;
-        m_positive = positive;
+        this.distance = distance;
+        this.positive = positive;
 
     }
 
     @Override
-    public boolean isFinished() {
+    public boolean finished() {
         Pose pose = drive.getPhysicalPose();
         double avg = (pose.getLeftDistance() + pose.getRightDistance()) / 2.0;
-        return (m_positive ? avg >= m_distance : avg <= m_distance) || super.isFinished();
+        return (positive ? avg >= distance : avg <= distance) || super.finished();
     }
 
 }

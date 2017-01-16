@@ -13,7 +13,7 @@ public class RobotData implements Tappable {
 
     @Override
     public void getState(StateHolder states) {
-        states.put("voltage", HardwareAdapter.kPDP.getVoltage());
+        states.put("voltage", HardwareAdapter.PDP.getVoltage());
         states.put("robotTime", Timer.getFPGATimestamp());
     }
 }

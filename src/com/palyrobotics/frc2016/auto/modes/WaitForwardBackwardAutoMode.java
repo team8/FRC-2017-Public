@@ -7,9 +7,9 @@ import com.palyrobotics.frc2016.behavior.routines.auto.DriveTimeRoutine;
 
 public class WaitForwardBackwardAutoMode extends AutoMode{
 	
-	private double waitTime;
-	private double driveTime;
-	private double backDistance;
+	private double mWaitTime;
+	private double mDriveTime;
+	private double mBackDistance;
 	
 	/**
 	 * 
@@ -18,16 +18,16 @@ public class WaitForwardBackwardAutoMode extends AutoMode{
 	 * @param backDistance distance to back up
 	 */
 	public WaitForwardBackwardAutoMode(double waitTime, double driveTime, double backDistance) {
-		this.waitTime = waitTime;
-		this.driveTime = driveTime;
-		this.backDistance = backDistance;
+		this.mWaitTime = waitTime;
+		this.mDriveTime = driveTime;
+		this.mBackDistance = backDistance;
 	}
 	
 	protected void routine() throws AutoModeEndedException {
-		waitTime(waitTime);
-		runRoutine(new DriveTimeRoutine(driveTime));
+		waitTime(mWaitTime);
+		runRoutine(new DriveTimeRoutine(mDriveTime));
 		waitTime(1);
-		runRoutine(new DriveDistanceRoutine(backDistance));
+		runRoutine(new DriveDistanceRoutine(mBackDistance));
 	}
 
 	public void prestart() {

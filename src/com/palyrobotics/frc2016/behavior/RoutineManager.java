@@ -10,62 +10,62 @@ import java.util.*;
 
 public class RoutineManager implements Tappable {
 	// Routines that are being run
-	ArrayList<Routine> mRunningRoutines = new ArrayList<Routine>();
-	ArrayList<Routine> mRemovalRoutines = new ArrayList<Routine>();
+	ArrayList<Routine> runningRoutines = new ArrayList<Routine>();
+	ArrayList<Routine> removalRoutines = new ArrayList<Routine>();
 
-	private Routine m_cur_routine = null;
-	private Commands.Setpoints m_setpoints;
+	private Routine mCurrentRoutine = null;
+	private Commands.Setpoints mSetpoints;
 	//    private ManualRoutine m_manual_routine = new ManualRoutine();
 
 	public void addNewRoutine(Routine newRoutine) {
 		// combine running routines w/ new routine to check for shared subsystems
-		ArrayList<Routine> conflicts = conflictingRoutines(mRunningRoutines, newRoutine);
+		ArrayList<Routine> conflicts = conflictingRoutines(runningRoutines, newRoutine);
 		for(Routine routine : conflicts) {
 			routine.cancel(Commands.getInstance());
-			System.out.println("Canceling routine "+routine.getName());
-			mRunningRoutines.remove(routine);
+			System.out.println("Canceling routine " + routine.getName());
+			runningRoutines.remove(routine);
 		}
 		newRoutine.start();
-		mRunningRoutines.add(newRoutine);
+		runningRoutines.add(newRoutine);
 	}
 
-	private void setNewRoutine(Routine new_routine) {
+	private void setNewRoutine(Routine newRoutine) {
 		// Cancel if new routine diff from current routine
-		boolean needs_cancel = (new_routine != m_cur_routine) && (m_cur_routine != null);
-		boolean needs_start = (new_routine != m_cur_routine) && (new_routine != null);
+		boolean needs_cancel = (newRoutine != mCurrentRoutine) && (mCurrentRoutine != null);
+		boolean needs_start = (newRoutine != mCurrentRoutine) && (newRoutine != null);
 		// Cancel old routine
 		if (needs_cancel) {
-			m_cur_routine.cancel(Commands.getInstance());
+			mCurrentRoutine.cancel(Commands.getInstance());
 			// Reset all setpoints
-			m_setpoints.reset();
+			mSetpoints.reset();
 		}
 		// Start next routine
 		if (needs_start) {
-			new_routine.start();
+			newRoutine.start();
 		}
-		System.out.println("Ending " + m_cur_routine.getName() + " Starting " + new_routine.getName());
-		m_cur_routine = new_routine;
+		System.out.println("Ending " + mCurrentRoutine.getName() + " Starting " + newRoutine.getName());
+		mCurrentRoutine = newRoutine;
 	}
 
 	public Routine getCurrentRoutine() {
-		return m_cur_routine;
+		return mCurrentRoutine;
 	}
 
 	// Wipes all current routines
 	public void reset() {
 		// Cancel all running routines
-		if(mRunningRoutines.size() != 0) {
-			for(Routine routine : mRunningRoutines) {
+		if(runningRoutines.size() != 0) {
+			for(Routine routine : runningRoutines) {
 				routine.cancel(Commands.getInstance());
 			}
 		}
 		// Empty the running routines
-		mRunningRoutines = new ArrayList<Routine>();
+		runningRoutines = new ArrayList<Routine>();
 	}
 
 	public RoutineManager() {
-		m_setpoints = new Commands.Setpoints();
-		m_setpoints.reset();
+		mSetpoints = new Commands.Setpoints();
+		mSetpoints.reset();
 	}
 
 	public void update() {
@@ -75,34 +75,34 @@ public class RoutineManager implements Tappable {
 //			System.out.println("Routine cancel called");
 //			setNewRoutine(null);
 //		}
-		mRemovalRoutines = new ArrayList<Routine>();
+		removalRoutines = new ArrayList<Routine>();
 		
-		for(Routine routine : mRunningRoutines) {
-			if(routine != null && routine.isFinished()) {
+		for(Routine routine : runningRoutines) {
+			if(routine != null && routine.finished()) {
 				System.out.println("Routine cancel called");
 				commands = routine.cancel(commands);
-				mRemovalRoutines.add(routine);
+				removalRoutines.add(routine);
 			} else {
-				System.out.println("Updating routine: "+routine.getName());
+				System.out.println("Updating routine: " + routine.getName());
 				commands = routine.update(commands);
 			}
 		}
 		
-		for(Routine routine : mRemovalRoutines) {
-			System.out.println("Removing routine: "+routine.getName());
-			mRunningRoutines.remove(routine);
+		for(Routine routine : removalRoutines) {
+			System.out.println("Removing routine: " + routine.getName());
+			runningRoutines.remove(routine);
 		}
 		
 		// Set TROUT routine_request
-		if (commands.cancel_current_routine) {
+		if (commands.cancelCurrentRoutine) {
 			System.out.println("Cancel routine button");
 			addNewRoutine(null);
-		} else if (commands.routine_request == Commands.Routines.ENCODER_DRIVE && !(m_cur_routine instanceof EncoderDriveRoutine)) {
+		} else if (commands.routineRequest == Commands.Routines.ENCODER_DRIVE && !(mCurrentRoutine instanceof EncoderDriveRoutine)) {
 			addNewRoutine(new EncoderDriveRoutine(500));
-		} else if (commands.routine_request == Commands.Routines.TIMER_DRIVE && !(m_cur_routine instanceof DriveTimeRoutine)) {
+		} else if (commands.routineRequest == Commands.Routines.TIMER_DRIVE && !(mCurrentRoutine instanceof DriveTimeRoutine)) {
 			System.out.println("Setting routine");
 			addNewRoutine(new DriveTimeRoutine(3, 0.5));
-		} else if (commands.routine_request == Commands.Routines.TURN_ANGLE && !(m_cur_routine instanceof TurnAngleRoutine)) {
+		} else if (commands.routineRequest == Commands.Routines.TURN_ANGLE && !(mCurrentRoutine instanceof TurnAngleRoutine)) {
 			System.out.println("Turn angle activated");
 			addNewRoutine(new TurnAngleRoutine(45, 0.3));
 		}
@@ -146,7 +146,7 @@ public class RoutineManager implements Tappable {
 
 	@Override
 	public void getState(StateHolder states) {
-		states.put("mode", m_cur_routine != null ? m_cur_routine.getName() : "---");
+		states.put("mode", mCurrentRoutine != null ? mCurrentRoutine.getName() : "---");
 	}
 
 	@Override

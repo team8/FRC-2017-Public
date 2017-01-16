@@ -12,10 +12,10 @@ import com.palyrobotics.frc2016.robot.team254.lib.util.Util;
  * Returns a DriveSignal for the motor output
  */
 public class CheesyDriveHelper {
-	private double oldWheel, quickStopAccumulator;
-	private final double wheelStickDeadband = 0.02;
-	private final double throttleStickDeadband = 0.02;
-	private DriveSignal signal = new DriveSignal(0, 0);
+	private double mOldWheel, mQuickStopAccumulator;
+	private final double kWheelStickDeadband = 0.02;
+	private final double kThrottleStickDeadband = 0.02;
+	private DriveSignal mSignal = new DriveSignal(0, 0);
 
 	public DriveSignal cheesyDrive(Commands commands, RobotState robotState) {
 		double throttle = -commands.leftStickInput.y;
@@ -25,11 +25,11 @@ public class CheesyDriveHelper {
 
 		double wheelNonLinearity;
 
-		wheel = handleDeadband(wheel, wheelStickDeadband);
-		throttle = handleDeadband(throttle, throttleStickDeadband);
+		wheel = handleDeadband(wheel, kWheelStickDeadband);
+		throttle = handleDeadband(throttle, kThrottleStickDeadband);
 
-		double negInertia = wheel - oldWheel;
-		oldWheel = wheel;
+		double negInertia = wheel - mOldWheel;
+		mOldWheel = wheel;
 
 		if (isHighGear) {
 			wheelNonLinearity = 0.6;
@@ -91,7 +91,7 @@ public class CheesyDriveHelper {
 			if (Math.abs(linearPower) < 0.2) {
 				// Can be tuned
 				double alpha = 0.3;
-				quickStopAccumulator = (1 - alpha) * quickStopAccumulator
+				mQuickStopAccumulator = (1 - alpha) * mQuickStopAccumulator
 						+ alpha * Util.limit(wheel, 1.0) * 5;
 			}
 			overPower = 1.0;
@@ -104,13 +104,13 @@ public class CheesyDriveHelper {
 		} else {
 			overPower = 0.0;
 			angularPower = Math.abs(throttle) * wheel * sensitivity
-					- quickStopAccumulator;
-			if (quickStopAccumulator > 1) {
-				quickStopAccumulator -= 1;
-			} else if (quickStopAccumulator < -1) {
-				quickStopAccumulator += 1;
+					- mQuickStopAccumulator;
+			if (mQuickStopAccumulator > 1) {
+				mQuickStopAccumulator -= 1;
+			} else if (mQuickStopAccumulator < -1) {
+				mQuickStopAccumulator += 1;
 			} else {
-				quickStopAccumulator = 0.0;
+				mQuickStopAccumulator = 0.0;
 			}
 		}
 
@@ -132,9 +132,9 @@ public class CheesyDriveHelper {
 			leftPwm += overPower * (-1.0 - rightPwm);
 			rightPwm = -1.0;
 		}
-		signal.leftMotor = leftPwm;
-		signal.rightMotor = rightPwm;
-		return signal;
+		mSignal.leftMotor = leftPwm;
+		mSignal.rightMotor = rightPwm;
+		return mSignal;
 	}
 
 	/**

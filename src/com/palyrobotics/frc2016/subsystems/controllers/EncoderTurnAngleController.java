@@ -1,7 +1,5 @@
 package com.palyrobotics.frc2016.subsystems.controllers;
 
-import com.palyrobotics.frc2016.config.RobotState;
-import com.palyrobotics.frc2016.robot.Robot;
 import com.palyrobotics.frc2016.subsystems.Drive;
 import com.palyrobotics.frc2016.config.Constants;
 import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
@@ -10,51 +8,54 @@ import com.palyrobotics.frc2016.robot.team254.lib.util.Pose;
 public class EncoderTurnAngleController implements Drive.DriveController {
 	private Pose mCachedPose;
 
-	private double maxVel;
-	private double leftTarget;
-	private double rightTarget;
-	private double leftSpeed;
-	private double rightSpeed;
-	private double kDegreeToDistance;
+	private double mMaxVel;
+	private double mLeftTarget;
+	private double mRightTarget;
+	private double mLeftSpeed;
+	private double mRightSpeed;
 	
-	private double leftP;
-	private double leftI;
-	private double leftD;
+	private final double kDegreeToDistance;
 	
-	private double rightP;
-	private double rightI;
-	private double rightD;
+	private double mLeftP;
+	private double mLeftI;
+	private double mLeftD;
+	
+	private double mRightP;
+	private double mRightI;
+	private double mRightD;
 	
 	public EncoderTurnAngleController(Pose priorSetpoint, double angle, double maxVel) {
-		this.maxVel = maxVel;
+		this.mMaxVel = maxVel;
 		
 		if(Constants.kRobotName == Constants.RobotName.DERICA) {
 			kDegreeToDistance = Constants.kDericaDegreeToDistance;
 		} else if(Constants.kRobotName == Constants.RobotName.TYR) {
 			kDegreeToDistance = Constants.kTyrDegreeToDistance;
+		} else {
+			kDegreeToDistance = 1;
 		}
 		
-		leftTarget = priorSetpoint.getLeftDistance() + angle * kDegreeToDistance;
-		rightTarget = priorSetpoint.getRightDistance() - angle * kDegreeToDistance;
+		mLeftTarget = priorSetpoint.getLeftDistance() + angle * kDegreeToDistance;
+		mRightTarget = priorSetpoint.getRightDistance() - angle * kDegreeToDistance;
 	}
 	
 	@Override
 	public DriveSignal update(Pose pose) {
-		leftP = leftTarget - pose.getLeftDistance();
-		rightP = rightTarget - pose.getRightDistance();
+		mLeftP = mLeftTarget - pose.getLeftDistance();
+		mRightP = mRightTarget - pose.getRightDistance();
 		
-		leftI = leftI + leftP * Constants.kControlLoopsDt;
-		rightI = rightI + rightP * Constants.kControlLoopsDt;
+		mLeftI = mLeftI + mLeftP * Constants.kControlLoopsDt;
+		mRightI = mRightI + mRightP * Constants.kControlLoopsDt;
 		
-		leftD = -pose.getLeftVelocity();
-		rightD = -pose.getRightVelocity();
+		mLeftD = -pose.getLeftVelocity();
+		mRightD = -pose.getRightVelocity();
 		
-		leftSpeed = Math.max(-maxVel, 
-				Math.min(maxVel, Constants.kEncoderTurnKp*leftP + Constants.kEncoderTurnKi*leftI + Constants.kEncoderTurnKd*leftD));
-		rightSpeed = Math.max(-maxVel, 
-				Math.min(maxVel, Constants.kEncoderTurnKp*rightP + Constants.kEncoderTurnKi*rightI + Constants.kEncoderTurnKd*rightD));
+		mLeftSpeed = Math.max(-mMaxVel, 
+				Math.min(mMaxVel, Constants.kEncoderTurnKp * mLeftP + Constants.kEncoderTurnKi * mLeftI + Constants.kEncoderTurnKd * mLeftD));
+		mRightSpeed = Math.max(-mMaxVel, 
+				Math.min(mMaxVel, Constants.kEncoderTurnKp * mRightP + Constants.kEncoderTurnKi * mRightI + Constants.kEncoderTurnKd * mRightD));
 		
-		return new DriveSignal(leftSpeed, rightSpeed);
+		return new DriveSignal(mLeftSpeed, mRightSpeed);
 	}
 
 	@Override
@@ -67,18 +68,18 @@ public class EncoderTurnAngleController implements Drive.DriveController {
 //				Math.toRadians(HardwareAdaptor.kDrive.m_gyro.getAngle()),
 //				HardwareAdaptor.kDrive.m_gyro.getRate());
 		return new Pose(
-				leftTarget,
-				rightTarget,
-				leftSpeed,
-				rightSpeed,
+				mLeftTarget,
+				mRightTarget,
+				mLeftSpeed,
+				mRightSpeed,
 				mCachedPose.getHeading(),
 				mCachedPose.getHeadingVelocity());
 	}
 
 	@Override
 	public boolean onTarget() {
-		if(Math.abs(leftP/kDegreeToDistance) < Constants.kAcceptableEncoderTurnError && 
-				Math.abs(rightP/kDegreeToDistance) < Constants.kAcceptableEncoderTurnError && leftD == 0 && rightD == 0) {
+		if(Math.abs(mLeftP / kDegreeToDistance) < Constants.kAcceptableEncoderTurnError && 
+				Math.abs(mRightP / kDegreeToDistance) < Constants.kAcceptableEncoderTurnError && mLeftD == 0 && mRightD == 0) {
 			return true;
 		} else return false;
 	}

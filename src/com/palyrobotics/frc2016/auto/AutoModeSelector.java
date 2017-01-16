@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class AutoModeSelector {
 	private static AutoModeSelector instance = null;
-	private ArrayList<AutoMode> autoModes = new ArrayList<AutoMode>();
+	private ArrayList<AutoMode> mAutoModes = new ArrayList<AutoMode>();
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
@@ -30,7 +30,7 @@ public class AutoModeSelector {
 	 * @param auto AutoMode to add
 	 */
 	public void registerAutonomous(AutoMode auto) {
-		autoModes.add(auto);
+		mAutoModes.add(auto);
 	}
 
 	public AutoModeSelector() {
@@ -43,7 +43,7 @@ public class AutoModeSelector {
 	 * @return AutoMode currently selected
 	 */
 	public AutoMode getAutoMode() {
-		return autoModes.get(selectedIndex);
+		return mAutoModes.get(selectedIndex);
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class AutoModeSelector {
 	public AutoMode getAutoMode(int index) {
 		// Assumes future selections will be the same auto mode
 		selectedIndex = index;
-		return autoModes.get(index);
+		return mAutoModes.get(index);
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class AutoModeSelector {
 	 */
 	public ArrayList<String> getAutoModeList() {
 		ArrayList<String> list = new ArrayList<String>();
-		for (AutoMode autoMode : autoModes) {
+		for (AutoMode autoMode : mAutoModes) {
 			list.add(autoMode.toString());
 		}
 		return list;
@@ -84,8 +84,8 @@ public class AutoModeSelector {
 	public boolean setAutoModeByName(String name) {
 		int numOccurrences = 0;
 		int index = -1;
-		for(int i=0; i<autoModes.size(); i++) {
-			if(autoModes.get(i).toString() == name) {
+		for(int i = 0; i<mAutoModes.size(); i++) {
+			if(mAutoModes.get(i).toString() == name) {
 				numOccurrences++;
 				index = i;
 			}
@@ -94,9 +94,9 @@ public class AutoModeSelector {
 			setAutoModeByIndex(index);
 			return true;
 		} else if(numOccurrences == 0) {
-			System.out.println("Couldn't find AutoMode "+name);
+			System.out.println("Couldn't find AutoMode " + name);
 		} else {
-			System.out.println("Found multiple AutoModes "+name);
+			System.out.println("Found multiple AutoModes " + name);
 		}
 		System.err.println("Didn't select AutoMode");
 		return false;
@@ -116,11 +116,11 @@ public class AutoModeSelector {
 	}
 
 	private void setAutoModeByIndex(int which) {
-		if (which < 0 || which >= autoModes.size()) {
+		if (which < 0 || which >= mAutoModes.size()) {
 			which = 0;
 		}
 		selectedIndex = which;
-		System.out.println("Selected AutoMode "+autoModes.get(selectedIndex).toString());
+		System.out.println("Selected AutoMode " + mAutoModes.get(selectedIndex).toString());
 	}
 
 }

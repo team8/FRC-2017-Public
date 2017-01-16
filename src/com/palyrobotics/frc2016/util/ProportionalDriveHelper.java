@@ -3,7 +3,7 @@ import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
 
 public class ProportionalDriveHelper {
-	private DriveSignal signal = DriveSignal.NEUTRAL;
+	private DriveSignal mSignal = DriveSignal.NEUTRAL;
 
 	public DriveSignal pDrive(Commands commands) {
 		double throttle = -commands.leftStickInput.y;
@@ -12,8 +12,8 @@ public class ProportionalDriveHelper {
 		double rightPwm = throttle - wheel;
 		double leftPwm = throttle + wheel;
 
-		signal.leftMotor = leftPwm;
-		signal.rightMotor = rightPwm;
+		mSignal.leftMotor = leftPwm;
+		mSignal.rightMotor = rightPwm;
 		return new DriveSignal(leftPwm, rightPwm);
 	}
 

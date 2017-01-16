@@ -5,7 +5,6 @@ import com.palyrobotics.frc2016.config.RobotState;
 import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
 import com.palyrobotics.frc2016.subsystems.Drive;
 import com.palyrobotics.frc2016.util.CheesyDriveHelper;
-import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -16,7 +15,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class CheesyDriveHelperTest {
 	// Instance to test with
-	private CheesyDriveHelper testCDH = new CheesyDriveHelper();
+	private CheesyDriveHelper mTestCDH = new CheesyDriveHelper();
 
 	/**
 	 * Tests for positive/negative/zero inputs matching sign of outputs
@@ -37,8 +36,8 @@ public class CheesyDriveHelperTest {
 		// Test that 0 input leads to 0 output (no negative inertia to start)
 		testCommands.leftStickInput.y = 0;
 		testCommands.rightStickInput.x = 0;
-		testCDH.cheesyDrive(testCommands, testRobotState);
-		DriveSignal output = testCDH.cheesyDrive(testCommands, testRobotState);
+		mTestCDH.cheesyDrive(testCommands, testRobotState);
+		DriveSignal output = mTestCDH.cheesyDrive(testCommands, testRobotState);
 		boolean zeroOutput = (output.leftMotor == 0) && (output.rightMotor==0);
 		assertTrue("Zero input should have zero output", zeroOutput);
 
@@ -49,6 +48,6 @@ public class CheesyDriveHelperTest {
 
 	// Helper method to check if two numbers have the same sign
 	private boolean matchSign(double n1, double n2) {
-		return (n1<=0)==(n2<=0);
+		return (n1 <= 0) == (n2 <= 0);
 	}
 }

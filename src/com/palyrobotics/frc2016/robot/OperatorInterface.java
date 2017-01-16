@@ -14,10 +14,10 @@ import com.palyrobotics.frc2016.robot.team254.lib.util.Latch;
  *
  */
 public class OperatorInterface {
-	private static final OperatorInterface mInstance = new OperatorInterface();
+	private static final OperatorInterface instance = new OperatorInterface();
 
 	public static OperatorInterface getInstance() {
-		return mInstance;
+		return instance;
 	}
 
 	private OperatorInterface(/* xu: string file_path, boolean read_from_file, boolean write_to_file */) {
@@ -29,30 +29,30 @@ public class OperatorInterface {
 	    // }
 	}
 	
-	private Commands m_commands = Commands.getInstance();
+	private Commands mCommands = Commands.getInstance();
 
-	private HardwareAdapter.Joysticks joysticks = HardwareAdapter.getInstance().getJoysticks();
-	private Joystick leftStick = joysticks.kLeftStick;
-	private Joystick rightStick = joysticks.kRightStick;
-	private Joystick operatorStick = joysticks.kOperatorStick;
+	private HardwareAdapter.Joysticks mJoysticks = HardwareAdapter.getInstance().getJoysticks();
+	private Joystick mLeftStick = mJoysticks.leftStick;
+	private Joystick mRightStick = mJoysticks.rightStick;
+	private Joystick mOperatorStick = mJoysticks.operatorStick;
 
-	private Latch driveForwardLatch = new Latch();
+	private Latch mDriveForwardLatch = new Latch();
 
 //	public void reset() {
 //		m_commands = new Commands();
 //	}
 	
 	public void updateCommands() {
-		if(operatorStick.getRawButton(4)) {
-			m_commands.routine_request = Commands.Routines.ENCODER_DRIVE;
+		if(mOperatorStick.getRawButton(4)) {
+			mCommands.routineRequest = Commands.Routines.ENCODER_DRIVE;
 		}
 		else {
-			m_commands.routine_request = Commands.Routines.NONE;
+			mCommands.routineRequest = Commands.Routines.NONE;
 		}
-		m_commands.operatorStickInput = new XboxInput(operatorStick.getX(), operatorStick.getY(), operatorStick.getX(), operatorStick.getY());
+		mCommands.operatorStickInput = new XboxInput(mOperatorStick.getX(), mOperatorStick.getY(), mOperatorStick.getX(), mOperatorStick.getY());
 		// Left Stick trigger cancels current routine
-		m_commands.cancel_current_routine = leftStick.getTrigger();
-		m_commands.leftStickInput = new JoystickInput(leftStick.getX(), leftStick.getY(), leftStick.getTrigger());
-		m_commands.rightStickInput = new JoystickInput(rightStick.getX(), rightStick.getY(), rightStick.getTrigger());
+		mCommands.cancelCurrentRoutine = mLeftStick.getTrigger();
+		mCommands.leftStickInput = new JoystickInput(mLeftStick.getX(), mLeftStick.getY(), mLeftStick.getTrigger());
+		mCommands.rightStickInput = new JoystickInput(mRightStick.getX(), mRightStick.getY(), mRightStick.getTrigger());
 	}
 }
