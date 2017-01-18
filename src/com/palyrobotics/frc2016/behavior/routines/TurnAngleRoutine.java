@@ -10,42 +10,42 @@ public class TurnAngleRoutine extends Routine {
 	public Subsystem[] getRequiredSubsystems() {
 		return new Subsystem[]{drive};
 	}
-	private double angle;
-	private double maxVel;
+	private double mAngle;
+	private double mMaxVel;
 	
-	private States m_state = States.START;
+	private States mState = States.START;
 	
 	private enum States {
 		START, TURNING, DONE
 	}
 	
 	public TurnAngleRoutine(double angle, double maxVel) {
-		this.angle = angle;
-		this.maxVel = maxVel;
+		this.mAngle = angle;
+		this.mMaxVel = maxVel;
 	}
 	
 	@Override
 	public void start() {
 		drive.resetController();
-		m_state = States.START;
+		mState = States.START;
 	}
 
 	@Override
 	public Commands update(Commands commands) {
 		Commands.Setpoints setpoints = commands.robotSetpoints;
 		
-		switch(m_state) {
+		switch(mState) {
 		case START:
-			System.out.println("Set setpoint: "+angle);
-			drive.setGyroTurnAngleSetpoint(angle, maxVel);
+			System.out.println("Set setpoint: "+mAngle);
+			drive.setGyroTurnAngleSetpoint(mAngle, mMaxVel);
 			
 			setpoints.currentRoutine = Commands.Routines.TURN_ANGLE;
-			m_state = States.TURNING;
+			mState = States.TURNING;
 			break;
 			
 		case TURNING:
 			if(drive.controllerOnTarget()) {
-				m_state = States.DONE;
+				mState = States.DONE;
 			}
 			break;
 			
@@ -59,15 +59,15 @@ public class TurnAngleRoutine extends Routine {
 	
 	@Override
 	public Commands cancel(Commands commands) {
-		m_state = States.DONE;
+		mState = States.DONE;
 		drive.setOpenLoop(DriveSignal.NEUTRAL);
 		drive.resetController();
 		return commands;
 	}
 
 	@Override
-	public boolean isFinished() {
-		return m_state == States.DONE;
+	public boolean finished() {
+		return mState == States.DONE;
 	}
 
 	@Override

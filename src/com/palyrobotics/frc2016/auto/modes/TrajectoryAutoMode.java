@@ -14,7 +14,7 @@ public class TrajectoryAutoMode extends AutoMode {
 		Segment[] segments = new Segment[50];
 		
 		for(int i = 0; i < 50; i++) {
-			segments[i] = new Segment(2*i, 0.5, 0.1, 0.1, 0, 10, 50, 50);
+			segments[i] = new Segment(2 * i, 0.5, 0.1, 0.1, 0, 10, 50, 50);
 		}
 		
 		Trajectory left = new Trajectory(segments);
@@ -33,7 +33,7 @@ public class TrajectoryAutoMode extends AutoMode {
 	@Override
 	public void prestart() {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Starting TrajectoryAutoMode");
 	}
 
 }

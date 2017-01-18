@@ -19,20 +19,20 @@ import edu.wpi.first.wpilibj.AnalogPotentiometer;
  */
 public class StrongHoldController extends Controller {
 	// Tuning constants
-	double m_default_max_speed = 0.5;
+	double kDefaultMaxSpeed = 0.5;
 	// Target angle
-	double m_angle;
+	double angle;
 	// Tolerance for holding position
-	double m_tolerance;
+	double tolerance;
 	
 	// Whether controller is enabled or not
-	private boolean m_enabled = false;
+	private boolean mEnabled = false;
 	
 	// Controller for finding outputs
-	private SynchronousPID m_controller;
+	private SynchronousPID mController;
 	
 	// Source of angle input
-	AnalogPotentiometer m_input_source;
+	AnalogPotentiometer inputSource;
 	
 	/**
 	 * Constructs the PID controller for holding position at an angle
@@ -42,10 +42,10 @@ public class StrongHoldController extends Controller {
 	 * @param angle Target angle
 	 */
 	public StrongHoldController(double p, double i, double d, double tolerance, AnalogPotentiometer inputSource) {
-		m_tolerance = tolerance;
-		m_controller = new SynchronousPID(p, i, d);
-		m_controller.setOutputRange(-m_default_max_speed, m_default_max_speed);
-		m_input_source = inputSource;
+		this.tolerance = tolerance;
+		mController = new SynchronousPID(p, i, d);
+		mController.setOutputRange(-kDefaultMaxSpeed, kDefaultMaxSpeed);
+		this.inputSource = inputSource;
 	}
 	
 	/**
@@ -55,13 +55,13 @@ public class StrongHoldController extends Controller {
 	 * @param d
 	 */
 	public void setPID(double p, double i, double d) {
-		m_controller.setPID(p, i, d);
+		mController.setPID(p, i, d);
 	}
 	/**
 	 * Set the tolerance (acceptable range of error)
 	 */
 	public void setTolerance(double tolerance) {
-		m_tolerance = tolerance;
+		this.tolerance = tolerance;
 	}
 	/**
 	 * Set max speed, limiting maximum output
@@ -70,25 +70,25 @@ public class StrongHoldController extends Controller {
 		if(speed < 0) {
 			speed = -speed;
 		}
-		m_controller.setOutputRange(-speed, speed);
+		mController.setOutputRange(-speed, speed);
 	}
 	
 	// Allow subsystem to enable and disable this controller to know when to ignore output
 	public void enable() {
-		m_enabled = true;
+		mEnabled = true;
 	}
 	public void disable() {
-		m_enabled = false;
+		mEnabled = false;
 	}
 	public boolean isEnabled() {
-		return m_enabled;
+		return mEnabled;
 	}
 	
 	/**
 	 * Sets a new setpoint for the controller
 	 */
 	public void setPositionSetpoint(double setpoint) {
-		m_controller.setSetpoint(setpoint);
+		mController.setSetpoint(setpoint);
 	}
 	
 	/**
@@ -96,7 +96,7 @@ public class StrongHoldController extends Controller {
 	 * @return The output for the motor
 	 */
 	public double update() {
-		return m_controller.calculate(m_input_source.get());
+		return mController.calculate(inputSource.get());
 	}
 	
 	@Override
@@ -104,7 +104,7 @@ public class StrongHoldController extends Controller {
 	 * @return true when the controller is on target
 	 */
 	public boolean isOnTarget() {
-		return m_controller.onTarget(m_tolerance);
+		return mController.onTarget(tolerance);
 	}
 
 	@Override

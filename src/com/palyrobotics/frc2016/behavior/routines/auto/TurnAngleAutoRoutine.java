@@ -11,14 +11,14 @@ import com.palyrobotics.frc2016.util.Subsystem;
  */
 public class TurnAngleAutoRoutine extends Routine {
 	
-	private double m_heading;
+	private double mHeading;
 	
 	public TurnAngleAutoRoutine(double heading) {
-		this.m_heading = heading;
+		this.mHeading = heading;
 	}
 	
 	@Override
-	public boolean isFinished() {
+	public boolean finished() {
 		return drive.controllerOnTarget();
 	}
 
@@ -34,7 +34,7 @@ public class TurnAngleAutoRoutine extends Routine {
 
 	@Override
 	public void start() {
-		drive.setTurnSetpoint(m_heading);
+		drive.setTurnSetpoint(mHeading);
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class TurnAngleAutoRoutine extends Routine {
 
 	@Override
 	public String getName() {
-		return "TurnAngleAuto";
+		return "TurnAngleAutoRoutine";
 	}
 
 }

@@ -1,7 +1,6 @@
 package com.palyrobotics.frc2016.config;
 
 import com.palyrobotics.frc2016.subsystems.Drive.DriveGear;
-import com.palyrobotics.frc2016.robot.team254.lib.util.ADXRS453_Gyro;
 import com.palyrobotics.frc2016.robot.team254.lib.util.Pose;
 
 /**
@@ -24,12 +23,7 @@ public class RobotState {
 	// No sensors on the robot currently
 	public DriveGear gear;
 
-	// Collects drivetrain sensor data into {@link Pose}
-	public Pose getDrivePose() {
-		return m_pose;
-	}
-
 	// Pose stores encoder and gyro data for drivetrain
-	public Pose m_pose = new Pose(0,0,0,0,0,0);
-	public double shooter_potentiometer;
+	public Pose drivePose = new Pose(0,0,0,0,0,0);
+	public double shooterPotentiometer;
 }

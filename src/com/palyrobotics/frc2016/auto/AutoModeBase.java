@@ -4,17 +4,17 @@ import com.palyrobotics.frc2016.behavior.Routine;
 import com.palyrobotics.frc2016.behavior.RoutineManager;
 
 public abstract class AutoModeBase {
-    protected double m_update_rate = 1.0 / 50.0;
-    protected boolean m_active = false;
+    protected double updateRate = 1.0 / 50.0;
+    protected boolean active = false;
 
     protected abstract void routine() throws AutoModeEndedException;
     public abstract String toString();
     public abstract void prestart();
-    private RoutineManager routineManager;
+    private RoutineManager mRoutineManager;
 
     public void run(RoutineManager routineManager) {
-    	this.routineManager = routineManager;
-        m_active = true;
+    	this.mRoutineManager = routineManager;
+        active = true;
         try {
             routine();
         } catch (AutoModeEndedException e) {
@@ -25,22 +25,22 @@ public abstract class AutoModeBase {
     }
 
     public void stop() {
-        m_active = false;
+        active = false;
     }
 
-    public boolean isActive() {
-        return m_active;
+    public boolean active() {
+        return active;
     }
 
-    public boolean isActiveWithThrow() throws AutoModeEndedException {
-        if (!isActive()) {
+    public boolean activeWithThrow() throws AutoModeEndedException {
+        if (!active()) {
             throw new AutoModeEndedException();
         }
-        return isActive();
+        return active();
     }
 
     public void runRoutine(Routine routine) {
-    	routineManager.addNewRoutine(routine);
+    	mRoutineManager.addNewRoutine(routine);
     }
     
 }

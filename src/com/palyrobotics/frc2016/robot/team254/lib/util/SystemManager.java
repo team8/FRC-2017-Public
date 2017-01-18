@@ -15,23 +15,23 @@ public class SystemManager {
     private static SystemManager inst = null;
 
     private class TappableHolder {
-        Tappable m_tappable;
-        StateHolder m_state_holder = new StateHolder();
+        Tappable tappable;
+        StateHolder stateHolder = new StateHolder();
 
         public TappableHolder(Tappable t) {
-            m_tappable = t;
+            tappable = t;
         }
 
         public StateHolder getStateHolder() {
-            return m_state_holder;
+            return stateHolder;
         }
 
         public void update() {
-            m_tappable.getState(m_state_holder);
+            tappable.getState(stateHolder);
         }
     }
 
-    private HashMap<String, TappableHolder> m_tappables;
+    private HashMap<String, TappableHolder> mTappables;
 
     public static SystemManager getInstance() {
         if (inst == null) {
@@ -41,27 +41,27 @@ public class SystemManager {
     }
 
     public SystemManager() {
-        this.m_tappables = new HashMap<String, TappableHolder>();
+        this.mTappables = new HashMap<String, TappableHolder>();
     }
 
     public void add(Tappable v) {
         TappableHolder th = new TappableHolder(v);
-        m_tappables.put(v.getName(), th);
+        mTappables.put(v.getName(), th);
     }
 
     public void add(Collection<Tappable> values) {
         for (Tappable v : values) {
             TappableHolder th = new TappableHolder(v);
-            m_tappables.put(v.getName(), th);
+            mTappables.put(v.getName(), th);
         }
     }
 
-    private void updateStates(String system_key) {
-        m_tappables.get(system_key).update();
+    private void updateStates(String systemKey) {
+        mTappables.get(systemKey).update();
     }
 
     private void updateAllStates() {
-        Set<String> keys = m_tappables.keySet();
+        Set<String> keys = mTappables.keySet();
         for (String key : keys) {
             updateStates(key);
         }
@@ -70,16 +70,16 @@ public class SystemManager {
     // Returns a map of all states
     public JSONObject get() {
         JSONObject states = new JSONObject();
-        Collection<String> system_keys = this.m_tappables.keySet();
+        Collection<String> systemKeys = this.mTappables.keySet();
 
         updateAllStates();
 
-        for (String system_key : system_keys) {
-            TappableHolder th = m_tappables.get(system_key);
+        for (String systemKey : systemKeys) {
+            TappableHolder th = mTappables.get(systemKey);
             StateHolder sh = th.getStateHolder();
-            Set<String> th_keys = sh.keySet();
-            for (String th_key : th_keys) {
-                states.put(system_key + "." + th_key, sh.get(th_key));
+            Set<String> thKeys = sh.keySet();
+            for (String thKey : thKeys) {
+                states.put(systemKey + "." + thKey, sh.get(thKey));
             }
         }
         return states;
@@ -93,7 +93,7 @@ public class SystemManager {
         String base = pieces[0];
         String key = pieces[1];
 
-        TappableHolder th = m_tappables.get(base);
+        TappableHolder th = mTappables.get(base);
         if (th == null) {
             return null;
         }

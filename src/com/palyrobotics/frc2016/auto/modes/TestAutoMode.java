@@ -23,6 +23,6 @@ public class TestAutoMode extends AutoMode {
 
 	@Override
 	public void prestart() {
-		System.out.println("Running Test Auto Mode");
+		System.out.println("Starting TestAutoMode");
 	}
 }

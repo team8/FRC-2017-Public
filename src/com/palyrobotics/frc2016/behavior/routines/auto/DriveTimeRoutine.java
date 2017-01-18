@@ -14,10 +14,10 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public class DriveTimeRoutine extends Routine {
 
-	private Timer timer = new Timer();
+	private Timer mTimer = new Timer();
 	
-	private double runTime;
-	private double speed = 0.5;
+	private double mRunTime;
+	private double mSpeed = 0.5;
 	
 	/**
 	 * Drives forward at (0.5, 0.5) for a specified number of seconds.
@@ -25,7 +25,7 @@ public class DriveTimeRoutine extends Routine {
 	 * @param runTime how long this action runs
 	 */
 	public DriveTimeRoutine(double runTime) {
-		this.runTime = runTime;
+		this.mRunTime = runTime;
 	}
 	
 	/**
@@ -36,13 +36,13 @@ public class DriveTimeRoutine extends Routine {
 	 * @param rightSpeed the speed of the right motor
 	 */
 	public DriveTimeRoutine(double runTime, double speed) {
-		this.runTime = runTime;
-		this.speed = speed;
+		this.mRunTime = runTime;
+		this.mSpeed = speed;
 	}
 	
 	@Override
-	public boolean isFinished() {
-		if(timer.get() < runTime && !drive.controllerOnTarget()) {
+	public boolean finished() {
+		if(mTimer.get() < mRunTime && !drive.controllerOnTarget()) {
 			return false;
 		}
 		else return true;
@@ -50,7 +50,7 @@ public class DriveTimeRoutine extends Routine {
 
 	@Override
 	public Commands update(Commands commands) {
-		System.out.println("Drive Time:" + timer.get());
+		System.out.println("Drive Time:" + mTimer.get());
 		return commands;
 	}
 
@@ -64,9 +64,9 @@ public class DriveTimeRoutine extends Routine {
 	@Override
 	public void start() {
 		System.out.println("Starting TimerDriveForwardAction");
-		timer.reset();
-		timer.start();
-		drive.setTimerDriveSetpoint(speed, runTime);
+		mTimer.reset();
+		mTimer.start();
+		drive.setTimerDriveSetpoint(mSpeed, mRunTime);
 	}
 
 	@Override
@@ -76,6 +76,6 @@ public class DriveTimeRoutine extends Routine {
 
 	@Override
 	public String getName() {
-		return "DriveTime";
+		return "DriveTimeRoutine";
 	}
 }

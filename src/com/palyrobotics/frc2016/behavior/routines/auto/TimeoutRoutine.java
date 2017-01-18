@@ -5,16 +5,16 @@ import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.util.Subsystem;
 
 public class TimeoutRoutine extends Routine {
-    double m_timeout;
-    double m_time_start;
+    double timeout;
+    double timeStart;
 
     public TimeoutRoutine(double timeout) {
-        m_timeout = timeout;
+        this.timeout = timeout;
     }
 
     @Override
-    public boolean isFinished() {
-        return System.currentTimeMillis() >= m_time_start + 1000*m_timeout;
+    public boolean finished() {
+        return System.currentTimeMillis() >= timeStart + 1000 * timeout;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class TimeoutRoutine extends Routine {
 
     @Override
     public void start() {
-        m_time_start = System.currentTimeMillis();
+        timeStart = System.currentTimeMillis();
     }
 
 	@Override
@@ -39,7 +39,7 @@ public class TimeoutRoutine extends Routine {
 
 	@Override
 	public String getName() {
-		return "Timeout";
+		return "TimeoutRoutine";
 	}
 
 }

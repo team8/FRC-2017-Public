@@ -4,7 +4,6 @@ import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.subsystems.*;
 import com.palyrobotics.frc2016.util.Subsystem;
 
-import java.util.ArrayList;
 
 /**
  * Abstract superclass for a routine, which specifies an autonomous series of actions <br />
@@ -27,7 +26,7 @@ public abstract class Routine {
     // Called to stop a routine, should return modified commands if needed
     public abstract Commands cancel(Commands commands);
     // Notifies routine manager when routine is complete
-    public abstract boolean isFinished();
+    public abstract boolean finished();
     // Store subsystems which are required by this routine, preventing routines from overlapping
     public abstract Subsystem[] getRequiredSubsystems();
     // Force override of getName()

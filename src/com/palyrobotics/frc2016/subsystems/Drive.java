@@ -2,7 +2,6 @@ package com.palyrobotics.frc2016.subsystems;
 
 import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.config.RobotState;
-import com.palyrobotics.frc2016.robot.Robot;
 import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
 import com.palyrobotics.frc2016.robot.team254.lib.util.Pose;
 import com.palyrobotics.frc2016.subsystems.controllers.BangBangTurnAngleController;
@@ -27,12 +26,12 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
  * Uses controllers or cheesydrivehelper/proportionaldrivehelper to calculate DriveSignal
  */
 public class Drive extends Subsystem implements SubsystemLoop {
-	private static Drive instance_ = new Drive();
+	private static Drive instance = new Drive();
 	public static Drive getInstance() {
-		return instance_;
+		return instance;
 	}
 	// Helper classes to calculate teleop output
-	private CheesyDriveHelper cdh = new CheesyDriveHelper();
+	private CheesyDriveHelper mCDH = new CheesyDriveHelper();
 //	private ProportionalDriveHelper pdh = new ProportionalDriveHelper();
 
 	public interface DriveController {
@@ -41,35 +40,35 @@ public class Drive extends Subsystem implements SubsystemLoop {
 
 		boolean onTarget();
 	}
-	private DriveController m_controller = null;
+	private DriveController mController = null;
 
 	// Derica is always considered high gear
 	public enum DriveGear {HIGH, LOW}
 	private DriveGear mGear;
 
 	// Encoder DPP
-	private final double m_inches_per_tick;
-	private final double m_wheelbase_width; // Get from CAD
-	private final double m_turn_slip_factor; // Measure empirically
+	private final double kInchesPerTick;
+	private final double kWheelbaseWidth; // Get from CAD
+	private final double kTurnSlipFactor; // Measure empirically
 
 	// Cache poses to not allocated at 200Hz
-	private Pose m_cached_pose = new Pose(0, 0, 0, 0, 0, 0);
+	private Pose mCachedPose = new Pose(0, 0, 0, 0, 0, 0);
 	// Cached robot state, updated by looper
-	private RobotState m_cached_robot_state;
+	private RobotState mCachedRobotState;
 	// Stores output
 	private DriveSignal mSignal = DriveSignal.NEUTRAL;
 
 	private Drive() {
 		super("Drive");
 		if(Constants.kRobotName == Constants.RobotName.TYR) {
-			m_wheelbase_width = 26.0;
-			m_turn_slip_factor = 1.2;
-			m_inches_per_tick = 0.184;
+			kWheelbaseWidth = 26.0;
+			kTurnSlipFactor = 1.2;
+			kInchesPerTick = 0.184;
 		}
 		else {
-			m_wheelbase_width = 22.0;
-			m_turn_slip_factor = 1.2;
-			m_inches_per_tick = 0.07033622;
+			kWheelbaseWidth = 22.0;
+			kTurnSlipFactor = 1.2;
+			kInchesPerTick = 0.07033622;
 			mGear = DriveGear.HIGH;
 		}
 	}
@@ -91,20 +90,20 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	 */
 	@Override
 	public void update(Commands commands, RobotState state) {
-		m_cached_robot_state = state;
+		mCachedRobotState = state;
 		Commands.Setpoints setpoints = commands.robotSetpoints;
 		// Call methods associated with any setpoints that are present
 		// Encoder drive distance routine
 //		setpoints.encoder_drive_setpoint.ifPresent(this.setDistanceSetpoint(setpoints.encoder_drive_setpoint));
 
-		if(m_controller==null && m_cached_robot_state.gamePeriod==RobotState.GamePeriod.TELEOP && commands.routine_request == Commands.Routines.NONE) {
-			setDriveOutputs(cdh.cheesyDrive(commands, m_cached_robot_state));
+		if(mController == null && mCachedRobotState.gamePeriod == RobotState.GamePeriod.TELEOP && commands.routineRequest == Commands.Routines.NONE) {
+			setDriveOutputs(mCDH.cheesyDrive(commands, mCachedRobotState));
 		}
-		else if (m_controller==null) {
+		else if (mController == null) {
 			setDriveOutputs(DriveSignal.NEUTRAL);
 		}
 		else {
-			setDriveOutputs(m_controller.update(getPhysicalPose()));
+			setDriveOutputs(mController.update(getPhysicalPose()));
 		}
 	}
 
@@ -141,7 +140,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	}
 
 	public void setOpenLoop(DriveSignal signal) {
-		m_controller = null;
+		mController = null;
 		setDriveOutputs(signal);
 	}
 
@@ -150,16 +149,16 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	}
 	public void setDistanceSetpoint(double distance, double velocity) {
 		// 0 < vel < max_vel
-		double vel_to_use = Math.min(Constants.kDriveMaxSpeedInchesPerSec, Math.max(velocity, 0));
-		m_controller = new DriveStraightController(
+		double velToUse = Math.min(Constants.kDriveMaxSpeedInchesPerSec, Math.max(velocity, 0));
+		mController = new DriveStraightController(
 				getPoseToContinueFrom(false),
 				distance,
-				vel_to_use);
+				velToUse);
 	}
 
 	public void setAutoAlignSetpoint(double heading) {
 		// Check if already turning to that setpoint
-		if(m_controller instanceof GyroTurnAngleController) {
+		if(mController instanceof GyroTurnAngleController) {
 //			if(m_controller.getCurrentSetpoint().getHeading()-getPhysicalPose().getHeading() != heading) {
 //				// New auto align iteration
 //				System.out.println("New auto align setpoint");
@@ -172,15 +171,15 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	}
 
 	public void setTimerDriveSetpoint(double velocity, double time) {
-		m_controller = (DriveController) new TimedOpenLoopController(velocity, time, 0, 1.5);
+		mController = (DriveController) new TimedOpenLoopController(velocity, time, 0, 1.5);
 	}
 	
-	public void setTimerDriveSetpoint(double velocity, double time, double decel_time) {
-		m_controller = (DriveController) new TimedOpenLoopController(velocity, time, 0, decel_time);
+	public void setTimerDriveSetpoint(double velocity, double time, double decelTime) {
+		mController = (DriveController) new TimedOpenLoopController(velocity, time, 0, decelTime);
 	}
 	
-	public void setTimerDriveSetpoint(double start_power, double time_full_on, double end_power, double time_to_decel) {
-		m_controller = (DriveController) new TimedOpenLoopController(start_power, time_full_on, end_power, time_to_decel);
+	public void setTimerDriveSetpoint(double startPower, double timeFullOn, double endPower, double timeToDecel) {
+		mController = (DriveController) new TimedOpenLoopController(startPower, timeFullOn, endPower, timeToDecel);
 		
 	}
 	
@@ -190,7 +189,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	
 	public void setTurnSetpoint(double heading, double velocity) {
 		velocity = Math.min(Constants.kTurnMaxSpeedRadsPerSec, Math.max(velocity, 0));
-		m_controller = new TurnInPlaceController(getPoseToContinueFrom(true), heading, velocity);
+		mController = new TurnInPlaceController(getPoseToContinueFrom(true), heading, velocity);
 	}
 
 	public void setEncoderTurnAngleSetpoint(double heading) {
@@ -198,7 +197,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	}
 	
 	public void setEncoderTurnAngleSetpoint(double heading, double maxVel) {
-		m_controller = new EncoderTurnAngleController(getPoseToContinueFrom(true), heading, maxVel);
+		mController = new EncoderTurnAngleController(getPoseToContinueFrom(true), heading, maxVel);
 	}
 
 	public void setGyroTurnAngleSetpoint(double heading) {
@@ -206,40 +205,40 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	}
 	
 	public void setGyroTurnAngleSetpoint(double heading, double maxVel) {
-		m_controller = new GyroTurnAngleController(getPoseToContinueFrom(true), heading, maxVel);
+		mController = new GyroTurnAngleController(getPoseToContinueFrom(true), heading, maxVel);
 	}
 	
 	public void setBangBangTurnAngleSetpoint(double heading) {
-		m_controller = new BangBangTurnAngleController(getPoseToContinueFrom(true), heading);
+		mController = new BangBangTurnAngleController(getPoseToContinueFrom(true), heading);
 	}
 
 	// Wipes current controller
 	public void resetController() {
-		m_controller = null;
+		mController = null;
 	}
 
 	public void setPathSetpoint(Path path) {
 		resetController();
-		m_controller = new DrivePathController(path);
+		mController = new DrivePathController(path);
 	}
 
 	public void setFinishLineSetpoint(double distance, double heading) {
 		resetController();
-		m_controller = new DriveFinishLineController(distance, heading, 1.0);
+		mController = new DriveFinishLineController(distance, heading, 1.0);
 	}
 
-	private Pose getPoseToContinueFrom(boolean for_turn_controller) {
-		if (!for_turn_controller && m_controller instanceof TurnInPlaceController) {
-			Pose pose_to_use = getPhysicalPose();
-			pose_to_use.m_heading = ((TurnInPlaceController) m_controller).getHeadingGoal();
-			pose_to_use.m_heading_velocity = 0;
-			return pose_to_use;
-		} else if (m_controller == null || (m_controller instanceof DriveStraightController && for_turn_controller)) {
+	private Pose getPoseToContinueFrom(boolean forTurnController) {
+		if (!forTurnController && mController instanceof TurnInPlaceController) {
+			Pose poseToUse = getPhysicalPose();
+			poseToUse.heading = ((TurnInPlaceController) mController).getHeadingGoal();
+			poseToUse.headingVelocity = 0;
+			return poseToUse;
+		} else if (mController == null || (mController instanceof DriveStraightController && forTurnController)) {
 			return getPhysicalPose();
-		} else if (m_controller instanceof DriveFinishLineController) {
+		} else if (mController instanceof DriveFinishLineController) {
 			return getPhysicalPose();
-		} else if (m_controller.onTarget()) {
-			return m_controller.getCurrentSetpoint();
+		} else if (mController.onTarget()) {
+			return mController.getCurrentSetpoint();
 		} else {
 			return getPhysicalPose();
 		}
@@ -250,22 +249,22 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	 */
 	public Pose getPhysicalPose() {
 		// If drivetrain has not had first update yet, return initial robot pose of 0,0,0,0,0,0
-		if(m_cached_robot_state == null) {
+		if(mCachedRobotState == null) {
 			return new Pose(0,0,0,0,0,0);
 		}
-		m_cached_pose = m_cached_robot_state.getDrivePose();
-		return m_cached_pose;
+		mCachedPose = mCachedRobotState.drivePose;
+		return mCachedPose;
 	}
 
 	public Drive.DriveController getController() {
-		return m_controller;
+		return mController;
 	}
 
 	public boolean controllerOnTarget() {
-		return m_controller != null && m_controller.onTarget();
+		return mController != null && mController.onTarget();
 	}
 
 	public boolean hasController() {
-		return m_controller != null;
+		return mController != null;
 	}
 }

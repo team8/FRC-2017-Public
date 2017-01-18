@@ -3,33 +3,32 @@ package com.palyrobotics.frc2016.behavior.routines.auto;
 import com.palyrobotics.frc2016.behavior.Routine;
 import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
-import com.palyrobotics.frc2016.subsystems.Drive;
 import com.palyrobotics.frc2016.util.Subsystem;
 
 public class DriveDistanceRoutine extends Routine {
 
-	private double distance;
-	private double maxVel;
-	private double startPoint;
+	private double mDistance;
+	private double mMaxVel;
+	private double mStartPoint;
 	
 	public DriveDistanceRoutine(double distance) {
-		this.distance = distance;
-		this.maxVel = 1;
+		this.mDistance = distance;
+		this.mMaxVel = 1;
 	}
 	
 	public DriveDistanceRoutine(double distance, double maxVel) {
-		this.distance = distance;
-		this.maxVel = maxVel;
+		this.mDistance = distance;
+		this.mMaxVel = maxVel;
 	}
 	
 	@Override
 	public void start() {
 		System.out.println("Starting EncoderDriveAction");
 		drive.resetController();
-		startPoint = drive.getPhysicalPose().getRightDistance();
-		System.out.println(startPoint);
+		mStartPoint = drive.getPhysicalPose().getRightDistance();
+		System.out.println(mStartPoint);
 		//setDistanceSetpoint is relative
-		drive.setDistanceSetpoint(distance, maxVel);
+		drive.setDistanceSetpoint(mDistance, mMaxVel);
 	}
 
 	@Override
@@ -47,7 +46,7 @@ public class DriveDistanceRoutine extends Routine {
 	}
 
 	@Override
-	public boolean isFinished() {
+	public boolean finished() {
 		return drive.controllerOnTarget();
 	}
 
@@ -58,6 +57,6 @@ public class DriveDistanceRoutine extends Routine {
 
 	@Override
 	public String getName() {
-		return "DriveDistance";
+		return "DriveDistanceRoutine";
 	}
 }

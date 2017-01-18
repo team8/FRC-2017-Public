@@ -23,7 +23,7 @@ public class Commands {
 	 * @author Nihar
 	 */
 	public static class Setpoints {
-		public static final Optional<Double> m_nullopt = Optional.empty();
+		public static final Optional<Double> NULLOPT = Optional.empty();
 		
 		public Routines currentRoutine;
 		/**
@@ -65,8 +65,8 @@ public class Commands {
 		TIMER_DRIVE, ENCODER_DRIVE, TURN_ANGLE, NONE
 	}
 	// Routine requests
-	public Routines routine_request = Routines.NONE;
+	public Routines routineRequest = Routines.NONE;
 	
 	// Allows you to cancel routine
-	public boolean cancel_current_routine = false;
+	public boolean cancelCurrentRoutine = false;
 }

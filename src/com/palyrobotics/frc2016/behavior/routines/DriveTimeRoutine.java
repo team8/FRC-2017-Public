@@ -16,13 +16,13 @@ public class DriveTimeRoutine extends Routine {
 	private enum DriveTimeRoutineStates {
 		START, DRIVING, DONE
 	}
-	DriveTimeRoutineStates m_state = DriveTimeRoutineStates.START;
-	Timer m_timer = new Timer();
+	DriveTimeRoutineStates state = DriveTimeRoutineStates.START;
+	Timer timer = new Timer();
 	// Default values for time and velocity setpoints
-	private double m_time_setpoint;
-	private double m_velocity_setpoint;
+	private double mTimeSetpoint;
+	private double mVelocitySetpoint;
 	
-	private boolean m_is_new_state = true;
+	private boolean mIsNewState = true;
 	/**
 	 * Constructs with a specified time setpoint and velocity
 	 * @param time How long to drive (seconds)
@@ -38,7 +38,7 @@ public class DriveTimeRoutine extends Routine {
 	 * @param time how long to drive forward in seconds
 	 */
 	public void setTimeSetpoint(double time) {
-		this.m_time_setpoint = time;
+		this.mTimeSetpoint = time;
 	}
 	
 	/**
@@ -48,7 +48,7 @@ public class DriveTimeRoutine extends Routine {
 	 */
 	public boolean setVelocity(double velocity) {
 		if(velocity > 0) {
-			this.m_velocity_setpoint = velocity;
+			this.mVelocitySetpoint = velocity;
 			return true;
 		}
 		return false;
@@ -56,23 +56,23 @@ public class DriveTimeRoutine extends Routine {
 	//Routines just change the states of the robotsetpoints, which the behavior manager then moves the physical subsystems based on.
 	@Override
 	public Commands update(Commands commands) {
-		DriveTimeRoutineStates new_state = m_state;
+		DriveTimeRoutineStates newState = state;
 		Commands.Setpoints setpoints = commands.robotSetpoints;
-		switch (m_state) {
+		switch (state) {
 		case START:
 			// Only set the setpoint the first time the state is START
-			if(m_is_new_state) {
-				m_timer.reset();
-				m_timer.start();
-				drive.setTimerDriveSetpoint(m_velocity_setpoint, m_time_setpoint);
+			if(mIsNewState) {
+				timer.reset();
+				timer.start();
+				drive.setTimerDriveSetpoint(mVelocitySetpoint, mTimeSetpoint);
 			}
 
 			setpoints.currentRoutine = Commands.Routines.TIMER_DRIVE;
-			new_state = DriveTimeRoutineStates.DRIVING;
+			newState = DriveTimeRoutineStates.DRIVING;
 			break;
 		case DRIVING:
 			if(drive.controllerOnTarget()) {
-				new_state = DriveTimeRoutineStates.DONE;
+				newState = DriveTimeRoutineStates.DONE;
 			}
 			break;
 		case DONE:
@@ -82,20 +82,20 @@ public class DriveTimeRoutine extends Routine {
 			break;
 		}
 
-		m_is_new_state = false;
-		if(new_state != m_state) {
-			m_state = new_state;
-			m_is_new_state = true;
+		mIsNewState = false;
+		if(newState != state) {
+			state = newState;
+			mIsNewState = true;
 		}
 		return commands;
 	}
 
 	@Override
 	public Commands cancel(Commands commands) {
-		m_state = DriveTimeRoutineStates.DONE;
+		state = DriveTimeRoutineStates.DONE;
 		System.out.println("Cancelling");
-		m_timer.stop();
-		m_timer.reset();
+		timer.stop();
+		timer.reset();
 		drive.resetController();
 		drive.setOpenLoop(DriveSignal.NEUTRAL);
 		return commands;
@@ -104,19 +104,19 @@ public class DriveTimeRoutine extends Routine {
 	@Override
 	public void start() {
 		drive.resetController();
-		m_timer.reset();
-		m_state = DriveTimeRoutineStates.START;
+		timer.reset();
+		state = DriveTimeRoutineStates.START;
 	}
 	
 	@Override
-	public boolean isFinished() {
+	public boolean finished() {
 		// allow
-		return m_state == DriveTimeRoutineStates.DONE && m_is_new_state==false;
+		return state == DriveTimeRoutineStates.DONE && mIsNewState==false;
 	}
 
 	@Override
 	public String getName() {
-		return "Timer Drive Forward";
+		return "DriveTimeRoutine";
 	}
 
 }

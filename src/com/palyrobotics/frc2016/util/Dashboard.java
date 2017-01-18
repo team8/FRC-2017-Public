@@ -20,27 +20,27 @@ public class Dashboard {
 	}
 	
 	private DriverStation mDriverStation = null;
-	private boolean checkAlliance = true;
-	protected NetworkTable mDashboardTable = null;
+	private boolean mCheckAlliance = true;
+	protected NetworkTable dashboardTable = null;
 		
 	/**
 	 * Default Tyr states
 	 * Make sure to call in robot init to instantiate network table and driver station
 	 */
 	public void init() {
-		mDashboardTable = NetworkTable.getTable("RobotTable");
+		dashboardTable = NetworkTable.getTable("RobotTable");
 		this.mDriverStation = DriverStation.getInstance();
 		
-		mDashboardTable.putNumber("match-time", 90);
-		mDashboardTable.putString("game-period", "DISABLED");
-		mDashboardTable.putBoolean("brownout-status", false);
-		mDashboardTable.putNumber("battery", 12.0);
-		mDashboardTable.putString("alliance", "invalid");
-		mDashboardTable.putString("accumulatorstate", "Disabled");
-		mDashboardTable.putString("drivetrainstate", "Disabled");
-		mDashboardTable.putString("shooterstate", "Disabled");
-		mDashboardTable.putString("breacherstate", "Disabled");
-		mDashboardTable.putString("grabberstate", "Disabled");
+		dashboardTable.putNumber("match-time", 90);
+		dashboardTable.putString("game-period", "DISABLED");
+		dashboardTable.putBoolean("brownout-status", false);
+		dashboardTable.putNumber("battery", 12.0);
+		dashboardTable.putString("alliance", "invalid");
+		dashboardTable.putString("accumulatorstate", "Disabled");
+		dashboardTable.putString("drivetrainstate", "Disabled");
+		dashboardTable.putString("shooterstate", "Disabled");
+		dashboardTable.putString("breacherstate", "Disabled");
+		dashboardTable.putString("grabberstate", "Disabled");
 	}
 	
 	/**
@@ -49,35 +49,35 @@ public class Dashboard {
 	public void update() {
 		// Update phase/period of the game
 		if (mDriverStation.isAutonomous()) {
-			mDashboardTable.putString("game-period", "Autonomous");
+			dashboardTable.putString("game-period", "Autonomous");
 		} else if (mDriverStation.isDisabled()) {
-			mDashboardTable.putString("game-period", "Disabled");
+			dashboardTable.putString("game-period", "Disabled");
 		} else if (mDriverStation.isOperatorControl()) {
-			mDashboardTable.putString("game-period", "Teleop");
+			dashboardTable.putString("game-period", "Teleop");
 		} else if (mDriverStation.isTest()) {
-			mDashboardTable.putString("game-period", "Test");
+			dashboardTable.putString("game-period", "Test");
 		} else {
-			mDashboardTable.putString("game-period", "Unidentified");
+			dashboardTable.putString("game-period", "Unidentified");
 		}
 		// Update alliance
-		if(checkAlliance) {
+		if(mCheckAlliance) {
 			switch (mDriverStation.getAlliance()) {
 			case Blue:
-				mDashboardTable.putString("alliance", "blue");
-				checkAlliance = false;
+				dashboardTable.putString("alliance", "blue");
+				mCheckAlliance = false;
 				break;
 			case Red:
-				mDashboardTable.putString("alliance", "red");
-				checkAlliance = false;
+				dashboardTable.putString("alliance", "red");
+				mCheckAlliance = false;
 				break;
 			case Invalid:
-				mDashboardTable.putString("alliance", "invalid");
+				dashboardTable.putString("alliance", "invalid");
 			}
 		}
 		// Update information from the driver station
-		mDashboardTable.putNumber("match-time", mDriverStation.getMatchTime());
-		mDashboardTable.putBoolean("brownout-status", mDriverStation.isBrownedOut());
-		mDashboardTable.putNumber("battery", mDriverStation.getBatteryVoltage());
+		dashboardTable.putNumber("match-time", mDriverStation.getMatchTime());
+		dashboardTable.putBoolean("brownout-status", mDriverStation.isBrownedOut());
+		dashboardTable.putNumber("battery", mDriverStation.getBatteryVoltage());
 
 	}
 	
@@ -86,10 +86,10 @@ public class Dashboard {
 	 * @return -1 if nothing, otherwise a string name for the auto path
 	 */
 	public String getSelectedAutoMode() {
-		return mDashboardTable.getString("autopath", "-1");
+		return dashboardTable.getString("autopath", "-1");
 	}
 	
 	public NetworkTable getTable() {
-		return mDashboardTable;
+		return dashboardTable;
 	}
 }

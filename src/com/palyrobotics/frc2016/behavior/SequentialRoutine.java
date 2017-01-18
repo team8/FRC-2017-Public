@@ -24,7 +24,7 @@ public class SequentialRoutine extends Routine {
 	}
 
 	@Override
-	public boolean isFinished() {
+	public boolean finished() {
 		return false;
 	}
 

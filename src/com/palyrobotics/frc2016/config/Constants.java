@@ -151,11 +151,8 @@ public class Constants extends ConstantsBase {
 	public static int kCompressorRelayPort = 0;
 	public static int kPressureSwitchDIO = 1;
 
-	// !!! Physical constants
-	public static final double kLowBarDistance = 6.5*12;
-	public static final double kLowBarVelocity = 0.4;
-	// 95.5 inches from start defense to 12 ft from goal
-	public static final double kBreachDistance = 95.5 + 10;
+	// !!! TODO: Physical constants
+	
 	
 	// !!! Loop rate of normal Looper
 	public static double kControlLoopsDt = 0.005;

@@ -3,20 +3,20 @@ package com.palyrobotics.frc2016.robot.team254.lib.util;
 public class Pose {
 	public Pose(double leftDistance, double rightDistance, double leftVelocity,
 				double rightVelocity, double heading, double headingVelocity) {
-		this.m_left_distance = leftDistance;
-		this.m_right_distance = rightDistance;
-		this.m_left_velocity = leftVelocity;
-		this.m_right_velocity = rightVelocity;
-		this.m_heading = heading;
-		this.m_heading_velocity = headingVelocity;
+		this.leftDistance = leftDistance;
+		this.rightDistance = rightDistance;
+		this.leftVelocity = leftVelocity;
+		this.rightVelocity = rightVelocity;
+		this.heading = heading;
+		this.headingVelocity = headingVelocity;
 	}
 
-	public double m_left_distance;
-	public double m_right_distance;
-	public double m_left_velocity;
-	public double m_right_velocity;
-	public double m_heading;
-	public double m_heading_velocity;
+	public double leftDistance;
+	public double rightDistance;
+	public double leftVelocity;
+	public double rightVelocity;
+	public double heading;
+	public double headingVelocity;
 
 	/**
 	 * Resets the current pose to use new parameters
@@ -25,43 +25,43 @@ public class Pose {
 	 */
 	public void reset(double leftDistance, double rightDistance, double leftVelocity,
 					  double rightVelocity, double heading, double headingVelocity) {
-		this.m_left_distance = leftDistance;
-		this.m_right_distance = rightDistance;
-		this.m_left_velocity = leftVelocity;
-		this.m_right_velocity = rightVelocity;
-		this.m_heading = heading;
-		this.m_heading_velocity = headingVelocity;
+		this.leftDistance = leftDistance;
+		this.rightDistance = rightDistance;
+		this.leftVelocity = leftVelocity;
+		this.rightVelocity = rightVelocity;
+		this.heading = heading;
+		this.headingVelocity = headingVelocity;
 	}
 
 	public double getLeftDistance() {
-		return m_left_distance;
+		return leftDistance;
 	}
 
 	public double getHeading() {
-		return m_heading;
+		return heading;
 	}
 
 	public double getRightDistance() {
-		return m_right_distance;
+		return rightDistance;
 	}
 
 	public double getLeftVelocity() {
-		return m_left_velocity;
+		return leftVelocity;
 	}
 
 	public double getRightVelocity() {
-		return m_right_velocity;
+		return rightVelocity;
 	}
 
 	public double getHeadingVelocity() {
-		return m_heading_velocity;
+		return headingVelocity;
 	}
 
 	public class RelativePoseGenerator {
-		private Pose m_base_pose;
+		private Pose _basePose;
 
 		public RelativePoseGenerator() {
-			m_base_pose = Pose.this;
+			_basePose = Pose.this;
 		}
 
 		/**
@@ -72,12 +72,12 @@ public class Pose {
 		 */
 		public Pose get(Pose pose) {
 			return new Pose(
-					pose.getLeftDistance() - m_base_pose.getLeftDistance(),
-					pose.getRightDistance() - m_base_pose.getRightDistance(),
-					m_base_pose.getLeftVelocity() - pose.getLeftVelocity(),
-					m_base_pose.getRightVelocity() - pose.getRightVelocity(),
-					pose.getHeading() - m_base_pose.getHeading(),
-					m_base_pose.getHeadingVelocity()
+					pose.getLeftDistance() - _basePose.getLeftDistance(),
+					pose.getRightDistance() - _basePose.getRightDistance(),
+					_basePose.getLeftVelocity() - pose.getLeftVelocity(),
+					_basePose.getRightVelocity() - pose.getRightVelocity(),
+					pose.getHeading() - _basePose.getHeading(),
+					_basePose.getHeadingVelocity()
 							- pose.getHeadingVelocity());
 		}
 	}
@@ -104,11 +104,11 @@ public class Pose {
 	 */
 	public Pose copy() {
 		return new Pose(
-				m_left_distance,
-				m_right_distance,
-				m_left_velocity,
-				m_right_velocity,
-				m_heading,
-				m_heading_velocity);
+				leftDistance,
+				rightDistance,
+				leftVelocity,
+				rightVelocity,
+				heading,
+				headingVelocity);
 	}
 }

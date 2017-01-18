@@ -11,8 +11,8 @@ public class WaitForDriveControllerRoutine extends TimeoutRoutine {
     }
 
     @Override
-    public boolean isFinished() {
-        return drive.controllerOnTarget() || super.isFinished();
+    public boolean finished() {
+        return drive.controllerOnTarget() || super.finished();
     }
 
 }

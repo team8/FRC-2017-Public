@@ -12,27 +12,27 @@ class HardwareUpdater {
 	/**
 	 * Hardware Updater for Derica
 	 * Updates Drive, Catapult, Intake, LowGoalShooter
-	 * @param mDrive
+	 * @param drive
 	 * @param mCatapult
 	 * @param mIntake
 	 * @param mLowGoalShooter
 	 */
-	HardwareUpdater(Drive mDrive) {
-		this.mDrive = mDrive;
+	HardwareUpdater(Drive drive) {
+		this.mDrive = drive;
 	}
 
 	/**
 	 * Updates all the sensor data taken from the hardware
 	 */
 	void updateSensors() {
-		System.out.println("Gyro "+HardwareAdapter.DrivetrainHardware.getInstance().kGyro.getAngle());
+		System.out.println("Gyro "+HardwareAdapter.DrivetrainHardware.getInstance().gyro.getAngle());
 		RobotState robotState = Robot.getRobotState();
-		robotState.m_pose.m_heading = HardwareAdapter.DrivetrainHardware.getInstance().kGyro.getAngle();
-		robotState.m_pose.m_heading_velocity = HardwareAdapter.DrivetrainHardware.getInstance().kGyro.getRate();
-		robotState.m_pose.m_left_distance = HardwareAdapter.DrivetrainHardware.getInstance().kLeftDriveEncoder.get();
-		robotState.m_pose.m_left_velocity = HardwareAdapter.DrivetrainHardware.getInstance().kLeftDriveEncoder.getRate();
-		robotState.m_pose.m_right_distance = HardwareAdapter.DrivetrainHardware.getInstance().kRightDriveEncoder.get();
-		robotState.m_pose.m_right_velocity = HardwareAdapter.DrivetrainHardware.getInstance().kRightDriveEncoder.getRate();
+		robotState.drivePose.heading = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getAngle();
+		robotState.drivePose.headingVelocity = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getRate();
+		robotState.drivePose.leftDistance = HardwareAdapter.DrivetrainHardware.getInstance().leftDriveEncoder.get();
+		robotState.drivePose.leftVelocity = HardwareAdapter.DrivetrainHardware.getInstance().leftDriveEncoder.getRate();
+		robotState.drivePose.rightDistance = HardwareAdapter.DrivetrainHardware.getInstance().rightDriveEncoder.get();
+		robotState.drivePose.rightVelocity = HardwareAdapter.DrivetrainHardware.getInstance().rightDriveEncoder.getRate();
 	}
 
 	/**
@@ -43,9 +43,9 @@ class HardwareUpdater {
 	}
 	
 	private void updateDrivetrain() {
-		HardwareAdapter.getInstance().getDrivetrain().kLeftDriveMotor.set(mDrive.getDriveSignal().leftMotor);
+		HardwareAdapter.getInstance().getDrivetrain().leftDriveMotor.set(mDrive.getDriveSignal().leftMotor);
 		// Need to invert right side motor
-		HardwareAdapter.getInstance().getDrivetrain().kRightDriveMotor.set(-mDrive.getDriveSignal().rightMotor);
+		HardwareAdapter.getInstance().getDrivetrain().rightDriveMotor.set(-mDrive.getDriveSignal().rightMotor);
 	}
 	
 

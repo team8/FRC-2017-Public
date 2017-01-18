@@ -8,14 +8,14 @@ import com.palyrobotics.frc2016.util.Subsystem;
 
 public class DrivePathRoutine extends Routine {
 
-	private Path path;
+	private Path mPath;
 	
 	public DrivePathRoutine(Path path) {
-		this.path = path;
+		this.mPath = path;
 	}
 	
 	@Override
-	public boolean isFinished() {
+	public boolean finished() {
 		return drive.controllerOnTarget();
 	}
 
@@ -34,7 +34,7 @@ public class DrivePathRoutine extends Routine {
 	@Override
 	public void start() {
 		System.out.println("DrivePathAction Started");
-		drive.setPathSetpoint(path);
+		drive.setPathSetpoint(mPath);
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class DrivePathRoutine extends Routine {
 
 	@Override
 	public String getName() {
-		return "DrivePath";
+		return "DrivePathRoutine";
 	}
 
 }
