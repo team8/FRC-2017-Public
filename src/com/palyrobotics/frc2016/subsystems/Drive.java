@@ -50,6 +50,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	private final double kInchesPerTick;
 	private final double kWheelbaseWidth; // Get from CAD
 	private final double kTurnSlipFactor; // Measure empirically
+	public final double kInchesToTicks;
 
 	// Cache poses to not allocated at 200Hz
 	private Pose mCachedPose = new Pose(0, 0, 0, 0, 0, 0);
@@ -64,12 +65,14 @@ public class Drive extends Subsystem implements SubsystemLoop {
 			kWheelbaseWidth = 26.0;
 			kTurnSlipFactor = 1.2;
 			kInchesPerTick = 0.184;
+			kInchesToTicks = 1400 / (2 * 3.1415 * 3.5);
 		}
 		else {
 			kWheelbaseWidth = 22.0;
 			kTurnSlipFactor = 1.2;
 			kInchesPerTick = 0.07033622;
 			mGear = DriveGear.HIGH;
+			kInchesToTicks = 1400 / (2 * 3.1415 * 3.5);
 		}
 	}
 
