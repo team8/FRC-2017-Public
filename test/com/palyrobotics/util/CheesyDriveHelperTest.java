@@ -8,6 +8,7 @@ import com.palyrobotics.frc2016.util.CheesyDriveHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -28,7 +29,7 @@ public class CheesyDriveHelperTest {
 		assertTrue("Match Sign broken", !matchSign(1,-2));
 		assertTrue("Match Sign broken", matchSign(-1,-2));
 		assertTrue("Match Sign broken", matchSign(0,0));
-		assertTrue("Match Sign broken", matchSign(1,0));
+		assertFalse("Match Sign broken", matchSign(1,0));
 		// Robot state only used by CDH to check for high gear vs low gear
 		RobotState testRobotState = new RobotState();
 		testRobotState.gear = Drive.DriveGear.HIGH;

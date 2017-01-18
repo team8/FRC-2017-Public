@@ -51,6 +51,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	private final double m_inches_per_tick;
 	private final double m_wheelbase_width; // Get from CAD
 	private final double m_turn_slip_factor; // Measure empirically
+	public final double INCHES_TO_TICKS;
 
 	// Cache poses to not allocated at 200Hz
 	private Pose m_cached_pose = new Pose(0, 0, 0, 0, 0, 0);
@@ -65,12 +66,14 @@ public class Drive extends Subsystem implements SubsystemLoop {
 			m_wheelbase_width = 26.0;
 			m_turn_slip_factor = 1.2;
 			m_inches_per_tick = 0.184;
+			INCHES_TO_TICKS = 1400 / (2 * 3.1415 * 3.5);
 		}
 		else {
 			m_wheelbase_width = 22.0;
 			m_turn_slip_factor = 1.2;
 			m_inches_per_tick = 0.07033622;
 			mGear = DriveGear.HIGH;
+			INCHES_TO_TICKS = 1400 / (2 * 3.1415 * 3.5);
 		}
 	}
 

@@ -1,6 +1,5 @@
 package com.palyrobotics.frc2016.robot;
 
-import com.palyrobotics.frc2016.config.RobotState;
 import com.ctre.CANTalon;
 import com.palyrobotics.frc2016.config.Constants;
 import com.palyrobotics.frc2016.util.XboxController;
@@ -29,10 +28,10 @@ public class HardwareAdapter {
 			return mInstance;
 		}
 
-		public final CANTalon kLeftFrontDriveMotor;
-		public final CANTalon kLeftBackDriveMotor;
-		public final CANTalon kRightFrontDriveMotor;
-		public final CANTalon kRightBackDriveMotor;
+		public final CANTalon kDriveLeftSlaveTalon;
+		public final CANTalon kDriveLeftMasterTalon;
+		public final CANTalon kDriveRightSlaveTalon;
+		public final CANTalon kDriveRightMasterTalon;
 
 		public final Encoder kLeftDriveEncoder;
 		public final Encoder kRightDriveEncoder;
@@ -41,30 +40,48 @@ public class HardwareAdapter {
 
 		private DrivetrainHardware() {
 			if (Constants.kRobotName == Constants.RobotName.TYR) {
-				kLeftFrontDriveMotor = new CANTalon(Constants.kTyrLeftDriveFrontMotorDeviceID);
-				kLeftBackDriveMotor = new CANTalon(Constants.kTyrLeftDriveBackMotorDeviceID);
-				kRightFrontDriveMotor = new CANTalon(Constants.kTyrRightDriveFrontMotorDeviceID);
-				kRightBackDriveMotor = new CANTalon(Constants.kTyrRightDriveBackMotorDeviceID);
-				kLeftDriveEncoder = new Encoder(
-						Constants.kTyrLeftDriveEncoderDIOA, Constants.kTyrLeftDriveEncoderDIOB);
-				kRightDriveEncoder = new Encoder(
-						Constants.kTyrRightDriveEncoderDIOA, Constants.kTyrRightDriveEncoderDIOB);
+				kDriveLeftSlaveTalon = new CANTalon(Constants.kTyrLeftDriveFrontMotorDeviceID);
+				kDriveLeftMasterTalon = new CANTalon(Constants.kTyrLeftDriveBackMotorDeviceID);
+				kDriveRightSlaveTalon = new CANTalon(Constants.kTyrRightDriveFrontMotorDeviceID);
+				kDriveRightMasterTalon = new CANTalon(Constants.kTyrRightDriveBackMotorDeviceID);
+//				kLeftDriveEncoder = new Encoder(
+//						Constants.kTyrLeftDriveEncoderDIOA, Constants.kTyrLeftDriveEncoderDIOB);
+//				kRightDriveEncoder = new Encoder(
+//						Constants.kTyrRightDriveEncoderDIOA, Constants.kTyrRightDriveEncoderDIOB);
+				// Currently encoders on Tyr are non-existent
+				kLeftDriveEncoder = null;
+				kRightDriveEncoder = null;
 				kGyro = new ADXRS450_Gyro();
 				kShifterSolenoid = new DoubleSolenoid(
 						Constants.kTyrDriveSolenoidExtend, Constants.kTyrDriveSolenoidRetract);
 			} else {
-				kLeftBackDriveMotor = new CANTalon(Constants.kDericaLeftDriveBackMotorDeviceID);
-				kLeftBackDriveMotor.enableBrakeMode(true);
-				kLeftFrontDriveMotor = new CANTalon(Constants.kDericaLeftDriveFrontMotorDeviceID);
-				kLeftFrontDriveMotor.enableBrakeMode(true);
-				kRightBackDriveMotor = new CANTalon(Constants.kDericaRightDriveBackMotorDeviceID);
-				kRightBackDriveMotor.enableBrakeMode(true);
-				kRightFrontDriveMotor = new CANTalon(Constants.kDericaRightDriveFrontMotorDeviceID);
-				kRightFrontDriveMotor.enableBrakeMode(true);
-				kLeftDriveEncoder = new Encoder(
-						Constants.kDericaLeftDriveEncoderDIOA, Constants.kDericaLeftDriveEncoderDIOB, true);
-				kRightDriveEncoder = new Encoder(
-						Constants.kDericaRightDriveEncoderDIOA, Constants.kDericaRightDriveEncoderDIOB);
+				kDriveLeftMasterTalon = new CANTalon(Constants.kDericaLeftDriveMasterDeviceID);
+				kDriveLeftSlaveTalon = new CANTalon(Constants.kDericaLeftDriveFrontMotorDeviceID);
+				kDriveRightMasterTalon = new CANTalon(Constants.kDericaRightDriveBackMotorDeviceID);
+				kDriveRightSlaveTalon = new CANTalon(Constants.kDericaRightDriveFrontMotorDeviceID);
+
+				kDriveLeftMasterTalon.enableBrakeMode(true);
+				kDriveLeftSlaveTalon.enableBrakeMode(true);
+				kDriveRightSlaveTalon.enableBrakeMode(true);
+				kDriveRightMasterTalon.enableBrakeMode(true);
+
+				kDriveLeftMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+				kDriveRightMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+				kDriveLeftMasterTalon.reverseSensor(true);
+				kDriveRightMasterTalon.reverseOutput(true);
+
+				// Zero encoders
+				kDriveLeftMasterTalon.setEncPosition(0);
+				kDriveRightMasterTalon.setEncPosition(0);
+				kDriveLeftMasterTalon.configPeakOutputVoltage(Constants.kPeakVoltage, -Constants.kPeakVoltage);
+				kDriveRightMasterTalon.configPeakOutputVoltage(Constants.kPeakVoltage, -Constants.kPeakVoltage);
+
+				kLeftDriveEncoder = null;
+				kRightDriveEncoder = null;
+//				kLeftDriveEncoder = new Encoder(
+//						Constants.kDericaLeftDriveEncoderDIOA, Constants.kDericaLeftDriveEncoderDIOB, true);
+//				kRightDriveEncoder = new Encoder(
+//						Constants.kDericaRightDriveEncoderDIOA, Constants.kDericaRightDriveEncoderDIOB);
 				kGyro = new ADXRS450_Gyro();
 				// no shifter solenoid
 				kShifterSolenoid = null;

@@ -1,6 +1,7 @@
 package com.palyrobotics.frc2016.robot;
 
 import com.ctre.CANTalon;
+import com.palyrobotics.frc2016.config.Constants;
 import com.palyrobotics.frc2016.config.RobotState;
 import com.palyrobotics.frc2016.subsystems.Drive;
 
@@ -12,11 +13,8 @@ class HardwareUpdater {
 	
 	/**
 	 * Hardware Updater for Derica
-	 * Updates Drive, Catapult, Intake, LowGoalShooter
+	 * Updates Drive
 	 * @param mDrive
-	 * @param mCatapult
-	 * @param mIntake
-	 * @param mLowGoalShooter
 	 */
 	HardwareUpdater(Drive mDrive) {
 		this.mDrive = mDrive;
@@ -30,10 +28,13 @@ class HardwareUpdater {
 		RobotState robotState = Robot.getRobotState();
 		robotState.m_pose.m_heading = HardwareAdapter.DrivetrainHardware.getInstance().kGyro.getAngle();
 		robotState.m_pose.m_heading_velocity = HardwareAdapter.DrivetrainHardware.getInstance().kGyro.getRate();
-		robotState.m_pose.m_left_distance = HardwareAdapter.DrivetrainHardware.getInstance().kLeftDriveEncoder.get();
-		robotState.m_pose.m_left_velocity = HardwareAdapter.DrivetrainHardware.getInstance().kLeftDriveEncoder.getRate();
-		robotState.m_pose.m_right_distance = HardwareAdapter.DrivetrainHardware.getInstance().kRightDriveEncoder.get();
-		robotState.m_pose.m_right_velocity = HardwareAdapter.DrivetrainHardware.getInstance().kRightDriveEncoder.getRate();
+		// Only on Derica
+		if(Constants.kRobotName == Constants.RobotName.DERICA) {
+			robotState.m_pose.m_left_distance = HardwareAdapter.DrivetrainHardware.getInstance().kDriveLeftMasterTalon.getEncPosition();
+			robotState.m_pose.m_left_velocity = HardwareAdapter.DrivetrainHardware.getInstance().kDriveLeftMasterTalon.getEncVelocity();
+			robotState.m_pose.m_right_distance = HardwareAdapter.DrivetrainHardware.getInstance().kDriveRightMasterTalon.getEncPosition();
+			robotState.m_pose.m_right_velocity = HardwareAdapter.DrivetrainHardware.getInstance().kDriveRightMasterTalon.getEncVelocity();
+		}
 	}
 
 	/**
@@ -44,11 +45,15 @@ class HardwareUpdater {
 	}
 
 	private void updateDrivetrain() {
-		HardwareAdapter.getInstance().getDrivetrain().kLeftFrontDriveMotor.set(mDrive.getDriveSignal().leftMotor);
-		HardwareAdapter.getInstance().getDrivetrain().kLeftBackDriveMotor.set(mDrive.getDriveSignal().leftMotor);
+		CANTalon kLeftFront = HardwareAdapter.getInstance().getDrivetrain().kDriveLeftSlaveTalon;
+		CANTalon kLeftBack = HardwareAdapter.getInstance().getDrivetrain().kDriveLeftMasterTalon;
+
+		HardwareAdapter.getInstance().getDrivetrain().kDriveLeftMasterTalon.set(mDrive.getDriveSignal().leftMotor);
 		// Need to invert right side motors
-		HardwareAdapter.getInstance().getDrivetrain().kRightFrontDriveMotor.set(-mDrive.getDriveSignal().rightMotor);
-		HardwareAdapter.getInstance().getDrivetrain().kRightBackDriveMotor.set(-mDrive.getDriveSignal().rightMotor);
+		CANTalon kRightFront = HardwareAdapter.getInstance().getDrivetrain().kDriveRightSlaveTalon;
+		CANTalon kRightBack = HardwareAdapter.getInstance().getDrivetrain().kDriveRightMasterTalon;
+		HardwareAdapter.getInstance().getDrivetrain().kDriveRightSlaveTalon.set(-mDrive.getDriveSignal().rightMotor);
+		HardwareAdapter.getInstance().getDrivetrain().kDriveRightMasterTalon.set(-mDrive.getDriveSignal().rightMotor);
 	}
 	
 
