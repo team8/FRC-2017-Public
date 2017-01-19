@@ -94,7 +94,7 @@ public class RoutineManager implements Tappable {
 		}
 		
 		// Set TROUT routine_request
-		if (commands.cancelCurrentRoutine) {
+		if (commands.cancelCurrentRoutines) {
 			System.out.println("Cancel routine button");
 			addNewRoutine(null);
 		} else if (commands.routineRequest == Commands.Routines.ENCODER_DRIVE && !(mCurrentRoutine instanceof EncoderDriveRoutine)) {

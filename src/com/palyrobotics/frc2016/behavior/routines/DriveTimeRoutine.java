@@ -4,6 +4,7 @@ import com.palyrobotics.frc2016.behavior.Routine;
 import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
 
+import com.palyrobotics.frc2016.subsystems.Drive;
 import com.palyrobotics.frc2016.util.Subsystem;
 
 import java.util.Optional;
@@ -34,7 +35,7 @@ public class DriveTimeRoutine extends Routine {
 	//Routines just change the states of the robotsetpoints, which the behavior manager then moves the physical subsystems based on.
 	@Override
 	public Commands update(Commands commands) {
-		commands.wantedDriveState = Commands.WantedDriveState.ROUTINE;
+		commands.wantedDriveState = Drive.DriveState.OPEN_LOOP;
 		commands.robotSetpoints.drivePowerSetpoint = Optional.of(mDrivePower);
 		return commands;
 	}

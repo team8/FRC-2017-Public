@@ -52,7 +52,7 @@ public class OperatorInterface {
 //		}
 		mCommands.operatorStickInput = new XboxInput(mOperatorStick.getX(), mOperatorStick.getY(), mOperatorStick.getX(), mOperatorStick.getY());
 		// Left Stick trigger cancels current routine
-		mCommands.cancelCurrentRoutine = mLeftStick.getTrigger();
+		mCommands.cancelCurrentRoutines = mLeftStick.getTrigger();
 		mCommands.leftStickInput = new JoystickInput(mLeftStick.getX(), mLeftStick.getY(), mLeftStick.getTrigger());
 		mCommands.rightStickInput = new JoystickInput(mRightStick.getX(), mRightStick.getY(), mRightStick.getTrigger());
 	}

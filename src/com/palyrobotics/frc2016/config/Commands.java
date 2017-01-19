@@ -1,9 +1,12 @@
 package com.palyrobotics.frc2016.config;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
+import com.palyrobotics.frc2016.behavior.Routine;
 import com.palyrobotics.frc2016.config.Commands.JoystickInput.XboxInput;
 import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
+import com.palyrobotics.frc2016.subsystems.Drive;
 
 /**
  * Commands represent the desired setpoints and subsystem states for the robot. <br />
@@ -18,12 +21,10 @@ public class Commands {
 	public static synchronized Commands getInstance() {
 		return commands;
 	}
+	public ArrayList<Routine> wantedRoutines = new ArrayList<Routine>();
 
 	// Store WantedStates for each subsystem state machine
-	public enum WantedDriveState {
-		NONE, ROUTINE, CHEESY
-	}
-	public WantedDriveState wantedDriveState = WantedDriveState.NONE;
+	public Drive.DriveState wantedDriveState = Drive.DriveState.NEUTRAL;
 	/**
 	 * Stores numeric setpoints
 	 * @author Nihar
@@ -70,5 +71,5 @@ public class Commands {
 	public XboxInput operatorStickInput;
 
 	// Allows you to cancel all running routines
-	public boolean cancelCurrentRoutine = false;
+	public boolean cancelCurrentRoutines = false;
 }
