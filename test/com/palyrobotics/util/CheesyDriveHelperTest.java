@@ -31,7 +31,6 @@ public class CheesyDriveHelperTest {
 		assertFalse("Match Sign broken", matchSign(1,0));
 		// Robot state only used by CDH to check for high gear vs low gear
 		RobotState testRobotState = new RobotState();
-		testRobotState.gear = Drive.DriveGear.HIGH;
 		Commands testCommands = new Commands();
 
 		// Test that 0 input leads to 0 output (no negative inertia to start)

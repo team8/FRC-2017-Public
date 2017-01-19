@@ -1,6 +1,5 @@
 package com.palyrobotics.frc2016.config;
 
-import com.palyrobotics.frc2016.subsystems.Drive.DriveGear;
 import com.palyrobotics.frc2016.robot.team254.lib.util.Pose;
 
 /**
@@ -19,9 +18,6 @@ public class RobotState {
 
 	// Tracks total voltage from PDP
 	public double voltage;
-
-	// No sensors on the robot currently
-	public DriveGear gear;
 
 	// Pose stores encoder and gyro data for drivetrain
 	public Pose drivePose = new Pose(0,0,0,0,0,0);
