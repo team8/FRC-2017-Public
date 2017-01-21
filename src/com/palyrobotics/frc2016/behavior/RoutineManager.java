@@ -1,6 +1,5 @@
 package com.palyrobotics.frc2016.behavior;
 
-import com.palyrobotics.frc2016.behavior.routines.*;
 import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.robot.team254.lib.util.StateHolder;
 import com.palyrobotics.frc2016.robot.team254.lib.util.Tappable;
@@ -13,11 +12,13 @@ public class RoutineManager implements Tappable {
 	ArrayList<Routine> runningRoutines = new ArrayList<Routine>();
 	ArrayList<Routine> removalRoutines = new ArrayList<Routine>();
 
-	private Routine mCurrentRoutine = null;
 	private Commands.Setpoints mSetpoints;
-	//    private ManualRoutine m_manual_routine = new ManualRoutine();
 
 	public void addNewRoutine(Routine newRoutine) {
+		if(newRoutine.equals(null)) {
+			reset();
+			return;
+		}
 		// combine running routines w/ new routine to check for shared subsystems
 		ArrayList<Routine> conflicts = conflictingRoutines(runningRoutines, newRoutine);
 		for(Routine routine : conflicts) {
@@ -29,26 +30,8 @@ public class RoutineManager implements Tappable {
 		runningRoutines.add(newRoutine);
 	}
 
-	private void setNewRoutine(Routine newRoutine) {
-		// Cancel if new routine diff from current routine
-		boolean needs_cancel = (newRoutine != mCurrentRoutine) && (mCurrentRoutine != null);
-		boolean needs_start = (newRoutine != mCurrentRoutine) && (newRoutine != null);
-		// Cancel old routine
-		if (needs_cancel) {
-			mCurrentRoutine.cancel(Commands.getInstance());
-			// Reset all setpoints
-			mSetpoints.reset();
-		}
-		// Start next routine
-		if (needs_start) {
-			newRoutine.start();
-		}
-		System.out.println("Ending " + mCurrentRoutine.getName() + " Starting " + newRoutine.getName());
-		mCurrentRoutine = newRoutine;
-	}
-
-	public Routine getCurrentRoutine() {
-		return mCurrentRoutine;
+	public ArrayList<Routine> getCurrentRoutine() {
+		return runningRoutines;
 	}
 
 	// Wipes all current routines
@@ -60,7 +43,7 @@ public class RoutineManager implements Tappable {
 			}
 		}
 		// Empty the running routines
-		runningRoutines = new ArrayList<Routine>();
+		runningRoutines.clear();
 	}
 
 	public RoutineManager() {
@@ -137,7 +120,7 @@ public class RoutineManager implements Tappable {
 
 	@Override
 	public void getState(StateHolder states) {
-		states.put("mode", mCurrentRoutine != null ? mCurrentRoutine.getName() : "---");
+//		states.put("mode", mCurrentRoutine != null ? mCurrentRoutine.getName() : "---");
 	}
 
 	@Override
