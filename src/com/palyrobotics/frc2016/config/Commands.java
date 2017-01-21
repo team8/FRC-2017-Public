@@ -25,6 +25,17 @@ public class Commands {
 
 	// Store WantedStates for each subsystem state machine
 	public Drive.DriveState wantedDriveState = Drive.DriveState.NEUTRAL;
+	
+	public void addWantedRoutine(Routine wantedRoutine) {
+		for(Routine routine : wantedRoutines) {
+			if(routine.getClass().equals(wantedRoutine.getClass())) {
+				System.out.println("tried to add duplicate routine!");
+				return;
+			}
+		}
+		wantedRoutines.add(wantedRoutine);
+	}
+	
 	/**
 	 * Stores numeric setpoints
 	 * @author Nihar

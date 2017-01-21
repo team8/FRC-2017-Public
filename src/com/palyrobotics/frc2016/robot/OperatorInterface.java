@@ -2,6 +2,8 @@ package com.palyrobotics.frc2016.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 
+import com.palyrobotics.frc2016.behavior.Routine;
+import com.palyrobotics.frc2016.behavior.routines.EncoderDriveRoutine;
 import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.config.Commands.*;
 import com.palyrobotics.frc2016.config.Commands.JoystickInput.XboxInput;
@@ -42,14 +44,19 @@ public class OperatorInterface {
 //		m_commands = new Commands();
 //	}
 	
+	public void addWantedRoutine(Routine wantedRoutine) {
+		for(Routine routine : mCommands.wantedRoutines) {
+			if(routine.getClass().equals(wantedRoutine.getClass())) {
+				return;
+			}
+		}
+	}
+	
 	public void updateCommands() {
 		// TODO: Change how routines are commanded
-//		if(mOperatorStick.getRawButton(4)) {
-//			mCommands.routineRequest = Commands.Routines.ENCODER_DRIVE;
-//		}
-//		else {
-//			mCommands.routineRequest = Commands.Routines.NONE;
-//		}
+		if(mOperatorStick.getRawButton(4)) {
+			mCommands.addWantedRoutine(new EncoderDriveRoutine(500));
+		}
 		mCommands.operatorStickInput = new XboxInput(mOperatorStick.getX(), mOperatorStick.getY(), mOperatorStick.getX(), mOperatorStick.getY());
 		// Left Stick trigger cancels current routine
 		mCommands.cancelCurrentRoutines = mLeftStick.getTrigger();

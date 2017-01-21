@@ -39,7 +39,6 @@ public class TurnAngleRoutine extends Routine {
 			System.out.println("Set setpoint: "+mAngle);
 			drive.setGyroTurnAngleSetpoint(mAngle, mMaxVel);
 			
-			setpoints.currentRoutine = Commands.Routines.TURN_ANGLE;
 			mState = States.TURNING;
 			break;
 			

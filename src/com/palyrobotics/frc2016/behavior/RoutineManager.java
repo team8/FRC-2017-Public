@@ -97,23 +97,14 @@ public class RoutineManager implements Tappable {
 		if (commands.cancelCurrentRoutines) {
 			System.out.println("Cancel routine button");
 			addNewRoutine(null);
-		} else if (commands.routineRequest == Commands.Routines.ENCODER_DRIVE && !(mCurrentRoutine instanceof EncoderDriveRoutine)) {
-			addNewRoutine(new EncoderDriveRoutine(500));
-		} else if (commands.routineRequest == Commands.Routines.TIMER_DRIVE && !(mCurrentRoutine instanceof DriveTimeRoutine)) {
-			System.out.println("Setting routine");
-			addNewRoutine(new DriveTimeRoutine(3, 0.5));
-		} else if (commands.routineRequest == Commands.Routines.TURN_ANGLE && !(mCurrentRoutine instanceof TurnAngleRoutine)) {
-			System.out.println("Turn angle activated");
-			addNewRoutine(new TurnAngleRoutine(45, 0.3));
+		} else if(!commands.wantedRoutines.isEmpty()) {
+			for(Routine routine : commands.wantedRoutines) {
+				addNewRoutine(routine);
+			}
 		}
-
-		//changes the setpoints according to the current routine update
-//		if (m_cur_routine != null) {
-//			m_setpoints = m_cur_routine.update(commands);
-//		}
-
-		// Get manual m_setpoints
-		//        m_setpoints = m_manual_routine.update(commands, m_setpoints);
+		
+		//clears the wanted routines every update cycle
+		commands.wantedRoutines.clear();
 	}
 
 	/**
