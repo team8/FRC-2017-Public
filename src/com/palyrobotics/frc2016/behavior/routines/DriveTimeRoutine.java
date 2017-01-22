@@ -10,7 +10,6 @@ import com.palyrobotics.frc2016.util.Subsystem;
 import java.util.Optional;
 
 public class DriveTimeRoutine extends Routine {
-	private long mStartTime;
 	private long mEndTime;
 	private DriveSignal mDrivePower;
 
@@ -28,7 +27,7 @@ public class DriveTimeRoutine extends Routine {
 	@Override
 	public void start() {
 		drive.resetController();
-		mStartTime = System.currentTimeMillis();
+		// mEndTime already has the desired drive time
 		mEndTime += System.currentTimeMillis();
 	}
 

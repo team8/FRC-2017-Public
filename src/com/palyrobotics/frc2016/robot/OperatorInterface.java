@@ -22,45 +22,39 @@ public class OperatorInterface {
 		return instance;
 	}
 
-	private OperatorInterface(/* xu: string file_path, boolean read_from_file, boolean write_to_file */) {
-		// xu: m_testing = testing;
-		// if (m_testing) {
-		//    m_file = open(file, read);
-		// } else {
-		//    m_file = open(file, write);
-	    // }
-	}
-	
-	private Commands mCommands = Commands.getInstance();
+	private OperatorInterface() {}
 
 	private HardwareAdapter.Joysticks mJoysticks = HardwareAdapter.getInstance().getJoysticks();
 	private Joystick mLeftStick = mJoysticks.leftStick;
 	private Joystick mRightStick = mJoysticks.rightStick;
 	private Joystick mOperatorStick = mJoysticks.operatorStick;
 
-	private Latch mDriveForwardLatch = new Latch();
-
-//	public void reset() {
-//		m_commands = new Commands();
-//	}
-	
-	public void addWantedRoutine(Routine wantedRoutine) {
-		for(Routine routine : mCommands.wantedRoutines) {
+	/**
+	 * Helper method to only add routines that aren't already in wantedRoutines
+	 * @param commands Current set of commands being modified
+	 * @param wantedRoutine Routine to add to the commands
+	 */
+	private void addWantedRoutine(Commands commands, Routine wantedRoutine) {
+		for(Routine routine : commands.wantedRoutines) {
 			if(routine.getClass().equals(wantedRoutine.getClass())) {
 				return;
 			}
 		}
 	}
-	
-	public void updateCommands() {
+
+	/**
+	 * Modifies the commands that are passed in
+	 * @param prevCommands
+	 */
+	public void updateCommands(Commands prevCommands) {
 		// TODO: Change how routines are commanded
 		if(mOperatorStick.getRawButton(4)) {
-			mCommands.addWantedRoutine(new EncoderDriveRoutine(500));
+			prevCommands.addWantedRoutine(new EncoderDriveRoutine(500));
 		}
-		mCommands.operatorStickInput = new XboxInput(mOperatorStick.getX(), mOperatorStick.getY(), mOperatorStick.getX(), mOperatorStick.getY());
+		prevCommands.operatorStickInput = new XboxInput(mOperatorStick.getX(), mOperatorStick.getY(), mOperatorStick.getX(), mOperatorStick.getY());
 		// Left Stick trigger cancels current routine
-		mCommands.cancelCurrentRoutines = mLeftStick.getTrigger();
-		mCommands.leftStickInput = new JoystickInput(mLeftStick.getX(), mLeftStick.getY(), mLeftStick.getTrigger());
-		mCommands.rightStickInput = new JoystickInput(mRightStick.getX(), mRightStick.getY(), mRightStick.getTrigger());
+		prevCommands.cancelCurrentRoutines = mLeftStick.getTrigger();
+		prevCommands.leftStickInput = new JoystickInput(mLeftStick.getX(), mLeftStick.getY(), mLeftStick.getTrigger());
+		prevCommands.rightStickInput = new JoystickInput(mRightStick.getX(), mRightStick.getY(), mRightStick.getTrigger());
 	}
 }

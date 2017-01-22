@@ -6,7 +6,7 @@ import com.palyrobotics.frc2016.subsystems.*;
 public abstract class AutoMode extends AutoModeBase {
 	/**
 	 * Keeps access to all subsystems to modify their output and read their status like
-	 * {@link Drive#controllerOnTarget()} {@link Drive#setGear(Drive.DriveGear)}
+	 * {@link Drive#controllerOnTarget()}
 	 */
 	protected final Drive drive = Drive.getInstance();
 

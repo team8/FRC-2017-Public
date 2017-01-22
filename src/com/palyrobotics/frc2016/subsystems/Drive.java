@@ -28,6 +28,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	public static Drive getInstance() {
 		return instance;
 	}
+
 	public enum DriveState {CHEZY, CONTROLLER, OPEN_LOOP, NEUTRAL}
 	private DriveState mState = DriveState.NEUTRAL;
 

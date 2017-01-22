@@ -1,15 +1,18 @@
 package com.palyrobotics.frc2016.auto;
 
 import com.palyrobotics.frc2016.behavior.RoutineManager;
+import com.palyrobotics.frc2016.config.Commands;
 
 public class AutoModeExecuter {
     private AutoModeBase mAutoMode;
     private Thread mThread = null;
     
-    private RoutineManager routineManager;
+    private RoutineManager mRoutineManager;
+    private Commands mCommands;
     
-    public AutoModeExecuter(RoutineManager routineManager) {
-    	this.routineManager = routineManager;
+    public AutoModeExecuter(Commands initialCommands, RoutineManager routineManager) {
+    	this.mRoutineManager = routineManager;
+
     }
     
     public void setAutoMode(AutoModeBase newAutoMode) {
@@ -22,7 +25,7 @@ public class AutoModeExecuter {
                 @Override
                 public void run() {
                     if (mAutoMode != null) {
-                        mAutoMode.run(routineManager);
+                        mAutoMode.run(mCommands, mRoutineManager);
                     }
                 }
             });

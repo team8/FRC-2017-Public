@@ -32,9 +32,7 @@ public class BBTurnAngleRoutine extends Routine {
 	}
 
 	@Override
-	public Commands update(Commands commands) {
-		Commands.Setpoints setpoints = commands.robotSetpoints;
-		
+	public Commands update(Commands commands) {		
 		switch(mState) {
 		case START:
 			System.out.println("Set setpoint: " + mAngle);

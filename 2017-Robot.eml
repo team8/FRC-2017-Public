@@ -20,4 +20,7 @@
 	<lib name="wpilib" scope="COMPILE">
 		<srcroot url="jar://$wpilib.sources$!/"/>
 	</lib>
+	<lib name="CTRLib.jar" scope="COMPILE">
+		<srcroot url="jar://$USERLIBS_DIR$/CTRLib.jar!/"/>
+	</lib>
 </component>

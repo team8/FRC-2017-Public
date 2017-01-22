@@ -5,6 +5,9 @@ import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 
+/**
+ * Do not run, is only reference code for usage of offboard CANTalon processing
+ */
 public class CANTalonTester {
 	public static final int DERICA_LEFT_A = 3;
 	public static final int DERICA_LEFT_B = 2;

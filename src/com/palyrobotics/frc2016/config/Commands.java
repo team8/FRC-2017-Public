@@ -16,11 +16,6 @@ import com.palyrobotics.frc2016.subsystems.Drive;
  *
  */
 public class Commands {
-	private static Commands commands = new Commands();
-	
-	public static synchronized Commands getInstance() {
-		return commands;
-	}
 	public ArrayList<Routine> wantedRoutines = new ArrayList<Routine>();
 
 	// Store WantedStates for each subsystem state machine

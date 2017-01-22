@@ -18,5 +18,9 @@ public abstract class Subsystem implements SubsystemLoop {
 		return mName;
 	}
 
+	@Override
+	public String toString() {
+		return mName;
+	}
 //	public abstract void reloadConstants();
 }

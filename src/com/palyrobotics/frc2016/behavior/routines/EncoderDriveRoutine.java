@@ -2,11 +2,9 @@ package com.palyrobotics.frc2016.behavior.routines;
 
 import com.palyrobotics.frc2016.behavior.Routine;
 import com.palyrobotics.frc2016.config.Commands;
-import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
 
 import com.palyrobotics.frc2016.subsystems.Drive;
 import com.palyrobotics.frc2016.util.Subsystem;
-import edu.wpi.first.wpilibj.Timer;
 
 /**
  * Drives forward a specified distance
@@ -91,7 +89,6 @@ public class EncoderDriveRoutine extends Routine {
 	@Override
 	public Commands update(Commands commands) {
 		EncoderDriveRoutineStates newState = state;
-		Commands.Setpoints setpoints = commands.robotSetpoints;
 		switch (state) {
 		case START:
 			mStartTime = System.currentTimeMillis();
