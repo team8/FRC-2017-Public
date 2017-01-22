@@ -1,4 +1,4 @@
-package com.palyrobotics.util;
+package com.palyrobotics.frc2016.util;
 
 import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.config.RobotState;
@@ -13,6 +13,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests CheesyDriveHelper
  * Created by Nihar on 12/23/16.
+ * @author Nihar
  */
 public class CheesyDriveHelperTest {
 	// Instance to test with

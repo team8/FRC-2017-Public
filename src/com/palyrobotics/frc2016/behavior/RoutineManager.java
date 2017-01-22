@@ -12,8 +12,6 @@ public class RoutineManager implements Tappable {
 	private ArrayList<Routine> runningRoutines = new ArrayList<Routine>();
 	private ArrayList<Routine> routinesToRemove = new ArrayList<Routine>();
 
-	private Commands.Setpoints mSetpoints;
-
 	public void addNewRoutine(Commands commands, Routine newRoutine) {
 		// combine running routines w/ new routine to check for shared subsystems
 		ArrayList<Routine> conflicts = conflictingRoutines(runningRoutines, newRoutine);
@@ -26,7 +24,7 @@ public class RoutineManager implements Tappable {
 		runningRoutines.add(newRoutine);
 	}
 
-	public ArrayList<Routine> getCurrentRoutine() {
+	public ArrayList<Routine> getCurrentRoutines() {
 		return runningRoutines;
 	}
 
@@ -44,12 +42,7 @@ public class RoutineManager implements Tappable {
 		// Empty the running routines
 		runningRoutines.clear();
 	}
-
-	public RoutineManager() {
-		mSetpoints = new Commands.Setpoints();
-		mSetpoints.reset();
-	}
-
+	
 	/**
 	 * Updates the commands that are passed in based on the running and canceled routines
 	 * @param commands Commands object to be modified

@@ -1,4 +1,4 @@
-package com.palyrobotics.robot.team254.lib.trajectory;
+package com.palyrobotics.frc2016.robot.team254.lib.trajectory;
 
 import static org.junit.Assert.assertTrue;
 
