@@ -27,12 +27,11 @@ public class Robot extends IterativeRobot {
 	private static Commands commands = new Commands();
 	public static Commands getCommands() {return commands;}
 
-	private static HardwareAdapter hardwareAdapter = HardwareAdapter.getInstance();
 	private static OperatorInterface operatorInterface = OperatorInterface.getInstance();
 	// Instantiate separate thread controls
 	private SubsystemLooper mSubsystemLooper = new SubsystemLooper();
 	private RoutineManager mRoutineManager = new RoutineManager();
-	private AutoModeExecuter mAutoModeRunner = new AutoModeExecuter(commands, mRoutineManager);
+	private AutoModeExecuter mAutoModeExecuter = new AutoModeExecuter(commands, mRoutineManager);
 
 	// Subsystem controllers
 	private Drive mDrive = Drive.getInstance();
@@ -68,10 +67,10 @@ public class Robot extends IterativeRobot {
 		mDrive.resetController();
 		
 		AutoMode mode = AutoModeSelector.getInstance().getAutoMode();
-		mAutoModeRunner.setAutoMode(mode);
+		mAutoModeExecuter.setAutoMode(mode);
 		// Prestart auto mode
 		mode.prestart();
-		mAutoModeRunner.start();
+		mAutoModeExecuter.start();
 		// Start control loops
 		mSubsystemLooper.start();
 		System.out.println("End autonomousInit()");
@@ -120,7 +119,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("Current Auto Mode: " + AutoModeSelector.getInstance().getAutoMode().toString());
 		robotState.gamePeriod = RobotState.GamePeriod.DISABLED;
 		// Stop auto mode
-		mAutoModeRunner.stop();
+		mAutoModeExecuter.stop();
 
 		// Stop routine_request
 		mRoutineManager.reset(commands);

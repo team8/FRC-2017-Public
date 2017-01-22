@@ -25,7 +25,7 @@ public class CheesyDriveHelperTest {
 	public void testSign() {
 		// Test matchSign helper method
 		assertTrue("Match Sign broken", matchSign(1,2));
-		assertTrue("Match Sign broken", !matchSign(1,-2));
+		assertFalse("Match Sign broken", matchSign(1,-2));
 		assertTrue("Match Sign broken", matchSign(-1,-2));
 		assertTrue("Match Sign broken", matchSign(0,0));
 		assertFalse("Match Sign broken", matchSign(1,0));

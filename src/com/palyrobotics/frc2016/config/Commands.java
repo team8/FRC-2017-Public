@@ -11,7 +11,8 @@ import com.palyrobotics.frc2016.subsystems.Drive;
 /**
  * Commands represent the desired setpoints and subsystem states for the robot. <br />
  * Store Requests (enum) for each subsystem and setpoints {@link Setpoints} <br />
- * Directly stores real or mock Joystick input in {@link JoystickInput}
+ * Directly stores real or mock Joystick input in {@link JoystickInput} <br />
+ * Variables are public and have default values to prefer NullPointerExceptions
  * @author Nihar
  *
  */
@@ -72,9 +73,9 @@ public class Commands {
 		}
 	}
 	// Stores Joystick values
-	public JoystickInput leftStickInput;
-	public JoystickInput rightStickInput;
-	public XboxInput operatorStickInput;
+	public JoystickInput leftStickInput = new JoystickInput(0,0);
+	public JoystickInput rightStickInput = new JoystickInput(0,0);
+	public XboxInput operatorStickInput = new XboxInput(0, 0, 0,0);
 
 	// Allows you to cancel all running routines
 	public boolean cancelCurrentRoutines = false;
