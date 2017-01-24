@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Created by Nihar on 12/27/16.
  */
 public class ParallelRoutine extends Routine {
-	ArrayList<Routine> mRoutines;
+	private ArrayList<Routine> mRoutines;
 
 	/**
 	 * Runs all routines at the same time
@@ -62,7 +62,10 @@ public class ParallelRoutine extends Routine {
 
 	@Override
 	public String getName() {
-		//TODO:
-		return null;
+		String name = "ParallelRoutine of ";
+		for(Routine routine: mRoutines) {
+			name += routine.getName();
+		}
+		return name;
 	}
 }

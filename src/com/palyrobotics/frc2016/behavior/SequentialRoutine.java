@@ -13,6 +13,7 @@ public class SequentialRoutine extends Routine {
 	private int mRunningRoutineIndex = 0;
 	private boolean mIsDone = false;
 	private Subsystem[] mRequiredSubsystems;
+
 	public SequentialRoutine(ArrayList<Routine> routines) {
 		mRoutines = routines;
 		mRequiredSubsystems = RoutineManager.sharedSubsystem(mRoutines);
