@@ -126,17 +126,17 @@ public class RoutineManager implements Tappable {
 	@Deprecated
 	/**
 	 * Old helper method to find the overlapping subsystems
-	 * is very efficient
+	 * is very efficient, but untested
 	 */
-	private Subsystem[] sharedSubsystem(Routine[] routines) {
+	public static Subsystem[] sharedSubsystem(ArrayList<Routine> routines) {
 		// Hash set is efficient for lookup and comparison to check w/ contents of others
-		HashSet<Subsystem> initialSet = new HashSet<Subsystem>(Arrays.asList(routines[0].getRequiredSubsystems()));
+		HashSet<Subsystem> initialSet = new HashSet<Subsystem>(Arrays.asList(routines.get(0).getRequiredSubsystems()));
 		// Instantiate all other subsystems
-		HashSet<Subsystem>[] routineSubsystemSets = new HashSet[routines.length];
-		for (int i = 1; i < routines.length; i++) {
-			routineSubsystemSets[i] = new HashSet<Subsystem>(Arrays.asList(routines[i].getRequiredSubsystems()));
+		HashSet<Subsystem>[] routineSubsystemSets = new HashSet[routines.size()];
+		for (int i = 1; i < routines.size(); i++) {
+			routineSubsystemSets[i] = new HashSet<Subsystem>(Arrays.asList(routines.get(i).getRequiredSubsystems()));
 		}
-		for (int j = 1; j < routines.length; j++) {
+		for (int j = 1; j < routines.size(); j++) {
 			initialSet.retainAll(routineSubsystemSets[j]);
 		}
 		return (Subsystem[]) initialSet.toArray();

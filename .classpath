@@ -11,5 +11,6 @@
 	<classpathentry kind="var" path="cscore" sourcepath="/cscore.sources"/>
 	<classpathentry kind="var" path="wpilib" sourcepath="wpilib.sources"/>
 	<classpathentry kind="var" path="USERLIBS_DIR/CTRLib.jar" sourcepath="/USERLIBS_DIR/CTRLib.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/junit:junit:4.12"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

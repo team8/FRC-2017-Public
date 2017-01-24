@@ -9,27 +9,27 @@ import java.util.ArrayList;
  * Created by Nihar on 12/27/16.
  */
 public class ParallelRoutine extends Routine {
-	ArrayList<Routine> parallelRoutines;
+	ArrayList<Routine> mRoutines;
 
 	/**
 	 * Runs all routines at the same time
 	 * Finishes when all routines finish
-	 * @param parallelRoutines
+	 * @param routines
 	 */
-	public ParallelRoutine(ArrayList<Routine> parallelRoutines) {
-		this.parallelRoutines = parallelRoutines;
+	public ParallelRoutine(ArrayList<Routine> routines) {
+		this.mRoutines = routines;
 	}
 
 	@Override
 	public void start() {
-		for(Routine routine: parallelRoutines) {
+		for(Routine routine: mRoutines) {
 			routine.start();
 		}
 	}
 
 	@Override
 	public Commands update(Commands commands) {
-		for(Routine routine: parallelRoutines) {
+		for(Routine routine: mRoutines) {
 			if(!routine.finished()) {
 				routine.update(commands);
 			}
@@ -39,7 +39,7 @@ public class ParallelRoutine extends Routine {
 
 	@Override
 	public Commands cancel(Commands commands) {
-		for(Routine routine : parallelRoutines) {
+		for(Routine routine : mRoutines) {
 			routine.cancel(commands);
 		}
 		return commands;
@@ -47,7 +47,7 @@ public class ParallelRoutine extends Routine {
 
 	@Override
 	public boolean finished() {
-		for(Routine routine : parallelRoutines) {
+		for(Routine routine : mRoutines) {
 			if(!routine.finished()) {
 				return false;
 			}
@@ -57,8 +57,7 @@ public class ParallelRoutine extends Routine {
 
 	@Override
 	public Subsystem[] getRequiredSubsystems() {
-		//TODO:
-		return new Subsystem[0];
+		return RoutineManager.sharedSubsystem(mRoutines);
 	}
 
 	@Override

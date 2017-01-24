@@ -23,4 +23,5 @@
 	<lib name="CTRLib.jar" scope="COMPILE">
 		<srcroot url="jar://$USERLIBS_DIR$/CTRLib.jar!/"/>
 	</lib>
+	<lib name="junit:junit:4.12" scope="TEST"/>
 </component>

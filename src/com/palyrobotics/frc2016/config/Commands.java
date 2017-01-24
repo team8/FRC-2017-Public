@@ -53,7 +53,6 @@ public class Commands {
 	
 	/**
 	 * Class to store Joystick input
-	 * Should eventually be extended to contain all buttons
 	 * @author Nihar
 	 */
 	public static class JoystickInput {
@@ -61,6 +60,10 @@ public class Commands {
 			public double leftX, leftY, rightX, rightY;
 			public XboxInput(double leftX, double leftY, double rightX, double rightY) {
 				super(leftX, leftY, false);
+				this.leftX = leftX;
+				this.leftY = leftY;
+				this.rightX = rightX;
+				this.rightY = rightY;
 			}
 		}
 		public double x,y;
@@ -68,13 +71,10 @@ public class Commands {
 		public JoystickInput(double x, double y, boolean triggerPressed) {
 			this.x = x; this.y = y; this.triggerPressed = triggerPressed;
 		}
-		public JoystickInput(double x, double y) {
-			this.x = x; this.y = y;
-		}
 	}
 	// Stores Joystick values
-	public JoystickInput leftStickInput = new JoystickInput(0,0);
-	public JoystickInput rightStickInput = new JoystickInput(0,0);
+	public JoystickInput leftStickInput = new JoystickInput(0,0, false);
+	public JoystickInput rightStickInput = new JoystickInput(0,0, false);
 	public XboxInput operatorStickInput = new XboxInput(0, 0, 0,0);
 
 	// Allows you to cancel all running routines
