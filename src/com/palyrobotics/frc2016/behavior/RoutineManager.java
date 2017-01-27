@@ -13,6 +13,10 @@ public class RoutineManager implements Tappable {
 	private ArrayList<Routine> routinesToRemove = new ArrayList<Routine>();
 
 	public void addNewRoutine(Commands commands, Routine newRoutine) {
+		if(newRoutine == null) {
+			System.err.println("Tried to add null routine to routine manager!");
+			throw new NullPointerException();
+		}
 		// combine running routines w/ new routine to check for shared subsystems
 		ArrayList<Routine> conflicts = conflictingRoutines(runningRoutines, newRoutine);
 		for(Routine routine : conflicts) {
@@ -56,7 +60,7 @@ public class RoutineManager implements Tappable {
 		routinesToRemove = new ArrayList<Routine>();
 		
 		for(Routine routine : runningRoutines) {
-			if(routine != null && routine.finished()) {
+			if(routine.finished()) {
 				System.out.println("Routine cancel called");
 				commands = routine.cancel(commands);
 				routinesToRemove.add(routine);
