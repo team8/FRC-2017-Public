@@ -35,6 +35,7 @@ public class Robot extends IterativeRobot {
 
 	// Subsystem controllers
 	private Drive mDrive = Drive.getInstance();
+	private Climber mClimb = Climber.getInstance();
 	
 	//hardware updater
 	private HardwareUpdater mHardwareUpdater;
@@ -52,7 +53,7 @@ public class Robot extends IterativeRobot {
 		// Gyro initialization
 		HardwareAdapter.getInstance().getDrivetrain().gyro.calibrate();
 		mSubsystemLooper.register(mDrive);
-		mHardwareUpdater = new HardwareUpdater(mDrive);
+		mHardwareUpdater = new HardwareUpdater(mDrive, mClimb);
 		//        SystemManager.getInstance().add(routineManager);
 		sensorTable = NetworkTable.getTable("Sensor");
 		mDashboard.init();

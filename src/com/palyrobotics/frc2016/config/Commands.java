@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.palyrobotics.frc2016.behavior.Routine;
 import com.palyrobotics.frc2016.config.Commands.JoystickInput.XboxInput;
 import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
+import com.palyrobotics.frc2016.subsystems.Climber;
 import com.palyrobotics.frc2016.subsystems.Drive;
 
 /**
@@ -21,6 +22,7 @@ public class Commands {
 
 	// Store WantedStates for each subsystem state machine
 	public Drive.DriveState wantedDriveState = Drive.DriveState.NEUTRAL;
+	public Climber.ClimberState wantedClimbState = Climber.ClimberState.NOT_MOVING;
 	
 	public void addWantedRoutine(Routine wantedRoutine) {
 		for(Routine routine : wantedRoutines) {
