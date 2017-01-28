@@ -2,7 +2,7 @@ package com.palyrobotics.frc2016.behavior.routines.auto;
 
 import com.palyrobotics.frc2016.behavior.Routine;
 import com.palyrobotics.frc2016.config.Commands;
-import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
+import com.palyrobotics.frc2016.util.DriveSignal;
 import com.palyrobotics.frc2016.util.Subsystem;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -32,8 +32,7 @@ public class DriveTimeRoutine extends Routine {
 	 * Drives forward at (leftSpeed, rightSpeed) for a specified number of seconds.
 	 * 
 	 * @param runTime how long this action runs
-	 * @param leftSpeed the speed of the left motor
-	 * @param rightSpeed the speed of the right motor
+	 * @param speed target power
 	 */
 	public DriveTimeRoutine(double runTime, double speed) {
 		this.mRunTime = runTime;
@@ -57,7 +56,7 @@ public class DriveTimeRoutine extends Routine {
 	@Override
 	public Commands cancel(Commands commands) {
 		System.out.println("TimerDriveForwardAction done");
-		drive.setOpenLoop(DriveSignal.NEUTRAL);
+		drive.setOpenLoop(DriveSignal.getNeutralSignal());
 		return commands;
 	}
 

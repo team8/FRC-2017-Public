@@ -59,22 +59,6 @@ public class HardwareAdapter {
 				rightMasterTalon = new CANTalon(Constants.kDericaRightDriveBackMotorDeviceID);
 				rightSlaveTalon = new CANTalon(Constants.kDericaRightDriveFrontMotorDeviceID);
 
-				leftMasterTalon.enableBrakeMode(true);
-				leftSlaveTalon.enableBrakeMode(true);
-				rightSlaveTalon.enableBrakeMode(true);
-				rightMasterTalon.enableBrakeMode(true);
-
-				leftMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
-				rightMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
-				leftMasterTalon.reverseSensor(true);
-				rightMasterTalon.reverseOutput(true);
-
-				// Zero encoders
-				leftMasterTalon.setEncPosition(0);
-				rightMasterTalon.setEncPosition(0);
-				leftMasterTalon.configPeakOutputVoltage(Constants.kPeakVoltage, -Constants.kPeakVoltage);
-				rightMasterTalon.configPeakOutputVoltage(Constants.kPeakVoltage, -Constants.kPeakVoltage);
-
 				leftEncoder = null;
 				rightEncoder = null;
 //				leftEncoder = new Encoder(

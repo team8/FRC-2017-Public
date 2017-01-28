@@ -2,7 +2,7 @@ package com.palyrobotics.frc2016.subsystems.controllers;
 
 import com.palyrobotics.frc2016.subsystems.Drive;
 import com.palyrobotics.frc2016.config.Constants;
-import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
+import com.palyrobotics.frc2016.util.DriveSignal;
 import com.palyrobotics.frc2016.robot.team254.lib.util.Pose;
 
 public class EncoderTurnAngleController implements Drive.DriveController {
@@ -54,8 +54,10 @@ public class EncoderTurnAngleController implements Drive.DriveController {
 				Math.min(mMaxVel, Constants.kEncoderTurnKp * mLeftP + Constants.kEncoderTurnKi * mLeftI + Constants.kEncoderTurnKd * mLeftD));
 		mRightSpeed = Math.max(-mMaxVel, 
 				Math.min(mMaxVel, Constants.kEncoderTurnKp * mRightP + Constants.kEncoderTurnKi * mRightI + Constants.kEncoderTurnKd * mRightD));
-		
-		return new DriveSignal(mLeftSpeed, mRightSpeed);
+		DriveSignal output = DriveSignal.getNeutralSignal();
+		output.leftMotor.setPercentVBus(mLeftSpeed);
+		output.rightMotor.setPercentVBus(mRightSpeed);
+		return output;
 	}
 
 	@Override

@@ -2,7 +2,7 @@ package com.palyrobotics.frc2016.behavior.routines.auto;
 
 import com.palyrobotics.frc2016.behavior.Routine;
 import com.palyrobotics.frc2016.config.Commands;
-import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
+import com.palyrobotics.frc2016.util.DriveSignal;
 import com.palyrobotics.frc2016.util.Subsystem;
 
 public class DriveDistanceRoutine extends Routine {
@@ -41,7 +41,7 @@ public class DriveDistanceRoutine extends Routine {
 	@Override
 	public Commands cancel(Commands commands) {
 		System.out.println("EncoderDriveAction done");
-		drive.setOpenLoop(DriveSignal.NEUTRAL);
+		drive.setOpenLoop(DriveSignal.getNeutralSignal());
 		return commands;
 	}
 

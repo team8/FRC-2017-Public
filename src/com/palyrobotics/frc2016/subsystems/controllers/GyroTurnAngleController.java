@@ -2,7 +2,7 @@ package com.palyrobotics.frc2016.subsystems.controllers;
 
 import com.palyrobotics.frc2016.subsystems.Drive;
 import com.palyrobotics.frc2016.config.Constants;
-import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
+import com.palyrobotics.frc2016.util.DriveSignal;
 import com.palyrobotics.frc2016.robot.team254.lib.util.Pose;
 
 /**
@@ -43,7 +43,10 @@ public class GyroTurnAngleController implements Drive.DriveController {
 		double rightSpeed = -leftSpeed;
 //		System.out.println("PID calc: " + Constants.kGyroTurnKp*P + Constants.kGyroTurnKi*I + Constants.kGyroTurnKd*D);
 //		System.out.println("Left speed "+leftSpeed);
-		return new DriveSignal(leftSpeed, rightSpeed);
+		DriveSignal output = DriveSignal.getNeutralSignal();
+		output.leftMotor.setPercentVBus(leftSpeed);
+		output.rightMotor.setPercentVBus(rightSpeed);
+		return output;
 	}
 
 	@Override

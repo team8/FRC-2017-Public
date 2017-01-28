@@ -9,7 +9,7 @@ import com.palyrobotics.frc2016.config.RobotState;
 import com.palyrobotics.frc2016.subsystems.*;
 import com.palyrobotics.frc2016.util.Dashboard;
 import com.palyrobotics.frc2016.util.SubsystemLooper;
-import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
+import com.palyrobotics.frc2016.util.DriveSignal;
 import com.palyrobotics.frc2016.robot.team254.lib.util.RobotData;
 import com.palyrobotics.frc2016.robot.team254.lib.util.SystemManager;
 
@@ -49,8 +49,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		System.out.println("Start robotInit()");
-		// Gyro initialization
-		HardwareAdapter.getInstance().getDrivetrain().gyro.calibrate();
 		mSubsystemLooper.register(mDrive);
 		mHardwareUpdater = new HardwareUpdater(mDrive);
 		//        SystemManager.getInstance().add(routineManager);
@@ -128,7 +126,7 @@ public class Robot extends IterativeRobot {
 		mSubsystemLooper.stop();
 
 		// Stop controllers
-		mDrive.setOpenLoop(DriveSignal.NEUTRAL);
+		mDrive.setOpenLoop(DriveSignal.getNeutralSignal());
 
 		// Manually run garbage collector
 		System.gc();

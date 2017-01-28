@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.palyrobotics.frc2016.behavior.Routine;
 import com.palyrobotics.frc2016.config.Commands.JoystickInput.XboxInput;
-import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
+import com.palyrobotics.frc2016.util.DriveSignal;
 import com.palyrobotics.frc2016.subsystems.Drive;
 
 /**

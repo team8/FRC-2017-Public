@@ -5,7 +5,7 @@ import static com.palyrobotics.frc2016.robot.team254.lib.trajectory.TrajectoryFo
 import com.palyrobotics.frc2016.subsystems.Drive;
 import com.palyrobotics.frc2016.config.Constants;
 import com.palyrobotics.frc2016.robot.team254.lib.trajectory.TrajectoryFollower;
-import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
+import com.palyrobotics.frc2016.util.DriveSignal;
 import com.palyrobotics.frc2016.robot.team254.lib.util.Pose;
 import com.palyrobotics.frc2016.robot.team254.lib.util.SynchronousPID;
 
@@ -57,8 +57,10 @@ public class DriveStraightController implements Drive.DriveController {
                 (currentPose.getLeftVelocity() + currentPose.getRightVelocity()) / 2.0);
         double throttle = mDistanceController.get();
         double turn = mTurnPid.calculate(currentPose.getHeading());
-
-        return new DriveSignal(throttle + turn, throttle - turn);
+        DriveSignal output = DriveSignal.getNeutralSignal();
+        output.leftMotor.setPercentVBus(throttle + turn);
+        output.rightMotor.setPercentVBus(throttle - turn);
+        return output;
     }
 
     @Override

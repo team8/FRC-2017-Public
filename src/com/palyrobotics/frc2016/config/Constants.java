@@ -4,7 +4,7 @@ import com.palyrobotics.frc2016.robot.team254.lib.util.ConstantsBase;
 
 public class Constants extends ConstantsBase {
 	public enum RobotName {
-		TYR, DERICA
+		STEIK, AEGIR, TYR, DERICA
 	}
 	public static final RobotName kRobotName = RobotName.DERICA;
 
@@ -17,7 +17,7 @@ public class Constants extends ConstantsBase {
 	public static double kManualExhaustSpeed = -1.0;
 
 	public static double kManualLowGoalShootSpeed = 1.0;
-	public static double kManuelLowGoalLoadSpeed = 1.0;
+	public static double kManualLowGoalLoadSpeed = 1.0;
 
 	// Autonomous intake speed
 	public static double kAutoIntakeSpeed = 1.0;

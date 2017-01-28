@@ -3,7 +3,7 @@ package com.palyrobotics.frc2016.subsystems.controllers.team254;
 import com.palyrobotics.frc2016.subsystems.Drive;
 import com.palyrobotics.frc2016.config.Constants;
 import com.palyrobotics.frc2016.robot.team254.lib.trajectory.TrajectoryFollower;
-import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
+import com.palyrobotics.frc2016.util.DriveSignal;
 import com.palyrobotics.frc2016.robot.team254.lib.util.Pose;
 
 /**
@@ -39,7 +39,10 @@ public class TurnInPlaceController implements Drive.DriveController {
     	System.out.println(pose.getHeading()+" "+mController.m_error+" "+pose.getHeadingVelocity()+" "+mController.get());
         mController.update(pose.getHeading(), pose.getHeadingVelocity());
         double turn = mController.get();
-        return new DriveSignal(turn, -turn);
+        DriveSignal output = DriveSignal.getNeutralSignal();
+        output.leftMotor.setPercentVBus(turn);
+        output.rightMotor.setPercentVBus(-turn);
+        return output;
     }
 
     @Override

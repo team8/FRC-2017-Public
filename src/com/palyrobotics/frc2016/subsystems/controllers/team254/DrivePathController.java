@@ -6,7 +6,7 @@ import com.palyrobotics.frc2016.robot.team254.lib.trajectory.LegacyTrajectoryFol
 import com.palyrobotics.frc2016.robot.team254.lib.trajectory.Path;
 import com.palyrobotics.frc2016.robot.team254.lib.trajectory.Trajectory;
 import com.palyrobotics.frc2016.robot.team254.lib.util.ChezyMath;
-import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
+import com.palyrobotics.frc2016.util.DriveSignal;
 import com.palyrobotics.frc2016.robot.team254.lib.util.Pose;
 
 /**
@@ -81,7 +81,7 @@ public class DrivePathController implements Drive.DriveController {
     @Override
     public DriveSignal update(Pose pose) {
         if (onTarget()) {
-            return new DriveSignal(0, 0);
+            return DriveSignal.getNeutralSignal();
         } else {
             double distanceL = direction * pose.getLeftDistance();
             double distanceR = direction * pose.getRightDistance();
@@ -99,7 +99,10 @@ public class DrivePathController implements Drive.DriveController {
             double turn = kTurn * angleDiff;
             System.out.println("left: " + (speedLeft+turn));
             System.out.println("right: " + (speedRight-turn));
-            return new DriveSignal(speedLeft + turn, speedRight - turn);
+            DriveSignal output = DriveSignal.getNeutralSignal();
+            output.leftMotor.setPercentVBus(speedLeft + turn);
+            output.rightMotor.setPercentVBus(speedRight - turn);
+            return output;
         }
     }
 

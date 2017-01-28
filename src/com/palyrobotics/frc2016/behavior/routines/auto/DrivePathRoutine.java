@@ -3,7 +3,7 @@ package com.palyrobotics.frc2016.behavior.routines.auto;
 import com.palyrobotics.frc2016.behavior.Routine;
 import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.robot.team254.lib.trajectory.Path;
-import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
+import com.palyrobotics.frc2016.util.DriveSignal;
 import com.palyrobotics.frc2016.util.Subsystem;
 
 public class DrivePathRoutine extends Routine {
@@ -27,7 +27,7 @@ public class DrivePathRoutine extends Routine {
 	@Override
 	public Commands cancel(Commands commands) {
 		System.out.println("DrivePathAction Done");
-		drive.setOpenLoop(DriveSignal.NEUTRAL);
+		drive.setOpenLoop(DriveSignal.getNeutralSignal());
 		return commands;
 	}
 

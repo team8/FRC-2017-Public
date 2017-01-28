@@ -2,7 +2,7 @@ package com.palyrobotics.frc2016.subsystems;
 
 import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.config.RobotState;
-import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
+import com.palyrobotics.frc2016.util.DriveSignal;
 import com.palyrobotics.frc2016.robot.team254.lib.util.Pose;
 import com.palyrobotics.frc2016.subsystems.controllers.BangBangTurnAngleController;
 import com.palyrobotics.frc2016.subsystems.controllers.EncoderTurnAngleController;
@@ -55,7 +55,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	// Cached robot state, updated by looper
 	private RobotState mCachedRobotState;
 	// Stores output
-	private DriveSignal mSignal = DriveSignal.NEUTRAL;
+	private DriveSignal mSignal = DriveSignal.getNeutralSignal();
 
 	private Drive() {
 		super("Drive");
@@ -107,7 +107,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 			case OPEN_LOOP:
 				setDriveOutputs(commands.robotSetpoints.drivePowerSetpoint.get());
 			case NEUTRAL:
-				setDriveOutputs(DriveSignal.NEUTRAL);
+				setDriveOutputs(DriveSignal.getNeutralSignal());
 				break;
 		}
 	}

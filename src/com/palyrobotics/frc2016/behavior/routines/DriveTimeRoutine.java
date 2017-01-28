@@ -2,7 +2,7 @@ package com.palyrobotics.frc2016.behavior.routines;
 
 import com.palyrobotics.frc2016.behavior.Routine;
 import com.palyrobotics.frc2016.config.Commands;
-import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
+import com.palyrobotics.frc2016.util.DriveSignal;
 
 import com.palyrobotics.frc2016.subsystems.Drive;
 import com.palyrobotics.frc2016.util.Subsystem;
@@ -43,7 +43,7 @@ public class DriveTimeRoutine extends Routine {
 	public Commands cancel(Commands commands) {
 		System.out.println("Cancelling");
 		drive.resetController();
-		drive.setOpenLoop(DriveSignal.NEUTRAL);
+		drive.setOpenLoop(DriveSignal.getNeutralSignal());
 		return commands;
 	}
 

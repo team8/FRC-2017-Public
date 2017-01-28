@@ -2,7 +2,7 @@ package com.palyrobotics.frc2016.behavior.routines;
 
 import com.palyrobotics.frc2016.behavior.Routine;
 import com.palyrobotics.frc2016.config.Commands;
-import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
+import com.palyrobotics.frc2016.util.DriveSignal;
 import com.palyrobotics.frc2016.util.Subsystem;
 
 public class TurnAngleRoutine extends Routine {
@@ -57,7 +57,7 @@ public class TurnAngleRoutine extends Routine {
 	@Override
 	public Commands cancel(Commands commands) {
 		mState = States.DONE;
-		drive.setOpenLoop(DriveSignal.NEUTRAL);
+		drive.setOpenLoop(DriveSignal.getNeutralSignal());
 		drive.resetController();
 		return commands;
 	}

@@ -2,9 +2,6 @@ package com.palyrobotics.frc2016.util;
 
 import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.config.RobotState;
-import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
-import com.palyrobotics.frc2016.subsystems.Drive;
-import com.palyrobotics.frc2016.util.CheesyDriveHelper;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertFalse;
@@ -39,7 +36,7 @@ public class CheesyDriveHelperTest {
 		testCommands.rightStickInput.x = 0;
 		mTestCDH.cheesyDrive(testCommands, testRobotState);
 		DriveSignal output = mTestCDH.cheesyDrive(testCommands, testRobotState);
-		boolean zeroOutput = (output.leftMotor == 0) && (output.rightMotor==0);
+		boolean zeroOutput = (output.leftMotor.getSetpoint() == 0) && (output.rightMotor.getSetpoint() == 0);
 		assertTrue("Zero input should have zero output", zeroOutput);
 
 		// Test turning

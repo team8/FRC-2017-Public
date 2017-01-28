@@ -3,7 +3,6 @@ package com.palyrobotics.frc2016.util;
 import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.config.Constants;
 import com.palyrobotics.frc2016.config.RobotState;
-import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
 import com.palyrobotics.frc2016.robot.team254.lib.util.Util;
 
 /**
@@ -14,9 +13,10 @@ public class CheesyDriveHelper {
 	private double mOldWheel, mQuickStopAccumulator;
 	private final double kWheelStickDeadband = 0.02;
 	private final double kThrottleStickDeadband = 0.02;
-	private DriveSignal mSignal = new DriveSignal(0, 0);
 
 	public DriveSignal cheesyDrive(Commands commands, RobotState robotState) {
+		DriveSignal mSignal = DriveSignal.getNeutralSignal();
+
 		double throttle = -commands.leftStickInput.y;
 		double wheel = commands.rightStickInput.x;
 		boolean isQuickTurn = commands.rightStickInput.triggerPressed;
@@ -131,8 +131,8 @@ public class CheesyDriveHelper {
 			leftPwm += overPower * (-1.0 - rightPwm);
 			rightPwm = -1.0;
 		}
-		mSignal.leftMotor = leftPwm;
-		mSignal.rightMotor = rightPwm;
+		mSignal.leftMotor.setPercentVBus(leftPwm);
+		mSignal.rightMotor.setPercentVBus(rightPwm);
 		return mSignal;
 	}
 

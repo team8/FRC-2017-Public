@@ -2,7 +2,7 @@ package com.palyrobotics.frc2016.subsystems.controllers;
 
 import com.palyrobotics.frc2016.config.Constants;
 import com.palyrobotics.frc2016.subsystems.Drive;
-import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
+import com.palyrobotics.frc2016.util.DriveSignal;
 import com.palyrobotics.frc2016.robot.team254.lib.util.Pose;
 
 /**
@@ -26,14 +26,19 @@ public class BangBangTurnAngleController implements Drive.DriveController {
 	@Override
 	public DriveSignal update(Pose pose) {
 		if (this.onTarget()) {
-			return new DriveSignal(0,0);
+			return DriveSignal.getNeutralSignal();
 		}
 		mCurrentPose = pose;
 		System.out.println("Current Pose: " + mCurrentPose.heading);
+		DriveSignal output = DriveSignal.getNeutralSignal();
 		if (pose.heading < mHeading) {
-			return new DriveSignal(this.mMaxVel, -(this.mMaxVel+.05));
+			output.leftMotor.setPercentVBus(this.mMaxVel);
+			output.rightMotor.setPercentVBus(-(this.mMaxVel+.05));
+		} else {
+			output.leftMotor.setPercentVBus(-(this.mMaxVel + .05));
+			output.rightMotor.setPercentVBus(this.mMaxVel);
 		}
-		return new DriveSignal(-(this.mMaxVel + .05), this.mMaxVel);
+		return output;
 	}
 
 	@Override
