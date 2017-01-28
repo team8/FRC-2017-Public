@@ -9,12 +9,11 @@ public class Climber extends Subsystem implements SubsystemLoop {
 
 	private static Climber instance = new Climber();
 	
-	private float climbState = 0;
+	private float climbSpeed = 0;
 	
 	public static enum ClimberState {
 		NOT_MOVING,
-		CLIMBING,
-		BACKWARDS
+		CLIMBING
 	}
 	
 	public static Climber getInstance() {
@@ -38,7 +37,7 @@ public class Climber extends Subsystem implements SubsystemLoop {
 	}
 
 	public float getClimbState() {
-		return this.climbState;
+		return this.climbSpeed;
 	}
 	
 	@Override
@@ -46,13 +45,10 @@ public class Climber extends Subsystem implements SubsystemLoop {
 		// TODO Auto-generated method stub
 		switch (commands.wantedClimbState) {
 			case NOT_MOVING: 
-				this.climbState = 0;
+				this.climbSpeed = 0;
 				break;
 			case CLIMBING:
-				this.climbState = 1;
-				break;
-			case BACKWARDS:
-				this.climbState = -1;
+				this.climbSpeed = 1;
 				break;
 		}
 	}
