@@ -3,6 +3,7 @@ package com.palyrobotics.frc2016.util;
 import edu.wpi.first.wpilibj.Joystick;
 
 /**
+ * Note that WPILib has their own XboxController class as of 2017 but doesn't allow inversion <br />
  * Implements an Xbox Controller as Joystick
  * @author Nihar based on Eric's code
  *
@@ -133,7 +134,7 @@ public class XboxController extends Joystick {
 	
 	/**
 	 * Get right bumper triggered
-	 * @param true if right bumper pressed
+	 * @return true if right bumper pressed
 	 */
 	public boolean getRightBumper() {
 		return super.getRawButton(6);

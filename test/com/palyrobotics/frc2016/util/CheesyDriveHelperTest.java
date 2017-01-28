@@ -1,4 +1,4 @@
-package com.palyrobotics.util;
+package com.palyrobotics.frc2016.util;
 
 import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.config.RobotState;
@@ -7,11 +7,13 @@ import com.palyrobotics.frc2016.subsystems.Drive;
 import com.palyrobotics.frc2016.util.CheesyDriveHelper;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
  * Tests CheesyDriveHelper
  * Created by Nihar on 12/23/16.
+ * @author Nihar
  */
 public class CheesyDriveHelperTest {
 	// Instance to test with
@@ -24,13 +26,12 @@ public class CheesyDriveHelperTest {
 	public void testSign() {
 		// Test matchSign helper method
 		assertTrue("Match Sign broken", matchSign(1,2));
-		assertTrue("Match Sign broken", !matchSign(1,-2));
+		assertFalse("Match Sign broken", matchSign(1,-2));
 		assertTrue("Match Sign broken", matchSign(-1,-2));
 		assertTrue("Match Sign broken", matchSign(0,0));
-		assertTrue("Match Sign broken", matchSign(1,0));
+		assertFalse("Match Sign broken", matchSign(1,0));
 		// Robot state only used by CDH to check for high gear vs low gear
 		RobotState testRobotState = new RobotState();
-		testRobotState.gear = Drive.DriveGear.HIGH;
 		Commands testCommands = new Commands();
 
 		// Test that 0 input leads to 0 output (no negative inertia to start)

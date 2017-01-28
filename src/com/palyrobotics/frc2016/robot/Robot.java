@@ -4,6 +4,7 @@ import com.palyrobotics.frc2016.auto.AutoMode;
 import com.palyrobotics.frc2016.auto.AutoModeExecuter;
 import com.palyrobotics.frc2016.auto.AutoModeSelector;
 import com.palyrobotics.frc2016.behavior.RoutineManager;
+import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.config.RobotState;
 import com.palyrobotics.frc2016.subsystems.*;
 import com.palyrobotics.frc2016.util.Dashboard;
@@ -18,20 +19,23 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 public class Robot extends IterativeRobot {
 	// Instantiate singleton classes
 	private static RobotState robotState = new RobotState();
-
 	public static RobotState getRobotState() {
 		return robotState;
 	}
 
-	private static HardwareAdapter hardwareAdapter = HardwareAdapter.getInstance();
+	// Single instance to be passed around
+	private static Commands commands = new Commands();
+	public static Commands getCommands() {return commands;}
+
 	private static OperatorInterface operatorInterface = OperatorInterface.getInstance();
 	// Instantiate separate thread controls
 	private SubsystemLooper mSubsystemLooper = new SubsystemLooper();
 	private RoutineManager mRoutineManager = new RoutineManager();
-	private AutoModeExecuter mAutoModeRunner = new AutoModeExecuter(mRoutineManager);
+	private AutoModeExecuter mAutoModeExecuter = new AutoModeExecuter(commands, mRoutineManager);
 
 	// Subsystem controllers
 	private Drive mDrive = Drive.getInstance();
+	private Climber mClimb = Climber.getInstance();
 	
 	//hardware updater
 	private HardwareUpdater mHardwareUpdater;
@@ -49,7 +53,7 @@ public class Robot extends IterativeRobot {
 		// Gyro initialization
 		HardwareAdapter.getInstance().getDrivetrain().gyro.calibrate();
 		mSubsystemLooper.register(mDrive);
-		mHardwareUpdater = new HardwareUpdater(mDrive);
+		mHardwareUpdater = new HardwareUpdater(mDrive, mClimb);
 		//        SystemManager.getInstance().add(routineManager);
 		sensorTable = NetworkTable.getTable("Sensor");
 		mDashboard.init();
@@ -64,10 +68,10 @@ public class Robot extends IterativeRobot {
 		mDrive.resetController();
 		
 		AutoMode mode = AutoModeSelector.getInstance().getAutoMode();
-		mAutoModeRunner.setAutoMode(mode);
+		mAutoModeExecuter.setAutoMode(mode);
 		// Prestart auto mode
 		mode.prestart();
-		mAutoModeRunner.start();
+		mAutoModeExecuter.start();
 		// Start control loops
 		mSubsystemLooper.start();
 		System.out.println("End autonomousInit()");
@@ -75,7 +79,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousPeriodic() {
-		mRoutineManager.update();
+		mRoutineManager.update(commands);
 		mDashboard.update();
 		mHardwareUpdater.updateSensors();
 		mHardwareUpdater.updateSubsystems();
@@ -85,8 +89,8 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		System.out.println("Start teleopInit()");
 		robotState.gamePeriod = RobotState.GamePeriod.TELEOP;
-		mRoutineManager.reset();
-		operatorInterface.updateCommands();
+		mRoutineManager.reset(commands);
+		operatorInterface.updateCommands(commands);
 		mSubsystemLooper.start();
 		System.out.println("End teleopInit()");
 	}
@@ -96,10 +100,10 @@ public class Robot extends IterativeRobot {
 		// Update RobotState
 		mHardwareUpdater.updateSensors();
 		// Gets joystick commands
-		operatorInterface.updateCommands();
+		operatorInterface.updateCommands(commands);
 		
 		// Updates commands based on routines
-		mRoutineManager.update();
+		mRoutineManager.update(commands);
 
 		//Update the hardware
 		mHardwareUpdater.updateSubsystems();
@@ -116,10 +120,10 @@ public class Robot extends IterativeRobot {
 		System.out.println("Current Auto Mode: " + AutoModeSelector.getInstance().getAutoMode().toString());
 		robotState.gamePeriod = RobotState.GamePeriod.DISABLED;
 		// Stop auto mode
-		mAutoModeRunner.stop();
+		mAutoModeExecuter.stop();
 
 		// Stop routine_request
-		mRoutineManager.reset();
+		mRoutineManager.reset(commands);
 
 		// Stop control loops
 		mSubsystemLooper.stop();

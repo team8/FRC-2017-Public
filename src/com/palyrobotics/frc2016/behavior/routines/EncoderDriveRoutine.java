@@ -2,10 +2,9 @@ package com.palyrobotics.frc2016.behavior.routines;
 
 import com.palyrobotics.frc2016.behavior.Routine;
 import com.palyrobotics.frc2016.config.Commands;
-import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
 
+import com.palyrobotics.frc2016.subsystems.Drive;
 import com.palyrobotics.frc2016.util.Subsystem;
-import edu.wpi.first.wpilibj.Timer;
 
 /**
  * Drives forward a specified distance
@@ -35,7 +34,7 @@ public class EncoderDriveRoutine extends Routine {
 	// Timeout after x seconds
 	private double mTimeout;
 	private final double kDefaultTimeout = 5;
-	Timer timer = new Timer();
+	private long mStartTime;
 
 	private boolean mIsNewState = true;
 
@@ -90,24 +89,21 @@ public class EncoderDriveRoutine extends Routine {
 	@Override
 	public Commands update(Commands commands) {
 		EncoderDriveRoutineStates newState = state;
-		Commands.Setpoints setpoints = commands.robotSetpoints;
 		switch (state) {
 		case START:
-			timer.reset();
-			timer.start();
-			// Only set the setpoint the first time the state is START 
+			mStartTime = System.currentTimeMillis();
+			// Only set the setpoint the first time the state is START
 			if(mIsNewState) {
 				drive.setDistanceSetpoint(mDistance, mVelocitySetpoint);
 			}
-
-			setpoints.currentRoutine = Commands.Routines.ENCODER_DRIVE;
+			commands.wantedDriveState = Drive.DriveState.CONTROLLER;
 			newState = EncoderDriveRoutineStates.DRIVING;
 			break;
 		case DRIVING:
 			if(drive.controllerOnTarget()) {
 				newState = EncoderDriveRoutineStates.DONE;
 			}
-			if(timer.get() > mTimeout) {
+			if((System.currentTimeMillis()-mStartTime) > mTimeout*1000) {
 				newState = EncoderDriveRoutineStates.DONE;
 			}
 			break;
@@ -119,7 +115,6 @@ public class EncoderDriveRoutine extends Routine {
 		mIsNewState = false;
 		if(newState != state) {
 			state = newState;
-			timer.reset();
 			mIsNewState = true;
 		}
 		
@@ -129,9 +124,7 @@ public class EncoderDriveRoutine extends Routine {
 	@Override
 	public Commands cancel(Commands commands) {
 		state = EncoderDriveRoutineStates.DONE;
-		timer.stop();
-		timer.reset();
-		drive.setOpenLoop(DriveSignal.NEUTRAL);
+		commands.wantedDriveState = Drive.DriveState.NEUTRAL;
 		drive.resetController();
 		return commands;
 	}
@@ -139,7 +132,7 @@ public class EncoderDriveRoutine extends Routine {
 	@Override
 	public void start() {
 		drive.resetController();
-		timer.reset();
+		mStartTime = System.currentTimeMillis();
 	}
 
 	@Override

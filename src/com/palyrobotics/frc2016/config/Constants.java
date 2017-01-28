@@ -122,9 +122,11 @@ public class Constants extends ConstantsBase {
 	 * DERICA
 	 */
 	// DRIVETRAIN
+	// CANTalon Tuning
+	public static float kPeakVoltage = 8.0f;
 	// Motors
 	public static int kDericaLeftDriveFrontMotorDeviceID  = 2;
-	public static int kDericaLeftDriveBackMotorDeviceID = 3;
+	public static int kDericaLeftDriveMasterDeviceID = 3;
 	public static int kDericaLeftDriveFrontMotorPDP = 14;
 	public static int kDericaLeftDriveBackMotorPDP = 3;
 	public static int kDericaRightDriveFrontMotorDeviceID = 4;
@@ -164,6 +166,13 @@ public class Constants extends ConstantsBase {
 	public static double kDriveEncoderCountsPerRev = 250.0;
 	public static double kDriveWheelSizeInches = 8; //pneumatic wheels
 
+	// CLIMBER CONSTANTS
+	public static int kSteikClimberMotorPWM = 2;
+	public static int kSteikClimberMotorPDP = 3;
+	
+	public static int kSteikClimberEncoderDIOA = 4;
+	public static int kSteikClimberEncoderDIOB = 5;
+	
 	@Override
 	public String getFileLocation() {
 		return "~/constants.txt";

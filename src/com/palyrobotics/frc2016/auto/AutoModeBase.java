@@ -2,6 +2,7 @@ package com.palyrobotics.frc2016.auto;
 
 import com.palyrobotics.frc2016.behavior.Routine;
 import com.palyrobotics.frc2016.behavior.RoutineManager;
+import com.palyrobotics.frc2016.config.Commands;
 
 public abstract class AutoModeBase {
     protected double updateRate = 1.0 / 50.0;
@@ -11,9 +12,11 @@ public abstract class AutoModeBase {
     public abstract String toString();
     public abstract void prestart();
     private RoutineManager mRoutineManager;
+    private Commands mCommands;
 
-    public void run(RoutineManager routineManager) {
+    public void run(Commands commands, RoutineManager routineManager) {
     	this.mRoutineManager = routineManager;
+    	this.mCommands = commands;
         active = true;
         try {
             routine();
@@ -40,7 +43,7 @@ public abstract class AutoModeBase {
     }
 
     public void runRoutine(Routine routine) {
-    	mRoutineManager.addNewRoutine(routine);
+    	mRoutineManager.addNewRoutine(mCommands, routine);
     }
     
 }

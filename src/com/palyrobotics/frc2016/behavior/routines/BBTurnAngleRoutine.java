@@ -3,6 +3,7 @@ package com.palyrobotics.frc2016.behavior.routines;
 import com.palyrobotics.frc2016.behavior.Routine;
 import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.robot.team254.lib.util.DriveSignal;
+import com.palyrobotics.frc2016.subsystems.Drive;
 import com.palyrobotics.frc2016.util.Subsystem;
 
 public class BBTurnAngleRoutine extends Routine {
@@ -26,20 +27,17 @@ public class BBTurnAngleRoutine extends Routine {
 	
 	@Override
 	public void start() {
-		drive.setOpenLoop(new DriveSignal(0,0));
+		drive.setOpenLoop(DriveSignal.NEUTRAL);
 		mState = States.START;
 	}
 
 	@Override
-	public Commands update(Commands commands) {
-		Commands.Setpoints setpoints = commands.robotSetpoints;
-		
+	public Commands update(Commands commands) {		
 		switch(mState) {
 		case START:
 			System.out.println("Set setpoint: " + mAngle);
 			drive.setBangBangTurnAngleSetpoint(mAngle);
-			
-			setpoints.currentRoutine = Commands.Routines.TURN_ANGLE;
+			commands.wantedDriveState = Drive.DriveState.CONTROLLER;
 			mState = States.TURNING;
 			break;
 			

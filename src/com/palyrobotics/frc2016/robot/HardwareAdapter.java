@@ -27,50 +27,60 @@ public class HardwareAdapter {
 		protected static DrivetrainHardware getInstance() {
 			return instance;
 		}
+		public final CANTalon leftSlaveTalon;
+		public final CANTalon leftMasterTalon;
+		public final CANTalon rightSlaveTalon;
+		public final CANTalon rightMasterTalon;
 
-		public final CheesySpeedController leftDriveMotor;
-		public final CheesySpeedController rightDriveMotor;
-		public final Encoder leftDriveEncoder;
-		public final Encoder rightDriveEncoder;
+		public final Encoder leftEncoder;
+		public final Encoder rightEncoder;
 		public final ADXRS450_Gyro gyro;
 		public final DoubleSolenoid shifterSolenoid;
 
 		private DrivetrainHardware() {
 			if (Constants.kRobotName == Constants.RobotName.TYR) {
-				leftDriveMotor = new CheesySpeedController(
-						new SpeedController[]{new CANTalon(Constants.kTyrLeftDriveFrontMotorDeviceID),
-								new CANTalon(Constants.kTyrLeftDriveBackMotorDeviceID)},
-						new int[]{Constants.kTyrLeftDriveFrontMotorPDP, Constants.kTyrLeftDriveBackMotorPDP});
-				rightDriveMotor = new CheesySpeedController(
-						new SpeedController[]{new CANTalon(Constants.kTyrRightDriveFrontMotorDeviceID),
-								new CANTalon(Constants.kTyrRightDriveBackMotorDeviceID)},
-						new int[]{Constants.kTyrRightDriveBackMotorPDP, Constants.kTyrRightDriveBackMotorPDP});
-				leftDriveEncoder = new Encoder(
-						Constants.kTyrLeftDriveEncoderDIOA, Constants.kTyrLeftDriveEncoderDIOB);
-				rightDriveEncoder = new Encoder(
-						Constants.kTyrRightDriveEncoderDIOA, Constants.kTyrRightDriveEncoderDIOB);
+				leftSlaveTalon = new CANTalon(Constants.kTyrLeftDriveFrontMotorDeviceID);
+				leftMasterTalon = new CANTalon(Constants.kTyrLeftDriveBackMotorDeviceID);
+				rightSlaveTalon = new CANTalon(Constants.kTyrRightDriveFrontMotorDeviceID);
+				rightMasterTalon = new CANTalon(Constants.kTyrRightDriveBackMotorDeviceID);
+//				leftEncoder = new Encoder(
+//						Constants.kTyrLeftDriveEncoderDIOA, Constants.kTyrLeftDriveEncoderDIOB);
+//				rightEncoder = new Encoder(
+//						Constants.kTyrRightDriveEncoderDIOA, Constants.kTyrRightDriveEncoderDIOB);
+				// Currently encoders on Tyr are non-existent
+				leftEncoder = null;
+				rightEncoder = null;
 				gyro = new ADXRS450_Gyro();
 				shifterSolenoid = new DoubleSolenoid(
 						Constants.kTyrDriveSolenoidExtend, Constants.kTyrDriveSolenoidRetract);
 			} else {
-				CANTalon leftDriveBackMotor = new CANTalon(Constants.kDericaLeftDriveBackMotorDeviceID);
-				leftDriveBackMotor.enableBrakeMode(true);
-				CANTalon leftDriveFrontMotor = new CANTalon(Constants.kDericaLeftDriveFrontMotorDeviceID);
-				leftDriveFrontMotor.enableBrakeMode(true);
-				CANTalon rightDriveBackMotor = new CANTalon(Constants.kDericaRightDriveBackMotorDeviceID);
-				rightDriveBackMotor.enableBrakeMode(true);
-				CANTalon rightDriveFrontMotor = new CANTalon(Constants.kDericaRightDriveFrontMotorDeviceID);
-				rightDriveFrontMotor.enableBrakeMode(true);
-				leftDriveMotor = new CheesySpeedController(
-						new SpeedController[]{leftDriveFrontMotor, leftDriveBackMotor},
-						new int[]{Constants.kDericaLeftDriveFrontMotorPDP, Constants.kDericaLeftDriveBackMotorPDP});
-				rightDriveMotor = new CheesySpeedController(
-						new SpeedController[]{rightDriveFrontMotor, rightDriveBackMotor},
-						new int[]{Constants.kDericaRightDriveBackMotorPDP, Constants.kDericaRightDriveBackMotorPDP});
-				leftDriveEncoder = new Encoder(
-						Constants.kDericaLeftDriveEncoderDIOA, Constants.kDericaLeftDriveEncoderDIOB, true);
-				rightDriveEncoder = new Encoder(
-						Constants.kDericaRightDriveEncoderDIOA, Constants.kDericaRightDriveEncoderDIOB);
+				leftMasterTalon = new CANTalon(Constants.kDericaLeftDriveMasterDeviceID);
+				leftSlaveTalon = new CANTalon(Constants.kDericaLeftDriveFrontMotorDeviceID);
+				rightMasterTalon = new CANTalon(Constants.kDericaRightDriveBackMotorDeviceID);
+				rightSlaveTalon = new CANTalon(Constants.kDericaRightDriveFrontMotorDeviceID);
+
+				leftMasterTalon.enableBrakeMode(true);
+				leftSlaveTalon.enableBrakeMode(true);
+				rightSlaveTalon.enableBrakeMode(true);
+				rightMasterTalon.enableBrakeMode(true);
+
+				leftMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+				rightMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+				leftMasterTalon.reverseSensor(true);
+				rightMasterTalon.reverseOutput(true);
+
+				// Zero encoders
+				leftMasterTalon.setEncPosition(0);
+				rightMasterTalon.setEncPosition(0);
+				leftMasterTalon.configPeakOutputVoltage(Constants.kPeakVoltage, -Constants.kPeakVoltage);
+				rightMasterTalon.configPeakOutputVoltage(Constants.kPeakVoltage, -Constants.kPeakVoltage);
+
+				leftEncoder = null;
+				rightEncoder = null;
+//				leftEncoder = new Encoder(
+//						Constants.kDericaLeftDriveEncoderDIOA, Constants.kDericaLeftDriveEncoderDIOB, true);
+//				rightEncoder = new Encoder(
+//						Constants.kDericaRightDriveEncoderDIOA, Constants.kDericaRightDriveEncoderDIOB);
 				gyro = new ADXRS450_Gyro();
 				// no shifter solenoid
 				shifterSolenoid = null;
@@ -192,6 +202,22 @@ public class HardwareAdapter {
 		}
 	}
 	
+	public static class ClimberHardware {
+		private static ClimberHardware instance = new ClimberHardware();
+		
+		public static ClimberHardware getInstance() {
+			return instance;
+		}
+		
+		public final CheesySpeedController climbingMotor;
+		public final Encoder positionEncoder;
+		
+		private ClimberHardware() {
+			climbingMotor = new CheesySpeedController(new TalonSRX(Constants.kSteikClimberMotorPDP), Constants.kSteikClimberMotorPWM);
+			positionEncoder = new Encoder(Constants.kSteikClimberEncoderDIOA, Constants.kSteikClimberEncoderDIOB);
+		}
+	}
+	
 	public final static PowerDistributionPanel PDP = new PowerDistributionPanel();
 
 	// Joysticks for operator interface
@@ -234,6 +260,10 @@ public class HardwareAdapter {
 
 	public LowGoalShooterHardware getLowGoalShooter() {
 		return LowGoalShooterHardware.getInstance();
+	}
+	
+	public ClimberHardware getClimber() {
+		return ClimberHardware.getInstance();
 	}
 	
 	public Joysticks getJoysticks() {

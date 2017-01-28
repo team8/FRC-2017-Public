@@ -1,6 +1,5 @@
 package com.palyrobotics.frc2016.behavior;
 
-import com.palyrobotics.frc2016.behavior.routines.*;
 import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.robot.team254.lib.util.StateHolder;
 import com.palyrobotics.frc2016.robot.team254.lib.util.Tappable;
@@ -10,18 +9,18 @@ import java.util.*;
 
 public class RoutineManager implements Tappable {
 	// Routines that are being run
-	ArrayList<Routine> runningRoutines = new ArrayList<Routine>();
-	ArrayList<Routine> removalRoutines = new ArrayList<Routine>();
+	private ArrayList<Routine> runningRoutines = new ArrayList<Routine>();
+	private ArrayList<Routine> routinesToRemove = new ArrayList<Routine>();
 
-	private Routine mCurrentRoutine = null;
-	private Commands.Setpoints mSetpoints;
-	//    private ManualRoutine m_manual_routine = new ManualRoutine();
-
-	public void addNewRoutine(Routine newRoutine) {
+	public void addNewRoutine(Commands commands, Routine newRoutine) {
+		if(newRoutine == null) {
+			System.err.println("Tried to add null routine to routine manager!");
+			throw new NullPointerException();
+		}
 		// combine running routines w/ new routine to check for shared subsystems
 		ArrayList<Routine> conflicts = conflictingRoutines(runningRoutines, newRoutine);
 		for(Routine routine : conflicts) {
-			routine.cancel(Commands.getInstance());
+			routine.cancel(commands);
 			System.out.println("Canceling routine " + routine.getName());
 			runningRoutines.remove(routine);
 		}
@@ -29,91 +28,65 @@ public class RoutineManager implements Tappable {
 		runningRoutines.add(newRoutine);
 	}
 
-	private void setNewRoutine(Routine newRoutine) {
-		// Cancel if new routine diff from current routine
-		boolean needs_cancel = (newRoutine != mCurrentRoutine) && (mCurrentRoutine != null);
-		boolean needs_start = (newRoutine != mCurrentRoutine) && (newRoutine != null);
-		// Cancel old routine
-		if (needs_cancel) {
-			mCurrentRoutine.cancel(Commands.getInstance());
-			// Reset all setpoints
-			mSetpoints.reset();
-		}
-		// Start next routine
-		if (needs_start) {
-			newRoutine.start();
-		}
-		System.out.println("Ending " + mCurrentRoutine.getName() + " Starting " + newRoutine.getName());
-		mCurrentRoutine = newRoutine;
+	public ArrayList<Routine> getCurrentRoutines() {
+		return runningRoutines;
 	}
 
-	public Routine getCurrentRoutine() {
-		return mCurrentRoutine;
-	}
-
-	// Wipes all current routines
-	public void reset() {
+	/** Wipes all current routines <br />
+	 * Pass in the commands so that routines can clean up
+	 * @param commands
+	 */
+	public void reset(Commands commands) {
 		// Cancel all running routines
 		if(runningRoutines.size() != 0) {
 			for(Routine routine : runningRoutines) {
-				routine.cancel(Commands.getInstance());
+				routine.cancel(commands);
 			}
 		}
 		// Empty the running routines
-		runningRoutines = new ArrayList<Routine>();
+		runningRoutines.clear();
 	}
-
-	public RoutineManager() {
-		mSetpoints = new Commands.Setpoints();
-		mSetpoints.reset();
-	}
-
-	public void update() {
-		Commands commands = Commands.getInstance();
+	
+	/**
+	 * Updates the commands that are passed in based on the running and canceled routines
+	 * @param commands Commands object to be modified
+	 */
+	public void update(Commands commands) {
 		// If current routine exists and is finished, nullify it
 //		if (m_cur_routine != null && m_cur_routine.isFinished()) {
 //			System.out.println("Routine cancel called");
 //			setNewRoutine(null);
 //		}
-		removalRoutines = new ArrayList<Routine>();
+		routinesToRemove = new ArrayList<Routine>();
 		
 		for(Routine routine : runningRoutines) {
-			if(routine != null && routine.finished()) {
+			if(routine.finished()) {
 				System.out.println("Routine cancel called");
 				commands = routine.cancel(commands);
-				removalRoutines.add(routine);
+				routinesToRemove.add(routine);
 			} else {
 				System.out.println("Updating routine: " + routine.getName());
 				commands = routine.update(commands);
 			}
 		}
 		
-		for(Routine routine : removalRoutines) {
+		for(Routine routine : routinesToRemove) {
 			System.out.println("Removing routine: " + routine.getName());
 			runningRoutines.remove(routine);
 		}
 		
 		// Set TROUT routine_request
-		if (commands.cancelCurrentRoutine) {
+		if (commands.cancelCurrentRoutines) {
 			System.out.println("Cancel routine button");
-			addNewRoutine(null);
-		} else if (commands.routineRequest == Commands.Routines.ENCODER_DRIVE && !(mCurrentRoutine instanceof EncoderDriveRoutine)) {
-			addNewRoutine(new EncoderDriveRoutine(500));
-		} else if (commands.routineRequest == Commands.Routines.TIMER_DRIVE && !(mCurrentRoutine instanceof DriveTimeRoutine)) {
-			System.out.println("Setting routine");
-			addNewRoutine(new DriveTimeRoutine(3, 0.5));
-		} else if (commands.routineRequest == Commands.Routines.TURN_ANGLE && !(mCurrentRoutine instanceof TurnAngleRoutine)) {
-			System.out.println("Turn angle activated");
-			addNewRoutine(new TurnAngleRoutine(45, 0.3));
+			reset(commands);
+		} else if(!commands.wantedRoutines.isEmpty()) {
+			for(Routine routine : commands.wantedRoutines) {
+				addNewRoutine(commands, routine);
+			}
 		}
-
-		//changes the setpoints according to the current routine update
-//		if (m_cur_routine != null) {
-//			m_setpoints = m_cur_routine.update(commands);
-//		}
-
-		// Get manual m_setpoints
-		//        m_setpoints = m_manual_routine.update(commands, m_setpoints);
+		
+		//clears the wanted routines every update cycle
+		commands.wantedRoutines.clear();
 	}
 
 	/**
@@ -146,7 +119,7 @@ public class RoutineManager implements Tappable {
 
 	@Override
 	public void getState(StateHolder states) {
-		states.put("mode", mCurrentRoutine != null ? mCurrentRoutine.getName() : "---");
+//		states.put("mode", mCurrentRoutine != null ? mCurrentRoutine.getName() : "---");
 	}
 
 	@Override
@@ -157,17 +130,17 @@ public class RoutineManager implements Tappable {
 	@Deprecated
 	/**
 	 * Old helper method to find the overlapping subsystems
-	 * is very efficient
+	 * is very efficient, but untested
 	 */
-	private Subsystem[] sharedSubsystem(Routine[] routines) {
+	public static Subsystem[] sharedSubsystem(ArrayList<Routine> routines) {
 		// Hash set is efficient for lookup and comparison to check w/ contents of others
-		HashSet<Subsystem> initialSet = new HashSet<Subsystem>(Arrays.asList(routines[0].getRequiredSubsystems()));
+		HashSet<Subsystem> initialSet = new HashSet<Subsystem>(Arrays.asList(routines.get(0).getRequiredSubsystems()));
 		// Instantiate all other subsystems
-		HashSet<Subsystem>[] routineSubsystemSets = new HashSet[routines.length];
-		for (int i = 1; i < routines.length; i++) {
-			routineSubsystemSets[i] = new HashSet<Subsystem>(Arrays.asList(routines[i].getRequiredSubsystems()));
+		HashSet<Subsystem>[] routineSubsystemSets = new HashSet[routines.size()];
+		for (int i = 1; i < routines.size(); i++) {
+			routineSubsystemSets[i] = new HashSet<Subsystem>(Arrays.asList(routines.get(i).getRequiredSubsystems()));
 		}
-		for (int j = 1; j < routines.length; j++) {
+		for (int j = 1; j < routines.size(); j++) {
 			initialSet.retainAll(routineSubsystemSets[j]);
 		}
 		return (Subsystem[]) initialSet.toArray();

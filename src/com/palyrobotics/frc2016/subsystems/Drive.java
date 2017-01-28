@@ -18,8 +18,6 @@ import com.palyrobotics.frc2016.util.Subsystem;
 import com.palyrobotics.frc2016.robot.team254.lib.trajectory.Path;
 
 import com.palyrobotics.frc2016.util.SubsystemLoop;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 /**
  * Represents the drivetrain
@@ -30,9 +28,13 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	public static Drive getInstance() {
 		return instance;
 	}
+
+	public enum DriveState {CHEZY, CONTROLLER, OPEN_LOOP, NEUTRAL}
+	private DriveState mState = DriveState.NEUTRAL;
+
 	// Helper classes to calculate teleop output
 	private CheesyDriveHelper mCDH = new CheesyDriveHelper();
-//	private ProportionalDriveHelper pdh = new ProportionalDriveHelper();
+//	private ProportionalDriveHelper mPDH = new ProportionalDriveHelper();
 
 	public interface DriveController {
 		DriveSignal update(Pose pose);
@@ -42,14 +44,11 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	}
 	private DriveController mController = null;
 
-	// Derica is always considered high gear
-	public enum DriveGear {HIGH, LOW}
-	private DriveGear mGear;
-
 	// Encoder DPP
 	private final double kInchesPerTick;
 	private final double kWheelbaseWidth; // Get from CAD
 	private final double kTurnSlipFactor; // Measure empirically
+	public final double kInchesToTicks;
 
 	// Cache poses to not allocated at 200Hz
 	private Pose mCachedPose = new Pose(0, 0, 0, 0, 0, 0);
@@ -64,12 +63,13 @@ public class Drive extends Subsystem implements SubsystemLoop {
 			kWheelbaseWidth = 26.0;
 			kTurnSlipFactor = 1.2;
 			kInchesPerTick = 0.184;
+			kInchesToTicks = 1400 / (2 * 3.1415 * 3.5);
 		}
 		else {
 			kWheelbaseWidth = 22.0;
 			kTurnSlipFactor = 1.2;
 			kInchesPerTick = 0.07033622;
-			mGear = DriveGear.HIGH;
+			kInchesToTicks = 1400 / (2 * 3.1415 * 3.5);
 		}
 	}
 
@@ -91,19 +91,24 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	@Override
 	public void update(Commands commands, RobotState state) {
 		mCachedRobotState = state;
+		mState = commands.wantedDriveState;
 		Commands.Setpoints setpoints = commands.robotSetpoints;
 		// Call methods associated with any setpoints that are present
 		// Encoder drive distance routine
 //		setpoints.encoder_drive_setpoint.ifPresent(this.setDistanceSetpoint(setpoints.encoder_drive_setpoint));
 
-		if(mController == null && mCachedRobotState.gamePeriod == RobotState.GamePeriod.TELEOP && commands.routineRequest == Commands.Routines.NONE) {
-			setDriveOutputs(mCDH.cheesyDrive(commands, mCachedRobotState));
-		}
-		else if (mController == null) {
-			setDriveOutputs(DriveSignal.NEUTRAL);
-		}
-		else {
-			setDriveOutputs(mController.update(getPhysicalPose()));
+		switch(mState) {
+			case CHEZY:
+				setDriveOutputs(mCDH.cheesyDrive(commands, mCachedRobotState));
+				break;
+			case CONTROLLER:
+				setDriveOutputs(mController.update(getPhysicalPose()));
+				break;
+			case OPEN_LOOP:
+				setDriveOutputs(commands.robotSetpoints.drivePowerSetpoint.get());
+			case NEUTRAL:
+				setDriveOutputs(DriveSignal.NEUTRAL);
+				break;
 		}
 	}
 
@@ -113,30 +118,6 @@ public class Drive extends Subsystem implements SubsystemLoop {
 
 	private void setDriveOutputs(DriveSignal signal) {
 		mSignal = signal;
-	}
-
-	/**
-	 * Allows shifting of gear - Note that Derica cannot shift gears
-	 *
-	 * @param targetGear Desired gear to shift to
-	 * @return What the shifterSolenoid should be set to
-	 */
-	public DoubleSolenoid.Value setGear(DriveGear targetGear) {
-		if (Constants.kRobotName == Constants.RobotName.DERICA) {
-			System.err.println("No gear shifting on Derica");
-			return null;
-		}
-		switch (targetGear) {
-			case HIGH:
-				return Value.kForward;
-			case LOW:
-				return Value.kReverse;
-		}
-		return null;
-	}
-
-	public boolean isHighGear() {
-		return mGear == DriveGear.HIGH;
 	}
 
 	public void setOpenLoop(DriveSignal signal) {

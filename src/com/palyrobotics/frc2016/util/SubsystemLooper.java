@@ -35,7 +35,7 @@ public class SubsystemLooper {
 			synchronized (mTaskRunningLock) {
 				if (mRunning) {
 					double now = Timer.getFPGATimestamp();
-					Commands commands = Commands.getInstance();
+					Commands commands = Robot.getCommands();
 					RobotState robotState = Robot.getRobotState();
 					for (SubsystemLoop loop : mLoops) {
 						loop.update(commands, robotState);
