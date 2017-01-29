@@ -23,7 +23,7 @@ public class Spatula extends Subsystem implements SubsystemLoop {
 	
 	private DoubleSolenoid.Value mOutput;
 	
-	public Spatula() {
+	private Spatula() {
 		super("Spatula");
 	}
 

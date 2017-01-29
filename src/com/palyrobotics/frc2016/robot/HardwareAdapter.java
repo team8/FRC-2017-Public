@@ -1,7 +1,10 @@
 package com.palyrobotics.frc2016.robot;
 
 import com.ctre.CANTalon;
+import com.mindsensors.CANSD540;
 import com.palyrobotics.frc2016.config.Constants;
+import com.palyrobotics.frc2016.config.Constants2016;
+import com.palyrobotics.frc2016.robot.team254.lib.util.ADXRS453_Gyro;
 import com.palyrobotics.frc2016.util.XboxController;
 import com.palyrobotics.frc2016.robot.team254.lib.util.CheesySpeedController;
 
@@ -32,186 +35,43 @@ public class HardwareAdapter {
 		public final CANTalon rightSlaveTalon;
 		public final CANTalon rightMasterTalon;
 
-		public final Encoder leftEncoder;
-		public final Encoder rightEncoder;
-		public final ADXRS450_Gyro gyro;
-		public final DoubleSolenoid shifterSolenoid;
+//		public final Encoder leftEncoder;
+//		public final Encoder rightEncoder;
+		public final ADXRS453_Gyro gyro;
 
 		private DrivetrainHardware() {
 			if (Constants.kRobotName == Constants.RobotName.TYR) {
-				leftSlaveTalon = new CANTalon(Constants.kTyrLeftDriveFrontMotorDeviceID);
-				leftMasterTalon = new CANTalon(Constants.kTyrLeftDriveBackMotorDeviceID);
-				rightSlaveTalon = new CANTalon(Constants.kTyrRightDriveFrontMotorDeviceID);
-				rightMasterTalon = new CANTalon(Constants.kTyrRightDriveBackMotorDeviceID);
-//				leftEncoder = new Encoder(
-//						Constants.kTyrLeftDriveEncoderDIOA, Constants.kTyrLeftDriveEncoderDIOB);
-//				rightEncoder = new Encoder(
-//						Constants.kTyrRightDriveEncoderDIOA, Constants.kTyrRightDriveEncoderDIOB);
-				// Currently encoders on Tyr are non-existent
-				leftEncoder = null;
-				rightEncoder = null;
-				gyro = new ADXRS450_Gyro();
-				shifterSolenoid = new DoubleSolenoid(
-						Constants.kTyrDriveSolenoidExtend, Constants.kTyrDriveSolenoidRetract);
-			} else {
-				leftMasterTalon = new CANTalon(Constants.kDericaLeftDriveMasterDeviceID);
-				leftSlaveTalon = new CANTalon(Constants.kDericaLeftDriveFrontMotorDeviceID);
-				rightMasterTalon = new CANTalon(Constants.kDericaRightDriveBackMotorDeviceID);
-				rightSlaveTalon = new CANTalon(Constants.kDericaRightDriveFrontMotorDeviceID);
+				leftSlaveTalon = new CANTalon(Constants2016.kTyrLeftDriveFrontMotorDeviceID);
+				leftMasterTalon = new CANTalon(Constants2016.kTyrLeftDriveBackMotorDeviceID);
+				rightSlaveTalon = new CANTalon(Constants2016.kTyrRightDriveFrontMotorDeviceID);
+				rightMasterTalon = new CANTalon(Constants2016.kTyrRightDriveBackMotorDeviceID);
+				gyro = new ADXRS453_Gyro();
+			} else if(Constants.kRobotName == Constants.RobotName.DERICA) {
+				leftMasterTalon = new CANTalon(Constants2016.kDericaLeftDriveMasterDeviceID);
+				leftSlaveTalon = new CANTalon(Constants2016.kDericaLeftDriveFrontMotorDeviceID);
+				rightMasterTalon = new CANTalon(Constants2016.kDericaRightDriveBackMotorDeviceID);
+				rightSlaveTalon = new CANTalon(Constants2016.kDericaRightDriveFrontMotorDeviceID);
 
-				leftEncoder = null;
-				rightEncoder = null;
-//				leftEncoder = new Encoder(
-//						Constants.kDericaLeftDriveEncoderDIOA, Constants.kDericaLeftDriveEncoderDIOB, true);
-//				rightEncoder = new Encoder(
-//						Constants.kDericaRightDriveEncoderDIOA, Constants.kDericaRightDriveEncoderDIOB);
-				gyro = new ADXRS450_Gyro();
+				gyro = new ADXRS453_Gyro();
 				// no shifter solenoid
-				shifterSolenoid = null;
-			}
-		}
-	}
-
-	/*
-	 * INTAKE - has some null hardware components
-	 */
-	public static class IntakeHardware {
-		private static IntakeHardware instance = new IntakeHardware();
-
-		protected static IntakeHardware getInstance() {
-			return instance;
-		}
-		public final CheesySpeedController leftIntakeMotor;
-		public final CheesySpeedController rightIntakeMotor;
-		public final CheesySpeedController intakeArmMotor;
-		public final AnalogPotentiometer intakeArmPotentiometer;
-
-		private IntakeHardware() {
-			if (Constants.kRobotName == Constants.RobotName.TYR) {
-				leftIntakeMotor = new CheesySpeedController(
-						new VictorSP(Constants.kTyrLeftIntakeMotorDeviceID),
-						Constants.kTyrLeftIntakeMotorPDP);
-				rightIntakeMotor = new CheesySpeedController(
-						new VictorSP(Constants.kTyrRightIntakeMotorDeviceID),
-						Constants.kTyrRightIntakeMotorPDP);
-				intakeArmMotor = null;
-				intakeArmPotentiometer = null;
-			} else if (Constants.kRobotName == Constants.RobotName.STEIK) {
-				leftIntakeMotor = new CheesySpeedController(
-						new VictorSP(Constants.kSteikLeftIntakeMotorDeviceID),
-						Constants.kSteikLeftIntakeMotorPDP);
-				rightIntakeMotor = new CheesySpeedController(
-						new VictorSP(Constants.kSteikRightIntakeMotorDeviceID),
-						Constants.kSteikRightIntakeMotorPDP);
-				intakeArmMotor = null;
-				intakeArmPotentiometer = null;
+			} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
+				leftMasterTalon = new CANTalon(Constants.kAegirLeftDriveMasterDeviceID);
+				leftSlaveTalon = new CANTalon(Constants.kAegirLeftDriveSlaveDeviceID);
+				rightMasterTalon = new CANTalon(Constants.kAegirRightDriveMasterDeviceID);
+				rightSlaveTalon = new CANTalon(Constants.kAegirRightDriveSlaveDeviceID);
+				gyro = new ADXRS453_Gyro();
 			} else {
-				leftIntakeMotor = new CheesySpeedController(
-						new CANTalon(Constants.kDericaIntakeMotorPWM),
-						Constants.kDericaIntakeMotorPDP);
-				rightIntakeMotor = leftIntakeMotor;
-				intakeArmMotor = new CheesySpeedController(
-						new CANTalon(Constants.kDericaArmIntakeMotorPWM),
-						Constants.kDericaArmIntakeMotorPDP);
-				intakeArmPotentiometer = null;
+				leftMasterTalon = new CANTalon(Constants.kSteikLeftDriveMasterDeviceID);
+				leftSlaveTalon = new CANTalon(Constants.kSteikLeftDriveSlaveDeviceID);
+				rightMasterTalon = new CANTalon(Constants.kSteikRightDriveMasterDeviceID);
+				rightSlaveTalon = new CANTalon(Constants.kSteikRightDriveSlaveDeviceID);
+				gyro = new ADXRS453_Gyro();
 			}
 		}
 	}
 
-	/*
-	 * SHOOTER/CATAPULT
-	 * TyrShooter comes with Grabber
-	 */
-	public static class ShooterHardware {
-		private static ShooterHardware instance = new ShooterHardware();
-
-		public static ShooterHardware getInstance() {
-			return instance;
-		}
-
-		// Pneumatic solenoids, only instantiate if Tyr
-		public final DoubleSolenoid pistonSolenoid;
-		public final DoubleSolenoid latchSolenoid;
-		public final DoubleSolenoid grabberSolenoid;
-		public final CheesySpeedController shooterMotor;
-		public final AnalogPotentiometer shooterPotentiometer;
-
-		private ShooterHardware() {
-			if (Constants.kRobotName == Constants.RobotName.TYR) {
-				pistonSolenoid = new DoubleSolenoid(
-						Constants.kShooterSolenoidPortExtend, Constants.kShooterSolenoidPortRetract);
-				latchSolenoid = new DoubleSolenoid(
-						Constants.kLatchSolenoidPortExtend, Constants.kLatchSolenoidPortRetract);
-				grabberSolenoid = new DoubleSolenoid(
-						Constants.kGrabberSolenoidPortExtend, Constants.kGrabberSolenoidPortRetract);
-				shooterMotor = new CheesySpeedController(new CANTalon(Constants.kTyrShooterMotorDeviceID),
-						Constants.kTyrShooterMotorPDP);
-				shooterPotentiometer = new AnalogPotentiometer(Constants.kTyrShooterPotentiometerPort);
-			} else {
-				pistonSolenoid = null;
-				latchSolenoid = null;
-				grabberSolenoid = null;
-				shooterMotor = null;
-				shooterPotentiometer = null;
-			}
-
-		}
-	}
-
-	/*
-	 * BREACHER
-	 */
-	public static class BreacherHardware {
-		private static BreacherHardware instance = new BreacherHardware();
-
-		public static BreacherHardware getInstance() {
-			return instance;
-		}
-		public final CheesySpeedController breacherMotor;
-
-		private BreacherHardware() {
-			if (Constants.kRobotName == Constants.RobotName.TYR) {
-				breacherMotor = new CheesySpeedController(new CANTalon(Constants.kBreacherMotorDeviceID), Constants.kBreacherMotorPDP);
-			} else {
-				breacherMotor = null;
-			}
-		}
-	}
-	
-	public static class LowGoalShooterHardware {
-		private static LowGoalShooterHardware instance = new LowGoalShooterHardware();
-		
-		public static LowGoalShooterHardware getInstance() {
-			return instance;
-		}
-		public final CheesySpeedController lowGoalShooterMotor;
-		
-		private LowGoalShooterHardware() {
-			if (Constants.kRobotName == Constants.RobotName.DERICA) {
-				lowGoalShooterMotor = new CheesySpeedController(new Victor(Constants.kDericaLowGoalShooterPWM), Constants.kDericaLowGoalShooterPDP);
-			} else {
-				lowGoalShooterMotor = null;
-			}
-		}
-	}
-	
-	public static class ClimberHardware {
-		private static ClimberHardware instance = new ClimberHardware();
-
-		public static ClimberHardware getInstance() {
-			return instance;
-		}
-
-		public final CheesySpeedController climbingMotor;
-		public final Encoder positionEncoder;
-
-		private ClimberHardware() {
-			climbingMotor = new CheesySpeedController(new TalonSRX(Constants.kSteikClimberMotorPDP), Constants.kSteikClimberMotorPWM);
-			positionEncoder = new Encoder(Constants.kSteikClimberEncoderDIOA, Constants.kSteikClimberEncoderDIOB);
-		}
-	}
 	/**
-	 * FLIPPERS
+	 * FLIPPERS - 2 double solenoids
 	 */
 	public static class FlippersHardware {
 		private static FlippersHardware instance = new FlippersHardware();
@@ -219,22 +79,47 @@ public class HardwareAdapter {
 			return instance;
 		}
 		public final DoubleSolenoid leftSolenoid, rightSolenoid;
-		
+
 		private FlippersHardware() {
 			if (Constants.kRobotName == Constants.RobotName.STEIK) {
 				leftSolenoid = new DoubleSolenoid(
-						Constants.kLeftFlipperPortExtend, Constants.kLeftFlipperPortRetract);
+						Constants.kSteikLeftFlipperPortExtend, Constants.kSteikLeftFlipperPortRetract);
 				rightSolenoid = new DoubleSolenoid(
-						Constants.kRightFlipperPortExtend, Constants.kRightFlipperPortRetract);
+						Constants.kSteikRightFlipperPortExtend, Constants.kSteikRightFlipperPortRetract);
+			} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
+				leftSolenoid = new DoubleSolenoid(
+						Constants.kAegirLeftFlipperPortExtend, Constants.kAegirLeftFlipperPortRetract);
+				rightSolenoid = new DoubleSolenoid(
+						Constants.kAegirRightFlipperPortExtend, Constants.kAegirRightFlipperPortRetract);
 			} else {
 				leftSolenoid = null;
 				rightSolenoid = null;
 			}
 		}
 	}
-	
+
 	/**
-	 * SPATULA
+	 * SLIDER - 1 TalonSRX
+	 */
+	public static class SliderHardware {
+		private static SliderHardware instance_ = new SliderHardware();
+		public static SliderHardware getInstance() {
+			return instance_;
+		}
+		public final CANTalon sliderTalon;
+
+		private SliderHardware() {
+			if (Constants.kRobotName == Constants.RobotName.AEGIR) {
+				sliderTalon = new CANTalon(Constants.kAegirSliderMotorDeviceID);
+			} else if (Constants.kRobotName == Constants.RobotName.STEIK) {
+				sliderTalon = new CANTalon(Constants.kSteikSliderMotorDeviceID);
+			} else {
+				sliderTalon = null;
+			}
+		}
+	}
+	/**
+	 * SPATULA - one double solenoid
 	 */
 	public static class SpatulaHardware {
 		private static SpatulaHardware instance = new SpatulaHardware();
@@ -242,17 +127,69 @@ public class HardwareAdapter {
 			return instance;
 		}
 		public final DoubleSolenoid spatulaSolenoid;
-		
+
 		private SpatulaHardware() {
 			if (Constants.kRobotName == Constants.RobotName.STEIK) {
-				spatulaSolenoid = new DoubleSolenoid(Constants.kSpatulaPortExtend, Constants.kSpatulaPortRetract);
+				spatulaSolenoid = new DoubleSolenoid(Constants.kSteikSpatulaPortExtend, Constants.kSteikSpatulaPortRetract);
 			} else {
 				spatulaSolenoid = null;
 			}
 		}
 	}
-	
-	public final static PowerDistributionPanel PDP = new PowerDistributionPanel();
+	/*
+	 * INTAKE - two SD540C motors
+	 */
+	public static class IntakeHardware {
+		private static IntakeHardware instance = new IntakeHardware();
+
+		protected static IntakeHardware getInstance() {
+			return instance;
+		}
+		public final CANSD540 leftIntakeMotor;
+		public final CANSD540 rightIntakeMotor;
+
+		private IntakeHardware() {
+			if (Constants.kRobotName == Constants.RobotName.AEGIR) {
+				leftIntakeMotor = new CANSD540(Constants.kAegirLeftIntakeMotorDeviceID);
+				rightIntakeMotor = new CANSD540(Constants.kAegirRightIntakeMotorDeviceID);
+			} else if (Constants.kRobotName == Constants.RobotName.STEIK) {
+				leftIntakeMotor = new CANSD540(Constants.kSteikLeftIntakeMotorDeviceID);
+				rightIntakeMotor = new CANSD540(Constants.kSteikRightIntakeMotorDeviceID);
+			} else {
+				leftIntakeMotor = null;
+				rightIntakeMotor = null;
+			}
+		}
+	}
+
+	/*
+	 * CLIMBER - one SD540C motor
+	 */
+	public static class ClimberHardware {
+		private static ClimberHardware instance = new ClimberHardware();
+
+		public static ClimberHardware getInstance() {
+			return instance;
+		}
+
+		public final CANSD540 climberMotor;
+		public final Encoder climberEncoder;
+
+		private ClimberHardware() {
+			if (Constants.kRobotName == Constants.RobotName.AEGIR) {
+				climberMotor = new CANSD540(Constants.kAegirClimberMotorDeviceID);
+				climberEncoder = new Encoder(Constants.kSteikClimberEncoderDIOA, Constants.kSteikClimberEncoderDIOB);
+			} else if (Constants.kRobotName == Constants.RobotName.STEIK) {
+				climberMotor = new CANSD540(Constants.kSteikClimberMotorDeviceID);
+				climberEncoder = new Encoder(Constants.kSteikClimberEncoderDIOA, Constants.kSteikClimberEncoderDIOB);
+			} else {
+				climberMotor = null;
+				climberEncoder = null;
+			}
+		}
+	}
+
+	public final PowerDistributionPanel kPDP = new PowerDistributionPanel();
 
 	// Joysticks for operator interface
 	protected static class Joysticks {
@@ -280,35 +217,21 @@ public class HardwareAdapter {
 	public DrivetrainHardware getDrivetrain() {
 		return DrivetrainHardware.getInstance();
 	}
-
-	public IntakeHardware getIntake() {
-		return IntakeHardware.getInstance();
-	}
-
-	public ShooterHardware getShooter() {
-		return ShooterHardware.getInstance();
-	}
-
-	public BreacherHardware getBreacher() {
-		return BreacherHardware.getInstance();
-	}
-
-	public LowGoalShooterHardware getLowGoalShooter() {
-		return LowGoalShooterHardware.getInstance();
-	}
-	
-	public ClimberHardware getClimber() {
-		return ClimberHardware.getInstance();
-	}
-
 	public FlippersHardware getFlippers() {
 		return FlippersHardware.getInstance();
 	}
-	
+	public SliderHardware getSlider() {
+		return SliderHardware.getInstance();
+	}
 	public SpatulaHardware getSpatula() {
 		return SpatulaHardware.getInstance();
 	}
-	
+	public IntakeHardware getIntake() {
+		return IntakeHardware.getInstance();
+	}
+	public ClimberHardware getClimber() {
+		return ClimberHardware.getInstance();
+	}
 	public Joysticks getJoysticks() {
 		return Joysticks.getInstance();
 	}

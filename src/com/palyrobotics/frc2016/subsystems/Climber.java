@@ -1,104 +1,114 @@
 package com.palyrobotics.frc2016.subsystems;
 
 import com.palyrobotics.frc2016.config.Commands;
-import com.palyrobotics.frc2016.config.Constants;
 import com.palyrobotics.frc2016.config.RobotState;
-import com.palyrobotics.frc2016.robot.HardwareAdapter;
 import com.palyrobotics.frc2016.util.Subsystem;
 import com.palyrobotics.frc2016.util.SubsystemLoop;
 
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
-
+/**
+ * Subsystem that represents the climber
+ * A single winch motor with an encoder
+ * Uses current draw to detect when starting and stopping climb
+ */
 public class Climber extends Subsystem implements SubsystemLoop {
-
 	private static Climber instance = new Climber();
-	
-	private float climbSpeed = 0;
-	
-	private final int ENCODER_TICKS_TO_TOP = 100;
-	private int encoder_cutoff = -1; // ENCODER_TICKS_TO_TOP + starting encoder state
-	
-	private PDPCurrentObserver currentObserver = new PDPCurrentObserver(Constants.kSteikClimberMotorPDP);
-	
-	public static enum ClimberState {
-		NOT_MOVING,
-		CLIMBING_MANUAL,
-		CLIMBING_ENCODER_WAITING_FOR_CURRENT_TRIGGER,
-		CLIMBING_ENCODER_DISTANCE
-	}
-	
 	public static Climber getInstance() {
 		return instance;
 	}
-	
+
+	private double climbSpeed = 0;
+	// Store for PD loop
+	private int prevEnc;
+	private final double kP = 0.1;
+	private final double kD = 0.01;
+
+	private final int kEncoderTicksToTop = 100;
+	private final float kClimbingTriggerCurrent = 2;
+	private final float kStallingTriggerCurrent = 70;
+	private final double kRopeGrabSpeed = 0.5;
+
+
+	private int encoder_cutoff = -1; // kEncoderTicksToTop + starting encoder state
+
+
+	public enum ClimberState {
+		IDLE,
+		CLIMBING_MANUAL,
+		WAITING_FOR_ROPE,
+		CLIMBING_ENCODER_DISTANCE
+	}
+
+	private ClimberState mState;
+
+
 	private Climber() {
 		super("Climber");
 	}
 
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
-		
+		mState = ClimberState.IDLE;
 	}
 
 	@Override
 	public void stop() {
-		// TODO Auto-generated method stub
-		
+		mState = ClimberState.IDLE;
 	}
 
-	public float getClimbState() {
+	public double getClimberOutput() {
 		return this.climbSpeed;
 	}
 	
 	@Override
 	public void update(Commands commands, RobotState robotState) {
-		if (commands.wantedClimbState == ClimberState.CLIMBING_ENCODER_WAITING_FOR_CURRENT_TRIGGER && currentObserver.hasInitiallyTriggeredClimb()) {
-			commands.wantedClimbState = ClimberState.CLIMBING_ENCODER_DISTANCE; // change the state
-			encoder_cutoff = HardwareAdapter.getInstance().getClimber().positionEncoder.get() + this.ENCODER_TICKS_TO_TOP;
-		}
-		
-		if (commands.wantedClimbState == ClimberState.CLIMBING_ENCODER_DISTANCE && (currentObserver.isStalling() || 
-				HardwareAdapter.getInstance().getClimber().positionEncoder.get() > this.encoder_cutoff)) {
-			commands.wantedClimbState = ClimberState.NOT_MOVING;
-		}
-		
-		// TODO Auto-generated method stub
+		// Check if climb has been initiated, manually overriden, or canceled
 		switch (commands.wantedClimbState) {
-			case NOT_MOVING: 
-				this.climbSpeed = 0;
+			case IDLE:
+				this.mState = ClimberState.IDLE;
 				break;
 			case CLIMBING_MANUAL:
-				this.climbSpeed = 1;
+				mState = ClimberState.CLIMBING_MANUAL;
 				break;
-			case CLIMBING_ENCODER_WAITING_FOR_CURRENT_TRIGGER:
-				this.climbSpeed = .5f; // go slowly at the beginning
+			case WAITING_FOR_ROPE:
+				this.climbSpeed = .5; // go slowly at the beginning
 				break;
 			case CLIMBING_ENCODER_DISTANCE:
 				this.climbSpeed = 1;
 				break;
 		}
-	}
-	
-	public static class PDPCurrentObserver {
 
-		private final float INITIAL_TRIGGER_CURRENT = 2;
-		private final float STALLING_TRIGGER_CURRENT = 70;
-		
-		private int port;
-		
-		public PDPCurrentObserver(int portObserved) {
-			this.port = portObserved;
+		// Switch states based on encoder or current draw thresholds
+		switch (mState) {
+			case WAITING_FOR_ROPE:
+				// Once current draw is high enough
+				if (robotState.climberCurrentDraw > kClimbingTriggerCurrent) {
+					mState = ClimberState.CLIMBING_ENCODER_DISTANCE;
+					encoder_cutoff = robotState.climberEncoder + this.kEncoderTicksToTop;
+				}
+				break;
+			case CLIMBING_ENCODER_DISTANCE:
+				if (robotState.climberCurrentDraw > kStallingTriggerCurrent) {
+					mState = ClimberState.IDLE;
+				}
+				if (robotState.climberEncoder > encoder_cutoff) {
+					mState = ClimberState.IDLE;
+				}
+				break;
 		}
-		
-		public boolean hasInitiallyTriggeredClimb() {
-			return new PowerDistributionPanel().getCurrent(port) > INITIAL_TRIGGER_CURRENT;
+
+		// Determine output
+		switch (mState) {
+			case IDLE:
+				climbSpeed = 0;
+				break;
+			case CLIMBING_MANUAL:
+				climbSpeed = 0.5;
+				break;
+			case WAITING_FOR_ROPE:
+				climbSpeed = kRopeGrabSpeed;
+			case CLIMBING_ENCODER_DISTANCE:
+				climbSpeed = kP*(encoder_cutoff-robotState.climberEncoder) + kD*(prevEnc - robotState.climberEncoder);
+				break;
 		}
-		
-		public boolean isStalling() {
-			return new PowerDistributionPanel().getCurrent(port) > STALLING_TRIGGER_CURRENT;
-		}
-		
 	}
-	
 }

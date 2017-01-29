@@ -37,7 +37,7 @@ public class CheesySpeedController implements SpeedController {
     }
 
     /**
-     * Takes the PDP as input and returns the current drawn by these slots
+     * Takes the kPDP as input and returns the current drawn by these slots
      * @param pdp Reference to the Power distribution panel
      * @return current of all slots or this pdp
      */

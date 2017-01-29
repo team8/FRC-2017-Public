@@ -42,7 +42,7 @@ public class Flippers extends Subsystem implements SubsystemLoop {
 	
 	private FlipperSignal mFlipperSignal;
 	
-	public Flippers() {
+	private Flippers() {
 		super("Flippers");
 	}
 

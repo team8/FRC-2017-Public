@@ -2,14 +2,14 @@
 <component jdk="1.8" jdk_type="JavaSDK">
 	<exclude-output/>
 	<contentEntry url="file://$MODULE_DIR$"/>
-	<lib name="networktables" scope="COMPILE">
-		<srcroot url="jar://$networktables.sources$!/"/>
-	</lib>
 	<lib name="json-simple-1.1.1.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/json-simple-1.1.1.jar!/"/>
 	</lib>
 	<lib name="guava-18.0.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/guava-18.0.jar!/"/>
+	</lib>
+	<lib name="networktables" scope="COMPILE">
+		<srcroot url="jar://$networktables.sources$!/"/>
 	</lib>
 	<lib name="opencv" scope="COMPILE">
 		<srcroot url="jar://$opencv.sources$!/"/>
@@ -20,7 +20,14 @@
 	<lib name="wpilib" scope="COMPILE">
 		<srcroot url="jar://$wpilib.sources$!/"/>
 	</lib>
+	<lib name="mindsensors.jar" scope="COMPILE">
+		<srcroot url="jar://$MODULE_DIR$/lib/mindsensors-javadoc.jar!/"/>
+		<relative-module-src project-related="jar://$PROJECT_DIR$/lib/mindsensors-javadoc.jar!/"/>
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/mindsensors.jar!/"/>
+	</lib>
 	<lib name="CTRLib.jar" scope="COMPILE">
-		<srcroot url="jar://$USERLIBS_DIR$/CTRLib.jar!/"/>
+		<srcroot url="jar://$MODULE_DIR$/lib/CTRLib-javadoc.jar!/"/>
+		<relative-module-src project-related="jar://$PROJECT_DIR$/lib/CTRLib-javadoc.jar!/"/>
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/CTRLib.jar!/"/>
 	</lib>
 </component>

@@ -27,7 +27,7 @@ public class Commands {
 
 	// Store WantedStates for each subsystem state machine
 	public Drive.DriveState wantedDriveState = Drive.DriveState.NEUTRAL;
-	public Climber.ClimberState wantedClimbState = Climber.ClimberState.NOT_MOVING;
+	public Climber.ClimberState wantedClimbState = Climber.ClimberState.IDLE;
 	public Flippers.FlipperSignal wantedFlipperSignal = new Flippers.FlipperSignal(
 			DoubleSolenoid.Value.kForward, DoubleSolenoid.Value.kForward);
 	public Spatula.SpatulaState wantedSpatulaState = Spatula.SpatulaState.UP;

@@ -3,12 +3,8 @@ package com.palyrobotics.frc2016.robot;
 import com.ctre.CANTalon;
 import com.palyrobotics.frc2016.config.Constants;
 import com.palyrobotics.frc2016.config.RobotState;
-import com.palyrobotics.frc2016.subsystems.Climber;
-import com.palyrobotics.frc2016.subsystems.Drive;
+import com.palyrobotics.frc2016.subsystems.*;
 import com.palyrobotics.frc2016.util.CANTalonOutput;
-import com.palyrobotics.frc2016.subsystems.Flippers;
-import com.palyrobotics.frc2016.subsystems.Intake;
-import com.palyrobotics.frc2016.subsystems.Spatula;
 
 /**
  * Should only be used in robot package.
@@ -16,38 +12,29 @@ import com.palyrobotics.frc2016.subsystems.Spatula;
 class HardwareUpdater {
 	// Subsystem references
 	private Drive mDrive;
-	private Climber mClimb;
 	private Flippers mFlippers;
+	private Slider mSlider;
 	private Spatula mSpatula;
 	private Intake mIntake;
-	
+	private Climber mClimber;
+
 	/**
-	 * Hardware Updater for Steik
-	 * Updates Drive, Flippers, Spatula
-	 * @param drive
-	 * @param flippers
-	 * @param spatula
+	 * Hardware Updater for Steik/Aegir
 	 */
-	HardwareUpdater(Drive drive, Flippers flippers, Spatula spatula, Intake intake) {
+	HardwareUpdater(Drive drive, Flippers flippers, Slider slider, Spatula spatula, Intake intake, Climber climber) {
 		this.mDrive = drive;
 		this.mFlippers = flippers;
+		this.mSlider = slider;
 		this.mSpatula = spatula;
 		this.mIntake = intake;
+		this.mClimber = climber;
 	}
 
 	/**
 	 * Hardware Updater for Derica and Tyr
 	 * Updates only the drivetrain
 	 */
-	HardwareUpdater(Drive drive, Climber climb) {
-		this.mDrive = drive;
-		this.mClimb = climb;
-	}
-
-	/**
-	 * Hardware Updater for Steik and Aegir
-	 */
-	HardwareUpdater(Drive drive, int temp) {
+	HardwareUpdater(Drive drive) {
 		this.mDrive = drive;
 	}
 
@@ -97,9 +84,7 @@ class HardwareUpdater {
 	/**
 	 * Updates all the sensor data taken from the hardware
 	 */
-	void updateSensors() {
-		System.out.println("Gyro "+HardwareAdapter.DrivetrainHardware.getInstance().gyro.getAngle());
-		RobotState robotState = Robot.getRobotState();
+	void updateSensors(RobotState robotState) {
 		robotState.drivePose.heading = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getAngle();
 		robotState.drivePose.headingVelocity = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getRate();
 		// Non-Tyr robots use talons
@@ -109,6 +94,17 @@ class HardwareUpdater {
 			robotState.drivePose.rightDistance = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getEncPosition();
 			robotState.drivePose.rightVelocity = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getEncVelocity();
 		}
+
+		// Update kPDP current draw
+		if (Constants.kRobotName == Constants.kRobotName.STEIK) {
+			robotState.climberCurrentDraw = HardwareAdapter.getInstance().kPDP.getCurrent(Constants.kSteikClimberMotorPDP);
+		} else if (Constants.kRobotName == Constants.kRobotName.AEGIR) {
+			robotState.climberCurrentDraw = HardwareAdapter.getInstance().kPDP.getCurrent(Constants.kAegirClimberMotorPDP);
+		}
+
+		if (HardwareAdapter.getInstance().getClimber().climberEncoder != null) {
+			robotState.climberEncoder = HardwareAdapter.getInstance().getClimber().climberEncoder.getRaw();
+		}
 	}
 
 	/**
@@ -116,22 +112,29 @@ class HardwareUpdater {
 	 */
 	void updateSubsystems() {
 		// On Derica or Tyr only update the drivetrain
-		if(Constants.kRobotName == Constants.RobotName.TYR) {
-			updateTyrDrivetrain();
-		} else if (Constants.kRobotName == Constants.RobotName.DERICA) {
-			updateDrivetrain();
-		} else {
-			updateDrivetrain();
+		if (Constants.kRobotName == Constants.RobotName.STEIK || Constants.kRobotName == Constants.RobotName.AEGIR) {
 			updateSteikSubsystems();
 		}
-		updateDrivetrain();
+		if (Constants.kRobotName == Constants.RobotName.TYR) {
+			updateTyrDrivetrain();
+		} else {
+			updateDrivetrain();
+		}
 	}
 
 	private void updateSteikSubsystems() {
-		updateClimber();
-		updateFlippers();
-		updateSpatula();
-		updateIntake();
+		// FLIPPERS
+		HardwareAdapter.getInstance().getFlippers().leftSolenoid.set(mFlippers.getFlipperSignal().leftFlipper);
+		HardwareAdapter.getInstance().getFlippers().rightSolenoid.set(mFlippers.getFlipperSignal().rightFlipper);
+		// SLIDER
+		updateCANTalonSRX(HardwareAdapter.getInstance().getSlider().sliderTalon, mSlider.getOutput());
+		// SPATULA
+		HardwareAdapter.getInstance().getSpatula().spatulaSolenoid.set(mSpatula.getOutput());
+		// INTAKE
+		HardwareAdapter.getInstance().getIntake().leftIntakeMotor.set(mIntake.getOutput());
+		HardwareAdapter.getInstance().getIntake().rightIntakeMotor.set(-mIntake.getOutput());
+		// CLIMBER
+		HardwareAdapter.getInstance().getClimber().climberMotor.set(mClimber.getClimberOutput());
 	}
 
 	/**
@@ -172,22 +175,5 @@ class HardwareUpdater {
 		CANTalon kRightBack = HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon;
 		kRightFront.set(-mDrive.getDriveSignal().rightMotor.getSetpoint());
 		kRightBack.set(-mDrive.getDriveSignal().rightMotor.getSetpoint());
-	}
-	private void updateClimber() {
-		HardwareAdapter.getInstance().getClimber().climbingMotor.set(mClimb.getClimbState());
-	}
-
-	private void updateFlippers() {
-		HardwareAdapter.getInstance().getFlippers().leftSolenoid.set(mFlippers.getFlipperSignal().leftFlipper);
-		HardwareAdapter.getInstance().getFlippers().rightSolenoid.set(mFlippers.getFlipperSignal().rightFlipper);
-	}
-	
-	private void updateSpatula() {
-		HardwareAdapter.getInstance().getSpatula().spatulaSolenoid.set(mSpatula.getOutput());
-	}
-	
-	private void updateIntake() {
-		HardwareAdapter.getInstance().getIntake().leftIntakeMotor.set(mIntake.getOutput());
-		HardwareAdapter.getInstance().getIntake().rightIntakeMotor.set(-mIntake.getOutput());
 	}
 }

@@ -16,14 +16,14 @@ public class SpatulaTest {
 	@Test
 	public void testOutput() {
 		Commands commands = Robot.getCommands();
-		Spatula spatula = new Spatula();
+		Spatula spatula = Spatula.getInstance();
 		
 		commands.wantedSpatulaState = Spatula.SpatulaState.UP;
 		spatula.update(commands, Robot.getRobotState());
-		assertTrue("Spatula should be up", spatula.getOutput().equals(Spatula.SpatulaState.UP));
+		assertTrue("Spatula not up", spatula.getOutput().equals(Spatula.SpatulaState.UP));
 		
 		commands.wantedSpatulaState = Spatula.SpatulaState.DOWN;
 		spatula.update(commands, Robot.getRobotState());
-		assertTrue("Spatula should be down", spatula.getOutput().equals(Spatula.SpatulaState.DOWN));
+		assertTrue("Spatula isn't down", spatula.getOutput().equals(Spatula.SpatulaState.DOWN));
 	}
 }

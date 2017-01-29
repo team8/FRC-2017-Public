@@ -36,10 +36,11 @@ public class Robot extends IterativeRobot {
 
 	// Subsystem controllers
 	private Drive mDrive = Drive.getInstance();
-	private Climber mClimb = Climber.getInstance();
 	private Flippers mFlippers = Flippers.getInstance();
+	private Slider mSlider = Slider.getInstance();
 	private Spatula mSpatula = Spatula.getInstance();
 	private Intake mIntake = Intake.getInstance();
+	private Climber mClimber = Climber.getInstance();
 
 	// Hardware Updater
 	private HardwareUpdater mHardwareUpdater;
@@ -56,13 +57,13 @@ public class Robot extends IterativeRobot {
 		System.out.println("Start robotInit()");
 		mSubsystemLooper.register(mDrive);
 
-		if (Constants.kRobotName == Constants.RobotName.STEIK) {
-			mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSpatula, mIntake);
+		if (Constants.kRobotName == Constants.RobotName.STEIK || Constants.kRobotName == Constants.RobotName.AEGIR) {
+			mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSlider, mSpatula, mIntake, mClimber);
 			mSubsystemLooper.register(mFlippers);
 			mSubsystemLooper.register(mSpatula);
 			mSubsystemLooper.register(mIntake);
 		} else {
-			mHardwareUpdater = new HardwareUpdater(mDrive, mClimb);
+			mHardwareUpdater = new HardwareUpdater(mDrive);
 		}
 		
 		//        SystemManager.getInstance().add(routineManager);
@@ -92,7 +93,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		mRoutineManager.update(commands);
 		mDashboard.update();
-		mHardwareUpdater.updateSensors();
+		mHardwareUpdater.updateSensors(robotState);
 		mHardwareUpdater.updateSubsystems();
 	}
 
@@ -109,7 +110,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		// Update RobotState
-		mHardwareUpdater.updateSensors();
+		mHardwareUpdater.updateSensors(robotState);
 		// Gets joystick commands
 		operatorInterface.updateCommands(commands);
 		

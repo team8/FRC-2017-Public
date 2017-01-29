@@ -21,7 +21,7 @@ public class Intake extends Subsystem implements SubsystemLoop {
 	
 	private double mOutput;
 	
-	public Intake() {
+	private Intake() {
 		super("Intake");
 	}
 

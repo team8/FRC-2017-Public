@@ -7,11 +7,8 @@ import com.palyrobotics.frc2016.behavior.routines.EncoderDriveRoutine;
 import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.config.Commands.*;
 import com.palyrobotics.frc2016.config.Commands.JoystickInput.XboxInput;
-import com.palyrobotics.frc2016.robot.team254.lib.util.Latch;
 import com.palyrobotics.frc2016.subsystems.Climber.ClimberState;
-import com.palyrobotics.frc2016.subsystems.Flippers;
 import com.palyrobotics.frc2016.subsystems.Intake;
-import com.palyrobotics.frc2016.subsystems.Intake.IntakeState;
 import com.palyrobotics.frc2016.subsystems.Spatula.SpatulaState;
 
 /**
@@ -88,13 +85,13 @@ public class OperatorInterface {
 	
 		// overall cancel button
 		if (mOperatorStick.getRawButton(5)) {
-			prevCommands.wantedClimbState = ClimberState.NOT_MOVING;
+			prevCommands.wantedClimbState = ClimberState.IDLE;
 		}
 		if (mOperatorStick.getRawButton(4)) {
 			prevCommands.wantedClimbState = ClimberState.CLIMBING_MANUAL;
 		}
 		if (mOperatorStick.getRawButton(6)) {
-			prevCommands.wantedClimbState = ClimberState.CLIMBING_ENCODER_WAITING_FOR_CURRENT_TRIGGER;
+			prevCommands.wantedClimbState = ClimberState.WAITING_FOR_ROPE;
 		}
 		
 	}

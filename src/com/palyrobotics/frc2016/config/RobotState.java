@@ -16,10 +16,12 @@ public class RobotState {
 	// Updated by autoInit, teleopInit, disabledInit
 	public GamePeriod gamePeriod;
 
-	// Tracks total voltage from PDP
+	// Tracks total voltage from kPDP
 	public double voltage;
 
 	// Pose stores encoder and gyro data for drivetrain
 	public Pose drivePose = new Pose(0,0,0,0,0,0);
-	public double shooterPotentiometer;
+
+	public double climberCurrentDraw;
+	public int climberEncoder;
 }
