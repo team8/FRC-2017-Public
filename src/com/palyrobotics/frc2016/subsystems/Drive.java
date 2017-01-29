@@ -59,17 +59,27 @@ public class Drive extends Subsystem implements SubsystemLoop {
 
 	private Drive() {
 		super("Drive");
-		if(Constants.kRobotName == Constants.RobotName.TYR) {
+		if (Constants.kRobotName == Constants.RobotName.TYR) {
 			kWheelbaseWidth = 26.0;
 			kTurnSlipFactor = 1.2;
 			kInchesPerTick = 0.184;
 			kInchesToTicks = 1400 / (2 * 3.1415 * 3.5);
 		}
-		else {
+		else if (Constants.kRobotName == Constants.RobotName.DERICA) {
 			kWheelbaseWidth = 22.0;
 			kTurnSlipFactor = 1.2;
 			kInchesPerTick = 0.07033622;
 			kInchesToTicks = 1400 / (2 * 3.1415 * 3.5);
+		} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
+			kWheelbaseWidth = 0;
+			kTurnSlipFactor = 0;
+			kInchesPerTick = 0.0;
+			kInchesToTicks = 0;
+		} else {
+			kWheelbaseWidth = 0;
+			kTurnSlipFactor = 0;
+			kInchesPerTick = 0.0;
+			kInchesToTicks = 0;
 		}
 	}
 

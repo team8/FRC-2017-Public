@@ -45,6 +45,14 @@ public class CANTalonOutput {
 	}
 
 	/**
+	 * Sets Talon to TalonControlMode.Position
+	 */
+	public void setPosition(double setpoint, double p, double i, double d, double f, int izone, double rampRate) {
+		controlMode = CANTalon.TalonControlMode.Position;
+		this.setpoint = setpoint;
+		setPID(p, i, d, f, izone, rampRate);
+	}
+	/**
 	 * Sets Talon to standard -1 to 1 voltage control
 	 */
 	public void setPercentVBus(double power) {
