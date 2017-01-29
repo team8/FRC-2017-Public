@@ -17,11 +17,14 @@
 	<lib name="cscore" scope="COMPILE">
 		<srcroot url="jar://$cscore.sources$!/"/>
 	</lib>
-	<lib name="wpilib" scope="COMPILE">
-		<srcroot url="jar://$wpilib.sources$!/"/>
-	</lib>
 	<lib name="CTRLib.jar" scope="COMPILE">
 		<srcroot url="jar://$USERLIBS_DIR$/CTRLib.jar!/"/>
 	</lib>
 	<lib name="junit:junit:4.12" scope="TEST"/>
+	<lib name="wpilib" scope="COMPILE">
+		<srcroot url="jar://$wpilib.sources$!/"/>
+	</lib>
+	<lib name="USERLIBS_DIR/CTRLib.jar" scope="COMPILE">
+		<srcroot url="jar://$USERLIBS_DIR$/CTRLib.jar!/"/>
+	</lib>
 </component>

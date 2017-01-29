@@ -8,6 +8,7 @@ import com.palyrobotics.frc2016.config.Commands;
 import com.palyrobotics.frc2016.config.Commands.*;
 import com.palyrobotics.frc2016.config.Commands.JoystickInput.XboxInput;
 import com.palyrobotics.frc2016.robot.team254.lib.util.Latch;
+import com.palyrobotics.frc2016.subsystems.Climber.ClimberState;
 
 /**
  * Used to produce Commands {@link Commands} from human input
@@ -56,5 +57,17 @@ public class OperatorInterface {
 		prevCommands.cancelCurrentRoutines = mLeftStick.getTrigger();
 		prevCommands.leftStickInput = new JoystickInput(mLeftStick.getX(), mLeftStick.getY(), mLeftStick.getTrigger());
 		prevCommands.rightStickInput = new JoystickInput(mRightStick.getX(), mRightStick.getY(), mRightStick.getTrigger());
+	
+		// overall cancel button
+		if (mOperatorStick.getRawButton(5)) {
+			prevCommands.wantedClimbState = ClimberState.NOT_MOVING;
+		}
+		if (mOperatorStick.getRawButton(4)) {
+			prevCommands.wantedClimbState = ClimberState.CLIMBING_MANUAL;
+		}
+		if (mOperatorStick.getRawButton(6)) {
+			prevCommands.wantedClimbState = ClimberState.CLIMBING_ENCODER_WAITING_FOR_CURRENT_TRIGGER;
+		}
+		
 	}
 }

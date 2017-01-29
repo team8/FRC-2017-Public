@@ -3,6 +3,7 @@ package com.palyrobotics.frc2016.robot;
 import com.ctre.CANTalon;
 import com.palyrobotics.frc2016.config.Constants;
 import com.palyrobotics.frc2016.config.RobotState;
+import com.palyrobotics.frc2016.subsystems.Climber;
 import com.palyrobotics.frc2016.subsystems.Drive;
 import com.palyrobotics.frc2016.util.CANTalonOutput;
 
@@ -11,13 +12,15 @@ import com.palyrobotics.frc2016.util.CANTalonOutput;
  */
 class HardwareUpdater {
 	private Drive mDrive;
+	private Climber mClimb;
 	
 	/**
 	 * Hardware Updater for Derica and Tyr
 	 * Updates only the drivetrain
 	 */
-	HardwareUpdater(Drive drive) {
+	HardwareUpdater(Drive drive, Climber climb) {
 		this.mDrive = drive;
+		this.mClimb = climb;
 	}
 
 	/**
@@ -100,10 +103,11 @@ class HardwareUpdater {
 			updateDrivetrain();
 			updateSteikSubsystems();
 		}
+		updateDrivetrain();
 	}
 
 	private void updateSteikSubsystems() {
-
+		updateClimber();
 	}
 
 	/**
@@ -144,6 +148,9 @@ class HardwareUpdater {
 		CANTalon kRightBack = HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon;
 		kRightFront.set(-mDrive.getDriveSignal().rightMotor.getSetpoint());
 		kRightBack.set(-mDrive.getDriveSignal().rightMotor.getSetpoint());
+	}
+	private void updateClimber() {
+		HardwareAdapter.getInstance().getClimber().climbingMotor.set(mClimb.getClimbState());
 	}
 
 }

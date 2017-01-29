@@ -186,6 +186,22 @@ public class HardwareAdapter {
 		}
 	}
 	
+	public static class ClimberHardware {
+		private static ClimberHardware instance = new ClimberHardware();
+		
+		public static ClimberHardware getInstance() {
+			return instance;
+		}
+		
+		public final CheesySpeedController climbingMotor;
+		public final Encoder positionEncoder;
+		
+		private ClimberHardware() {
+			climbingMotor = new CheesySpeedController(new TalonSRX(Constants.kSteikClimberMotorPDP), Constants.kSteikClimberMotorPWM);
+			positionEncoder = new Encoder(Constants.kSteikClimberEncoderDIOA, Constants.kSteikClimberEncoderDIOB);
+		}
+	}
+	
 	public final static PowerDistributionPanel PDP = new PowerDistributionPanel();
 
 	// Joysticks for operator interface
@@ -228,6 +244,10 @@ public class HardwareAdapter {
 
 	public LowGoalShooterHardware getLowGoalShooter() {
 		return LowGoalShooterHardware.getInstance();
+	}
+	
+	public ClimberHardware getClimber() {
+		return ClimberHardware.getInstance();
 	}
 	
 	public Joysticks getJoysticks() {
