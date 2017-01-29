@@ -6,14 +6,35 @@ import com.palyrobotics.frc2016.config.RobotState;
 import com.palyrobotics.frc2016.subsystems.Climber;
 import com.palyrobotics.frc2016.subsystems.Drive;
 import com.palyrobotics.frc2016.util.CANTalonOutput;
+import com.palyrobotics.frc2016.subsystems.Flippers;
+import com.palyrobotics.frc2016.subsystems.Intake;
+import com.palyrobotics.frc2016.subsystems.Spatula;
 
 /**
  * Should only be used in robot package.
  */
 class HardwareUpdater {
+	// Subsystem references
 	private Drive mDrive;
 	private Climber mClimb;
+	private Flippers mFlippers;
+	private Spatula mSpatula;
+	private Intake mIntake;
 	
+	/**
+	 * Hardware Updater for Steik
+	 * Updates Drive, Flippers, Spatula
+	 * @param drive
+	 * @param flippers
+	 * @param spatula
+	 */
+	HardwareUpdater(Drive drive, Flippers flippers, Spatula spatula, Intake intake) {
+		this.mDrive = drive;
+		this.mFlippers = flippers;
+		this.mSpatula = spatula;
+		this.mIntake = intake;
+	}
+
 	/**
 	 * Hardware Updater for Derica and Tyr
 	 * Updates only the drivetrain
@@ -108,6 +129,9 @@ class HardwareUpdater {
 
 	private void updateSteikSubsystems() {
 		updateClimber();
+		updateFlippers();
+		updateSpatula();
+		updateIntake();
 	}
 
 	/**
@@ -153,4 +177,17 @@ class HardwareUpdater {
 		HardwareAdapter.getInstance().getClimber().climbingMotor.set(mClimb.getClimbState());
 	}
 
+	private void updateFlippers() {
+		HardwareAdapter.getInstance().getFlippers().leftSolenoid.set(mFlippers.getFlipperSignal().leftFlipper);
+		HardwareAdapter.getInstance().getFlippers().rightSolenoid.set(mFlippers.getFlipperSignal().rightFlipper);
+	}
+	
+	private void updateSpatula() {
+		HardwareAdapter.getInstance().getSpatula().spatulaSolenoid.set(mSpatula.getOutput());
+	}
+	
+	private void updateIntake() {
+		HardwareAdapter.getInstance().getIntake().leftIntakeMotor.set(mIntake.getOutput());
+		HardwareAdapter.getInstance().getIntake().rightIntakeMotor.set(-mIntake.getOutput());
+	}
 }

@@ -146,15 +146,31 @@ public class Constants extends ConstantsBase {
 	public static int kDericaArmIntakeMotorPDP = 0;
 	public static int kDericaLowGoalShooterPWM = 0;
 	public static int kDericaLowGoalShooterPDP = 3;
-
-
-
+	
 	// Compressor Ports DON'T WORK
 	public static int kCompressorRelayPort = 0;
 	public static int kPressureSwitchDIO = 1;
 
-	// !!! TODO: Physical constants
+	/*
+	 * Steik
+	 */
+	//FLIPPERS
+	public static int kLeftFlipperPortExtend = 0;
+	public static int kLeftFlipperPortRetract = 0;
+	public static int kRightFlipperPortExtend = 0;
+	public static int kRightFlipperPortRetract = 0;
 	
+	//SPATULA
+	public static int kSpatulaPortExtend = 0;
+	public static int kSpatulaPortRetract = 0;
+	
+	//INTAKE
+	public static int kSteikLeftIntakeMotorDeviceID = 0;
+	public static int kSteikLeftIntakeMotorPDP = 0;
+	public static int kSteikRightIntakeMotorDeviceID = 0;
+	public static int kSteikRightIntakeMotorPDP = 0;
+
+	// !!! TODO: Physical constants
 	
 	// !!! Loop rate of normal Looper
 	public static double kControlLoopsDt = 0.005;

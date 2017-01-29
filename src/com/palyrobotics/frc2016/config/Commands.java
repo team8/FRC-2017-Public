@@ -8,6 +8,11 @@ import com.palyrobotics.frc2016.config.Commands.JoystickInput.XboxInput;
 import com.palyrobotics.frc2016.util.DriveSignal;
 import com.palyrobotics.frc2016.subsystems.Climber;
 import com.palyrobotics.frc2016.subsystems.Drive;
+import com.palyrobotics.frc2016.subsystems.Flippers;
+import com.palyrobotics.frc2016.subsystems.Intake;
+import com.palyrobotics.frc2016.subsystems.Spatula;
+
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /**
  * Commands represent the desired setpoints and subsystem states for the robot. <br />
@@ -23,7 +28,11 @@ public class Commands {
 	// Store WantedStates for each subsystem state machine
 	public Drive.DriveState wantedDriveState = Drive.DriveState.NEUTRAL;
 	public Climber.ClimberState wantedClimbState = Climber.ClimberState.NOT_MOVING;
-	
+	public Flippers.FlipperSignal wantedFlipperSignal = new Flippers.FlipperSignal(
+			DoubleSolenoid.Value.kForward, DoubleSolenoid.Value.kForward);
+	public Spatula.SpatulaState wantedSpatulaState = Spatula.SpatulaState.UP;
+	public Intake.IntakeState wantedIntakeState = Intake.IntakeState.IDLE;
+
 	public void addWantedRoutine(Routine wantedRoutine) {
 		for(Routine routine : wantedRoutines) {
 			if(routine.getClass().equals(wantedRoutine.getClass())) {

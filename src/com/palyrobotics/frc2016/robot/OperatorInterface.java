@@ -9,6 +9,10 @@ import com.palyrobotics.frc2016.config.Commands.*;
 import com.palyrobotics.frc2016.config.Commands.JoystickInput.XboxInput;
 import com.palyrobotics.frc2016.robot.team254.lib.util.Latch;
 import com.palyrobotics.frc2016.subsystems.Climber.ClimberState;
+import com.palyrobotics.frc2016.subsystems.Flippers;
+import com.palyrobotics.frc2016.subsystems.Intake;
+import com.palyrobotics.frc2016.subsystems.Intake.IntakeState;
+import com.palyrobotics.frc2016.subsystems.Spatula.SpatulaState;
 
 /**
  * Used to produce Commands {@link Commands} from human input
@@ -36,8 +40,8 @@ public class OperatorInterface {
 	 * @param wantedRoutine Routine to add to the commands
 	 */
 	private void addWantedRoutine(Commands commands, Routine wantedRoutine) {
-		for(Routine routine : commands.wantedRoutines) {
-			if(routine.getClass().equals(wantedRoutine.getClass())) {
+		for (Routine routine : commands.wantedRoutines) {
+			if (routine.getClass().equals(wantedRoutine.getClass())) {
 				return;
 			}
 		}
@@ -49,9 +53,33 @@ public class OperatorInterface {
 	 */
 	public void updateCommands(Commands prevCommands) {
 		// TODO: Change how routines are commanded
-		if(mOperatorStick.getRawButton(4)) {
+		if (mOperatorStick.getRawButton(4)) {
 			prevCommands.addWantedRoutine(new EncoderDriveRoutine(500));
 		}
+		
+		//TODO figure out Steik controls
+		
+		// Flippers
+		//TODO wait a certain amount of time before being able to toggle again
+		if (mOperatorStick.getRawButton(1)) {
+			prevCommands.wantedFlipperSignal.toggleLeft();
+		} else if (mOperatorStick.getRawButton(1)) {
+			prevCommands.wantedFlipperSignal.toggleRight();
+		}
+		// Spatula
+		if (mOperatorStick.getRawButton(1)) {
+			prevCommands.wantedSpatulaState = 
+					(prevCommands.wantedSpatulaState == SpatulaState.UP) ? SpatulaState.UP : SpatulaState.DOWN;
+		}
+		// Intake
+		if (mOperatorStick.getRawButton(1)) {
+			prevCommands.wantedIntakeState = Intake.IntakeState.INTAKE;
+		} else if (mOperatorStick.getRawButton(1)) {
+			prevCommands.wantedIntakeState = Intake.IntakeState.EXPEL;
+		} else {
+			prevCommands.wantedIntakeState = Intake.IntakeState.IDLE;
+		}
+		
 		prevCommands.operatorStickInput = new XboxInput(mOperatorStick.getX(), mOperatorStick.getY(), mOperatorStick.getX(), mOperatorStick.getY());
 		// Left Stick trigger cancels current routine
 		prevCommands.cancelCurrentRoutines = mLeftStick.getTrigger();

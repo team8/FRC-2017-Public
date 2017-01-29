@@ -96,6 +96,15 @@ public class HardwareAdapter {
 						Constants.kTyrRightIntakeMotorPDP);
 				intakeArmMotor = null;
 				intakeArmPotentiometer = null;
+			} else if (Constants.kRobotName == Constants.RobotName.STEIK) {
+				leftIntakeMotor = new CheesySpeedController(
+						new VictorSP(Constants.kSteikLeftIntakeMotorDeviceID),
+						Constants.kSteikLeftIntakeMotorPDP);
+				rightIntakeMotor = new CheesySpeedController(
+						new VictorSP(Constants.kSteikRightIntakeMotorDeviceID),
+						Constants.kSteikRightIntakeMotorPDP);
+				intakeArmMotor = null;
+				intakeArmPotentiometer = null;
 			} else {
 				leftIntakeMotor = new CheesySpeedController(
 						new CANTalon(Constants.kDericaIntakeMotorPWM),
@@ -178,7 +187,7 @@ public class HardwareAdapter {
 		public final CheesySpeedController lowGoalShooterMotor;
 		
 		private LowGoalShooterHardware() {
-			if(Constants.kRobotName == Constants.RobotName.DERICA) {
+			if (Constants.kRobotName == Constants.RobotName.DERICA) {
 				lowGoalShooterMotor = new CheesySpeedController(new Victor(Constants.kDericaLowGoalShooterPWM), Constants.kDericaLowGoalShooterPDP);
 			} else {
 				lowGoalShooterMotor = null;
@@ -188,17 +197,58 @@ public class HardwareAdapter {
 	
 	public static class ClimberHardware {
 		private static ClimberHardware instance = new ClimberHardware();
-		
+
 		public static ClimberHardware getInstance() {
 			return instance;
 		}
-		
+
 		public final CheesySpeedController climbingMotor;
 		public final Encoder positionEncoder;
-		
+
 		private ClimberHardware() {
 			climbingMotor = new CheesySpeedController(new TalonSRX(Constants.kSteikClimberMotorPDP), Constants.kSteikClimberMotorPWM);
 			positionEncoder = new Encoder(Constants.kSteikClimberEncoderDIOA, Constants.kSteikClimberEncoderDIOB);
+		}
+	}
+	/**
+	 * FLIPPERS
+	 */
+	public static class FlippersHardware {
+		private static FlippersHardware instance = new FlippersHardware();
+		public static FlippersHardware getInstance() {
+			return instance;
+		}
+		public final DoubleSolenoid leftSolenoid, rightSolenoid;
+		
+		private FlippersHardware() {
+			if (Constants.kRobotName == Constants.RobotName.STEIK) {
+				leftSolenoid = new DoubleSolenoid(
+						Constants.kLeftFlipperPortExtend, Constants.kLeftFlipperPortRetract);
+				rightSolenoid = new DoubleSolenoid(
+						Constants.kRightFlipperPortExtend, Constants.kRightFlipperPortRetract);
+			} else {
+				leftSolenoid = null;
+				rightSolenoid = null;
+			}
+		}
+	}
+	
+	/**
+	 * SPATULA
+	 */
+	public static class SpatulaHardware {
+		private static SpatulaHardware instance = new SpatulaHardware();
+		public static SpatulaHardware getInstance() {
+			return instance;
+		}
+		public final DoubleSolenoid spatulaSolenoid;
+		
+		private SpatulaHardware() {
+			if (Constants.kRobotName == Constants.RobotName.STEIK) {
+				spatulaSolenoid = new DoubleSolenoid(Constants.kSpatulaPortExtend, Constants.kSpatulaPortRetract);
+			} else {
+				spatulaSolenoid = null;
+			}
 		}
 	}
 	
@@ -217,7 +267,8 @@ public class HardwareAdapter {
 		public final Joystick operatorStick;
 
 		public Joysticks() {
-			if (Constants.kRobotName == Constants.RobotName.TYR) {
+			if (Constants.kRobotName == Constants.RobotName.TYR 
+					|| Constants.kRobotName == Constants.RobotName.STEIK) {
 				operatorStick = new XboxController(2);
 			} else {
 				operatorStick = new Joystick(2);
@@ -248,6 +299,14 @@ public class HardwareAdapter {
 	
 	public ClimberHardware getClimber() {
 		return ClimberHardware.getInstance();
+	}
+
+	public FlippersHardware getFlippers() {
+		return FlippersHardware.getInstance();
+	}
+	
+	public SpatulaHardware getSpatula() {
+		return SpatulaHardware.getInstance();
 	}
 	
 	public Joysticks getJoysticks() {

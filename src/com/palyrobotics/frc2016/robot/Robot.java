@@ -5,6 +5,7 @@ import com.palyrobotics.frc2016.auto.AutoModeExecuter;
 import com.palyrobotics.frc2016.auto.AutoModeSelector;
 import com.palyrobotics.frc2016.behavior.RoutineManager;
 import com.palyrobotics.frc2016.config.Commands;
+import com.palyrobotics.frc2016.config.Constants;
 import com.palyrobotics.frc2016.config.RobotState;
 import com.palyrobotics.frc2016.subsystems.*;
 import com.palyrobotics.frc2016.util.Dashboard;
@@ -36,8 +37,11 @@ public class Robot extends IterativeRobot {
 	// Subsystem controllers
 	private Drive mDrive = Drive.getInstance();
 	private Climber mClimb = Climber.getInstance();
-	
-	//hardware updater
+	private Flippers mFlippers = Flippers.getInstance();
+	private Spatula mSpatula = Spatula.getInstance();
+	private Intake mIntake = Intake.getInstance();
+
+	// Hardware Updater
 	private HardwareUpdater mHardwareUpdater;
 
 	private Dashboard mDashboard = Dashboard.getInstance();
@@ -51,7 +55,16 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		System.out.println("Start robotInit()");
 		mSubsystemLooper.register(mDrive);
-		mHardwareUpdater = new HardwareUpdater(mDrive, mClimb);
+
+		if (Constants.kRobotName == Constants.RobotName.STEIK) {
+			mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSpatula, mIntake);
+			mSubsystemLooper.register(mFlippers);
+			mSubsystemLooper.register(mSpatula);
+			mSubsystemLooper.register(mIntake);
+		} else {
+			mHardwareUpdater = new HardwareUpdater(mDrive, mClimb);
+		}
+		
 		//        SystemManager.getInstance().add(routineManager);
 		sensorTable = NetworkTable.getTable("Sensor");
 		mDashboard.init();

@@ -17,6 +17,9 @@ public class CommandsTest {
 	public void testNullPointers() {
 		// Check for variable construction in Commands if a line throws an Exception
 		mCommands.wantedDriveState.toString();
+		mCommands.wantedFlipperSignal.toString();
+		mCommands.wantedIntakeState.toString();
+		mCommands.wantedSpatulaState.toString();
 		mCommands.robotSetpoints.toString();
 		mCommands.leftStickInput.y = 0;
 		mCommands.rightStickInput.y = 0;
