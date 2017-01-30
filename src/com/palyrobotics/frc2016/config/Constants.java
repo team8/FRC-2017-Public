@@ -6,7 +6,7 @@ public class Constants extends ConstantsBase {
 	public enum RobotName {
 		STEIK, AEGIR, TYR, DERICA
 	}
-	public static final RobotName kRobotName = RobotName.DERICA;
+	public static final RobotName kRobotName = RobotName.STEIK;
 
 	// Chezy Drive tuning
 	public static double kDriveSensitivity = .85;
@@ -15,11 +15,6 @@ public class Constants extends ConstantsBase {
 	// Manual control speed tuning
 	public static double kManualIntakeSpeed = 1.0;
 	public static double kManualExhaustSpeed = -1.0;
-
-	public static double kDistanceToDriveToAccumulateExtra = 12 * 2;
-	
-	// Auto low goal shooter expel 
-	public static double kAutoShooterExpelTime = .5;
 
 	// DriveStraightController gains
 	public static double kDriveMaxSpeedInchesPerSec = 80.0;
@@ -41,7 +36,6 @@ public class Constants extends ConstantsBase {
 	public static double kEncoderTurnKi = 0.01;
 	public static double kEncoderTurnKd = 0.007;
 	public static double kTyrDegreeToDistance = 0;
-	public static double kDericaDegreeToDistance = 0.209;
 	public static double kAcceptableEncoderTurnError = 2;
 	
 	// Gyro Turn in Place controller gains
@@ -71,7 +65,6 @@ public class Constants extends ConstantsBase {
 
 	// Compressor Ports DON'T WORK
 	public static int kCompressorRelayPort = 0;
-	public static int kPressureSwitchDIO = 1;
 
 	/*
 	 * STEIK ELECTRONIC CONSTANTS
@@ -95,6 +88,9 @@ public class Constants extends ConstantsBase {
 	// SLIDER
 	public static int kSteikSliderMotorDeviceID = 0;
 	public static int kSteikSliderMotorPDP = 0;
+	public static int kSteikSliderLeftHallEffect = 0;
+	public static int kSteikSliderMiddleHallEffect = 0;
+	public static int kSteikSliderRightHallEffect = 0;
 
 	//SPATULA
 	public static int kSteikSpatulaPortExtend = 0;
@@ -134,6 +130,9 @@ public class Constants extends ConstantsBase {
 	// SLIDER
 	public static int kAegirSliderMotorDeviceID = 0;
 	public static int kAegirSliderMotorPDP = 0;
+	public static int kAegirSliderLeftHallEffect = 0;
+	public static int kAegirSliderMiddleHallEffect = 0;
+	public static int kAegirSliderRightHallEffect = 0;
 
 	//SPATULA
 	public static int kAegirSpatulaPortExtend = 0;

@@ -86,7 +86,7 @@ public class Commands {
 	// Stores Joystick values
 	public JoystickInput leftStickInput = new JoystickInput(0,0, false);
 	public JoystickInput rightStickInput = new JoystickInput(0,0, false);
-	public XboxInput operatorStickInput = new XboxInput(0, 0, 0,0);
+	public JoystickInput operatorStickInput = new JoystickInput(0, 0, false);
 
 	// Allows you to cancel all running routines
 	public boolean cancelCurrentRoutines = false;

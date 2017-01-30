@@ -18,6 +18,11 @@ public abstract class Routine {
      * {@link Drive#controllerOnTarget()}
      */
     protected final Drive drive = Drive.getInstance();
+    protected final Flippers flippers = Flippers.getInstance();
+    protected final Slider slider = Slider.getInstance();
+    protected final Spatula spatula = Spatula.getInstance();
+    protected final Intake intake = Intake.getInstance();
+    protected final Climber climber = Climber.getInstance();
 
     // Called to start a routine
     public abstract void start();

@@ -2,8 +2,9 @@ package com.palyrobotics.frc2016.auto.modes;
 
 import com.palyrobotics.frc2016.auto.AutoMode;
 import com.palyrobotics.frc2016.auto.AutoModeEndedException;
+import com.palyrobotics.frc2016.behavior.routines.DriveTimeRoutine;
 import com.palyrobotics.frc2016.behavior.routines.auto.DriveDistanceRoutine;
-import com.palyrobotics.frc2016.behavior.routines.auto.DriveTimeRoutine;
+import com.palyrobotics.frc2016.util.DriveSignal;
 
 public class WaitForwardBackwardAutoMode extends AutoMode{
 	
@@ -25,7 +26,8 @@ public class WaitForwardBackwardAutoMode extends AutoMode{
 	
 	protected void routine() throws AutoModeEndedException {
 		waitTime(mWaitTime);
-		runRoutine(new DriveTimeRoutine(mDriveTime));
+		// TODO: No drive power set
+		runRoutine(new DriveTimeRoutine(mDriveTime, DriveSignal.getNeutralSignal()));
 		waitTime(1);
 		runRoutine(new DriveDistanceRoutine(mBackDistance));
 	}
