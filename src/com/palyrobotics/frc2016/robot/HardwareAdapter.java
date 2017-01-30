@@ -5,6 +5,7 @@ import com.mindsensors.CANSD540;
 import com.palyrobotics.frc2016.config.Constants;
 import com.palyrobotics.frc2016.config.Constants2016;
 import com.palyrobotics.frc2016.robot.team254.lib.util.ADXRS453_Gyro;
+import com.palyrobotics.frc2016.robot.team254.lib.util.ConstantsBase;
 import com.palyrobotics.frc2016.util.XboxController;
 import com.palyrobotics.frc2016.robot.team254.lib.util.CheesySpeedController;
 
@@ -35,6 +36,7 @@ public class HardwareAdapter {
 		public final CANTalon rightSlaveTalon;
 		public final CANTalon rightMasterTalon;
 
+		// If encoders are wired directly to RIO use the following objects
 //		public final Encoder leftEncoder;
 //		public final Encoder rightEncoder;
 		public final ADXRS453_Gyro gyro;
@@ -107,14 +109,26 @@ public class HardwareAdapter {
 			return instance_;
 		}
 		public final CANTalon sliderTalon;
+		public final DigitalInput leftHallEffect;
+		public final DigitalInput middleHallEffect;
+		public final DigitalInput rightHallEffect;
 
 		private SliderHardware() {
 			if (Constants.kRobotName == Constants.RobotName.AEGIR) {
 				sliderTalon = new CANTalon(Constants.kAegirSliderMotorDeviceID);
+				leftHallEffect = new DigitalInput(Constants.kAegirSliderLeftHallEffect);
+				middleHallEffect = new DigitalInput(Constants.kAegirSliderMiddleHallEffect);
+				rightHallEffect = new DigitalInput(Constants.kAegirSliderRightHallEffect);
 			} else if (Constants.kRobotName == Constants.RobotName.STEIK) {
 				sliderTalon = new CANTalon(Constants.kSteikSliderMotorDeviceID);
+				leftHallEffect = new DigitalInput(Constants.kSteikSliderLeftHallEffect);
+				middleHallEffect = new DigitalInput(Constants.kSteikSliderMiddleHallEffect);
+				rightHallEffect = new DigitalInput(Constants.kSteikSliderRightHallEffect);
 			} else {
 				sliderTalon = null;
+				leftHallEffect = null;
+				middleHallEffect = null;
+				rightHallEffect = null;
 			}
 		}
 	}
@@ -131,6 +145,8 @@ public class HardwareAdapter {
 		private SpatulaHardware() {
 			if (Constants.kRobotName == Constants.RobotName.STEIK) {
 				spatulaSolenoid = new DoubleSolenoid(Constants.kSteikSpatulaPortExtend, Constants.kSteikSpatulaPortRetract);
+			} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
+				spatulaSolenoid = new DoubleSolenoid(Constants.kAegirSpatulaPortExtend, Constants.kAegirSpatulaPortRetract);
 			} else {
 				spatulaSolenoid = null;
 			}
@@ -178,7 +194,7 @@ public class HardwareAdapter {
 		private ClimberHardware() {
 			if (Constants.kRobotName == Constants.RobotName.AEGIR) {
 				climberMotor = new CANSD540(Constants.kAegirClimberMotorDeviceID);
-				climberEncoder = new Encoder(Constants.kSteikClimberEncoderDIOA, Constants.kSteikClimberEncoderDIOB);
+				climberEncoder = new Encoder(Constants.kAegirClimberEncoderDIOA, Constants.kAegirClimberEncoderDIOB);
 			} else if (Constants.kRobotName == Constants.RobotName.STEIK) {
 				climberMotor = new CANSD540(Constants.kSteikClimberMotorDeviceID);
 				climberEncoder = new Encoder(Constants.kSteikClimberEncoderDIOA, Constants.kSteikClimberEncoderDIOB);
@@ -201,15 +217,9 @@ public class HardwareAdapter {
 
 		public final Joystick leftStick = new Joystick(0);
 		public final Joystick rightStick = new Joystick(1);
-		public final Joystick operatorStick;
+		public final Joystick operatorStick = new Joystick(2);
 
-		public Joysticks() {
-			if (Constants.kRobotName == Constants.RobotName.TYR 
-					|| Constants.kRobotName == Constants.RobotName.STEIK) {
-				operatorStick = new XboxController(2);
-			} else {
-				operatorStick = new Joystick(2);
-			}
+		private Joysticks() {
 		}
 	}
 

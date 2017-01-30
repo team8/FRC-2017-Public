@@ -96,9 +96,9 @@ class HardwareUpdater {
 		}
 
 		// Update kPDP current draw
-		if (Constants.kRobotName == Constants.kRobotName.STEIK) {
+		if (Constants.kRobotName == Constants.RobotName.STEIK) {
 			robotState.climberCurrentDraw = HardwareAdapter.getInstance().kPDP.getCurrent(Constants.kSteikClimberMotorPDP);
-		} else if (Constants.kRobotName == Constants.kRobotName.AEGIR) {
+		} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
 			robotState.climberCurrentDraw = HardwareAdapter.getInstance().kPDP.getCurrent(Constants.kAegirClimberMotorPDP);
 		}
 

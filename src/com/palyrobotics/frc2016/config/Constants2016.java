@@ -72,4 +72,5 @@ public class Constants2016 {
 	public static int kDericaArmIntakeMotorPDP = 0;
 	public static int kDericaLowGoalShooterPWM = 0;
 	public static int kDericaLowGoalShooterPDP = 3;
+	public static double kDericaDegreeToDistance = 0.209;
 }

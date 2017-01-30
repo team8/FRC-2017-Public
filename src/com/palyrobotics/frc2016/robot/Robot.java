@@ -60,8 +60,10 @@ public class Robot extends IterativeRobot {
 		if (Constants.kRobotName == Constants.RobotName.STEIK || Constants.kRobotName == Constants.RobotName.AEGIR) {
 			mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSlider, mSpatula, mIntake, mClimber);
 			mSubsystemLooper.register(mFlippers);
+			mSubsystemLooper.register(mSlider);
 			mSubsystemLooper.register(mSpatula);
 			mSubsystemLooper.register(mIntake);
+			mSubsystemLooper.register(mClimber);
 		} else {
 			mHardwareUpdater = new HardwareUpdater(mDrive);
 		}

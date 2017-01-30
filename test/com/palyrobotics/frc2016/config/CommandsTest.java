@@ -23,7 +23,7 @@ public class CommandsTest {
 		mCommands.robotSetpoints.toString();
 		mCommands.leftStickInput.y = 0;
 		mCommands.rightStickInput.y = 0;
-		mCommands.operatorStickInput.rightX = 0;
+		mCommands.operatorStickInput.x = 0;
 		System.out.println("No null pointer exceptions!");
 	}
 }
