@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component jdk="1.8" jdk_type="JavaSDK">
 	<exclude-output/>
-	<contentEntry url="file://$MODULE_DIR$"/>
+	<contentEntry url="file://$MODULE_DIR$">
+		<testFolder url="file://$MODULE_DIR$/test"/>
+	</contentEntry>
 	<lib name="json-simple-1.1.1.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/json-simple-1.1.1.jar!/"/>
 	</lib>
@@ -29,5 +31,11 @@
 		<srcroot url="jar://$MODULE_DIR$/lib/CTRLib-javadoc.jar!/"/>
 		<relative-module-src project-related="jar://$PROJECT_DIR$/lib/CTRLib-javadoc.jar!/"/>
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/CTRLib.jar!/"/>
+	</lib>
+	<lib name="hamcrest-core-1.3.jar" scope="TEST">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/res/hamcrest-core-1.3.jar!/"/>
+	</lib>
+	<lib name="junit-4.12.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/res/junit-4.12.jar!/"/>
 	</lib>
 </component>
