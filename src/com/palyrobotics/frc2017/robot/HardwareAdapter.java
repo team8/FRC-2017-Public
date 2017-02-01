@@ -100,35 +100,7 @@ public class HardwareAdapter {
 	/**
 	 * SLIDER - 1 TalonSRX
 	 */
-	public static class SliderHardware {
-		private static SliderHardware instance_ = new SliderHardware();
-		public static SliderHardware getInstance() {
-			return instance_;
-		}
-		public final CANTalon sliderTalon;
-		public final DigitalInput leftHallEffect;
-		public final DigitalInput middleHallEffect;
-		public final DigitalInput rightHallEffect;
 
-		private SliderHardware() {
-			if (Constants.kRobotName == Constants.RobotName.AEGIR) {
-				sliderTalon = new CANTalon(Constants.kAegirSliderMotorDeviceID);
-				leftHallEffect = new DigitalInput(Constants.kAegirSliderLeftHallEffect);
-				middleHallEffect = new DigitalInput(Constants.kAegirSliderMiddleHallEffect);
-				rightHallEffect = new DigitalInput(Constants.kAegirSliderRightHallEffect);
-			} else if (Constants.kRobotName == Constants.RobotName.STEIK) {
-				sliderTalon = new CANTalon(Constants.kSteikSliderMotorDeviceID);
-				leftHallEffect = new DigitalInput(Constants.kSteikSliderLeftHallEffect);
-				middleHallEffect = new DigitalInput(Constants.kSteikSliderMiddleHallEffect);
-				rightHallEffect = new DigitalInput(Constants.kSteikSliderRightHallEffect);
-			} else {
-				sliderTalon = null;
-				leftHallEffect = null;
-				middleHallEffect = null;
-				rightHallEffect = null;
-			}
-		}
-	}
 	/**
 	 * SPATULA - one double solenoid
 	 */
@@ -178,29 +150,6 @@ public class HardwareAdapter {
 	/*
 	 * CLIMBER - one SD540C motor
 	 */
-	public static class ClimberHardware {
-		private static ClimberHardware instance = new ClimberHardware();
-
-		public static ClimberHardware getInstance() {
-			return instance;
-		}
-
-		public final CANSD540 climberMotor;
-		public final Encoder climberEncoder;
-
-		private ClimberHardware() {
-			if (Constants.kRobotName == Constants.RobotName.AEGIR) {
-				climberMotor = new CANSD540(Constants.kAegirClimberMotorDeviceID);
-				climberEncoder = new Encoder(Constants.kAegirClimberEncoderDIOA, Constants.kAegirClimberEncoderDIOB);
-			} else if (Constants.kRobotName == Constants.RobotName.STEIK) {
-				climberMotor = new CANSD540(Constants.kSteikClimberMotorDeviceID);
-				climberEncoder = new Encoder(Constants.kSteikClimberEncoderDIOA, Constants.kSteikClimberEncoderDIOB);
-			} else {
-				climberMotor = null;
-				climberEncoder = null;
-			}
-		}
-	}
 
 	public final PowerDistributionPanel kPDP = new PowerDistributionPanel();
 
@@ -227,17 +176,11 @@ public class HardwareAdapter {
 	public FlippersHardware getFlippers() {
 		return FlippersHardware.getInstance();
 	}
-	public SliderHardware getSlider() {
-		return SliderHardware.getInstance();
-	}
 	public SpatulaHardware getSpatula() {
 		return SpatulaHardware.getInstance();
 	}
 	public IntakeHardware getIntake() {
 		return IntakeHardware.getInstance();
-	}
-	public ClimberHardware getClimber() {
-		return ClimberHardware.getInstance();
 	}
 	public Joysticks getJoysticks() {
 		return Joysticks.getInstance();

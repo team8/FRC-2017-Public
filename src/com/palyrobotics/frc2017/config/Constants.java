@@ -84,13 +84,8 @@ public class Constants extends ConstantsBase {
 	public static int kSteikLeftFlipperPortRetract = 0;
 	public static int kSteikRightFlipperPortExtend = 0;
 	public static int kSteikRightFlipperPortRetract = 0;
-
-	// SLIDER
-	public static int kSteikSliderMotorDeviceID = 0;
-	public static int kSteikSliderMotorPDP = 0;
-	public static int kSteikSliderLeftHallEffect = 0;
-	public static int kSteikSliderMiddleHallEffect = 0;
-	public static int kSteikSliderRightHallEffect = 0;
+	
+	//SLIDER
 
 	//SPATULA
 	public static int kSteikSpatulaPortExtend = 0;
@@ -101,13 +96,8 @@ public class Constants extends ConstantsBase {
 	public static int kSteikLeftIntakeMotorPDP = 0;
 	public static int kSteikRightIntakeMotorDeviceID = 0;
 	public static int kSteikRightIntakeMotorPDP = 0;
-
-	// CLIMBER CONSTANTS
-	public static int kSteikClimberMotorDeviceID = 2;
-	public static int kSteikClimberMotorPDP = 3;
-
-	public static int kSteikClimberEncoderDIOA = 4;
-	public static int kSteikClimberEncoderDIOB = 5;
+	
+	//CLIMBER
 
 	/*
 	 * AEGIR ELECTRONIC CONSTANTS
@@ -128,11 +118,6 @@ public class Constants extends ConstantsBase {
 	public static int kAegirRightFlipperPortRetract = 0;
 
 	// SLIDER
-	public static int kAegirSliderMotorDeviceID = 0;
-	public static int kAegirSliderMotorPDP = 0;
-	public static int kAegirSliderLeftHallEffect = 0;
-	public static int kAegirSliderMiddleHallEffect = 0;
-	public static int kAegirSliderRightHallEffect = 0;
 
 	//SPATULA
 	public static int kAegirSpatulaPortExtend = 0;
@@ -145,10 +130,6 @@ public class Constants extends ConstantsBase {
 	public static int kAegirRightIntakeMotorPDP = 0;
 
 	// CLIMBER
-	public static int kAegirClimberMotorDeviceID = 2;
-	public static int kAegirClimberMotorPDP = 3;
-	public static int kAegirClimberEncoderDIOA = 4;
-	public static int kAegirClimberEncoderDIOB = 5;
 
 	// !!! Physical constants
 

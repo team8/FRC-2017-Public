@@ -37,10 +37,8 @@ public class Robot extends IterativeRobot {
 	// Subsystem controllers
 	private Drive mDrive = Drive.getInstance();
 	private Flippers mFlippers = Flippers.getInstance();
-	private Slider mSlider = Slider.getInstance();
 	private Spatula mSpatula = Spatula.getInstance();
 	private Intake mIntake = Intake.getInstance();
-	private Climber mClimber = Climber.getInstance();
 
 	// Hardware Updater
 	private HardwareUpdater mHardwareUpdater;
@@ -58,12 +56,10 @@ public class Robot extends IterativeRobot {
 		mSubsystemLooper.register(mDrive);
 
 		if (Constants.kRobotName == Constants.RobotName.STEIK || Constants.kRobotName == Constants.RobotName.AEGIR) {
-			mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSlider, mSpatula, mIntake, mClimber);
+			mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSpatula, mIntake);
 			mSubsystemLooper.register(mFlippers);
-			mSubsystemLooper.register(mSlider);
 			mSubsystemLooper.register(mSpatula);
 			mSubsystemLooper.register(mIntake);
-			mSubsystemLooper.register(mClimber);
 		} else {
 			mHardwareUpdater = new HardwareUpdater(mDrive);
 		}
