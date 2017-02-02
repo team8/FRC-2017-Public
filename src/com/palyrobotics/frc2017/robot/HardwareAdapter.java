@@ -100,6 +100,25 @@ public class HardwareAdapter {
 	/**
 	 * SLIDER - 1 TalonSRX
 	 */
+	public static class SimpleSliderHardware {
+		private static SimpleSliderHardware instance = new SimpleSliderHardware();
+		
+		protected static SimpleSliderHardware getInstance() {
+			return instance;
+		}
+		public final TalonSRX simpleSliderMotor;
+		public final Encoder simpleSliderEncoder;
+		
+		private SimpleSliderHardware() {
+			if(Constants.kRobotName == Constants.RobotName.STEIK) {
+				simpleSliderMotor = new TalonSRX(Constants.kSteikSimpleSliderMotorDeviceID);
+				simpleSliderEncoder = new Encoder(Constants.kSteikSimpleSliderEncoderDIOA, Constants.kSteikSimpleSliderEncoderDIOB);
+			} else {
+				simpleSliderMotor = null;
+				simpleSliderEncoder = null;
+			}
+		}
+	}
 
 	/**
 	 * SPATULA - one double solenoid
@@ -121,6 +140,7 @@ public class HardwareAdapter {
 			}
 		}
 	}
+	
 	/*
 	 * INTAKE - two SD540C motors
 	 */
@@ -150,7 +170,28 @@ public class HardwareAdapter {
 	/*
 	 * CLIMBER - one SD540C motor
 	 */
-
+	public static class ClimberHardware {
+		private static ClimberHardware instance = new ClimberHardware();
+		
+		protected static ClimberHardware getInstance(){
+			return instance;
+		}
+		public final CANSD540 climberMotor;
+		public final Encoder climberEncoder;
+		
+		private ClimberHardware() {
+			if (Constants.kRobotName == Constants.RobotName.AEGIR) {
+				climberMotor = new CANSD540(Constants.kAegirClimberMotorDeviceID);
+				climberEncoder = new Encoder(Constants.kAegirClimberEncoderPortA, Constants.kAegirClimberEncoderPortB);
+			} else if (Constants.kRobotName == Constants.RobotName.STEIK) {
+				climberMotor = new CANSD540(Constants.kSteikClimberMotorDeviceID);
+				climberEncoder = new Encoder(Constants.kSteikClimberEncoderPortA, Constants.kSteikClimberEncoderPortB);
+			} else {
+				climberMotor = null;
+				climberEncoder = null;
+			}
+		}
+	}
 	public final PowerDistributionPanel kPDP = new PowerDistributionPanel();
 
 	// Joysticks for operator interface
@@ -176,11 +217,17 @@ public class HardwareAdapter {
 	public FlippersHardware getFlippers() {
 		return FlippersHardware.getInstance();
 	}
+	public SimpleSliderHardware getSimpleSlider() {
+		return SimpleSliderHardware.getInstance();
+	}
 	public SpatulaHardware getSpatula() {
 		return SpatulaHardware.getInstance();
 	}
 	public IntakeHardware getIntake() {
 		return IntakeHardware.getInstance();
+	}
+	public ClimberHardware getClimber() {
+		return ClimberHardware.getInstance();
 	}
 	public Joysticks getJoysticks() {
 		return Joysticks.getInstance();

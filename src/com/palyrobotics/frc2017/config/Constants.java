@@ -45,7 +45,6 @@ public class Constants extends ConstantsBase {
 	public static double kAcceptableGyroTurnError = 2;
 	public static double kAcceptableGyroTurnStopSpeed = 1.2;
 	public static double kTurnAngleSpeed = .35;
-
 	
 	// TurnInPlaceController gains
 	public static double kTurnMaxSpeedRadsPerSec = 4.5;
@@ -86,6 +85,13 @@ public class Constants extends ConstantsBase {
 	public static int kSteikRightFlipperPortRetract = 0;
 	
 	//SLIDER
+	public static int kSteikSimpleSliderEncoderDIOA = 0;
+	public static int kSteikSimpleSliderEncoderDIOB = 0;
+	public static int kSteikSimpleSliderMotorDeviceID = 0;
+	public static int kSteikSimpleSliderMotorSpeed = 0;
+	public static int kSteikLeftSimpleSliderHallEffectSensor = 0;
+	public static int kSteikRightSimpleSliderHallEffectSensor = 0;
+	public static int kSteikSimpleSliderPotentiometer = 0;
 
 	//SPATULA
 	public static int kSteikSpatulaPortExtend = 0;
@@ -98,6 +104,10 @@ public class Constants extends ConstantsBase {
 	public static int kSteikRightIntakeMotorPDP = 0;
 	
 	//CLIMBER
+	public static int kSteikClimberMotorDeviceID = 0;
+	public static int kSteikClimberMotorPDP = 0;
+	public static int kSteikClimberEncoderPortA = 0;
+	public static int kSteikClimberEncoderPortB = 0;
 
 	/*
 	 * AEGIR ELECTRONIC CONSTANTS
@@ -118,6 +128,13 @@ public class Constants extends ConstantsBase {
 	public static int kAegirRightFlipperPortRetract = 0;
 
 	// SLIDER
+	public static int kAegirSimpleSliderEncoderDIOA = 0;
+	public static int kAegirSimpleSliderEncoderDIOB = 0;
+	public static int kAegirSimpleSliderMotorDeviceID = 0;
+	public static int kAegirSimpleSliderMotorSpeed = 0;
+	public static int kAegirLeftSimpleSliderHallEffectSensor = 0;
+	public static int kAegirRightSimpleSliderHallEffectSensor = 0;
+	public static int kAegirSimpleSliderPotentiometer = 0;
 
 	//SPATULA
 	public static int kAegirSpatulaPortExtend = 0;
@@ -130,7 +147,10 @@ public class Constants extends ConstantsBase {
 	public static int kAegirRightIntakeMotorPDP = 0;
 
 	// CLIMBER
-
+	public static int kAegirClimberMotorDeviceID = 0;
+	public static int kAegirClimberMotorPDP = 0;
+	public static int kAegirClimberEncoderPortA = 0;
+	public static int kAegirClimberEncoderPortB = 0;
 	// !!! Physical constants
 
 	// !!! Loop rate of normal Looper

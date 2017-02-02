@@ -7,7 +7,9 @@ import com.palyrobotics.frc2017.behavior.routines.EncoderDriveRoutine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Commands.*;
 import com.palyrobotics.frc2017.config.Commands.JoystickInput.XboxInput;
+import com.palyrobotics.frc2017.subsystems.SimpleClimber;
 import com.palyrobotics.frc2017.subsystems.Intake;
+import com.palyrobotics.frc2017.subsystems.SimpleSlider;
 import com.palyrobotics.frc2017.subsystems.Spatula.SpatulaState;
 
 /**
@@ -62,6 +64,12 @@ public class OperatorInterface {
 		} else if (mOperatorStick.getRawButton(1)) {
 			prevCommands.wantedFlipperSignal.toggleRight();
 		}
+		// Slider
+		if (mOperatorStick.getRawButton(0)){
+			prevCommands.wantedSimpleSliderState = SimpleSlider.SimpleSliderState.IDLE;
+		} else if(mOperatorStick.getRawButton(0)){
+			prevCommands.wantedSimpleSliderState = SimpleSlider.SimpleSliderState.MANUAL;
+		}
 		// Spatula
 		if (mOperatorStick.getRawButton(1)) {
 			prevCommands.wantedSpatulaState = 
@@ -74,6 +82,13 @@ public class OperatorInterface {
 			prevCommands.wantedIntakeState = Intake.IntakeState.EXPEL;
 		} else {
 			prevCommands.wantedIntakeState = Intake.IntakeState.IDLE;
+		}
+		// Climber
+		// Hold button 10 to climb, release to stop
+		if(mOperatorStick.getRawButton(10)) {
+			prevCommands.wantedSimpleClimberState = SimpleClimber.ClimberState.CLIMBING;
+		} else {
+			prevCommands.wantedSimpleClimberState = SimpleClimber.ClimberState.IDLE;
 		}
 		
 		prevCommands.operatorStickInput = new XboxInput(mOperatorStick.getX(), mOperatorStick.getY(), mOperatorStick.getX(), mOperatorStick.getY());

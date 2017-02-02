@@ -13,17 +13,21 @@ class HardwareUpdater {
 	// Subsystem references
 	private Drive mDrive;
 	private Flippers mFlippers;
+	private SimpleSlider mSimpleSlider;
 	private Spatula mSpatula;
 	private Intake mIntake;
+	private SimpleClimber mSimpleClimber;
 
 	/**
 	 * Hardware Updater for Steik/Aegir
 	 */
-	HardwareUpdater(Drive drive, Flippers flippers, Spatula spatula, Intake intake) {
+	HardwareUpdater(Drive drive, Flippers flippers, SimpleSlider slider, Spatula spatula, Intake intake, SimpleClimber climber) {
 		this.mDrive = drive;
 		this.mFlippers = flippers;
+		this.mSimpleSlider = slider;
 		this.mSpatula = spatula;
 		this.mIntake = intake;
+		this.mSimpleClimber = climber;
 	}
 
 	/**
@@ -89,12 +93,13 @@ class HardwareUpdater {
 			robotState.drivePose.leftVelocity = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getEncVelocity();
 			robotState.drivePose.rightDistance = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getEncPosition();
 			robotState.drivePose.rightVelocity = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getEncVelocity();
+			
 		}
 
 		// Update kPDP current draw
 
 		// Update climber encoder
-		
+		robotState.climberEncoder = HardwareAdapter.ClimberHardware.getInstance().climberEncoder.getDistance();
 	}
 
 	/**
@@ -117,14 +122,14 @@ class HardwareUpdater {
 		HardwareAdapter.getInstance().getFlippers().leftSolenoid.set(mFlippers.getFlipperSignal().leftFlipper);
 		HardwareAdapter.getInstance().getFlippers().rightSolenoid.set(mFlippers.getFlipperSignal().rightFlipper);
 		// SLIDER
-
+		HardwareAdapter.getInstance().getSimpleSlider().simpleSliderMotor.set(mSimpleSlider.getOutput());
 		// SPATULA
 		HardwareAdapter.getInstance().getSpatula().spatulaSolenoid.set(mSpatula.getOutput());
 		// INTAKE
 		HardwareAdapter.getInstance().getIntake().leftIntakeMotor.set(mIntake.getOutput());
 		HardwareAdapter.getInstance().getIntake().rightIntakeMotor.set(-mIntake.getOutput());
 		// CLIMBER
-
+		HardwareAdapter.getInstance().getClimber().climberMotor.set(mSimpleClimber.getOutput());
 	}
 
 	/**

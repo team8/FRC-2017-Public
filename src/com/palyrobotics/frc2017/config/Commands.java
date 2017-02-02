@@ -5,9 +5,12 @@ import java.util.Optional;
 
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.util.DriveSignal;
+import com.palyrobotics.frc2017.subsystems.SimpleClimber;
+import com.palyrobotics.frc2017.subsystems.Climber;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.subsystems.Flippers;
 import com.palyrobotics.frc2017.subsystems.Intake;
+import com.palyrobotics.frc2017.subsystems.SimpleSlider;
 import com.palyrobotics.frc2017.subsystems.Spatula;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -27,8 +30,11 @@ public class Commands {
 	public Drive.DriveState wantedDriveState = Drive.DriveState.NEUTRAL;
 	public Flippers.FlipperSignal wantedFlipperSignal = new Flippers.FlipperSignal(
 			DoubleSolenoid.Value.kForward, DoubleSolenoid.Value.kForward);
+	public SimpleSlider.SimpleSliderState wantedSimpleSliderState = SimpleSlider.SimpleSliderState.IDLE;
 	public Spatula.SpatulaState wantedSpatulaState = Spatula.SpatulaState.UP;
 	public Intake.IntakeState wantedIntakeState = Intake.IntakeState.IDLE;
+	public Climber.ClimberState wantedClimberState = Climber.ClimberState.IDLE;
+	public SimpleClimber.ClimberState wantedSimpleClimberState = SimpleClimber.ClimberState.IDLE;
 
 	public void addWantedRoutine(Routine wantedRoutine) {
 		for(Routine routine : wantedRoutines) {
