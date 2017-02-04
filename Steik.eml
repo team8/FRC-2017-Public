@@ -38,4 +38,7 @@
 	<lib name="junit-4.12.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/res/junit-4.12.jar!/"/>
 	</lib>
+	<lib name="RIOdroid.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/RIOdroid.jar!/"/>
+	</lib>
 </component>
