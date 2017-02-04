@@ -1,5 +1,6 @@
 package com.palyrobotics.frc2017.robot;
 
+import com.palyrobotics.frc2017.subsystems.Drive;
 import edu.wpi.first.wpilibj.Joystick;
 
 import com.palyrobotics.frc2017.behavior.Routine;
@@ -50,6 +51,9 @@ public class OperatorInterface {
 	 * @param prevCommands
 	 */
 	public void updateCommands(Commands prevCommands) {
+		if(prevCommands.wantedDriveState != Drive.DriveState.CONTROLLER) {
+			prevCommands.wantedDriveState = Drive.DriveState.CHEZY;
+		}
 		// TODO: Change how routines are commanded
 		if (mOperatorStick.getRawButton(4)) {
 			prevCommands.addWantedRoutine(new EncoderDriveRoutine(500));

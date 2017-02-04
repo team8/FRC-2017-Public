@@ -27,7 +27,8 @@ public class CheesyDriveHelperTest {
 		assertTrue("Match Sign broken", matchSign(-1,-2));
 		assertTrue("Match Sign broken", matchSign(0,0));
 		assertFalse("Match Sign broken", matchSign(1,0));
-		// Robot state only used by CDH to check for high gear vs low gear
+
+		// Robot state is not used by CDH
 		RobotState testRobotState = new RobotState();
 		Commands testCommands = new Commands();
 
@@ -36,8 +37,8 @@ public class CheesyDriveHelperTest {
 		testCommands.rightStickInput.x = 0;
 		mTestCDH.cheesyDrive(testCommands, testRobotState);
 		DriveSignal output = mTestCDH.cheesyDrive(testCommands, testRobotState);
-		boolean zeroOutput = (output.leftMotor.getSetpoint() == 0) && (output.rightMotor.getSetpoint() == 0);
-		assertTrue("Zero input should have zero output", zeroOutput);
+		DriveSignal zeroOutput = DriveSignal.getNeutralSignal();
+		assertTrue("Zero input should have zero output", output.equals(zeroOutput));
 
 		// Test turning
 		testCommands.leftStickInput.y = 0.5;

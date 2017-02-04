@@ -98,4 +98,28 @@ public class Commands {
 
 	// Allows you to cancel all running routines
 	public boolean cancelCurrentRoutines = false;
+
+	/**
+	 *
+	 * @return a copy of these commands
+	 */
+	public Commands copy() {
+		Commands copy = new Commands();
+		copy.wantedDriveState = this.wantedDriveState;
+		copy.wantedFlipperSignal = this.wantedFlipperSignal;
+		copy.wantedSpatulaState = this.wantedSpatulaState;
+		copy.wantedIntakeState = this.wantedIntakeState;
+		copy.wantedClimbState = this.wantedClimbState;
+
+		copy.cancelCurrentRoutines = this.cancelCurrentRoutines;
+		copy.leftStickInput = this.leftStickInput;
+		copy.rightStickInput = this.rightStickInput;
+		copy.operatorStickInput = this.operatorStickInput;
+
+		// Copy robot setpoints
+		copy.robotSetpoints = new Setpoints();
+		// Copy optionals that are present
+		robotSetpoints.drivePowerSetpoint.ifPresent((DriveSignal signal) -> copy.robotSetpoints.drivePowerSetpoint = Optional.of(signal));
+		return copy;
+	}
 }

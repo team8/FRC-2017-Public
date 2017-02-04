@@ -59,6 +59,11 @@ class HardwareUpdater {
 			rightMasterTalon.enableForwardSoftLimit(false);
 			rightMasterTalon.enableReverseSoftLimit(false);
 
+			// Enable all the talons
+			leftMasterTalon.enable();
+			leftSlaveTalon.enable();
+			rightMasterTalon.enable();
+			rightSlaveTalon.enable();
 			// Configure master talon feedback devises
 			leftMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 			rightMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
@@ -155,7 +160,7 @@ class HardwareUpdater {
 		if(talon.getControlMode() != output.getControlMode()) {
 			talon.changeControlMode(output.getControlMode());
 			if(output.getControlMode().isPID()) {
-				talon.setPID(output.P, output.I, output.D, output.f, output.izone, output.rampRate, output.profile);
+				talon.setPID(output.P, output.I, output.D, output.F, output.izone, output.rampRate, output.profile);
 			}
 		}
 		talon.setSetpoint(output.getSetpoint());

@@ -1,6 +1,15 @@
 package com.palyrobotics.frc2017.config;
 
+import com.palyrobotics.frc2017.subsystems.Drive;
+import com.palyrobotics.frc2017.util.DriveSignal;
 import org.junit.Test;
+
+import java.util.Optional;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Nihar on 1/22/17.
@@ -25,5 +34,25 @@ public class CommandsTest {
 		mCommands.rightStickInput.y = 0;
 		mCommands.operatorStickInput.x = 0;
 		System.out.println("No null pointer exceptions!");
+	}
+
+	/**
+	 * Test that the copy method works
+	 */
+	@Test
+	public void testCopyMethod() {
+		mCommands = new Commands();
+		Commands copy = mCommands.copy();
+
+		// Test the
+		mCommands.wantedDriveState = Drive.DriveState.NEUTRAL;
+		copy.wantedDriveState = Drive.DriveState.CHEZY;
+		assertThat("Copy modified original drivestate", mCommands.wantedDriveState, equalTo(Drive.DriveState.NEUTRAL));
+
+		mCommands.robotSetpoints.drivePowerSetpoint = Optional.of(DriveSignal.getNeutralSignal());
+		copy.robotSetpoints.drivePowerSetpoint = null;
+
+		assertThat("Copy modified original setpoints",
+				mCommands.robotSetpoints.drivePowerSetpoint.get(), equalTo(DriveSignal.getNeutralSignal()));
 	}
 }

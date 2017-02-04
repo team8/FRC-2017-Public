@@ -1,20 +1,24 @@
 package com.palyrobotics.frc2017.util;
 
 public class DriveSignal {
-    public CANTalonOutput leftMotor;
-    public CANTalonOutput rightMotor;
+	public CANTalonOutput leftMotor;
+	public CANTalonOutput rightMotor;
 
-    public DriveSignal(CANTalonOutput left, CANTalonOutput right) {
-        this.leftMotor = left;
-        this.rightMotor = right;
-    }
+	public DriveSignal(CANTalonOutput left, CANTalonOutput right) {
+		this.leftMotor = left;
+		this.rightMotor = right;
+	}
 
-    private static CANTalonOutput neutral;
-    static {
-        neutral = new CANTalonOutput();
-        neutral.setPercentVBus(0);
-    }
-    public static DriveSignal getNeutralSignal() {
-        return new DriveSignal(neutral, neutral);
-    }
+	public static DriveSignal getNeutralSignal() {
+		CANTalonOutput neutral = new CANTalonOutput();
+		neutral.setPercentVBus(0);
+
+		return new DriveSignal(neutral, neutral);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return ((DriveSignal) obj).leftMotor.equals(this.leftMotor) &&
+				((DriveSignal) obj).rightMotor.equals(this.rightMotor);
+	}
 }
