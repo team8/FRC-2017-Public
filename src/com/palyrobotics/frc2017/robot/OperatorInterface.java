@@ -40,13 +40,16 @@ public class OperatorInterface {
 	 * Helper method to only add routines that aren't already in wantedRoutines
 	 * @param commands Current set of commands being modified
 	 * @param wantedRoutine Routine to add to the commands
+	 * @return whether or not wantedRoutine was successfully added
 	 */
-	private void addWantedRoutine(Commands commands, Routine wantedRoutine) {
+	private boolean addWantedRoutine(Commands commands, Routine wantedRoutine) {
 		for (Routine routine : commands.wantedRoutines) {
 			if (routine.getClass().equals(wantedRoutine.getClass())) {
-				return;
+				return false;
 			}
 		}
+		commands.wantedRoutines.add(wantedRoutine);
+		return true;
 	}
 
 	/**
@@ -82,9 +85,9 @@ public class OperatorInterface {
 		if (mOperatorStick.getRawButton(4)) {
 			newCommands.addWantedRoutine(new EncoderDriveRoutine(500));
 		}
-		
+
 		//TODO figure out Steik controls
-		
+
 		// Flippers
 		//TODO wait a certain amount of time before being able to toggle again
 		if (mOperatorStick.getRawButton(1)) {

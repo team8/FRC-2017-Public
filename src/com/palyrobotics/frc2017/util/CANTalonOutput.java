@@ -81,31 +81,14 @@ public class CANTalonOutput {
 	 */
 	@Override
 	public boolean equals(Object other) {
-		if (((CANTalonOutput) other).getSetpoint() != this.getSetpoint()) {
-			return false;
-		}
-		if (((CANTalonOutput) other).controlMode != this.controlMode) {
-			return false;
-		}
-		if (((CANTalonOutput) other).P != this.P) {
-			return false;
-		}
-		if (((CANTalonOutput) other).I != this.I) {
-			return false;
-		}
-		if (((CANTalonOutput) other).D != this.D) {
-			return false;
-		}
-		if (((CANTalonOutput) other).F != this.F) {
-			return false;
-		}
-		if (((CANTalonOutput) other).izone != this.izone) {
-			return false;
-		}
-		if (((CANTalonOutput) other).rampRate != this.rampRate) {
-			return false;
-		}
-		return true;
+		return ((CANTalonOutput) other).getSetpoint() == this.getSetpoint() && 
+				((CANTalonOutput) other).controlMode == this.controlMode &&
+				((CANTalonOutput) other).P == this.P && 
+				((CANTalonOutput) other).I == this.I && 
+				((CANTalonOutput) other).D == this.D && 
+				((CANTalonOutput) other).F == this.F && 
+				((CANTalonOutput) other).izone == this.izone && 
+				((CANTalonOutput) other).rampRate == this.rampRate;
 	}
 
 	/* Should not be used as talon's should be set to slave mode when initialized
