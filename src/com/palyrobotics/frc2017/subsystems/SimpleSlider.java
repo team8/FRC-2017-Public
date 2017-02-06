@@ -2,6 +2,7 @@ package com.palyrobotics.frc2017.subsystems;
 
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Subsystem;
 import com.palyrobotics.frc2017.util.SubsystemLoop;
 
@@ -30,7 +31,7 @@ public class SimpleSlider  extends Subsystem implements SubsystemLoop  {
 		super("Simple Slider");
 	}
 	
-	private double mOutput;
+	private CANTalonOutput mOutput;
 	public static double kMotorScaleFactor = 0.5;
 	
 	public enum SimpleSliderState {
@@ -55,15 +56,15 @@ public class SimpleSlider  extends Subsystem implements SubsystemLoop  {
 	public void update(Commands commands, RobotState robotState) {
 		switch (commands.wantedSimpleSliderState){
 		case IDLE:
-			mOutput = 0;
+			mOutput.setPercentVBus(0);
 			break;
 		case MANUAL:
-			mOutput = commands.operatorStickInput.x * kMotorScaleFactor;
+			mOutput.setPercentVBus(commands.operatorStickInput.x * kMotorScaleFactor);
 			break;
 		}
 	}
 	
-	public double getOutput(){
+	public CANTalonOutput getOutput(){
 		return mOutput;
 	}
 }

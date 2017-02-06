@@ -7,6 +7,7 @@ import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.robot.team254.lib.util.ADXRS453_Gyro;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 //TODO: Set the DPP's somehow
 
 /**
@@ -100,22 +101,31 @@ public class HardwareAdapter {
 	/**
 	 * SLIDER - 1 TalonSRX
 	 */
-	public static class SimpleSliderHardware {
-		private static SimpleSliderHardware instance = new SimpleSliderHardware();
+	public static class SliderHardware {
+		private static SliderHardware instance = new SliderHardware();
 		
-		protected static SimpleSliderHardware getInstance() {
+		protected static SliderHardware getInstance() {
 			return instance;
 		}
-		public final TalonSRX simpleSliderMotor;
-		public final Encoder simpleSliderEncoder;
+		public final CANTalon sliderMotor;
+		public final Encoder sliderEncoder;
+		public final AnalogPotentiometer sliderPotentiometer;
+		public final DigitalInput sliderLeftHFX;
+		public final DigitalInput sliderRightHFX;
 		
-		private SimpleSliderHardware() {
+		private SliderHardware() {
 			if(Constants.kRobotName == Constants.RobotName.STEIK) {
-				simpleSliderMotor = new TalonSRX(Constants.kSteikSimpleSliderMotorDeviceID);
-				simpleSliderEncoder = new Encoder(Constants.kSteikSimpleSliderEncoderDIOA, Constants.kSteikSimpleSliderEncoderDIOB);
+				sliderMotor = new CANTalon(Constants.kSteikSliderMotorDeviceID);
+				sliderEncoder = new Encoder(Constants.kSteikSliderEncoderDIOA, Constants.kSteikSliderEncoderDIOB);
+				sliderPotentiometer = new AnalogPotentiometer(Constants.kSteikSliderPotentiometer, Constants.kSteikSliderPotentiometerFullRange, Constants.kSteikSliderPotentiometerOffset);
+				sliderLeftHFX = new DigitalInput(Constants.kSteikLeftSliderHallEffectSensor);
+				sliderRightHFX = new DigitalInput(Constants.kSteikRightSliderHallEffectSensor);
 			} else {
-				simpleSliderMotor = null;
-				simpleSliderEncoder = null;
+				sliderMotor = null;
+				sliderEncoder = null;
+				sliderPotentiometer = null;
+				sliderLeftHFX = null;
+				sliderRightHFX = null;
 			}
 		}
 	}
@@ -217,8 +227,8 @@ public class HardwareAdapter {
 	public FlippersHardware getFlippers() {
 		return FlippersHardware.getInstance();
 	}
-	public SimpleSliderHardware getSimpleSlider() {
-		return SimpleSliderHardware.getInstance();
+	public SliderHardware getSimpleSlider() {
+		return SliderHardware.getInstance();
 	}
 	public SpatulaHardware getSpatula() {
 		return SpatulaHardware.getInstance();

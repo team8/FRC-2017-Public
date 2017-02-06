@@ -55,7 +55,7 @@ public class Constants extends ConstantsBase {
 	public static double kTurnKv = 0.085;
 	public static double kTurnKa = 0.075;
 	public static double kTurnOnTargetError = 0.1;
-
+	
 	// !!! End of editable Constants! !!!
 	public static int kEndEditableArea = 0;
 
@@ -85,13 +85,15 @@ public class Constants extends ConstantsBase {
 	public static int kSteikRightFlipperPortRetract = 0;
 	
 	//SLIDER
-	public static int kSteikSimpleSliderEncoderDIOA = 0;
-	public static int kSteikSimpleSliderEncoderDIOB = 0;
-	public static int kSteikSimpleSliderMotorDeviceID = 0;
-	public static int kSteikSimpleSliderMotorSpeed = 0;
-	public static int kSteikLeftSimpleSliderHallEffectSensor = 0;
-	public static int kSteikRightSimpleSliderHallEffectSensor = 0;
-	public static int kSteikSimpleSliderPotentiometer = 0;
+	public static int kSteikSliderEncoderDIOA = 0;
+	public static int kSteikSliderEncoderDIOB = 0;
+	public static int kSteikSliderMotorDeviceID = 0;
+	public static int kSteikSliderMotorSpeed = 0;
+	public static int kSteikLeftSliderHallEffectSensor = 0;
+	public static int kSteikRightSliderHallEffectSensor = 0;
+	public static int kSteikSliderPotentiometer = 0;
+	public static int kSteikSliderPotentiometerFullRange = 0;
+	public static int kSteikSliderPotentiometerOffset;
 
 	//SPATULA
 	public static int kSteikSpatulaPortExtend = 0;
@@ -128,13 +130,15 @@ public class Constants extends ConstantsBase {
 	public static int kAegirRightFlipperPortRetract = 0;
 
 	// SLIDER
-	public static int kAegirSimpleSliderEncoderDIOA = 0;
-	public static int kAegirSimpleSliderEncoderDIOB = 0;
-	public static int kAegirSimpleSliderMotorDeviceID = 0;
-	public static int kAegirSimpleSliderMotorSpeed = 0;
-	public static int kAegirLeftSimpleSliderHallEffectSensor = 0;
-	public static int kAegirRightSimpleSliderHallEffectSensor = 0;
-	public static int kAegirSimpleSliderPotentiometer = 0;
+	public static int kAegirSliderEncoderDIOA = 0;
+	public static int kAegirSliderEncoderDIOB = 0;
+	public static int kAegirSliderMotorDeviceID = 0;
+	public static int kAegirSliderMotorSpeed = 0;
+	public static int kAegirLeftSliderHallEffectSensor = 0;
+	public static int kAegirRightSliderHallEffectSensor = 0;
+	public static int kAegirSliderPotentiometer = 0;
+	public static int kAegirSliderPotentiometerFullRange = 0;
+	public static int kAegirSliderPotentiometerOffset;
 
 	//SPATULA
 	public static int kAegirSpatulaPortExtend = 0;

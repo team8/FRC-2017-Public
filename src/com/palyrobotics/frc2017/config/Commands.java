@@ -11,6 +11,7 @@ import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.subsystems.Flippers;
 import com.palyrobotics.frc2017.subsystems.Intake;
 import com.palyrobotics.frc2017.subsystems.SimpleSlider;
+import com.palyrobotics.frc2017.subsystems.Slider;
 import com.palyrobotics.frc2017.subsystems.Spatula;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -30,6 +31,7 @@ public class Commands {
 	public Drive.DriveState wantedDriveState = Drive.DriveState.NEUTRAL;
 	public Flippers.FlipperSignal wantedFlipperSignal = new Flippers.FlipperSignal(
 			DoubleSolenoid.Value.kForward, DoubleSolenoid.Value.kForward);
+	public Slider.SliderState wantedSliderState = Slider.SliderState.IDLE;
 	public SimpleSlider.SimpleSliderState wantedSimpleSliderState = SimpleSlider.SimpleSliderState.IDLE;
 	public Spatula.SpatulaState wantedSpatulaState = Spatula.SpatulaState.UP;
 	public Intake.IntakeState wantedIntakeState = Intake.IntakeState.IDLE;
@@ -54,12 +56,15 @@ public class Commands {
 		public static final Optional<Double> NULLOPT = Optional.empty();
 		
 		public Optional<DriveSignal> drivePowerSetpoint = Optional.empty();
+		public Slider.SliderTarget sliderSetpoint = Slider.SliderTarget.NONE;
+		public Optional<Double> sliderPowerSetpoint = Optional.empty();
 
 		/**
 		 * Resets all the setpoints
 		 */
 		public void reset() {
 			drivePowerSetpoint = Optional.empty();
+			sliderSetpoint = Slider.SliderTarget.NONE;
 		}
 	}
 	// All robot setpoints

@@ -13,7 +13,7 @@ class HardwareUpdater {
 	// Subsystem references
 	private Drive mDrive;
 	private Flippers mFlippers;
-	private SimpleSlider mSimpleSlider;
+	private Slider mSlider;
 	private Spatula mSpatula;
 	private Intake mIntake;
 	private SimpleClimber mSimpleClimber;
@@ -21,10 +21,10 @@ class HardwareUpdater {
 	/**
 	 * Hardware Updater for Steik/Aegir
 	 */
-	HardwareUpdater(Drive drive, Flippers flippers, SimpleSlider slider, Spatula spatula, Intake intake, SimpleClimber climber) {
+	HardwareUpdater(Drive drive, Flippers flippers, Slider slider, Spatula spatula, Intake intake, SimpleClimber climber) {
 		this.mDrive = drive;
 		this.mFlippers = flippers;
-		this.mSimpleSlider = slider;
+		this.mSlider = slider;
 		this.mSpatula = spatula;
 		this.mIntake = intake;
 		this.mSimpleClimber = climber;
@@ -95,6 +95,13 @@ class HardwareUpdater {
 			robotState.drivePose.rightVelocity = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getEncVelocity();
 			
 		}
+		if(Constants.kRobotName == Constants.RobotName.AEGIR || Constants.kRobotName == Constants.RobotName.STEIK) {
+			robotState.sliderEncoder = HardwareAdapter.SliderHardware.getInstance().sliderMotor.getPosition();
+//			robotState.sliderEncoder = HardwareAdapter.SliderHardware.getInstance().sliderEncoder.getDistance();
+			robotState.sliderPotentiometer = HardwareAdapter.SliderHardware.getInstance().sliderPotentiometer.get();
+			robotState.sliderRightHFX = HardwareAdapter.SliderHardware.getInstance().sliderRightHFX.get();
+			robotState.sliderLeftHFX = HardwareAdapter.SliderHardware.getInstance().sliderLeftHFX.get();
+		}
 
 		// Update kPDP current draw
 
@@ -122,7 +129,7 @@ class HardwareUpdater {
 		HardwareAdapter.getInstance().getFlippers().leftSolenoid.set(mFlippers.getFlipperSignal().leftFlipper);
 		HardwareAdapter.getInstance().getFlippers().rightSolenoid.set(mFlippers.getFlipperSignal().rightFlipper);
 		// SLIDER
-		HardwareAdapter.getInstance().getSimpleSlider().simpleSliderMotor.set(mSimpleSlider.getOutput());
+		updateCANTalonSRX(HardwareAdapter.getInstance().getSimpleSlider().sliderMotor, mSlider.getOutput());
 		// SPATULA
 		HardwareAdapter.getInstance().getSpatula().spatulaSolenoid.set(mSpatula.getOutput());
 		// INTAKE
