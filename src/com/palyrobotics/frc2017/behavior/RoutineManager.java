@@ -49,24 +49,25 @@ public class RoutineManager implements Tappable {
 	
 	/**
 	 * Updates the commands that are passed in based on the running and canceled routines
-	 * @param commands Commands object to be modified
+	 * @param commands Current commands
+	 * @return Modified commands
 	 */
-	public void update(Commands commands) {
+	public Commands update(Commands commands) {
 		// If current routine exists and is finished, nullify it
 //		if (m_cur_routine != null && m_cur_routine.isFinished()) {
 //			System.out.println("Routine cancel called");
 //			setNewRoutine(null);
 //		}
 		routinesToRemove = new ArrayList<Routine>();
-		
+		Commands output = commands.copy();
 		for(Routine routine : runningRoutines) {
 			if(routine.finished()) {
 				System.out.println("Routine cancel called");
-				commands = routine.cancel(commands);
+				output = routine.cancel(output);
 				routinesToRemove.add(routine);
 			} else {
 				System.out.println("Updating routine: " + routine.getName());
-				commands = routine.update(commands);
+				output = routine.update(output);
 			}
 		}
 		
@@ -76,17 +77,18 @@ public class RoutineManager implements Tappable {
 		}
 		
 		// Set TROUT routine_request
-		if (commands.cancelCurrentRoutines) {
+		if (output.cancelCurrentRoutines) {
 			System.out.println("Cancel routine button");
-			reset(commands);
-		} else if(!commands.wantedRoutines.isEmpty()) {
-			for(Routine routine : commands.wantedRoutines) {
-				addNewRoutine(commands, routine);
+			reset(output);
+		} else if(!output.wantedRoutines.isEmpty()) {
+			for(Routine routine : output.wantedRoutines) {
+				addNewRoutine(output, routine);
 			}
 		}
 		
 		//clears the wanted routines every update cycle
-		commands.wantedRoutines.clear();
+		output.wantedRoutines.clear();
+		return output;
 	}
 
 	/**

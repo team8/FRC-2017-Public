@@ -5,12 +5,14 @@ import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
+import com.palyrobotics.frc2017.util.LegacyDrive;
 
 /**
  * Should only be used in robot package.
  */
 class HardwareUpdater {
 	// Subsystem references
+	private LegacyDrive mLegacyDrive;
 	private Drive mDrive;
 	private Flippers mFlippers;
 	private Slider mSlider;
@@ -21,7 +23,11 @@ class HardwareUpdater {
 	/**
 	 * Hardware Updater for Steik/Aegir
 	 */
-	HardwareUpdater(Drive drive, Flippers flippers, Slider slider, Spatula spatula, Intake intake, SimpleClimber climber) {
+	HardwareUpdater(Drive drive, Flippers flippers, Slider slider, Spatula spatula, Intake intake, SimpleClimber climber) throws Exception {
+		if(Constants.kRobotName != Constants.RobotName.AEGIR && Constants.kRobotName != Constants.RobotName.STEIK) {
+			System.out.println("Incompatible robot name and hardware!");
+			throw new Exception();
+		}
 		this.mDrive = drive;
 		this.mFlippers = flippers;
 		this.mSlider = slider;
@@ -31,18 +37,37 @@ class HardwareUpdater {
 	}
 
 	/**
-	 * Hardware Updater for Derica and Tyr
+	 * Hardware updater for Derica
+	 * @throws Exception 
+	 */
+	HardwareUpdater(Drive drive) throws Exception {
+		if(Constants.kRobotName != Constants.RobotName.DERICA) {
+			System.out.println("Incompatible robot name and hardware!");
+			throw new Exception();
+		}
+		this.mDrive = drive;
+	}
+
+	/**
+	 * Hardware Updater for Tyr
 	 * Updates only the drivetrain
 	 */
-	HardwareUpdater(Drive drive) {
-		this.mDrive = drive;
+	HardwareUpdater(LegacyDrive drive) throws Exception {
+		if(Constants.kRobotName != Constants.RobotName.TYR) {
+			System.out.println("Incompatible robot name and hardware!");
+			throw new Exception();
+		}
+
+		this.mLegacyDrive = drive;
 	}
 
 	/**
 	 * Initialize all hardware
 	 */
 	void initHardware() {
-		HardwareAdapter.getInstance().getDrivetrain().gyro.calibrate();
+		// TODO: Add the gyro calibration
+//		HardwareAdapter.getInstance().getDrivetrain().gyro.calibrate();
+		System.out.println("Gyro calibrated");
 		if(Constants.kRobotName != Constants.RobotName.TYR) {
 			CANTalon leftMasterTalon = HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon;
 			CANTalon leftSlaveTalon = HardwareAdapter.getInstance().getDrivetrain().leftSlaveTalon;
@@ -94,6 +119,7 @@ class HardwareUpdater {
 		robotState.drivePose.headingVelocity = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getRate();
 		// Non-Tyr robots use talons
 		if(Constants.kRobotName != Constants.RobotName.TYR) {
+			robotState.hallEffectTriggered = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.isFwdLimitSwitchClosed();
 			robotState.drivePose.leftDistance = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getEncPosition();
 			robotState.drivePose.leftVelocity = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getEncVelocity();
 			robotState.drivePose.rightDistance = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getEncPosition();
@@ -150,6 +176,7 @@ class HardwareUpdater {
 	 */
 	private void updateDrivetrain() {
 		updateCANTalonSRX(HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon, mDrive.getDriveSignal().leftMotor);
+//		System.out.println("Drive out " + mDrive.getDriveSignal().leftMotor.toString());
 		updateCANTalonSRX(HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon, mDrive.getDriveSignal().rightMotor);
 	}
 
@@ -174,13 +201,13 @@ class HardwareUpdater {
 	private void updateTyrDrivetrain() {
 		CANTalon kLeftFront = HardwareAdapter.getInstance().getDrivetrain().leftSlaveTalon;
 		CANTalon kLeftBack = HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon;
-		kLeftFront.set(mDrive.getDriveSignal().leftMotor.getSetpoint());
-		kLeftBack.set(mDrive.getDriveSignal().leftMotor.getSetpoint());
+		kLeftFront.set(mLegacyDrive.getDriveSignal().leftMotor.getSetpoint());
+		kLeftBack.set(mLegacyDrive.getDriveSignal().leftMotor.getSetpoint());
 
 		// Need to invert right side motors
 		CANTalon kRightFront = HardwareAdapter.getInstance().getDrivetrain().rightSlaveTalon;
 		CANTalon kRightBack = HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon;
-		kRightFront.set(-mDrive.getDriveSignal().rightMotor.getSetpoint());
-		kRightBack.set(-mDrive.getDriveSignal().rightMotor.getSetpoint());
+		kRightFront.set(-mLegacyDrive.getDriveSignal().rightMotor.getSetpoint());
+		kRightBack.set(-mLegacyDrive.getDriveSignal().rightMotor.getSetpoint());
 	}
 }

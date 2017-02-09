@@ -1,12 +1,12 @@
 package com.palyrobotics.frc2017.subsystems.controllers;
 
 import com.palyrobotics.frc2017.config.Constants2016;
-import com.palyrobotics.frc2017.subsystems.Drive;
+import com.palyrobotics.frc2017.util.LegacyDrive;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.util.DriveSignal;
 import com.palyrobotics.frc2017.robot.team254.lib.util.Pose;
 
-public class EncoderTurnAngleController implements Drive.DriveController {
+public class EncoderTurnAngleController implements LegacyDrive.DriveController {
 	private Pose mCachedPose;
 
 	private double mMaxVel;

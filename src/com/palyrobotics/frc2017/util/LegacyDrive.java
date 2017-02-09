@@ -1,8 +1,7 @@
-package com.palyrobotics.frc2017.subsystems;
+package com.palyrobotics.frc2017.util;
 
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
-import com.palyrobotics.frc2017.util.*;
 import com.palyrobotics.frc2017.robot.team254.lib.util.Pose;
 import com.palyrobotics.frc2017.subsystems.controllers.BangBangTurnAngleController;
 import com.palyrobotics.frc2017.subsystems.controllers.EncoderTurnAngleController;
@@ -19,20 +18,26 @@ import com.palyrobotics.frc2017.robot.team254.lib.trajectory.Path;
  * Represents the drivetrain
  * Uses controllers or cheesydrivehelper/proportionaldrivehelper to calculate DriveSignal
  */
-public class Drive extends Subsystem implements SubsystemLoop {
-	private static Drive instance = new Drive();
-	public static Drive getInstance() {
+public class LegacyDrive extends Subsystem implements SubsystemLoop {
+	private static LegacyDrive instance = new LegacyDrive();
+	public static LegacyDrive getInstance() {
 		return instance;
 	}
 
-	public enum DriveState {CHEZY, CONTROLLER, OPEN_LOOP, NEUTRAL}
-	private DriveState mState = DriveState.NEUTRAL;
+	public enum LegacyDriveState {CHEZY, CONTROLLER, OPEN_LOOP, NEUTRAL}
+	private LegacyDriveState mState = LegacyDriveState.NEUTRAL;
 
 	// Helper classes to calculate teleop output
 	private CheesyDriveHelper mCDH = new CheesyDriveHelper();
 //	private ProportionalDriveHelper mPDH = new ProportionalDriveHelper();
 
-	private LegacyDrive.DriveController mController = null;
+	public interface DriveController {
+		DriveSignal update(Pose pose);
+		Pose getCurrentSetpoint();
+
+		boolean onTarget();
+	}
+	private DriveController mController = null;
 
 	// Encoder DPP
 	private final double kInchesPerTick;
@@ -47,8 +52,8 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	// Stores output
 	private DriveSignal mSignal = DriveSignal.getNeutralSignal();
 
-	private Drive() {
-		super("Drive");
+	private LegacyDrive() {
+		super("LegacyDrive");
 		if (Constants.kRobotName == Constants.RobotName.TYR) {
 			kWheelbaseWidth = 26.0;
 			kTurnSlipFactor = 1.2;
@@ -90,29 +95,26 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	 */
 	@Override
 	public void update(Commands commands, RobotState state) {
-		// TODO: UNDO
-		System.out.println("Drive input" + commands.leftDriveOutput.toString());
-		setDriveOutputs(new DriveSignal(commands.leftDriveOutput, DriveSignal.getNeutralSignal().rightMotor));
-//		mCachedRobotState = state;
+		mCachedRobotState = state;
 //		mState = commands.wantedDriveState;
-//		Commands.Setpoints setpoints = commands.robotSetpoints;
-//		// Call methods associated with any setpoints that are present
-//		// Encoder drive distance routine
-////		setpoints.encoder_drive_setpoint.ifPresent(this.setDistanceSetpoint(setpoints.encoder_drive_setpoint));
-//
-//		switch(mState) {
-//			case CHEZY:
-//				setDriveOutputs(mCDH.cheesyDrive(commands, mCachedRobotState));
-//				break;
-//			case CONTROLLER:
-//				setDriveOutputs(mController.update(getPhysicalPose()));
-//				break;
-//			case OPEN_LOOP:
-//				setDriveOutputs(commands.robotSetpoints.drivePowerSetpoint.get());
-//			case NEUTRAL:
-//				setDriveOutputs(DriveSignal.getNeutralSignal());
-//				break;
-//		}
+		Commands.Setpoints setpoints = commands.robotSetpoints;
+		// Call methods associated with any setpoints that are present
+		// Encoder drive distance routine
+//		setpoints.encoder_drive_setpoint.ifPresent(this.setDistanceSetpoint(setpoints.encoder_drive_setpoint));
+
+		switch(mState) {
+			case CHEZY:
+				setDriveOutputs(mCDH.cheesyDrive(commands, mCachedRobotState));
+				break;
+			case CONTROLLER:
+				setDriveOutputs(mController.update(getPhysicalPose()));
+				break;
+			case OPEN_LOOP:
+				setDriveOutputs(commands.robotSetpoints.drivePowerSetpoint.get());
+			case NEUTRAL:
+				setDriveOutputs(DriveSignal.getNeutralSignal());
+				break;
+		}
 	}
 
 	@Override
@@ -155,22 +157,22 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	}
 
 	public void setTimerDriveSetpoint(double velocity, double time) {
-		mController = (LegacyDrive.DriveController) new TimedOpenLoopController(velocity, time, 0, 1.5);
+		mController = (DriveController) new TimedOpenLoopController(velocity, time, 0, 1.5);
 	}
-
+	
 	public void setTimerDriveSetpoint(double velocity, double time, double decelTime) {
-		mController = (LegacyDrive.DriveController) new TimedOpenLoopController(velocity, time, 0, decelTime);
+		mController = (DriveController) new TimedOpenLoopController(velocity, time, 0, decelTime);
 	}
-
+	
 	public void setTimerDriveSetpoint(double startPower, double timeFullOn, double endPower, double timeToDecel) {
-		mController = (LegacyDrive.DriveController) new TimedOpenLoopController(startPower, timeFullOn, endPower, timeToDecel);
-
+		mController = (DriveController) new TimedOpenLoopController(startPower, timeFullOn, endPower, timeToDecel);
+		
 	}
-
+	
 	public void setTurnSetpoint(double heading) {
 		setTurnSetpoint(heading, Constants.kTurnMaxSpeedRadsPerSec);
 	}
-
+	
 	public void setTurnSetpoint(double heading, double velocity) {
 		velocity = Math.min(Constants.kTurnMaxSpeedRadsPerSec, Math.max(velocity, 0));
 		mController = new TurnInPlaceController(getPoseToContinueFrom(true), heading, velocity);
@@ -179,7 +181,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	public void setEncoderTurnAngleSetpoint(double heading) {
 		setEncoderTurnAngleSetpoint(heading, 1);
 	}
-
+	
 	public void setEncoderTurnAngleSetpoint(double heading, double maxVel) {
 		mController = new EncoderTurnAngleController(getPoseToContinueFrom(true), heading, maxVel);
 	}
@@ -187,11 +189,11 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	public void setGyroTurnAngleSetpoint(double heading) {
 		setGyroTurnAngleSetpoint(heading, 0.7);
 	}
-
+	
 	public void setGyroTurnAngleSetpoint(double heading, double maxVel) {
 		mController = new GyroTurnAngleController(getPoseToContinueFrom(true), heading, maxVel);
 	}
-
+	
 	public void setBangBangTurnAngleSetpoint(double heading) {
 		mController = new BangBangTurnAngleController(getPoseToContinueFrom(true), heading);
 	}

@@ -48,9 +48,9 @@ public class HardwareAdapter {
 				gyro = new ADXRS453_Gyro();
 			} else if(Constants.kRobotName == Constants.RobotName.DERICA) {
 				leftMasterTalon = new CANTalon(Constants2016.kDericaLeftDriveMasterDeviceID);
-				leftSlaveTalon = new CANTalon(Constants2016.kDericaLeftDriveFrontMotorDeviceID);
-				rightMasterTalon = new CANTalon(Constants2016.kDericaRightDriveBackMotorDeviceID);
-				rightSlaveTalon = new CANTalon(Constants2016.kDericaRightDriveFrontMotorDeviceID);
+				leftSlaveTalon = new CANTalon(Constants2016.kDericaLeftDriveSlaveDeviceID);
+				rightMasterTalon = new CANTalon(Constants2016.kDericaRightDriveMasterDeviceID);
+				rightSlaveTalon = new CANTalon(Constants2016.kDericaRightDriveSlaveDeviceID);
 
 				gyro = new ADXRS453_Gyro();
 				// no shifter solenoid

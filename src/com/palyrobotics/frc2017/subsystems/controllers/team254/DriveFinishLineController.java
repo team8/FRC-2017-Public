@@ -1,12 +1,12 @@
 package com.palyrobotics.frc2017.subsystems.controllers.team254;
 
-import com.palyrobotics.frc2017.subsystems.Drive;
+import com.palyrobotics.frc2017.util.LegacyDrive;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.util.DriveSignal;
 import com.palyrobotics.frc2017.robot.team254.lib.util.Pose;
 import com.palyrobotics.frc2017.robot.team254.lib.util.SynchronousPID;
 
-public class DriveFinishLineController implements Drive.DriveController {
+public class DriveFinishLineController implements LegacyDrive.DriveController {
 	BangBangFinishLineController m_controller;
 
 	Pose m_setpoint = new Pose(0, 0, 0, 0, 0, 0);

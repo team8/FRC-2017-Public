@@ -9,7 +9,6 @@ import com.palyrobotics.frc2017.robot.team254.lib.util.Pose;
  *
  */
 public class RobotState {
-	
 	public enum GamePeriod {
 		AUTO, TELEOP, DISABLED
 	}

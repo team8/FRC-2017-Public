@@ -1,6 +1,9 @@
 package com.palyrobotics.frc2017.robot;
 
 import com.palyrobotics.frc2017.subsystems.Drive;
+import com.palyrobotics.frc2017.util.CANTalonOutput;
+import com.palyrobotics.frc2017.util.DriveSignal;
+import com.palyrobotics.frc2017.util.LegacyDrive;
 import edu.wpi.first.wpilibj.Joystick;
 
 import com.palyrobotics.frc2017.behavior.Routine;
@@ -47,16 +50,37 @@ public class OperatorInterface {
 	}
 
 	/**
-	 * Modifies the commands that are passed in
+	 * Returns modified commands
 	 * @param prevCommands
 	 */
-	public void updateCommands(Commands prevCommands) {
+	public Commands updateCommands(Commands prevCommands) {
+		Commands newCommands = prevCommands.copy();
 		if(prevCommands.wantedDriveState != Drive.DriveState.CONTROLLER) {
-			prevCommands.wantedDriveState = Drive.DriveState.CHEZY;
+			newCommands.wantedDriveState = Drive.DriveState.CHEZY;
 		}
+		
+		//TODO: REMOVE ALL THIS STUFF and the related imports
+		newCommands.leftDriveOutput = new CANTalonOutput();
+		if(mLeftStick.getRawButton(6)) {
+			newCommands.leftDriveOutput.setPercentVBus(0.5);
+		}
+		else if(mLeftStick.getRawButton(7)) {
+			newCommands.leftDriveOutput.setCurrent(5, 1, 0, 0.1, 0, 0, 0);;
+		}
+		else if(mLeftStick.getRawButton(10)) {
+			newCommands.leftDriveOutput.setPosition(72 * 1400 / (2 * 3.1415 * 3.5), 0.4, 0, 4, 0, 0, 0);
+		}
+		else if(mLeftStick.getRawButton(11)) {
+			newCommands.leftDriveOutput.setSpeed(12 / 10.0f * 1400 / (2 * 3.1415 * 3.5), 3, 0, 50, 2.122, 0, 0);
+		}
+		else {
+			newCommands.leftDriveOutput = DriveSignal.getNeutralSignal().leftMotor;
+		}
+//		System.out.println(prevCommands.leftDriveOutput.toString());
+		
 		// TODO: Change how routines are commanded
 		if (mOperatorStick.getRawButton(4)) {
-			prevCommands.addWantedRoutine(new EncoderDriveRoutine(500));
+			newCommands.addWantedRoutine(new EncoderDriveRoutine(500));
 		}
 		
 		//TODO figure out Steik controls
@@ -64,9 +88,9 @@ public class OperatorInterface {
 		// Flippers
 		//TODO wait a certain amount of time before being able to toggle again
 		if (mOperatorStick.getRawButton(1)) {
-			prevCommands.wantedFlipperSignal.toggleLeft();
+			newCommands.wantedFlipperSignal.toggleLeft();
 		} else if (mOperatorStick.getRawButton(1)) {
-			prevCommands.wantedFlipperSignal.toggleRight();
+			newCommands.wantedFlipperSignal.toggleRight();
 		}
 		// Slider
 		if (mOperatorStick.getRawButton(0)){
@@ -76,16 +100,16 @@ public class OperatorInterface {
 		}
 		// Spatula
 		if (mOperatorStick.getRawButton(1)) {
-			prevCommands.wantedSpatulaState = 
-					(prevCommands.wantedSpatulaState == SpatulaState.UP) ? SpatulaState.UP : SpatulaState.DOWN;
+			newCommands.wantedSpatulaState = 
+					(newCommands.wantedSpatulaState == SpatulaState.UP) ? SpatulaState.UP : SpatulaState.DOWN;
 		}
 		// Intake
 		if (mOperatorStick.getRawButton(1)) {
-			prevCommands.wantedIntakeState = Intake.IntakeState.INTAKE;
+			newCommands.wantedIntakeState = Intake.IntakeState.INTAKE;
 		} else if (mOperatorStick.getRawButton(1)) {
-			prevCommands.wantedIntakeState = Intake.IntakeState.EXPEL;
+			newCommands.wantedIntakeState = Intake.IntakeState.EXPEL;
 		} else {
-			prevCommands.wantedIntakeState = Intake.IntakeState.IDLE;
+			newCommands.wantedIntakeState = Intake.IntakeState.IDLE;
 		}
 		// Climber
 		// Hold button 10 to climb, release to stop
@@ -95,11 +119,23 @@ public class OperatorInterface {
 			prevCommands.wantedSimpleClimberState = SimpleClimber.ClimberState.IDLE;
 		}
 		
-		prevCommands.operatorStickInput = new XboxInput(mOperatorStick.getX(), mOperatorStick.getY(), mOperatorStick.getX(), mOperatorStick.getY());
+//		newCommands.operatorStickInput = new XboxInput(mOperatorStick.getX(), mOperatorStick.getY(), mOperatorStick.getX(), mOperatorStick.getY());
 		// Left Stick trigger cancels current routine
-		prevCommands.cancelCurrentRoutines = mLeftStick.getTrigger();
-		prevCommands.leftStickInput = new JoystickInput(mLeftStick.getX(), mLeftStick.getY(), mLeftStick.getTrigger());
-		prevCommands.rightStickInput = new JoystickInput(mRightStick.getX(), mRightStick.getY(), mRightStick.getTrigger());
-		
+		newCommands.cancelCurrentRoutines = mLeftStick.getTrigger();
+		newCommands.leftStickInput = new JoystickInput(mLeftStick.getX(), mLeftStick.getY(), mLeftStick.getTrigger());
+		newCommands.rightStickInput = new JoystickInput(mRightStick.getX(), mRightStick.getY(), mRightStick.getTrigger());
+	
+		// TODO REINSERT
+		// overall cancel button
+//		if (mOperatorStick.getRawButton(5)) {
+//			newCommands.wantedClimbState = ClimberState.IDLE;
+//		}
+//		if (mOperatorStick.getRawButton(4)) {
+//			newCommands.wantedClimbState = ClimberState.CLIMBING_MANUAL;
+//		}
+//		if (mOperatorStick.getRawButton(6)) {
+//			newCommands.wantedClimbState = ClimberState.WAITING_FOR_ROPE;
+//		}
+		return newCommands;
 	}
 }

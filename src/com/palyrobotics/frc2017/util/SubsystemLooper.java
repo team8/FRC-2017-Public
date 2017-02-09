@@ -38,6 +38,7 @@ public class SubsystemLooper {
 					Commands commands = Robot.getCommands();
 					RobotState robotState = Robot.getRobotState();
 					for (SubsystemLoop loop : mLoops) {
+						System.out.println("loop" + loop.toString());
 						loop.update(commands, robotState);
 					}
 					mDt = now - mTimeStamp;
@@ -55,6 +56,7 @@ public class SubsystemLooper {
 
 	public synchronized void register(SubsystemLoop loop) {
 		synchronized (mTaskRunningLock) {
+			System.out.println("Added loop:"+loop.toString());
 			mLoops.add(loop);
 		}
 	}
@@ -65,11 +67,14 @@ public class SubsystemLooper {
 			synchronized (mTaskRunningLock) {
 				mTimeStamp = Timer.getFPGATimestamp();
 				for (SubsystemLoop loop : mLoops) {
+					System.out.println("Starting " + loop.toString());
 					loop.start();
 				}
 				mRunning = true;
 			}
 			mNotifier.startPeriodic(kPeriod);
+		} else {
+			System.out.println("SubsystemLooper already running");
 		}
 	}
 

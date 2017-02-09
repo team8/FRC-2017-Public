@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import com.palyrobotics.frc2017.behavior.Routine;
+import com.palyrobotics.frc2017.subsystems.*;
+import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.DriveSignal;
 import com.palyrobotics.frc2017.subsystems.SimpleClimber;
 import com.palyrobotics.frc2017.subsystems.Climber;
@@ -20,11 +22,14 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
  * Commands represent the desired setpoints and subsystem states for the robot. <br />
  * Store Requests (enum) for each subsystem and setpoints {@link Setpoints} <br />
  * Directly stores real or mock Joystick input in {@link JoystickInput} <br />
- * Variables are public and have default values to prefer NullPointerExceptions
+ * Variables are public and have default values to prevent NullPointerExceptions
  * @author Nihar
  *
  */
 public class Commands {
+	// TODO: REMOVE
+	public CANTalonOutput leftDriveOutput = new CANTalonOutput();
+	public CANTalonOutput rightDriveOutput = new CANTalonOutput();
 	public ArrayList<Routine> wantedRoutines = new ArrayList<Routine>();
 
 	// Store WantedStates for each subsystem state machine
@@ -109,7 +114,7 @@ public class Commands {
 		copy.wantedFlipperSignal = this.wantedFlipperSignal;
 		copy.wantedSpatulaState = this.wantedSpatulaState;
 		copy.wantedIntakeState = this.wantedIntakeState;
-		copy.wantedClimbState = this.wantedClimbState;
+		copy.wantedClimberState = this.wantedClimberState;
 
 		copy.cancelCurrentRoutines = this.cancelCurrentRoutines;
 		copy.leftStickInput = this.leftStickInput;

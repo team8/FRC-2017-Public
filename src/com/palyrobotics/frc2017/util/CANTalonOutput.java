@@ -71,6 +71,10 @@ public class CANTalonOutput {
 		setpoint = current;
 		setPID(p, i, d, f, izone, rampRate);
 	}
+	
+	public String toString() {
+		return controlMode.toString()+" "+getSetpoint();
+	}
 
 	/**
 	 * Used for unit tests to compare drive signal values

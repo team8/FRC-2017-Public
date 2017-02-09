@@ -9,6 +9,7 @@ import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.Dashboard;
+import com.palyrobotics.frc2017.util.LegacyDrive;
 import com.palyrobotics.frc2017.util.SubsystemLooper;
 import com.palyrobotics.frc2017.util.DriveSignal;
 import com.palyrobotics.frc2017.robot.team254.lib.util.RobotData;
@@ -54,20 +55,37 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void robotInit() {
-		System.out.println("Start robotInit()");
-		mSubsystemLooper.register(mDrive);
+		System.out.println("Start robotInit() for "+Constants.kRobotName.toString());
 
 		if (Constants.kRobotName == Constants.RobotName.STEIK || Constants.kRobotName == Constants.RobotName.AEGIR) {
-			mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSimpleSlider, mSpatula, mIntake, mSimpleClimber);
+			try {
+				mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSimpleSlider, mSpatula, mIntake, mSimpleClimber);
+			} catch (Exception e) {
+				
+			}
+			mSubsystemLooper.register(mDrive);
 			mSubsystemLooper.register(mFlippers);
 			mSubsystemLooper.register(mSimpleSlider);
 			mSubsystemLooper.register(mSpatula);
 			mSubsystemLooper.register(mIntake);
 			mSubsystemLooper.register(mSimpleClimber);
+		} else if (Constants.kRobotName == Constants.RobotName.TYR) {
+			try {
+				mHardwareUpdater = new HardwareUpdater(LegacyDrive.getInstance());
+			} catch (Exception e) {
+				
+			}
+			mSubsystemLooper.register(LegacyDrive.getInstance());
 		} else {
-			mHardwareUpdater = new HardwareUpdater(mDrive);
+			try {
+				mHardwareUpdater = new HardwareUpdater(mDrive);
+			} catch (Exception e) {
+				
+			}
+			mSubsystemLooper.register(mDrive);
 		}
 		
+		mHardwareUpdater.initHardware();
 		//        SystemManager.getInstance().add(routineManager);
 		sensorTable = NetworkTable.getTable("Sensor");
 		mDashboard.init();
@@ -104,7 +122,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("Start teleopInit()");
 		robotState.gamePeriod = RobotState.GamePeriod.TELEOP;
 		mRoutineManager.reset(commands);
-		operatorInterface.updateCommands(commands);
+		commands = operatorInterface.updateCommands(commands);
 		mSubsystemLooper.start();
 		System.out.println("End teleopInit()");
 	}
@@ -114,10 +132,8 @@ public class Robot extends IterativeRobot {
 		// Update RobotState
 		mHardwareUpdater.updateSensors(robotState);
 		// Gets joystick commands
-		operatorInterface.updateCommands(commands);
-		
 		// Updates commands based on routines
-		mRoutineManager.update(commands);
+		commands = mRoutineManager.update(operatorInterface.updateCommands(commands));
 
 		//Update the hardware
 		mHardwareUpdater.updateSubsystems();

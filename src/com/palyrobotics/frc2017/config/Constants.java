@@ -6,9 +6,9 @@ public class Constants extends ConstantsBase {
 	public enum RobotName {
 		STEIK, AEGIR, TYR, DERICA
 	}
-	public static final RobotName kRobotName = RobotName.STEIK;
+	public static final RobotName kRobotName = RobotName.DERICA;
 
-	// Chezy Drive tuning
+	// Chezy LegacyDrive tuning
 	public static double kDriveSensitivity = .85;
 	public static double kNegativeInertiaScalar = 5.0;
 
@@ -163,7 +163,7 @@ public class Constants extends ConstantsBase {
 	// !!! Loop rate of subsystem updates
 	public static double kSubsystemLooperDt = 0.005;
 
-	// Drive parameters
+	// LegacyDrive parameters
 	public static double kDriveEncoderCountsPerRev = 250.0;
 	public static double kDriveWheelSizeInches = 8; //pneumatic wheels
 
