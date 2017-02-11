@@ -1,13 +1,15 @@
-package com.palyrobotics.frc2017.behavior;
+package com.palyrobotics.frc2016.behavior;
 
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.util.Subsystem;
+import com.palyrobotics.frc2017.behavior.Routine;
+import com.palyrobotics.frc2017.subsystems.Intake;
 
 /**
  * Created by Nihar on 1/22/17.
  * Used for testing {@link RoutineManager} in {@link RoutineManagerTest}
  */
-public class SampleRoutine extends Routine {
+public class IntakeRoutine extends Routine {
 	
 	private boolean isFinished;
 	
@@ -34,7 +36,8 @@ public class SampleRoutine extends Routine {
 
 	@Override
 	public Subsystem[] getRequiredSubsystems() {
-		return new Subsystem[3];
+		Subsystem[] required = {Intake.getInstance()};
+		return required;
 	}
 
 	@Override

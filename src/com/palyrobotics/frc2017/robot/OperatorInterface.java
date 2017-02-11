@@ -4,6 +4,7 @@ import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.DriveSignal;
 import com.palyrobotics.frc2017.util.LegacyDrive;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 
 import com.palyrobotics.frc2017.behavior.Routine;
@@ -11,6 +12,12 @@ import com.palyrobotics.frc2017.behavior.routines.EncoderDriveRoutine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Commands.*;
 import com.palyrobotics.frc2017.config.Commands.JoystickInput.XboxInput;
+<<<<<<< HEAD
+=======
+import com.palyrobotics.frc2017.subsystems.Climber.ClimberState;
+import com.palyrobotics.frc2017.subsystems.Intake;
+import com.palyrobotics.frc2017.subsystems.Spatula;
+>>>>>>> 6a4137c... Add unit tests for subsystems, autonomous. Fix and unit test routine manager.
 import com.palyrobotics.frc2017.subsystems.Spatula.SpatulaState;
 
 /**
@@ -63,15 +70,16 @@ public class OperatorInterface {
 		if (mOperatorStick.getRawButton(4)) {
 			newCommands.addWantedRoutine(new EncoderDriveRoutine(500));
 		}
-
 		//TODO figure out Steik controls
 
 		// Flippers
+		//TODO figure out flipper controls
 		//TODO wait a certain amount of time before being able to toggle again
+		// Left Flipper
 		if (mOperatorStick.getRawButton(1)) {
-			newCommands.wantedFlipperSignal.toggleLeft();
+			newCommands.wantedFlipperSignal.leftFlipper = DoubleSolenoid.Value.kForward;
 		} else if (mOperatorStick.getRawButton(1)) {
-			newCommands.wantedFlipperSignal.toggleRight();
+			newCommands.wantedFlipperSignal.leftFlipper = DoubleSolenoid.Value.kReverse;
 		}
 		// Slider
 		if (mOperatorStick.getRawButton(0)){
@@ -79,11 +87,20 @@ public class OperatorInterface {
 		} else if(mOperatorStick.getRawButton(0)){
 			prevCommands.wantedSimpleSliderState = SimpleSlider.SimpleSliderState.MANUAL;
 		}
-		// Spatula
+		//Right Flipper
 		if (mOperatorStick.getRawButton(1)) {
-			newCommands.wantedSpatulaState = 
-					(newCommands.wantedSpatulaState == SpatulaState.UP) ? SpatulaState.UP : SpatulaState.DOWN;
+			newCommands.wantedFlipperSignal.rightFlipper = DoubleSolenoid.Value.kForward;
+		} else if (mOperatorStick.getRawButton(1)) {
+			newCommands.wantedFlipperSignal.rightFlipper = DoubleSolenoid.Value.kReverse;
 		}
+		
+		// Spatula
+		if (mOperatorStick.getRawButton(3)) {
+			prevCommands.wantedSpatulaState = Spatula.SpatulaState.UP;
+		} else if (mOperatorStick.getRawButton(2)) {
+			prevCommands.wantedSpatulaState = Spatula.SpatulaState.DOWN;
+		}
+		
 		// Intake
 		if (mOperatorStick.getRawButton(1)) {
 			newCommands.wantedIntakeState = Intake.IntakeState.INTAKE;

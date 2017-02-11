@@ -16,7 +16,7 @@ public class SequentialRoutine extends Routine {
 
 	public SequentialRoutine(ArrayList<Routine> routines) {
 		mRoutines = routines;
-		mRequiredSubsystems = RoutineManager.sharedSubsystem(mRoutines);
+		mRequiredSubsystems = RoutineManager.sharedSubsystems(mRoutines);
 	}
 
 	@Override

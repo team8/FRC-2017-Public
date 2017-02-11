@@ -18,7 +18,7 @@ public class TestAutoMode extends AutoMode {
 
 	@Override
 	public String toString() {
-		return "TestAutoMode";
+		return "Test";
 	}
 
 	@Override

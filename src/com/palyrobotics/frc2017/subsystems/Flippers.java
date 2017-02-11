@@ -30,14 +30,6 @@ public class Flippers extends Subsystem implements SubsystemLoop {
 			this.leftFlipper = leftFlipper;
 			this.rightFlipper = rightFlipper;
 		}
-		
-		public void toggleLeft() {
-			leftFlipper = (leftFlipper == DoubleSolenoid.Value.kForward) ? DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward;
-		}
-		
-		public void toggleRight() {
-			rightFlipper = (rightFlipper == DoubleSolenoid.Value.kForward) ? DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward;
-		}
 	}
 	
 	private FlipperSignal mFlipperSignal;
