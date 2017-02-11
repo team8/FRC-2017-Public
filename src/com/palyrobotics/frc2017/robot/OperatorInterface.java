@@ -1,6 +1,6 @@
 package com.palyrobotics.frc2017.robot;
 
-import com.palyrobotics.frc2017.subsystems.Drive;
+import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.DriveSignal;
 import com.palyrobotics.frc2017.util.LegacyDrive;
@@ -11,9 +11,6 @@ import com.palyrobotics.frc2017.behavior.routines.EncoderDriveRoutine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Commands.*;
 import com.palyrobotics.frc2017.config.Commands.JoystickInput.XboxInput;
-import com.palyrobotics.frc2017.subsystems.SimpleClimber;
-import com.palyrobotics.frc2017.subsystems.Intake;
-import com.palyrobotics.frc2017.subsystems.SimpleSlider;
 import com.palyrobotics.frc2017.subsystems.Spatula.SpatulaState;
 
 /**
@@ -96,30 +93,22 @@ public class OperatorInterface {
 			newCommands.wantedIntakeState = Intake.IntakeState.IDLE;
 		}
 		// Climber
-		// Hold button 10 to climb, release to stop
-		if(mOperatorStick.getRawButton(10)) {
-			prevCommands.wantedSimpleClimberState = SimpleClimber.ClimberState.CLIMBING;
-		} else {
-			prevCommands.wantedSimpleClimberState = SimpleClimber.ClimberState.IDLE;
+		if (mOperatorStick.getRawButton(7)) { // overall cancel button
+			newCommands.wantedClimberState = Climber.ClimberState.IDLE;
 		}
-		
-//		newCommands.operatorStickInput = new XboxInput(mOperatorStick.getX(), mOperatorStick.getY(), mOperatorStick.getX(), mOperatorStick.getY());
+		if (mOperatorStick.getRawButton(10)) {
+			newCommands.wantedClimberState = Climber.ClimberState.MANUAL;
+		}
+		if (mOperatorStick.getRawButton(6)) {
+			newCommands.wantedClimberState = Climber.ClimberState.WAITING_FOR_ROPE;
+		}
+
+		newCommands.operatorStickInput = new XboxInput(mOperatorStick.getX(), mOperatorStick.getY(), mOperatorStick.getX(), mOperatorStick.getY());
 		// Left Stick trigger cancels current routine
 		newCommands.cancelCurrentRoutines = mLeftStick.getTrigger();
 		newCommands.leftStickInput = new JoystickInput(mLeftStick.getX(), mLeftStick.getY(), mLeftStick.getTrigger());
 		newCommands.rightStickInput = new JoystickInput(mRightStick.getX(), mRightStick.getY(), mRightStick.getTrigger());
-	
-		// TODO REINSERT
-		// overall cancel button
-//		if (mOperatorStick.getRawButton(5)) {
-//			newCommands.wantedClimbState = ClimberState.IDLE;
-//		}
-//		if (mOperatorStick.getRawButton(4)) {
-//			newCommands.wantedClimbState = ClimberState.CLIMBING_MANUAL;
-//		}
-//		if (mOperatorStick.getRawButton(6)) {
-//			newCommands.wantedClimbState = ClimberState.WAITING_FOR_ROPE;
-//		}
+
 		return newCommands;
 	}
 }

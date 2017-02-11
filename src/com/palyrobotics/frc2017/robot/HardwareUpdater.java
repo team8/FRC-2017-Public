@@ -137,8 +137,9 @@ class HardwareUpdater {
 
 		// Update kPDP current draw
 
-		// Update climber encoder
-		robotState.climberEncoder = HardwareAdapter.ClimberHardware.getInstance().climberEncoder.getDistance();
+		if (HardwareAdapter.getInstance().getClimber().climberEncoder != null) {
+			robotState.climberEncoder = HardwareAdapter.getInstance().getClimber().climberEncoder.get();
+		}
 	}
 
 	/**
@@ -168,7 +169,7 @@ class HardwareUpdater {
 		HardwareAdapter.getInstance().getIntake().leftIntakeMotor.set(mIntake.getOutput());
 		HardwareAdapter.getInstance().getIntake().rightIntakeMotor.set(-mIntake.getOutput());
 		// CLIMBER
-		HardwareAdapter.getInstance().getClimber().climberMotor.set(mSimpleClimber.getOutput());
+		HardwareAdapter.getInstance().getClimber().climberMotor.set(mClimber.getOutput());
 	}
 
 	/**

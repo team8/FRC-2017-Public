@@ -20,7 +20,7 @@ public class RobotState {
 
 	// Pose stores encoder and gyro data for drivetrain
 	public Pose drivePose = new Pose(0,0,0,0,0,0);
-	
+
 	public double sliderPotentiometer;
 	public double sliderEncoder;
 	public boolean sliderLeftHFX;
@@ -29,6 +29,8 @@ public class RobotState {
 	// Talon readouts
 	public double leftClosedLoopError;
 	public double rightClosedLoopError;
+
+	// Climber
 	public double climberCurrentDraw;
 	public double climberEncoder;
 }
