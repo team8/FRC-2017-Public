@@ -12,12 +12,9 @@ import com.palyrobotics.frc2017.behavior.routines.EncoderDriveRoutine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Commands.*;
 import com.palyrobotics.frc2017.config.Commands.JoystickInput.XboxInput;
-<<<<<<< HEAD
-=======
 import com.palyrobotics.frc2017.subsystems.Climber.ClimberState;
 import com.palyrobotics.frc2017.subsystems.Intake;
 import com.palyrobotics.frc2017.subsystems.Spatula;
->>>>>>> 6a4137c... Add unit tests for subsystems, autonomous. Fix and unit test routine manager.
 import com.palyrobotics.frc2017.subsystems.Spatula.SpatulaState;
 
 /**

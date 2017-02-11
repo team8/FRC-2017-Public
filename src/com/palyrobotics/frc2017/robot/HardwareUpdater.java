@@ -119,10 +119,12 @@ class HardwareUpdater {
 		robotState.drivePose.headingVelocity = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getRate();
 		// Non-Tyr robots use talons
 		if(Constants.kRobotName != Constants.RobotName.TYR) {
-			robotState.drivePose.leftDistance = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getEncPosition();
-			robotState.drivePose.leftVelocity = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getEncVelocity();
-			robotState.drivePose.rightDistance = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getEncPosition();
-			robotState.drivePose.rightVelocity = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getEncVelocity();
+			CANTalon leftMasterTalon = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon;
+			CANTalon rightMasterTalon = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon;
+			robotState.drivePose.leftDistance = leftMasterTalon.getEncPosition();
+			robotState.drivePose.leftVelocity = leftMasterTalon.getEncVelocity();
+			robotState.drivePose.rightDistance = rightMasterTalon.getEncPosition();
+			robotState.drivePose.rightVelocity = rightMasterTalon.getEncVelocity();
 
 			robotState.leftClosedLoopError = leftMasterTalon.getClosedLoopError();
 			robotState.rightClosedLoopError = rightMasterTalon.getClosedLoopError();
@@ -169,7 +171,7 @@ class HardwareUpdater {
 		HardwareAdapter.getInstance().getIntake().leftIntakeMotor.set(mIntake.getOutput());
 		HardwareAdapter.getInstance().getIntake().rightIntakeMotor.set(-mIntake.getOutput());
 		// CLIMBER
-		HardwareAdapter.getInstance().getClimber().climberMotor.set(mClimber.getOutput());
+		HardwareAdapter.getInstance().getClimber().climberMotor.set(mSimpleClimber.getOutput());
 	}
 
 	/**

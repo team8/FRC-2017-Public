@@ -21,18 +21,18 @@ public class ClimberTest {
 	@Test
 	public void testOutput() {
 		// Test idle output
-		commands.wantedClimbState = Climber.ClimberState.IDLE;
+		commands.wantedClimberState = Climber.ClimberState.IDLE;
 		climber.update(commands, robotState);
 		assertThat("Climber not idle", climber.getState(), equalTo(Climber.ClimberState.IDLE));
 		assertThat("Climber should not move", climber.getOutput(), equalTo(0));
 		
 		// Test manual output
-		commands.wantedClimbState = Climber.ClimberState.MANUAL;
+		commands.wantedClimberState = Climber.ClimberState.MANUAL;
 		climber.update(commands, robotState);
 		assertThat("Climber not in manual mode", climber.getState(), equalTo(Climber.ClimberState.MANUAL));
 		assertThat("Climber not moving at constant speed", climber.getOutput(), equalTo(Climber.kClimbSpeed));
 		
-		commands.wantedClimbState = Climber.ClimberState.WAITING_FOR_ROPE;
+		commands.wantedClimberState = Climber.ClimberState.WAITING_FOR_ROPE;
 		climber.update(commands, robotState);
 		assertThat("Climber not waiting for rope", climber.getState(), equalTo(Climber.ClimberState.WAITING_FOR_ROPE));
 		assertThat("Climber not moving slowly", climber.getOutput(), equalTo(Climber.kRopeGrabSpeed));

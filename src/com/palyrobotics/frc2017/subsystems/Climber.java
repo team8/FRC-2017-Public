@@ -68,12 +68,12 @@ public class Climber extends Subsystem implements SubsystemLoop {
 	@Override
 	public void update(Commands commands, RobotState robotState) {
 		// Sets mState
-		switch (commands.wantedClimbState) {
+		switch (commands.wantedClimberState) {
 		case IDLE:
-			mState = commands.wantedClimbState;
+			mState = commands.wantedClimberState;
 			break;
 		case MANUAL:
-			mState = commands.wantedClimbState;
+			mState = commands.wantedClimberState;
 			break;
 		case WAITING_FOR_ROPE:
 			// Climber is climbing
@@ -106,7 +106,7 @@ public class Climber extends Subsystem implements SubsystemLoop {
 					mTarget = robotState.climberEncoder + kEncoderTicksToTop;	// Calculate endpoint
 					mPrevEnc = robotState.climberEncoder;	// Initialize for climb
 				} else {
-					mState = commands.wantedClimbState;
+					mState = commands.wantedClimberState;
 				}
 			}
 			break;
