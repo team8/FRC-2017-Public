@@ -2,6 +2,8 @@ package com.palyrobotics.frc2017.subsystems;
 
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
+import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
 import com.palyrobotics.frc2017.util.Subsystem;
 import com.palyrobotics.frc2017.util.SubsystemLoop;
 
@@ -23,9 +25,13 @@ public class Spatula extends Subsystem implements SubsystemLoop {
 	public enum SpatulaState { UP, DOWN }
 	
 	private DoubleSolenoid.Value mOutput;
+
+	private DashboardValue mDv;
 	
 	private Spatula() {
 		super("Spatula");
+		
+		mDv = new DashboardValue("spatula");
 	}
 
 	@Override
@@ -49,6 +55,9 @@ public class Spatula extends Subsystem implements SubsystemLoop {
 			mState = SpatulaState.DOWN;
 			break;
 		}
+	
+		mDv.updateValue(mOutput.toString());
+		DashboardManager.getInstance().publishKVPair(mDv);
 	}
 	
 	public DoubleSolenoid.Value getOutput() {

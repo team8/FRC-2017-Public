@@ -3,6 +3,8 @@ package com.palyrobotics.frc2017.subsystems;
 import com.mindsensors.CANSD540;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
+import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
 import com.palyrobotics.frc2017.util.Subsystem;
 import com.palyrobotics.frc2017.util.SubsystemLoop;
 
@@ -36,6 +38,7 @@ public class Climber extends Subsystem implements SubsystemLoop {
 	public static final double kClimbSpeed = 1;
 
 	private int mTarget = -1; // Encoder endpoint
+	private DashboardValue mDv;
 
 	public enum ClimberState {
 		IDLE,
@@ -48,6 +51,8 @@ public class Climber extends Subsystem implements SubsystemLoop {
 
 	private Climber() {
 		super("Climber");
+		
+		mDv = new DashboardValue("climber");
 	}
 
 	@Override
@@ -127,6 +132,15 @@ public class Climber extends Subsystem implements SubsystemLoop {
 			mPrevEnc = robotState.climberEncoder;
 			break;
 		}
+		
+		if (mOutput == 0) {
+			mDv.updateValue("NOT MOVING");
+		}
+		else {
+			mDv.updateValue("MOVING");
+		}
+		
+		DashboardManager.getInstance().publishKVPair(mDv);
 	}
 
 	public double getOutput() {

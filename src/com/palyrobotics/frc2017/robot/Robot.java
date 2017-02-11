@@ -7,6 +7,7 @@ import com.palyrobotics.frc2017.behavior.RoutineManager;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.Dashboard;
 import com.palyrobotics.frc2017.util.LegacyDrive;
@@ -34,6 +35,7 @@ public class Robot extends IterativeRobot {
 	private SubsystemLooper mSubsystemLooper = new SubsystemLooper();
 	private RoutineManager mRoutineManager = new RoutineManager();
 	private AutoModeExecuter mAutoModeExecuter = new AutoModeExecuter(commands, mRoutineManager);
+	private DashboardManager mDashboardManager = DashboardManager.getInstance();
 
 	// Subsystem controllers
 	private Drive mDrive = Drive.getInstance();

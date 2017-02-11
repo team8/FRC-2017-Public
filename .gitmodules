@@ -1,0 +1,3 @@
+[submodule "robot-dashboard"]
+	path = robot-dashboard
+	url = https://github.com/team8/robot-dashboard

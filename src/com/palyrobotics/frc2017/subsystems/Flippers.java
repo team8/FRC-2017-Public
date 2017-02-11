@@ -2,6 +2,8 @@ package com.palyrobotics.frc2017.subsystems;
 
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
+import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
 import com.palyrobotics.frc2017.util.Subsystem;
 import com.palyrobotics.frc2017.util.SubsystemLoop;
 
@@ -14,7 +16,10 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
  * Each rod is controlled independently by a DoubleSolenoid
  */
 public class Flippers extends Subsystem implements SubsystemLoop {
+	
 	private static Flippers instance = new Flippers();
+	
+	
 	public static Flippers getInstance() {
 		return instance;
 	}
@@ -34,8 +39,12 @@ public class Flippers extends Subsystem implements SubsystemLoop {
 	
 	private FlipperSignal mFlipperSignal;
 	
+	private DashboardValue mDv;
+	
 	private Flippers() {
 		super("Flippers");
+		
+		mDv = new DashboardValue("flippers");
 	}
 
 	@Override
@@ -49,9 +58,13 @@ public class Flippers extends Subsystem implements SubsystemLoop {
 	@Override
 	public void update(Commands commands, RobotState robotState) {
 		mFlipperSignal = commands.wantedFlipperSignal;
+		
+		mDv.updateValue(mFlipperSignal.toString());
+		DashboardManager.getInstance().publishKVPair(mDv);
 	}
 
 	public FlipperSignal getFlipperSignal() {
 		return mFlipperSignal;
 	}
+
 }
