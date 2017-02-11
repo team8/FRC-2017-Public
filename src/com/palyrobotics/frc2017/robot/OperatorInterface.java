@@ -62,25 +62,6 @@ public class OperatorInterface {
 			newCommands.wantedDriveState = Drive.DriveState.CHEZY;
 		}
 		
-		//TODO: REMOVE ALL THIS STUFF and the related imports
-		newCommands.leftDriveOutput = new CANTalonOutput();
-		if(mLeftStick.getRawButton(6)) {
-			newCommands.leftDriveOutput.setPercentVBus(0.5);
-		}
-		else if(mLeftStick.getRawButton(7)) {
-			newCommands.leftDriveOutput.setCurrent(5, 1, 0, 0.1, 0, 0, 0);;
-		}
-		else if(mLeftStick.getRawButton(10)) {
-			newCommands.leftDriveOutput.setPosition(72 * 1400 / (2 * 3.1415 * 3.5), 0.4, 0, 4, 0, 0, 0);
-		}
-		else if(mLeftStick.getRawButton(11)) {
-			newCommands.leftDriveOutput.setSpeed(12 / 10.0f * 1400 / (2 * 3.1415 * 3.5), 3, 0, 50, 2.122, 0, 0);
-		}
-		else {
-			newCommands.leftDriveOutput = DriveSignal.getNeutralSignal().leftMotor;
-		}
-//		System.out.println(prevCommands.leftDriveOutput.toString());
-		
 		// TODO: Change how routines are commanded
 		if (mOperatorStick.getRawButton(4)) {
 			newCommands.addWantedRoutine(new EncoderDriveRoutine(500));

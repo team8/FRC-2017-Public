@@ -27,9 +27,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
  *
  */
 public class Commands {
-	// TODO: REMOVE
-	public CANTalonOutput leftDriveOutput = new CANTalonOutput();
-	public CANTalonOutput rightDriveOutput = new CANTalonOutput();
 	public ArrayList<Routine> wantedRoutines = new ArrayList<Routine>();
 
 	// Store WantedStates for each subsystem state machine

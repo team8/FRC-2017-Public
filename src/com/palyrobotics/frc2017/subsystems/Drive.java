@@ -91,28 +91,36 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	@Override
 	public void update(Commands commands, RobotState state) {
 		// TODO: UNDO
-		System.out.println("Drive input" + commands.leftDriveOutput.toString());
-		setDriveOutputs(new DriveSignal(commands.leftDriveOutput, DriveSignal.getNeutralSignal().rightMotor));
-//		mCachedRobotState = state;
-//		mState = commands.wantedDriveState;
-//		Commands.Setpoints setpoints = commands.robotSetpoints;
-//		// Call methods associated with any setpoints that are present
-//		// Encoder drive distance routine
-////		setpoints.encoder_drive_setpoint.ifPresent(this.setDistanceSetpoint(setpoints.encoder_drive_setpoint));
-//
-//		switch(mState) {
-//			case CHEZY:
-//				setDriveOutputs(mCDH.cheesyDrive(commands, mCachedRobotState));
-//				break;
-//			case CONTROLLER:
+		mCachedRobotState = state;
+		boolean mIsNewState = (mState == commands.wantedDriveState) ? false : true;
+		Commands.Setpoints setpoints = commands.robotSetpoints;
+		// Call methods associated with any setpoints that are present
+		// Encoder drive distance routine
+//		setpoints.encoder_drive_setpoint.ifPresent(this.setDistanceSetpoint(setpoints.encoder_drive_setpoint));
+
+		switch(commands.wantedDriveState) {
+			case CHEZY:
+				setDriveOutputs(mCDH.cheesyDrive(commands, mCachedRobotState));
+				break;
+			case CONTROLLER:
+				if (mIsNewState) {
+					//setDriveOutputs
+				}
+				System.out.println("Left "+ state.leftClosedLoopError);
+				if (state.leftClosedLoopError < Constants.kAcceptableDriveError) {
+					System.out.println("Talons reached setpoint!");
+				}
 //				setDriveOutputs(mController.update(getPhysicalPose()));
-//				break;
-//			case OPEN_LOOP:
-//				setDriveOutputs(commands.robotSetpoints.drivePowerSetpoint.get());
-//			case NEUTRAL:
-//				setDriveOutputs(DriveSignal.getNeutralSignal());
-//				break;
-//		}
+				break;
+			case OPEN_LOOP:
+				setDriveOutputs(commands.robotSetpoints.drivePowerSetpoint.get());
+			case NEUTRAL:
+				setDriveOutputs(DriveSignal.getNeutralSignal());
+				break;
+		}
+		
+		mIsNewState = false;
+		mState = commands.wantedDriveState;
 	}
 
 	@Override
@@ -245,7 +253,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	}
 
 	public boolean controllerOnTarget() {
-		return mController != null && mController.onTarget();
+		return (mCachedRobotState.leftClosedLoopError < Constants.kAcceptableDriveError) && (mCachedRobotState.rightClosedLoopError < Constants.kAcceptableDriveError);
 	}
 
 	public boolean hasController() {

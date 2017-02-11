@@ -31,7 +31,7 @@ public class EncoderTurnAngleController implements LegacyDrive.DriveController {
 		if(Constants.kRobotName == Constants.RobotName.DERICA) {
 			kDegreeToDistance = Constants2016.kDericaDegreeToDistance;
 		} else if(Constants.kRobotName == Constants.RobotName.TYR) {
-			kDegreeToDistance = Constants.kTyrDegreeToDistance;
+			kDegreeToDistance = Constants2016.kTyrDegreeToDistance;
 		} else {
 			kDegreeToDistance = 1;
 		}

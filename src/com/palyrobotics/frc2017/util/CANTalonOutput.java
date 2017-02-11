@@ -9,13 +9,42 @@ import com.ctre.CANTalon;
  * Allows configuration for offboard SRX calculations
  */
 public class CANTalonOutput {
-	// PercentVBus, Speed, Current, Voltage, not Follower, MotionProfile, MotionMagic
+	
+	/**
+	 * Prevent null pointer exceptions
+	 */
 	private CANTalon.TalonControlMode controlMode;
+	// PercentVBus, Speed, Current, Voltage, not Follower, MotionProfile, MotionMagic
 	private double setpoint;
 	public double P,I,D, F, rampRate;
 	public int izone;
-	public int profile = 0;
-
+	public int profile;
+	
+	/**
+	 * Default constructor
+	 */
+	public CANTalonOutput() {
+		controlMode = CANTalon.TalonControlMode.Disabled;
+		setpoint = 0;
+		profile = 0;
+	}
+	
+	/**
+	 * Copy constructor
+	 * @param talon output to copy
+	 */
+	public CANTalonOutput(CANTalonOutput talon) {
+		this.controlMode = talon.getControlMode();
+		this.setpoint = talon.getSetpoint();
+		this.P = talon.P;
+		this.I = talon.I;
+		this.D = talon.D;
+		this.F = talon.F;
+		this.izone = talon.izone;
+		this.rampRate = talon.rampRate;
+		this.profile = talon.profile;
+	}
+	
 	public CANTalon.TalonControlMode getControlMode() {
 		return controlMode;
 	}
@@ -72,8 +101,19 @@ public class CANTalonOutput {
 		setPID(p, i, d, f, izone, rampRate);
 	}
 	
+	public void setDisabled() {
+		this.controlMode = CANTalon.TalonControlMode.Disabled;
+	}
+	
 	public String toString() {
-		return controlMode.toString()+" "+getSetpoint();
+		String name = "";
+		if (controlMode == null) {
+			name += "null";
+		} else {
+			name += controlMode.toString();
+		}
+		name+= " "+getSetpoint();
+		return name;
 	}
 
 	/**

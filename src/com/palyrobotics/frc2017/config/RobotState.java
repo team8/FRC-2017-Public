@@ -26,6 +26,9 @@ public class RobotState {
 	public boolean sliderLeftHFX;
 	public boolean sliderRightHFX;
 
+	// Talon readouts
+	public double leftClosedLoopError;
+	public double rightClosedLoopError;
 	public double climberCurrentDraw;
 	public double climberEncoder;
 }

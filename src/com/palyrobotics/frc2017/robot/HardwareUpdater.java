@@ -119,12 +119,13 @@ class HardwareUpdater {
 		robotState.drivePose.headingVelocity = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getRate();
 		// Non-Tyr robots use talons
 		if(Constants.kRobotName != Constants.RobotName.TYR) {
-			robotState.hallEffectTriggered = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.isFwdLimitSwitchClosed();
 			robotState.drivePose.leftDistance = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getEncPosition();
 			robotState.drivePose.leftVelocity = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getEncVelocity();
 			robotState.drivePose.rightDistance = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getEncPosition();
 			robotState.drivePose.rightVelocity = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getEncVelocity();
-			
+
+			robotState.leftClosedLoopError = leftMasterTalon.getClosedLoopError();
+			robotState.rightClosedLoopError = rightMasterTalon.getClosedLoopError();
 		}
 		if(Constants.kRobotName == Constants.RobotName.AEGIR || Constants.kRobotName == Constants.RobotName.STEIK) {
 			robotState.sliderEncoder = HardwareAdapter.SliderHardware.getInstance().sliderMotor.getPosition();
@@ -176,7 +177,6 @@ class HardwareUpdater {
 	 */
 	private void updateDrivetrain() {
 		updateCANTalonSRX(HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon, mDrive.getDriveSignal().leftMotor);
-//		System.out.println("Drive out " + mDrive.getDriveSignal().leftMotor.toString());
 		updateCANTalonSRX(HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon, mDrive.getDriveSignal().rightMotor);
 	}
 
@@ -190,7 +190,10 @@ class HardwareUpdater {
 				talon.setPID(output.P, output.I, output.D, output.F, output.izone, output.rampRate, output.profile);
 			}
 		}
-		talon.setSetpoint(output.getSetpoint());
+		// Don't resend setpoint if that is the currently running loop
+		if(talon.getSetpoint() != output.getSetpoint()) {
+			talon.setSetpoint(output.getSetpoint());
+		}
 	}
 
 	/**

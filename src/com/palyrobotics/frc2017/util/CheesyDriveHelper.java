@@ -15,8 +15,6 @@ public class CheesyDriveHelper {
 	private final double kThrottleStickDeadband = 0.02;
 
 	public DriveSignal cheesyDrive(Commands commands, RobotState robotState) {
-		DriveSignal mSignal = DriveSignal.getNeutralSignal();
-
 		double throttle = -commands.leftStickInput.y;
 		double wheel = commands.rightStickInput.x;
 		boolean isQuickTurn = commands.rightStickInput.triggerPressed;
@@ -131,6 +129,7 @@ public class CheesyDriveHelper {
 			leftPwm += overPower * (-1.0 - rightPwm);
 			rightPwm = -1.0;
 		}
+		DriveSignal mSignal = DriveSignal.getNeutralSignal();
 		mSignal.leftMotor.setPercentVBus(leftPwm);
 		mSignal.rightMotor.setPercentVBus(rightPwm);
 		return mSignal;

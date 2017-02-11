@@ -30,12 +30,13 @@ public class Constants extends ConstantsBase {
 	public static double kDriveStraightKd = 0.04;
 	public static double kDriveOnTargetError = 1.5;
 	public static double kDrivePathHeadingFollowKp = 0.01;
+	
+	public static double kAcceptableDriveError = 200;
 
 	//Encoder Turn in Place Controller gains
 	public static double kEncoderTurnKp = 0.07;
 	public static double kEncoderTurnKi = 0.01;
 	public static double kEncoderTurnKd = 0.007;
-	public static double kTyrDegreeToDistance = 0;
 	public static double kAcceptableEncoderTurnError = 2;
 	
 	// Gyro Turn in Place controller gains
