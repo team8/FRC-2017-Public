@@ -18,12 +18,12 @@ class HardwareUpdater {
 	private Slider mSlider;
 	private Spatula mSpatula;
 	private Intake mIntake;
-	private SimpleClimber mSimpleClimber;
+	private Climber mClimber;
 
 	/**
 	 * Hardware Updater for Steik/Aegir
 	 */
-	HardwareUpdater(Drive drive, Flippers flippers, Slider slider, Spatula spatula, Intake intake, SimpleClimber climber) throws Exception {
+	HardwareUpdater(Drive drive, Flippers flippers, Slider slider, Spatula spatula, Intake intake, Climber climber) throws Exception {
 		if(Constants.kRobotName != Constants.RobotName.AEGIR && Constants.kRobotName != Constants.RobotName.STEIK) {
 			System.out.println("Incompatible robot name and hardware!");
 			throw new Exception();
@@ -33,7 +33,7 @@ class HardwareUpdater {
 		this.mSlider = slider;
 		this.mSpatula = spatula;
 		this.mIntake = intake;
-		this.mSimpleClimber = climber;
+		this.mClimber = climber;
 	}
 
 	/**
@@ -138,6 +138,11 @@ class HardwareUpdater {
 		}
 
 		// Update kPDP current draw
+		if (Constants.kRobotName == Constants.RobotName.STEIK) {
+			robotState.climberCurrentDraw = HardwareAdapter.getInstance().kPDP.getCurrent(Constants.kSteikClimberMotorPDP);
+		} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
+			robotState.climberCurrentDraw = HardwareAdapter.getInstance().kPDP.getCurrent(Constants.kAegirClimberMotorPDP);
+		}
 
 		if (HardwareAdapter.getInstance().getClimber().climberEncoder != null) {
 			robotState.climberEncoder = HardwareAdapter.getInstance().getClimber().climberEncoder.get();
@@ -171,7 +176,7 @@ class HardwareUpdater {
 		HardwareAdapter.getInstance().getIntake().leftIntakeMotor.set(mIntake.getOutput());
 		HardwareAdapter.getInstance().getIntake().rightIntakeMotor.set(-mIntake.getOutput());
 		// CLIMBER
-		HardwareAdapter.getInstance().getClimber().climberMotor.set(mSimpleClimber.getOutput());
+		HardwareAdapter.getInstance().getClimber().climberMotor.set(mClimber.getOutput());
 	}
 
 	/**

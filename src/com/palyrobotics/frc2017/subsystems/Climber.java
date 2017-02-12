@@ -1,6 +1,5 @@
 package com.palyrobotics.frc2017.subsystems;
 
-import com.mindsensors.CANSD540;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
@@ -8,7 +7,6 @@ import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
 import com.palyrobotics.frc2017.util.Subsystem;
 import com.palyrobotics.frc2017.util.SubsystemLoop;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 /**
  * Subsystem that represents the climber
  * A single winch motor with an encoder
