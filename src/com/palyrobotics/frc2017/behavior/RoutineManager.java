@@ -3,6 +3,12 @@ package com.palyrobotics.frc2017.behavior;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.robot.team254.lib.util.StateHolder;
 import com.palyrobotics.frc2017.robot.team254.lib.util.Tappable;
+import com.palyrobotics.frc2017.subsystems.Climber;
+import com.palyrobotics.frc2017.subsystems.Drive;
+import com.palyrobotics.frc2017.subsystems.Flippers;
+import com.palyrobotics.frc2017.subsystems.Intake;
+import com.palyrobotics.frc2017.subsystems.Slider;
+import com.palyrobotics.frc2017.subsystems.Spatula;
 import com.palyrobotics.frc2017.util.Subsystem;
 
 import java.util.*;
@@ -46,47 +52,49 @@ public class RoutineManager implements Tappable {
 		// Empty the running routines
 		runningRoutines.clear();
 	}
-	
+
 	/**
 	 * Updates the commands that are passed in based on the running and canceled routines
-	 * @param commands Commands object to be modified
+	 * @param commands Current commands
+	 * @return Modified commands
 	 */
-	public void update(Commands commands) {
+	public Commands update(Commands commands) {
 		// If current routine exists and is finished, nullify it
-//		if (m_cur_routine != null && m_cur_routine.isFinished()) {
-//			System.out.println("Routine cancel called");
-//			setNewRoutine(null);
-//		}
+		//		if (m_cur_routine != null && m_cur_routine.isFinished()) {
+		//			System.out.println("Routine cancel called");
+		//			setNewRoutine(null);
+		//		}
 		routinesToRemove = new ArrayList<Routine>();
-		
+		Commands output = commands.copy();
 		for(Routine routine : runningRoutines) {
 			if(routine.finished()) {
 				System.out.println("Routine cancel called");
-				commands = routine.cancel(commands);
+				output = routine.cancel(output);
 				routinesToRemove.add(routine);
 			} else {
 				System.out.println("Updating routine: " + routine.getName());
-				commands = routine.update(commands);
+				output = routine.update(output);
 			}
 		}
-		
+
 		for(Routine routine : routinesToRemove) {
 			System.out.println("Removing routine: " + routine.getName());
 			runningRoutines.remove(routine);
 		}
-		
+
 		// Set TROUT routine_request
-		if (commands.cancelCurrentRoutines) {
+		if (output.cancelCurrentRoutines) {
 			System.out.println("Cancel routine button");
-			reset(commands);
-		} else if(!commands.wantedRoutines.isEmpty()) {
-			for(Routine routine : commands.wantedRoutines) {
-				addNewRoutine(commands, routine);
+			reset(output);
+		} else if(!output.wantedRoutines.isEmpty()) {
+			for(Routine routine : output.wantedRoutines) {
+				addNewRoutine(output, routine);
 			}
 		}
-		
+
 		//clears the wanted routines every update cycle
-		commands.wantedRoutines.clear();
+		output.wantedRoutines.clear();
+		return output;
 	}
 
 	/**
@@ -100,18 +108,20 @@ public class RoutineManager implements Tappable {
 		// Get hash sets of required subsystems for existing routines
 		ArrayList<HashSet<Subsystem>> routineSubsystemSets = new ArrayList<HashSet<Subsystem>>();
 		HashSet<Subsystem> subsystemsRequired = new HashSet(Arrays.asList(newRoutine.getRequiredSubsystems()));
+
 		for (int i = 0; i < routinesList.size(); i++) {
-			routineSubsystemSets.add(new HashSet<Subsystem>(Arrays.asList(routinesList.get(i).getRequiredSubsystems())));
+			routineSubsystemSets.add(new HashSet<Subsystem>(Arrays.asList(routinesList.get(i).getRequiredSubsystems())));			
 		}
+
 		ArrayList<Routine> conflicts = new ArrayList<Routine>();
 		// Any existing routines that require the same subsystem are added to routine
-		breakpoint:
 		for (int j = 0; j < routinesList.size(); j++) {
+			// Find intersection
 			routineSubsystemSets.get(j).retainAll(subsystemsRequired);
 			if(routineSubsystemSets.get(j).size()!=0) {
 				conflicts.add(routinesList.get(j));
 				// Move to next routine in the list
-				break breakpoint;
+				continue;
 			}
 		}
 		return conflicts;
@@ -119,30 +129,49 @@ public class RoutineManager implements Tappable {
 
 	@Override
 	public void getState(StateHolder states) {
-//		states.put("mode", mCurrentRoutine != null ? mCurrentRoutine.getName() : "---");
+		//		states.put("mode", mCurrentRoutine != null ? mCurrentRoutine.getName() : "---");
 	}
 
 	@Override
 	public String getName() {
 		return "RoutineManager";
 	}
+	
+	public static Subsystem[] subsystemSuperset(ArrayList<Routine> routines) {
+		HashSet<Subsystem> superset = new HashSet<Subsystem>();
+		for (Routine routine : routines) {
+			superset.addAll(Arrays.asList(routine.getRequiredSubsystems()));
+		}
+		return superset.toArray(new Subsystem[superset.size()]);
+	}
 
 	@Deprecated
 	/**
-	 * Old helper method to find the overlapping subsystems
-	 * is very efficient, but untested
+	 * Finds overlapping subsystems
+	 * Not optimized
 	 */
-	public static Subsystem[] sharedSubsystem(ArrayList<Routine> routines) {
-		// Hash set is efficient for lookup and comparison to check w/ contents of others
-		HashSet<Subsystem> initialSet = new HashSet<Subsystem>(Arrays.asList(routines.get(0).getRequiredSubsystems()));
-		// Instantiate all other subsystems
-		HashSet<Subsystem>[] routineSubsystemSets = new HashSet[routines.size()];
-		for (int i = 1; i < routines.size(); i++) {
-			routineSubsystemSets[i] = new HashSet<Subsystem>(Arrays.asList(routines.get(i).getRequiredSubsystems()));
+	public static Subsystem[] sharedSubsystems(ArrayList<Routine> routines) {
+		HashMap<Subsystem, Integer> counter = new HashMap<Subsystem, Integer>();
+		counter.put(null, 0);	// for SampleRoutine
+		counter.put(Drive.getInstance(), 0);
+		counter.put(Flippers.getInstance(), 0);
+		counter.put(Slider.getInstance(), 0);
+		counter.put(Spatula.getInstance(), 0);
+		counter.put(Intake.getInstance(), 0);
+		counter.put(Climber.getInstance(), 0);
+		// Count the number of times each subsystem appears
+		for (Routine routine : routines) {
+			for (Subsystem subsystem : routine.getRequiredSubsystems()) {
+				counter.put(subsystem, counter.get(subsystem) + 1);
+			}
 		}
-		for (int j = 1; j < routines.size(); j++) {
-			initialSet.retainAll(routineSubsystemSets[j]);
+		// Add all subsystems that appear multiple times to return list
+		HashSet<Subsystem> conflicts = new HashSet<Subsystem>();
+		for (Subsystem subsystem : counter.keySet()) {
+			if (counter.get(subsystem) > 1 && subsystem != null) {
+				conflicts.add(subsystem);
+			}
 		}
-		return (Subsystem[]) initialSet.toArray();
+		return conflicts.toArray(new Subsystem[conflicts.size()]);
 	}
 }

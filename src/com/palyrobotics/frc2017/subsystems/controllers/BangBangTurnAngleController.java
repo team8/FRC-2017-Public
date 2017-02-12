@@ -1,7 +1,7 @@
 package com.palyrobotics.frc2017.subsystems.controllers;
 
 import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.subsystems.Drive;
+import com.palyrobotics.frc2017.util.LegacyDrive;
 import com.palyrobotics.frc2017.util.DriveSignal;
 import com.palyrobotics.frc2017.robot.team254.lib.util.Pose;
 
@@ -10,7 +10,7 @@ import com.palyrobotics.frc2017.robot.team254.lib.util.Pose;
  * @author Robbie
  *
  */
-public class BangBangTurnAngleController implements Drive.DriveController {
+public class BangBangTurnAngleController implements LegacyDrive.DriveController {
 	
 	private double mMaxVel;
 	private double mHeading;

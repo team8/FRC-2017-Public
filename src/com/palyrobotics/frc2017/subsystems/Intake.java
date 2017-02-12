@@ -51,4 +51,5 @@ public class Intake extends Subsystem implements SubsystemLoop {
 	public double getOutput() {
 		return mOutput;
 	}
+
 }

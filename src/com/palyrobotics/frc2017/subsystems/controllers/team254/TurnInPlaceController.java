@@ -1,6 +1,6 @@
 package com.palyrobotics.frc2017.subsystems.controllers.team254;
 
-import com.palyrobotics.frc2017.subsystems.Drive;
+import com.palyrobotics.frc2017.util.LegacyDrive;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.robot.team254.lib.trajectory.TrajectoryFollower;
 import com.palyrobotics.frc2017.util.DriveSignal;
@@ -9,7 +9,7 @@ import com.palyrobotics.frc2017.robot.team254.lib.util.Pose;
 /**
  * Controls the robot to turn in place
  */
-public class TurnInPlaceController implements Drive.DriveController {
+public class TurnInPlaceController implements LegacyDrive.DriveController {
     private final TrajectoryFollowingPositionController mController;
     private final Pose mSetpointRelativePose;
 

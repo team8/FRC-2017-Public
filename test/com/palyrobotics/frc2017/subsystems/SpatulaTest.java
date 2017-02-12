@@ -1,6 +1,7 @@
 package com.palyrobotics.frc2017.subsystems;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
@@ -8,7 +9,7 @@ import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.robot.Robot;
 
 /**
- * Spatula Tests
+ * Unit tests for Spatula
  * @author Ailyn Tong
  */
 public class SpatulaTest {
@@ -20,10 +21,10 @@ public class SpatulaTest {
 		
 		commands.wantedSpatulaState = Spatula.SpatulaState.UP;
 		spatula.update(commands, Robot.getRobotState());
-		assertTrue("Spatula not up", spatula.getOutput().equals(Spatula.SpatulaState.UP));
+		assertThat("Spatula not up", spatula.getOutput(), equalTo(Spatula.SpatulaState.UP));
 		
 		commands.wantedSpatulaState = Spatula.SpatulaState.DOWN;
 		spatula.update(commands, Robot.getRobotState());
-		assertTrue("Spatula isn't down", spatula.getOutput().equals(Spatula.SpatulaState.DOWN));
+		assertThat("Spatula not down", spatula.getOutput(), equalTo(Spatula.SpatulaState.DOWN));
 	}
 }

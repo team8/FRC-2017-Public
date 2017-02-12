@@ -2,14 +2,14 @@ package com.palyrobotics.frc2017.subsystems.controllers.team254;
 
 import static com.palyrobotics.frc2017.robot.team254.lib.trajectory.TrajectoryFollower.TrajectorySetpoint;
 
-import com.palyrobotics.frc2017.subsystems.Drive;
+import com.palyrobotics.frc2017.util.LegacyDrive;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.robot.team254.lib.trajectory.TrajectoryFollower;
 import com.palyrobotics.frc2017.util.DriveSignal;
 import com.palyrobotics.frc2017.robot.team254.lib.util.Pose;
 import com.palyrobotics.frc2017.robot.team254.lib.util.SynchronousPID;
 
-public class DriveStraightController implements Drive.DriveController {
+public class DriveStraightController implements LegacyDrive.DriveController {
 
     private TrajectoryFollowingPositionController mDistanceController;
     private SynchronousPID mTurnPid;

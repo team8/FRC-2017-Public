@@ -57,7 +57,7 @@ public class ParallelRoutine extends Routine {
 
 	@Override
 	public Subsystem[] getRequiredSubsystems() {
-		return RoutineManager.sharedSubsystem(mRoutines);
+		return RoutineManager.sharedSubsystems(mRoutines);
 	}
 
 	@Override

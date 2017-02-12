@@ -52,12 +52,12 @@ public class Constants2016 {
 	public static int kGrabberSolenoidPortExtend = 4;
 	public static int kGrabberSolenoidPortRetract = 3;
 	// Motors
-	public static int kDericaLeftDriveFrontMotorDeviceID  = 2;
-	public static int kDericaLeftDriveMasterDeviceID = 3;
+	public static int kDericaLeftDriveMasterDeviceID = 1;
+	public static int kDericaLeftDriveSlaveDeviceID  = 4;
 	public static int kDericaLeftDriveFrontMotorPDP = 14;
 	public static int kDericaLeftDriveBackMotorPDP = 3;
-	public static int kDericaRightDriveFrontMotorDeviceID = 4;
-	public static int kDericaRightDriveBackMotorDeviceID = 1;
+	public static int kDericaRightDriveMasterDeviceID = 3;
+	public static int kDericaRightDriveSlaveDeviceID = 2;
 	public static int kDericaRightDriveFrontMotorPDP = 15;
 	public static int kDericaRightDriveBackMotorPDP = 2;
 	// DIO Encoders
@@ -73,4 +73,5 @@ public class Constants2016 {
 	public static int kDericaLowGoalShooterPWM = 0;
 	public static int kDericaLowGoalShooterPDP = 3;
 	public static double kDericaDegreeToDistance = 0.209;
+	public static double kTyrDegreeToDistance = 0;
 }

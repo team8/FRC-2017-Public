@@ -7,6 +7,7 @@ import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.robot.team254.lib.util.ADXRS453_Gyro;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 //TODO: Set the DPP's somehow
 
 /**
@@ -47,9 +48,9 @@ public class HardwareAdapter {
 				gyro = new ADXRS453_Gyro();
 			} else if(Constants.kRobotName == Constants.RobotName.DERICA) {
 				leftMasterTalon = new CANTalon(Constants2016.kDericaLeftDriveMasterDeviceID);
-				leftSlaveTalon = new CANTalon(Constants2016.kDericaLeftDriveFrontMotorDeviceID);
-				rightMasterTalon = new CANTalon(Constants2016.kDericaRightDriveBackMotorDeviceID);
-				rightSlaveTalon = new CANTalon(Constants2016.kDericaRightDriveFrontMotorDeviceID);
+				leftSlaveTalon = new CANTalon(Constants2016.kDericaLeftDriveSlaveDeviceID);
+				rightMasterTalon = new CANTalon(Constants2016.kDericaRightDriveMasterDeviceID);
+				rightSlaveTalon = new CANTalon(Constants2016.kDericaRightDriveSlaveDeviceID);
 
 				gyro = new ADXRS453_Gyro();
 				// no shifter solenoid
@@ -101,34 +102,34 @@ public class HardwareAdapter {
 	 * SLIDER - 1 TalonSRX
 	 */
 	public static class SliderHardware {
-		private static SliderHardware instance_ = new SliderHardware();
-		public static SliderHardware getInstance() {
-			return instance_;
+		private static SliderHardware instance = new SliderHardware();
+		
+		protected static SliderHardware getInstance() {
+			return instance;
 		}
-		public final CANTalon sliderTalon;
-		public final DigitalInput leftHallEffect;
-		public final DigitalInput middleHallEffect;
-		public final DigitalInput rightHallEffect;
-
+		public final CANTalon sliderMotor;
+		public final Encoder sliderEncoder;
+		public final AnalogPotentiometer sliderPotentiometer;
+		public final DigitalInput sliderLeftHFX;
+		public final DigitalInput sliderRightHFX;
+		
 		private SliderHardware() {
-			if (Constants.kRobotName == Constants.RobotName.AEGIR) {
-				sliderTalon = new CANTalon(Constants.kAegirSliderMotorDeviceID);
-				leftHallEffect = new DigitalInput(Constants.kAegirSliderLeftHallEffect);
-				middleHallEffect = new DigitalInput(Constants.kAegirSliderMiddleHallEffect);
-				rightHallEffect = new DigitalInput(Constants.kAegirSliderRightHallEffect);
-			} else if (Constants.kRobotName == Constants.RobotName.STEIK) {
-				sliderTalon = new CANTalon(Constants.kSteikSliderMotorDeviceID);
-				leftHallEffect = new DigitalInput(Constants.kSteikSliderLeftHallEffect);
-				middleHallEffect = new DigitalInput(Constants.kSteikSliderMiddleHallEffect);
-				rightHallEffect = new DigitalInput(Constants.kSteikSliderRightHallEffect);
+			if(Constants.kRobotName == Constants.RobotName.STEIK) {
+				sliderMotor = new CANTalon(Constants.kSteikSliderMotorDeviceID);
+				sliderEncoder = new Encoder(Constants.kSteikSliderEncoderDIOA, Constants.kSteikSliderEncoderDIOB);
+				sliderPotentiometer = new AnalogPotentiometer(Constants.kSteikSliderPotentiometer, Constants.kSteikSliderPotentiometerFullRange, Constants.kSteikSliderPotentiometerOffset);
+				sliderLeftHFX = new DigitalInput(Constants.kSteikLeftSliderHallEffectSensor);
+				sliderRightHFX = new DigitalInput(Constants.kSteikRightSliderHallEffectSensor);
 			} else {
-				sliderTalon = null;
-				leftHallEffect = null;
-				middleHallEffect = null;
-				rightHallEffect = null;
+				sliderMotor = null;
+				sliderEncoder = null;
+				sliderPotentiometer = null;
+				sliderLeftHFX = null;
+				sliderRightHFX = null;
 			}
 		}
 	}
+
 	/**
 	 * SPATULA - one double solenoid
 	 */
@@ -149,6 +150,7 @@ public class HardwareAdapter {
 			}
 		}
 	}
+	
 	/*
 	 * INTAKE - two SD540C motors
 	 */
@@ -180,28 +182,26 @@ public class HardwareAdapter {
 	 */
 	public static class ClimberHardware {
 		private static ClimberHardware instance = new ClimberHardware();
-
-		public static ClimberHardware getInstance() {
+		
+		protected static ClimberHardware getInstance(){
 			return instance;
 		}
-
 		public final CANSD540 climberMotor;
 		public final Encoder climberEncoder;
-
+		
 		private ClimberHardware() {
 			if (Constants.kRobotName == Constants.RobotName.AEGIR) {
 				climberMotor = new CANSD540(Constants.kAegirClimberMotorDeviceID);
-				climberEncoder = new Encoder(Constants.kAegirClimberEncoderDIOA, Constants.kAegirClimberEncoderDIOB);
+				climberEncoder = new Encoder(Constants.kAegirClimberEncoderPortA, Constants.kAegirClimberEncoderPortB);
 			} else if (Constants.kRobotName == Constants.RobotName.STEIK) {
 				climberMotor = new CANSD540(Constants.kSteikClimberMotorDeviceID);
-				climberEncoder = new Encoder(Constants.kSteikClimberEncoderDIOA, Constants.kSteikClimberEncoderDIOB);
+				climberEncoder = new Encoder(Constants.kSteikClimberEncoderPortA, Constants.kSteikClimberEncoderPortB);
 			} else {
 				climberMotor = null;
 				climberEncoder = null;
 			}
 		}
 	}
-
 	public final PowerDistributionPanel kPDP = new PowerDistributionPanel();
 
 	// Joysticks for operator interface
@@ -227,7 +227,7 @@ public class HardwareAdapter {
 	public FlippersHardware getFlippers() {
 		return FlippersHardware.getInstance();
 	}
-	public SliderHardware getSlider() {
+	public SliderHardware getSimpleSlider() {
 		return SliderHardware.getInstance();
 	}
 	public SpatulaHardware getSpatula() {

@@ -35,7 +35,8 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindowSendable;
  * pdf
  */
 public class ADXRS453_Gyro extends GyroBase implements Gyro, PIDSource, LiveWindowSendable {
-    public static final double kCalibrationSampleTime = 5.0;
+    // Time in seconds to run calibration
+	public static final double kCalibrationSampleTime = 3.0;
 
     private static final double kSamplePeriod = 0.001;
     private static final double kDegreePerSecondPerLSB = -0.0125;
@@ -93,7 +94,9 @@ public class ADXRS453_Gyro extends GyroBase implements Gyro, PIDSource, LiveWind
     public synchronized void calibrate() {
         Timer.delay(0.1);
         startCalibrate();
+        System.out.println("Start gyro calibration, waiting");
         Timer.delay(kCalibrationSampleTime);
+        System.out.println("Gyro calibrated");
         endCalibrate();
     }
 

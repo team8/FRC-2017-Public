@@ -26,13 +26,11 @@ public class TrajectoryAutoMode extends AutoMode {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Trajectory";
 	}
 
 	@Override
 	public void prestart() {
-		// TODO Auto-generated method stub
 		System.out.println("Starting TrajectoryAutoMode");
 	}
 

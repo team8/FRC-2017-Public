@@ -9,7 +9,6 @@ import com.palyrobotics.frc2017.robot.team254.lib.util.Pose;
  *
  */
 public class RobotState {
-	
 	public enum GamePeriod {
 		AUTO, TELEOP, DISABLED
 	}
@@ -22,6 +21,16 @@ public class RobotState {
 	// Pose stores encoder and gyro data for drivetrain
 	public Pose drivePose = new Pose(0,0,0,0,0,0);
 
+	public double sliderPotentiometer;
+	public double sliderEncoder;
+	public boolean sliderLeftHFX;
+	public boolean sliderRightHFX;
+
+	// Talon readouts
+	public double leftClosedLoopError;
+	public double rightClosedLoopError;
+
+	// Climber
 	public double climberCurrentDraw;
 	public int climberEncoder;
 }

@@ -9,13 +9,42 @@ import com.ctre.CANTalon;
  * Allows configuration for offboard SRX calculations
  */
 public class CANTalonOutput {
-	// PercentVBus, Speed, Current, Voltage, not Follower, MotionProfile, MotionMagic
+	
+	/**
+	 * Prevent null pointer exceptions
+	 */
 	private CANTalon.TalonControlMode controlMode;
+	// PercentVBus, Speed, Current, Voltage, not Follower, MotionProfile, MotionMagic
 	private double setpoint;
-	public double P,I,D, f, rampRate;
+	public double P,I,D, F, rampRate;
 	public int izone;
-	public int profile = 0;
-
+	public int profile;
+	
+	/**
+	 * Default constructor
+	 */
+	public CANTalonOutput() {
+		controlMode = CANTalon.TalonControlMode.Disabled;
+		setpoint = 0;
+		profile = 0;
+	}
+	
+	/**
+	 * Copy constructor
+	 * @param talon output to copy
+	 */
+	public CANTalonOutput(CANTalonOutput talon) {
+		this.controlMode = talon.getControlMode();
+		this.setpoint = talon.getSetpoint();
+		this.P = talon.P;
+		this.I = talon.I;
+		this.D = talon.D;
+		this.F = talon.F;
+		this.izone = talon.izone;
+		this.rampRate = talon.rampRate;
+		this.profile = talon.profile;
+	}
+	
 	public CANTalon.TalonControlMode getControlMode() {
 		return controlMode;
 	}
@@ -28,7 +57,7 @@ public class CANTalonOutput {
 		this.P = p;
 		this.I = i;
 		this.D = d;
-		this.f = f;
+		this.F = f;
 		this.izone = izone;
 		this.rampRate = rampRate;
 	}
@@ -36,7 +65,7 @@ public class CANTalonOutput {
 	/**
 	 * Sets Talon to TalonControlMode.Speed, velocity target control loop
 	 * @param speed, target velocity (from -1023019 to 10230?)
-	 * @param p,i,d, f, izone, rampRate parameters for control loop
+	 * @param p,i,d, F, izone, rampRate parameters for control loop
 	 */
 	public void setSpeed(double speed, double p, double i, double d, double f, int izone, double rampRate) {
 		controlMode = CANTalon.TalonControlMode.Speed;
@@ -70,6 +99,36 @@ public class CANTalonOutput {
 		controlMode = CANTalon.TalonControlMode.Current;
 		setpoint = current;
 		setPID(p, i, d, f, izone, rampRate);
+	}
+	
+	public void setDisabled() {
+		this.controlMode = CANTalon.TalonControlMode.Disabled;
+	}
+	
+	public String toString() {
+		String name = "";
+		if (controlMode == null) {
+			name += "null";
+		} else {
+			name += controlMode.toString();
+		}
+		name+= " "+getSetpoint();
+		return name;
+	}
+
+	/**
+	 * Used for unit tests to compare drive signal values
+	 */
+	@Override
+	public boolean equals(Object other) {
+		return ((CANTalonOutput) other).getSetpoint() == this.getSetpoint() && 
+				((CANTalonOutput) other).controlMode == this.controlMode &&
+				((CANTalonOutput) other).P == this.P && 
+				((CANTalonOutput) other).I == this.I && 
+				((CANTalonOutput) other).D == this.D && 
+				((CANTalonOutput) other).F == this.F && 
+				((CANTalonOutput) other).izone == this.izone && 
+				((CANTalonOutput) other).rampRate == this.rampRate;
 	}
 
 	/* Should not be used as talon's should be set to slave mode when initialized

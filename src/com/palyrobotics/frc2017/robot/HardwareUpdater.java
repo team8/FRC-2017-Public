@@ -5,12 +5,14 @@ import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
+import com.palyrobotics.frc2017.util.LegacyDrive;
 
 /**
  * Should only be used in robot package.
  */
 class HardwareUpdater {
 	// Subsystem references
+	private LegacyDrive mLegacyDrive;
 	private Drive mDrive;
 	private Flippers mFlippers;
 	private Slider mSlider;
@@ -21,7 +23,11 @@ class HardwareUpdater {
 	/**
 	 * Hardware Updater for Steik/Aegir
 	 */
-	HardwareUpdater(Drive drive, Flippers flippers, Slider slider, Spatula spatula, Intake intake, Climber climber) {
+	HardwareUpdater(Drive drive, Flippers flippers, Slider slider, Spatula spatula, Intake intake, Climber climber) throws Exception {
+		if(Constants.kRobotName != Constants.RobotName.AEGIR && Constants.kRobotName != Constants.RobotName.STEIK) {
+			System.out.println("Incompatible robot name and hardware!");
+			throw new Exception();
+		}
 		this.mDrive = drive;
 		this.mFlippers = flippers;
 		this.mSlider = slider;
@@ -31,18 +37,37 @@ class HardwareUpdater {
 	}
 
 	/**
-	 * Hardware Updater for Derica and Tyr
+	 * Hardware updater for Derica
+	 * @throws Exception 
+	 */
+	HardwareUpdater(Drive drive) throws Exception {
+		if(Constants.kRobotName != Constants.RobotName.DERICA) {
+			System.out.println("Incompatible robot name and hardware!");
+			throw new Exception();
+		}
+		this.mDrive = drive;
+	}
+
+	/**
+	 * Hardware Updater for Tyr
 	 * Updates only the drivetrain
 	 */
-	HardwareUpdater(Drive drive) {
-		this.mDrive = drive;
+	HardwareUpdater(LegacyDrive drive) throws Exception {
+		if(Constants.kRobotName != Constants.RobotName.TYR) {
+			System.out.println("Incompatible robot name and hardware!");
+			throw new Exception();
+		}
+
+		this.mLegacyDrive = drive;
 	}
 
 	/**
 	 * Initialize all hardware
 	 */
 	void initHardware() {
-		HardwareAdapter.getInstance().getDrivetrain().gyro.calibrate();
+		// TODO: Add the gyro calibration
+//		HardwareAdapter.getInstance().getDrivetrain().gyro.calibrate();
+		System.out.println("Gyro calibrated");
 		if(Constants.kRobotName != Constants.RobotName.TYR) {
 			CANTalon leftMasterTalon = HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon;
 			CANTalon leftSlaveTalon = HardwareAdapter.getInstance().getDrivetrain().leftSlaveTalon;
@@ -59,6 +84,11 @@ class HardwareUpdater {
 			rightMasterTalon.enableForwardSoftLimit(false);
 			rightMasterTalon.enableReverseSoftLimit(false);
 
+			// Enable all the talons
+			leftMasterTalon.enable();
+			leftSlaveTalon.enable();
+			rightMasterTalon.enable();
+			rightSlaveTalon.enable();
 			// Configure master talon feedback devises
 			leftMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 			rightMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
@@ -89,10 +119,22 @@ class HardwareUpdater {
 		robotState.drivePose.headingVelocity = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getRate();
 		// Non-Tyr robots use talons
 		if(Constants.kRobotName != Constants.RobotName.TYR) {
-			robotState.drivePose.leftDistance = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getEncPosition();
-			robotState.drivePose.leftVelocity = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getEncVelocity();
-			robotState.drivePose.rightDistance = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getEncPosition();
-			robotState.drivePose.rightVelocity = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getEncVelocity();
+			CANTalon leftMasterTalon = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon;
+			CANTalon rightMasterTalon = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon;
+			robotState.drivePose.leftDistance = leftMasterTalon.getEncPosition();
+			robotState.drivePose.leftVelocity = leftMasterTalon.getEncVelocity();
+			robotState.drivePose.rightDistance = rightMasterTalon.getEncPosition();
+			robotState.drivePose.rightVelocity = rightMasterTalon.getEncVelocity();
+
+			robotState.leftClosedLoopError = leftMasterTalon.getClosedLoopError();
+			robotState.rightClosedLoopError = rightMasterTalon.getClosedLoopError();
+		}
+		if(Constants.kRobotName == Constants.RobotName.AEGIR || Constants.kRobotName == Constants.RobotName.STEIK) {
+			robotState.sliderEncoder = HardwareAdapter.SliderHardware.getInstance().sliderMotor.getPosition();
+//			robotState.sliderEncoder = HardwareAdapter.SliderHardware.getInstance().sliderEncoder.getDistance();
+			robotState.sliderPotentiometer = HardwareAdapter.SliderHardware.getInstance().sliderPotentiometer.get();
+			robotState.sliderRightHFX = HardwareAdapter.SliderHardware.getInstance().sliderRightHFX.get();
+			robotState.sliderLeftHFX = HardwareAdapter.SliderHardware.getInstance().sliderLeftHFX.get();
 		}
 
 		// Update kPDP current draw
@@ -103,7 +145,7 @@ class HardwareUpdater {
 		}
 
 		if (HardwareAdapter.getInstance().getClimber().climberEncoder != null) {
-			robotState.climberEncoder = HardwareAdapter.getInstance().getClimber().climberEncoder.getRaw();
+			robotState.climberEncoder = HardwareAdapter.getInstance().getClimber().climberEncoder.get();
 		}
 	}
 
@@ -127,14 +169,14 @@ class HardwareUpdater {
 		HardwareAdapter.getInstance().getFlippers().leftSolenoid.set(mFlippers.getFlipperSignal().leftFlipper);
 		HardwareAdapter.getInstance().getFlippers().rightSolenoid.set(mFlippers.getFlipperSignal().rightFlipper);
 		// SLIDER
-		updateCANTalonSRX(HardwareAdapter.getInstance().getSlider().sliderTalon, mSlider.getOutput());
+		updateCANTalonSRX(HardwareAdapter.getInstance().getSimpleSlider().sliderMotor, mSlider.getOutput());
 		// SPATULA
 		HardwareAdapter.getInstance().getSpatula().spatulaSolenoid.set(mSpatula.getOutput());
 		// INTAKE
 		HardwareAdapter.getInstance().getIntake().leftIntakeMotor.set(mIntake.getOutput());
 		HardwareAdapter.getInstance().getIntake().rightIntakeMotor.set(-mIntake.getOutput());
 		// CLIMBER
-		HardwareAdapter.getInstance().getClimber().climberMotor.set(mClimber.getClimberOutput());
+		HardwareAdapter.getInstance().getClimber().climberMotor.set(mClimber.getOutput());
 	}
 
 	/**
@@ -153,10 +195,13 @@ class HardwareUpdater {
 		if(talon.getControlMode() != output.getControlMode()) {
 			talon.changeControlMode(output.getControlMode());
 			if(output.getControlMode().isPID()) {
-				talon.setPID(output.P, output.I, output.D, output.f, output.izone, output.rampRate, output.profile);
+				talon.setPID(output.P, output.I, output.D, output.F, output.izone, output.rampRate, output.profile);
 			}
 		}
-		talon.setSetpoint(output.getSetpoint());
+		// Don't resend setpoint if that is the currently running loop
+		if(talon.getSetpoint() != output.getSetpoint()) {
+			talon.setSetpoint(output.getSetpoint());
+		}
 	}
 
 	/**
@@ -167,13 +212,13 @@ class HardwareUpdater {
 	private void updateTyrDrivetrain() {
 		CANTalon kLeftFront = HardwareAdapter.getInstance().getDrivetrain().leftSlaveTalon;
 		CANTalon kLeftBack = HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon;
-		kLeftFront.set(mDrive.getDriveSignal().leftMotor.getSetpoint());
-		kLeftBack.set(mDrive.getDriveSignal().leftMotor.getSetpoint());
+		kLeftFront.set(mLegacyDrive.getDriveSignal().leftMotor.getSetpoint());
+		kLeftBack.set(mLegacyDrive.getDriveSignal().leftMotor.getSetpoint());
 
 		// Need to invert right side motors
 		CANTalon kRightFront = HardwareAdapter.getInstance().getDrivetrain().rightSlaveTalon;
 		CANTalon kRightBack = HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon;
-		kRightFront.set(-mDrive.getDriveSignal().rightMotor.getSetpoint());
-		kRightBack.set(-mDrive.getDriveSignal().rightMotor.getSetpoint());
+		kRightFront.set(-mLegacyDrive.getDriveSignal().rightMotor.getSetpoint());
+		kRightBack.set(-mLegacyDrive.getDriveSignal().rightMotor.getSetpoint());
 	}
 }

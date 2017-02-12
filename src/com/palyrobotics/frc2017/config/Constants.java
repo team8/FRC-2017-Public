@@ -6,9 +6,9 @@ public class Constants extends ConstantsBase {
 	public enum RobotName {
 		STEIK, AEGIR, TYR, DERICA
 	}
-	public static final RobotName kRobotName = RobotName.STEIK;
+	public static final RobotName kRobotName = RobotName.DERICA;
 
-	// Chezy Drive tuning
+	// Chezy LegacyDrive tuning
 	public static double kDriveSensitivity = .85;
 	public static double kNegativeInertiaScalar = 5.0;
 
@@ -30,12 +30,13 @@ public class Constants extends ConstantsBase {
 	public static double kDriveStraightKd = 0.04;
 	public static double kDriveOnTargetError = 1.5;
 	public static double kDrivePathHeadingFollowKp = 0.01;
+	
+	public static double kAcceptableDriveError = 200;
 
 	//Encoder Turn in Place Controller gains
 	public static double kEncoderTurnKp = 0.07;
 	public static double kEncoderTurnKi = 0.01;
 	public static double kEncoderTurnKd = 0.007;
-	public static double kTyrDegreeToDistance = 0;
 	public static double kAcceptableEncoderTurnError = 2;
 	
 	// Gyro Turn in Place controller gains
@@ -45,7 +46,6 @@ public class Constants extends ConstantsBase {
 	public static double kAcceptableGyroTurnError = 2;
 	public static double kAcceptableGyroTurnStopSpeed = 1.2;
 	public static double kTurnAngleSpeed = .35;
-
 	
 	// TurnInPlaceController gains
 	public static double kTurnMaxSpeedRadsPerSec = 4.5;
@@ -56,7 +56,7 @@ public class Constants extends ConstantsBase {
 	public static double kTurnKv = 0.085;
 	public static double kTurnKa = 0.075;
 	public static double kTurnOnTargetError = 0.1;
-
+	
 	// !!! End of editable Constants! !!!
 	public static int kEndEditableArea = 0;
 
@@ -84,13 +84,17 @@ public class Constants extends ConstantsBase {
 	public static int kSteikLeftFlipperPortRetract = 0;
 	public static int kSteikRightFlipperPortExtend = 0;
 	public static int kSteikRightFlipperPortRetract = 0;
-
-	// SLIDER
+	
+	//SLIDER
+	public static int kSteikSliderEncoderDIOA = 0;
+	public static int kSteikSliderEncoderDIOB = 0;
 	public static int kSteikSliderMotorDeviceID = 0;
-	public static int kSteikSliderMotorPDP = 0;
-	public static int kSteikSliderLeftHallEffect = 0;
-	public static int kSteikSliderMiddleHallEffect = 0;
-	public static int kSteikSliderRightHallEffect = 0;
+	public static int kSteikSliderMotorSpeed = 0;
+	public static int kSteikLeftSliderHallEffectSensor = 0;
+	public static int kSteikRightSliderHallEffectSensor = 0;
+	public static int kSteikSliderPotentiometer = 0;
+	public static int kSteikSliderPotentiometerFullRange = 0;
+	public static int kSteikSliderPotentiometerOffset;
 
 	//SPATULA
 	public static int kSteikSpatulaPortExtend = 0;
@@ -101,13 +105,12 @@ public class Constants extends ConstantsBase {
 	public static int kSteikLeftIntakeMotorPDP = 0;
 	public static int kSteikRightIntakeMotorDeviceID = 0;
 	public static int kSteikRightIntakeMotorPDP = 0;
-
-	// CLIMBER CONSTANTS
-	public static int kSteikClimberMotorDeviceID = 2;
-	public static int kSteikClimberMotorPDP = 3;
-
-	public static int kSteikClimberEncoderDIOA = 4;
-	public static int kSteikClimberEncoderDIOB = 5;
+	
+	//CLIMBER
+	public static int kSteikClimberMotorDeviceID = 0;
+	public static int kSteikClimberMotorPDP = 0;
+	public static int kSteikClimberEncoderPortA = 0;
+	public static int kSteikClimberEncoderPortB = 0;
 
 	/*
 	 * AEGIR ELECTRONIC CONSTANTS
@@ -128,11 +131,15 @@ public class Constants extends ConstantsBase {
 	public static int kAegirRightFlipperPortRetract = 0;
 
 	// SLIDER
+	public static int kAegirSliderEncoderDIOA = 0;
+	public static int kAegirSliderEncoderDIOB = 0;
 	public static int kAegirSliderMotorDeviceID = 0;
-	public static int kAegirSliderMotorPDP = 0;
-	public static int kAegirSliderLeftHallEffect = 0;
-	public static int kAegirSliderMiddleHallEffect = 0;
-	public static int kAegirSliderRightHallEffect = 0;
+	public static int kAegirSliderMotorSpeed = 0;
+	public static int kAegirLeftSliderHallEffectSensor = 0;
+	public static int kAegirRightSliderHallEffectSensor = 0;
+	public static int kAegirSliderPotentiometer = 0;
+	public static int kAegirSliderPotentiometerFullRange = 0;
+	public static int kAegirSliderPotentiometerOffset;
 
 	//SPATULA
 	public static int kAegirSpatulaPortExtend = 0;
@@ -145,11 +152,10 @@ public class Constants extends ConstantsBase {
 	public static int kAegirRightIntakeMotorPDP = 0;
 
 	// CLIMBER
-	public static int kAegirClimberMotorDeviceID = 2;
-	public static int kAegirClimberMotorPDP = 3;
-	public static int kAegirClimberEncoderDIOA = 4;
-	public static int kAegirClimberEncoderDIOB = 5;
-
+	public static int kAegirClimberMotorDeviceID = 0;
+	public static int kAegirClimberMotorPDP = 0;
+	public static int kAegirClimberEncoderPortA = 0;
+	public static int kAegirClimberEncoderPortB = 0;
 	// !!! Physical constants
 
 	// !!! Loop rate of normal Looper
@@ -158,7 +164,7 @@ public class Constants extends ConstantsBase {
 	// !!! Loop rate of subsystem updates
 	public static double kSubsystemLooperDt = 0.005;
 
-	// Drive parameters
+	// LegacyDrive parameters
 	public static double kDriveEncoderCountsPerRev = 250.0;
 	public static double kDriveWheelSizeInches = 8; //pneumatic wheels
 

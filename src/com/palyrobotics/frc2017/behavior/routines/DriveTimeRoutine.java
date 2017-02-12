@@ -2,9 +2,10 @@ package com.palyrobotics.frc2017.behavior.routines;
 
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
+import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.util.DriveSignal;
 
-import com.palyrobotics.frc2017.subsystems.Drive;
+import com.palyrobotics.frc2017.util.LegacyDrive;
 import com.palyrobotics.frc2017.util.Subsystem;
 
 import java.util.Optional;
@@ -16,7 +17,7 @@ public class DriveTimeRoutine extends Routine {
 	/**
 	 * Constructs with a specified time setpoint and velocity
 	 * @param time How long to drive (seconds)
-	 * @param drivePower Drive signal to output (left/right speeds -1 to 1)
+	 * @param drivePower LegacyDrive signal to output (left/right speeds -1 to 1)
 	 */
 	public DriveTimeRoutine(double time, DriveSignal drivePower) {
 		// Keeps the offset prepared, when routine starts, will add System.currentTime
