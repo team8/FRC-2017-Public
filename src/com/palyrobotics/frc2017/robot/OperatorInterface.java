@@ -2,20 +2,20 @@ package com.palyrobotics.frc2017.robot;
 
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
+import com.palyrobotics.frc2017.util.DoubleClickTimer;
 import com.palyrobotics.frc2017.util.DriveSignal;
 import com.palyrobotics.frc2017.util.LegacyDrive;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 
 import com.palyrobotics.frc2017.behavior.Routine;
-import com.palyrobotics.frc2017.behavior.routines.EncoderDriveRoutine;
+import com.palyrobotics.frc2017.behavior.routines.*;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Commands.*;
 import com.palyrobotics.frc2017.config.Commands.JoystickInput.XboxInput;
 import com.palyrobotics.frc2017.subsystems.Climber.ClimberState;
 import com.palyrobotics.frc2017.subsystems.Intake;
 import com.palyrobotics.frc2017.subsystems.Spatula;
-import com.palyrobotics.frc2017.subsystems.Spatula.SpatulaState;
 
 /**
  * Used to produce Commands {@link Commands} from human input
@@ -36,6 +36,10 @@ public class OperatorInterface {
 	private Joystick mLeftStick = mJoysticks.leftStick;
 	private Joystick mRightStick = mJoysticks.rightStick;
 	private Joystick mOperatorStick = mJoysticks.operatorStick;
+	
+	// Adjust parameters as needed, default for now
+	private DoubleClickTimer sliderLeft = new DoubleClickTimer();
+	private DoubleClickTimer sliderRight = new DoubleClickTimer();
 
 	/**
 	 * Helper method to only add routines that aren't already in wantedRoutines
@@ -64,10 +68,9 @@ public class OperatorInterface {
 		}
 		
 		// TODO: Change how routines are commanded
-		if (mOperatorStick.getRawButton(4)) {
-			newCommands.addWantedRoutine(new EncoderDriveRoutine(500));
-		}
-		//TODO figure out Steik controls
+//		if (mOperatorStick.getRawButton(4)) {
+//			newCommands.addWantedRoutine(new EncoderDriveRoutine(500));
+//		}
 
 		// Flippers
 		//TODO figure out flipper controls
@@ -78,12 +81,6 @@ public class OperatorInterface {
 		} else if (mOperatorStick.getRawButton(1)) {
 			newCommands.wantedFlipperSignal.leftFlipper = DoubleSolenoid.Value.kReverse;
 		}
-		// Slider
-		if (mOperatorStick.getRawButton(0)){
-			prevCommands.wantedSimpleSliderState = SimpleSlider.SimpleSliderState.IDLE;
-		} else if(mOperatorStick.getRawButton(0)){
-			prevCommands.wantedSimpleSliderState = SimpleSlider.SimpleSliderState.MANUAL;
-		}
 		//Right Flipper
 		if (mOperatorStick.getRawButton(1)) {
 			newCommands.wantedFlipperSignal.rightFlipper = DoubleSolenoid.Value.kForward;
@@ -91,21 +88,49 @@ public class OperatorInterface {
 			newCommands.wantedFlipperSignal.rightFlipper = DoubleSolenoid.Value.kReverse;
 		}
 		
+		// Slider
+		if (mOperatorStick.getRawButton(8)) {
+			newCommands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
+			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.LEFT;
+			if (sliderLeft.twice()) {
+				newCommands.addWantedRoutine(new SliderDistancePositioningAutocorrectRoutine());
+			} else {
+				newCommands.addWantedRoutine(new SliderDistancePositioningRoutine());
+			}
+		} else if (mOperatorStick.getRawButton(9)) {
+			newCommands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
+			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.RIGHT;
+			if (sliderRight.twice()) {
+				newCommands.addWantedRoutine(new SliderDistancePositioningAutocorrectRoutine());
+			} else {
+				newCommands.addWantedRoutine(new SliderDistancePositioningRoutine());
+			}
+		} else if (mOperatorStick.getRawButton(5)) {	// preferred thumb position
+			newCommands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
+			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.CENTER;
+			newCommands.addWantedRoutine(new SliderDistancePositioningRoutine());
+		} else if (mOperatorStick.getRawButton(4)) {	// opposite of preferred thumb position
+			newCommands.wantedSliderState = Slider.SliderState.MANUAL;
+			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.NONE;
+			newCommands.addWantedRoutine(new ManualSliderControlRoutine());
+		}
+		
 		// Spatula
 		if (mOperatorStick.getRawButton(3)) {
-			prevCommands.wantedSpatulaState = Spatula.SpatulaState.UP;
+			newCommands.wantedSpatulaState = Spatula.SpatulaState.UP;
 		} else if (mOperatorStick.getRawButton(2)) {
-			prevCommands.wantedSpatulaState = Spatula.SpatulaState.DOWN;
+			newCommands.wantedSpatulaState = Spatula.SpatulaState.DOWN;
 		}
 		
 		// Intake
 		if (mOperatorStick.getRawButton(1)) {
 			newCommands.wantedIntakeState = Intake.IntakeState.INTAKE;
-		} else if (mOperatorStick.getRawButton(1)) {
+		} else if (mOperatorStick.getRawButton(11)) {
 			newCommands.wantedIntakeState = Intake.IntakeState.EXPEL;
 		} else {
 			newCommands.wantedIntakeState = Intake.IntakeState.IDLE;
 		}
+		
 		// Climber
 		if (mOperatorStick.getRawButton(7)) { // overall cancel button
 			newCommands.wantedClimberState = Climber.ClimberState.IDLE;
