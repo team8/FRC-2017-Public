@@ -6,7 +6,7 @@ import com.palyrobotics.frc2017.subsystems.Slider.SliderState;
 import com.palyrobotics.frc2017.subsystems.Spatula.SpatulaState;
 import com.palyrobotics.frc2017.util.Subsystem;
 
-public class SilderDistancePositioningRoutine extends Routine {
+public class SliderDistancePositioningRoutine extends Routine {
 	
 	private Subsystem[] required = {slider, spatula};
 	
