@@ -10,6 +10,7 @@ import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.archive.SubsystemLooper;
 import com.palyrobotics.frc2017.util.logger.Logger;
+import com.palyrobotics.frc2017.vision.AndroidConnectionHelper;
 import com.palyrobotics.frc2017.robot.team254.lib.util.RobotData;
 import com.palyrobotics.frc2017.robot.team254.lib.util.SystemManager;
 
@@ -65,6 +66,8 @@ public class Robot extends IterativeRobot {
 		} catch (NullPointerException e) {
 			mLogger.logRobotThread("Auto: "+e.getMessage());
 		}
+		AndroidConnectionHelper.getInstance().start(AndroidConnectionHelper.StreamState.JSON);
+
 		if (Constants.kRobotName == Constants.RobotName.STEIK) {
 			try {
 				mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSlider, mSpatula, mIntake, mClimber);
@@ -87,6 +90,7 @@ public class Robot extends IterativeRobot {
 		}
 		mHardwareUpdater.initHardware();
 		System.out.println("Auto: "+AutoModeSelector.getInstance().getAutoMode().toString());
+		AndroidConnectionHelper.getInstance().StartVisionApp();
 		System.out.println("End robotInit()");
 		mLogger.logRobotThread("End robotInit()");
 	}

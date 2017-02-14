@@ -1,0 +1,94 @@
+<!-- <html> 
+<head>
+	<title>FRC Team #8 Dashboard</title>
+</head>
+<body id="bodyid">
+
+	<img id = "feedgoal" src = "http://localhost:1180/mjpeg/img.mjpg" alt = "no goal stream">
+ 	<video id = "nexus" src = "http://localhost:1180/mjpeg/img.mjpg" controls>
+		Your Browser is dumb <code>video</code>
+	</video>
+
+</body>
+</html>-->
+
+<html>
+<head>
+	<script type="text/JavaScript">
+var refreshInterval = 140; //in ms
+var drawDate = true; //draw date string
+var img;
+var canvas;
+var context;
+var say = "Hello All, time: ";
+var count = 0;
+
+var url;
+var testing_pc = false;
+if(testing_pc){
+	url = "http://localhost:1180/";
+} else {
+	url = "http://10.0.8.2:1180/"
+}
+
+function init() {
+	canvas = document.getElementById("canvas");
+	context = canvas.getContext("2d");
+	img = new Image();
+	context.font = "20px Arial";
+	context.fillText(say, 10, 30);
+	img.onload = load;
+	img.onerror = imgError;
+	refresh();
+}
+
+function load() {
+	canvas.setAttribute("width", img.width)
+	canvas.setAttribute("height", img.height)
+	context.drawImage(this, 50, 100);
+	if(drawDate) {
+		var text = getDateTime();
+		var maxWidth = 100;
+		var x = img.width-10-maxWidth;
+		var y = img.height-10;
+		context.strokeStyle = 'black';
+		context.lineWidth = 2;
+		context.strokeText(text, x, y, maxWidth);
+		context.fillStyle = 'white';
+		context.fillText(text, x, y, maxWidth);
+
+		setText("Streamed with time: ", 10, 80);
+	}else{
+		setText("No time, but hey it loaded", 10, 80);
+	}
+}
+
+function imgError()  {
+	setText("could not load image");
+}
+
+function setText (text_context, x, y) {
+	context.fillStyle = 'black';
+	context.fillText("Log: "+text_context+" "+getDateTime(), x, y, 600);
+}
+
+function refresh() {
+	setText("Ref: ", 10, 60);
+	img.src = url + "?t=" + new Date().getTime();
+	// document.body.innerHTML = "";
+	setTimeout("refresh()",refreshInterval);
+}
+
+function getDateTime() {
+	var now = new Date();
+	return now.toLocaleDateString() + " " + now.toLocaleTimeString();
+}
+
+</script>
+	<title>JavaScript Refresh Example</title>
+</head>
+
+<body onload="JavaScript:init();">
+<canvas id="canvas"/>
+</body>
+</html> 

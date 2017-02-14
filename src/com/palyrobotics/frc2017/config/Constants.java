@@ -10,6 +10,17 @@ public class Constants extends ConstantsBase {
 	// Initialization constants
 	public static final RobotName kRobotName = RobotName.STEIK;
 	public static final boolean kCalibrateSliderWithPotentiometer = true;
+	
+	// Android app information
+	public static String kPackageName = "com.frc8.team8vision";
+	public static String kActivityName = "MainActivity";
+	public static int kAndroidConnectionUpdateRate = 5;	// Update rate in milliseconds
+	public static int kAndroidDataSocketUpdateRate = 100;
+	public static int kAndroidVisionSocketUpdateRate = 10;
+	public static int kMJPEGVisionSocketUpdateRate = 10;
+	public static int kAndroidDataSocketPort = 8008;
+	public static int kAndroidVisionSocketPort = 8009;
+	public static int kMJPEGServerSocketPort = 1180;
 
 	// Cheesy Drive tuning
 
