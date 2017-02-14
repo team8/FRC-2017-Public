@@ -40,8 +40,7 @@ public class CANTalonDriveController implements Drive.DriveController {
 				output.leftEncVelocity = 0;
 				output.leftSpeed = 0;
 			case Speed:
-				// TODO: enc velocity or speed?
-				output.leftEncVelocity = mSignal.leftMotor.getSetpoint();
+				output.leftSpeed = mSignal.leftMotor.getSetpoint();
 		}
 		switch (mSignal.rightMotor.getControlMode()) {
 			case MotionMagic:
@@ -53,8 +52,7 @@ public class CANTalonDriveController implements Drive.DriveController {
 				output.rightEncVelocity = 0;
 				output.rightSpeed = 0;
 			case Speed:
-				// TODO: enc velocity or speed?
-				output.rightEncVelocity = mSignal.rightMotor.getSetpoint();
+				output.rightSpeed = mSignal.rightMotor.getSetpoint();
 		}
 		return output;
 	}

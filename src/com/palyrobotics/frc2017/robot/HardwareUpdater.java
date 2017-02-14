@@ -171,6 +171,10 @@ class HardwareUpdater {
 			if(output.getControlMode().isPID()) {
 				talon.setPID(output.P, output.I, output.D, output.F, output.izone, output.rampRate, output.profile);
 			}
+			if (output.getControlMode() == CANTalon.TalonControlMode.MotionMagic) {
+				talon.setMotionMagicAcceleration(output.accel);
+				talon.setMotionMagicCruiseVelocity(output.cruiseVel);
+			}
 		}
 		// Don't resend setpoint if that is the currently running loop
 		if(talon.getSetpoint() != output.getSetpoint()) {

@@ -21,6 +21,10 @@ public class CANTalonOutput {
 	public double P,I,D, F, rampRate;
 	public int izone;
 	public int profile;
+
+	// Used for motion magic
+	public double accel;
+	public double cruiseVel;
 	
 	/**
 	 * Default constructor
@@ -117,7 +121,15 @@ public class CANTalonOutput {
 		setpoint = current;
 		setPID(p, i, d, f, izone, rampRate);
 	}
-	
+
+	public void setMotionMagic(double setpoint, double accel, double cruiseVelocity, double p, double i, double d, double f, int izone, double rampRate) {
+		controlMode = CANTalon.TalonControlMode.MotionMagic;
+		this.setpoint = setpoint;
+		this.accel = accel;
+		this.cruiseVel = cruiseVelocity;
+		setPID(p, i, d, f, izone, rampRate);
+	}
+
 	/**
 	 * Sets Talon to TalonControlMode.Disabled
 	 */

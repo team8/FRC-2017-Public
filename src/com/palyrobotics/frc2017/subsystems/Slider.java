@@ -13,7 +13,8 @@ import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
 
 /**
  * Created by Nihar on 1/28/17.
- * TODO: All
+ * @author Prashanti
+ * Controls the slider subsystem,
  */
 public class Slider extends Subsystem implements SubsystemLoop {
 	private static Slider instance = new Slider();
@@ -37,7 +38,6 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		CENTER,
 		RIGHT
 	}
-	
 	
 	private SimpleSlider mSimpleSlider = SimpleSlider.getInstance();
 	private RobotState mRobotState;
@@ -117,7 +117,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	}
 	
 	/**
-	 * Updates the output based on commands
+	 * Takes in new set of commands, must be called by a routine!
 	 * @param commands the commands
 	 * @param master the object calling the method
 	 * @throws IllegalAccessException if master not a routine
@@ -177,7 +177,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		mState = SliderState.IDLE;
 	}
 	/**
-	 * A getter for the output for the slider
+	 * Get the output for the slider motor
 	 * @return the output
 	 */
 	public CANTalonOutput getOutput() {

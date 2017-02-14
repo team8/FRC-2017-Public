@@ -4,8 +4,6 @@ import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.robot.team254.lib.util.LegacyPose;
-import com.palyrobotics.frc2017.subsystems.controllers.EncoderTurnAngleController;
-import com.palyrobotics.frc2017.subsystems.controllers.GyroTurnAngleController;
 import com.palyrobotics.frc2017.util.archive.team254.controllers.team254.DriveFinishLineController;
 import com.palyrobotics.frc2017.util.archive.team254.controllers.team254.DrivePathController;
 import com.palyrobotics.frc2017.util.archive.team254.controllers.team254.DriveStraightController;
