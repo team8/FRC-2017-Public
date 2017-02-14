@@ -1,6 +1,7 @@
 package com.palyrobotics.frc2017.config;
 
-import com.palyrobotics.frc2017.robot.team254.lib.util.Pose;
+import com.palyrobotics.frc2017.robot.team254.lib.util.LegacyPose;
+import com.palyrobotics.frc2017.util.Pose;
 
 /**
  * Holds all hardware input, such as sensors. <br />
@@ -16,19 +17,15 @@ public class RobotState {
 	public GamePeriod gamePeriod;
 
 	// Tracks total voltage from kPDP
-	public double voltage;
+	public double totalVoltageDraw;
 
-	// Pose stores encoder and gyro data for drivetrain
-	public Pose drivePose = new Pose(0,0,0,0,0,0);
+	// Pose stores drivetrain sensor data
+	public Pose drivePose = new Pose(0,0,0,0,0, 0, 0,0,0,0);
 
 	public double sliderPotentiometer;
 	public double sliderEncoder;
 	public boolean sliderLeftHFX;
 	public boolean sliderRightHFX;
-
-	// Talon readouts
-	public double leftClosedLoopError;
-	public double rightClosedLoopError;
 
 	// Climber
 	public double climberCurrentDraw;

@@ -1,5 +1,7 @@
 package com.palyrobotics.frc2017.auto;
 
+import com.palyrobotics.frc2017.auto.modes.CenterPegAutoMode;
+import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode;
 import org.json.simple.JSONArray;
 
 import com.palyrobotics.frc2017.auto.modes.DoNothingAutoMode;
@@ -8,6 +10,9 @@ import com.palyrobotics.frc2017.util.Dashboard;
 
 import java.util.ArrayList;
 
+/**
+ * @author Nihar, based off Team 254 2015
+ */
 public class AutoModeSelector {
 	private static AutoModeSelector instance = null;
 	private ArrayList<AutoMode> mAutoModes = new ArrayList<AutoMode>();
@@ -31,8 +36,16 @@ public class AutoModeSelector {
 	}
 
 	public AutoModeSelector() {
-		registerAutonomous(new DoNothingAutoMode());
 		registerAutonomous(new TestAutoMode());
+
+		registerAutonomous(new DoNothingAutoMode());
+
+		registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.CenterAutoVariant.NOTHING));
+		registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.CenterAutoVariant.CROSS_LEFT));
+		registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.CenterAutoVariant.CROSS_RIGHT));
+
+		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.LEFT));
+		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RIGHT));
 	}
 
 	/**

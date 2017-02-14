@@ -45,15 +45,14 @@ public class AutoModeSelectorTest {
 		assertThat("Not all auto modes were retrieved", test.size(), equalTo(correct.size()));
 		assertThat("Auto modes are incorrect", test, equalTo(correct));
 	}
-	
+
+	// TODO: BROKEN WITH NEW AUTO MODES
 	@Test
 	public void testSetAutoModeByName() {
 		AutoModeSelector auto = new AutoModeSelector();
 		// 0 DoNothing
 		// 1 Test
 		auto.registerAutonomous(new DoNothingAutoMode());	// 2
-		auto.registerAutonomous(new DriveForwardAutoMode());	// 3
-		auto.registerAutonomous(new TrajectoryAutoMode());	// 4
 
 		assertThat("Did not catch duplicates", auto.setAutoModeByName("DoNothing"), equalTo(false));
 		assertThat("Found auto mode when none exists", auto.setAutoModeByName("WaitForwardBackward"), equalTo(false));

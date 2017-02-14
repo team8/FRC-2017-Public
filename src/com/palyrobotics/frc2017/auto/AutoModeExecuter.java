@@ -25,7 +25,7 @@ public class AutoModeExecuter {
                 @Override
                 public void run() {
                     if (mAutoMode != null) {
-                        mAutoMode.run(mCommands, mRoutineManager);
+                        mAutoMode.run(mRoutineManager);
                     }
                 }
             });

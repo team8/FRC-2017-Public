@@ -1,21 +1,16 @@
 package com.palyrobotics.frc2017.robot;
 
 import com.palyrobotics.frc2017.subsystems.*;
-import com.palyrobotics.frc2017.util.CANTalonOutput;
-import com.palyrobotics.frc2017.util.DriveSignal;
-import com.palyrobotics.frc2017.util.LegacyDrive;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 
 import com.palyrobotics.frc2017.behavior.Routine;
-import com.palyrobotics.frc2017.behavior.routines.EncoderDriveRoutine;
+import com.palyrobotics.frc2017.behavior.routines.drive.EncoderDriveRoutine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Commands.*;
 import com.palyrobotics.frc2017.config.Commands.JoystickInput.XboxInput;
-import com.palyrobotics.frc2017.subsystems.Climber.ClimberState;
 import com.palyrobotics.frc2017.subsystems.Intake;
 import com.palyrobotics.frc2017.subsystems.Spatula;
-import com.palyrobotics.frc2017.subsystems.Spatula.SpatulaState;
 
 /**
  * Used to produce Commands {@link Commands} from human input
@@ -59,7 +54,7 @@ public class OperatorInterface {
 	 */
 	public Commands updateCommands(Commands prevCommands) {
 		Commands newCommands = prevCommands.copy();
-		if(prevCommands.wantedDriveState != Drive.DriveState.CONTROLLER) {
+		if(prevCommands.wantedDriveState != Drive.DriveState.OFF_BOARD_CONTROLLER) {
 			newCommands.wantedDriveState = Drive.DriveState.CHEZY;
 		}
 		

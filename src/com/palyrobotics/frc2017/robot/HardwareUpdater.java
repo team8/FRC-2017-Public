@@ -5,14 +5,14 @@ import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
-import com.palyrobotics.frc2017.util.LegacyDrive;
+
+import java.util.Optional;
 
 /**
  * Should only be used in robot package.
  */
 class HardwareUpdater {
 	// Subsystem references
-	private LegacyDrive mLegacyDrive;
 	private Drive mDrive;
 	private Flippers mFlippers;
 	private Slider mSlider;
@@ -49,66 +49,45 @@ class HardwareUpdater {
 	}
 
 	/**
-	 * Hardware Updater for Tyr
-	 * Updates only the drivetrain
-	 */
-	HardwareUpdater(LegacyDrive drive) throws Exception {
-		if(Constants.kRobotName != Constants.RobotName.TYR) {
-			System.out.println("Incompatible robot name and hardware!");
-			throw new Exception();
-		}
-
-		this.mLegacyDrive = drive;
-	}
-
-	/**
 	 * Initialize all hardware
 	 */
 	void initHardware() {
-		// TODO: Add the gyro calibration
-//		HardwareAdapter.getInstance().getDrivetrain().gyro.calibrate();
-		System.out.println("Gyro calibrated");
-		if(Constants.kRobotName != Constants.RobotName.TYR) {
-			CANTalon leftMasterTalon = HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon;
-			CANTalon leftSlaveTalon = HardwareAdapter.getInstance().getDrivetrain().leftSlaveTalon;
-			CANTalon rightMasterTalon = HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon;
-			CANTalon rightSlaveTalon = HardwareAdapter.getInstance().getDrivetrain().rightSlaveTalon;
+		HardwareAdapter.getInstance().getDrivetrain().gyro.calibrate();
+		CANTalon leftMasterTalon = HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon;
+		CANTalon leftSlaveTalon = HardwareAdapter.getInstance().getDrivetrain().leftSlaveTalon;
+		CANTalon rightMasterTalon = HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon;
+		CANTalon rightSlaveTalon = HardwareAdapter.getInstance().getDrivetrain().rightSlaveTalon;
 
-			// Enable all talons' brake mode and disables forward and reverse soft limits
-			leftMasterTalon.enableBrakeMode(true);
-			leftSlaveTalon.enableBrakeMode(true);
-			rightSlaveTalon.enableBrakeMode(true);
-			rightMasterTalon.enableBrakeMode(true);
-			leftMasterTalon.enableForwardSoftLimit(false);
-			leftMasterTalon.enableReverseSoftLimit(false);
-			rightMasterTalon.enableForwardSoftLimit(false);
-			rightMasterTalon.enableReverseSoftLimit(false);
+		// Enable all talons' brake mode and disables forward and reverse soft limits
+		leftMasterTalon.enableBrakeMode(true);
+		leftSlaveTalon.enableBrakeMode(true);
+		rightSlaveTalon.enableBrakeMode(true);
+		rightMasterTalon.enableBrakeMode(true);
+		leftMasterTalon.enableForwardSoftLimit(false);
+		leftMasterTalon.enableReverseSoftLimit(false);
+		rightMasterTalon.enableForwardSoftLimit(false);
+		rightMasterTalon.enableReverseSoftLimit(false);
 
-			// Enable all the talons
-			leftMasterTalon.enable();
-			leftSlaveTalon.enable();
-			rightMasterTalon.enable();
-			rightSlaveTalon.enable();
-			// Configure master talon feedback devises
-			leftMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
-			rightMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
-			leftMasterTalon.reverseSensor(true);
-			rightMasterTalon.reverseOutput(true);
+		// Enable all the talons
+		leftMasterTalon.enable();
+		leftSlaveTalon.enable();
+		rightMasterTalon.enable();
+		rightSlaveTalon.enable();
+		// Configure master talon feedback devises
+		leftMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+		rightMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+		leftMasterTalon.reverseSensor(true);
+		rightMasterTalon.reverseOutput(true);
 
-			// Zero encoders
-			leftMasterTalon.setEncPosition(0);
-			rightMasterTalon.setEncPosition(0);
+		// Zero encoders
+		leftMasterTalon.setEncPosition(0);
+		rightMasterTalon.setEncPosition(0);
 
-			// Set slave talons to follower mode
-			leftSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
-			leftSlaveTalon.set(leftMasterTalon.getDeviceID());
-			rightSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
-			rightSlaveTalon.set(rightMasterTalon.getDeviceID());
-			// Limit max output voltage
-			leftMasterTalon.configPeakOutputVoltage(Constants.kPeakVoltage, -Constants.kPeakVoltage);
-			rightMasterTalon.configPeakOutputVoltage(Constants.kPeakVoltage, -Constants.kPeakVoltage);
-
-		}
+		// Set slave talons to follower mode
+		leftSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
+		leftSlaveTalon.set(leftMasterTalon.getDeviceID());
+		rightSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
+		rightSlaveTalon.set(rightMasterTalon.getDeviceID());
 	}
 
 	/**
@@ -117,18 +96,17 @@ class HardwareUpdater {
 	void updateSensors(RobotState robotState) {
 		robotState.drivePose.heading = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getAngle();
 		robotState.drivePose.headingVelocity = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getRate();
-		// Non-Tyr robots use talons
-		if(Constants.kRobotName != Constants.RobotName.TYR) {
 			CANTalon leftMasterTalon = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon;
 			CANTalon rightMasterTalon = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon;
-			robotState.drivePose.leftDistance = leftMasterTalon.getEncPosition();
-			robotState.drivePose.leftVelocity = leftMasterTalon.getEncVelocity();
-			robotState.drivePose.rightDistance = rightMasterTalon.getEncPosition();
-			robotState.drivePose.rightVelocity = rightMasterTalon.getEncVelocity();
+			robotState.drivePose.leftEnc = leftMasterTalon.getEncPosition();
+			robotState.drivePose.leftEncVelocity = leftMasterTalon.getEncVelocity();
+			robotState.drivePose.leftSpeed = leftMasterTalon.getSpeed();
+			robotState.drivePose.rightEnc = rightMasterTalon.getEncPosition();
+			robotState.drivePose.rightEncVelocity = rightMasterTalon.getEncVelocity();
+			robotState.drivePose.rightSpeed = rightMasterTalon.getSpeed();
 
-			robotState.leftClosedLoopError = leftMasterTalon.getClosedLoopError();
-			robotState.rightClosedLoopError = rightMasterTalon.getClosedLoopError();
-		}
+			robotState.drivePose.leftError = Optional.of(leftMasterTalon.getClosedLoopError());
+			robotState.drivePose.rightError = Optional.of(rightMasterTalon.getClosedLoopError());
 		if(Constants.kRobotName == Constants.RobotName.AEGIR || Constants.kRobotName == Constants.RobotName.STEIK) {
 			robotState.sliderEncoder = HardwareAdapter.SliderHardware.getInstance().sliderMotor.getPosition();
 //			robotState.sliderEncoder = HardwareAdapter.SliderHardware.getInstance().sliderEncoder.getDistance();
@@ -157,11 +135,7 @@ class HardwareUpdater {
 		if (Constants.kRobotName == Constants.RobotName.STEIK || Constants.kRobotName == Constants.RobotName.AEGIR) {
 			updateSteikSubsystems();
 		}
-		if (Constants.kRobotName == Constants.RobotName.TYR) {
-			updateTyrDrivetrain();
-		} else {
-			updateDrivetrain();
-		}
+		updateDrivetrain();
 	}
 
 	private void updateSteikSubsystems() {
@@ -202,23 +176,5 @@ class HardwareUpdater {
 		if(talon.getSetpoint() != output.getSetpoint()) {
 			talon.setSetpoint(output.getSetpoint());
 		}
-	}
-
-	/**
-	 * Updates the drivetrain on Tyr
-	 * Can only use direct PWM signals
-	 * Automatically inverts the right side motor output
-	 */
-	private void updateTyrDrivetrain() {
-		CANTalon kLeftFront = HardwareAdapter.getInstance().getDrivetrain().leftSlaveTalon;
-		CANTalon kLeftBack = HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon;
-		kLeftFront.set(mLegacyDrive.getDriveSignal().leftMotor.getSetpoint());
-		kLeftBack.set(mLegacyDrive.getDriveSignal().leftMotor.getSetpoint());
-
-		// Need to invert right side motors
-		CANTalon kRightFront = HardwareAdapter.getInstance().getDrivetrain().rightSlaveTalon;
-		CANTalon kRightBack = HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon;
-		kRightFront.set(-mLegacyDrive.getDriveSignal().rightMotor.getSetpoint());
-		kRightBack.set(-mLegacyDrive.getDriveSignal().rightMotor.getSetpoint());
 	}
 }

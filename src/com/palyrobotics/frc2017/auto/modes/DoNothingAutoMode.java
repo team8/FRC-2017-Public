@@ -5,7 +5,7 @@ import com.palyrobotics.frc2017.auto.AutoModeEndedException;
 
 public class DoNothingAutoMode extends AutoMode {
 	@Override
-	protected void routine() throws AutoModeEndedException {
+	protected void execute() throws AutoModeEndedException {
 
 	}
 

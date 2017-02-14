@@ -4,11 +4,11 @@ import com.palyrobotics.frc2017.robot.team254.lib.util.ConstantsBase;
 
 public class Constants extends ConstantsBase {
 	public enum RobotName {
-		STEIK, AEGIR, TYR, DERICA
+		STEIK, AEGIR, DERICA
 	}
 	public static final RobotName kRobotName = RobotName.DERICA;
 
-	// Chezy LegacyDrive tuning
+	// Cheesy Drive tuning
 	public static double kDriveSensitivity = .85;
 	public static double kNegativeInertiaScalar = 5.0;
 
@@ -16,58 +16,84 @@ public class Constants extends ConstantsBase {
 	public static double kManualIntakeSpeed = 1.0;
 	public static double kManualExhaustSpeed = -1.0;
 
-	// DriveStraightController gains
-	public static double kDriveMaxSpeedInchesPerSec = 80.0;
-	public static double kDriveMaxAccelInchesPerSec2 = 10.0;
-	public static double kDrivePositionKp = 0.7;
-	public static double kDrivePositionKi = 0;
-	public static double kDrivePositionKd = .07;
-	public static double kDrivePositionKv = 0.008;
-	public static double kDrivePositionKa = 0.0017;
-	// PID Tuning for turning to straighten
-	public static double kDriveStraightKp = 00;
-	public static double kDriveStraightKi = 0;
-	public static double kDriveStraightKd = 0.04;
-	public static double kDriveOnTargetError = 1.5;
-	public static double kDrivePathHeadingFollowKp = 0.01;
-	
-	public static double kAcceptableDriveError = 200;
+	/*
+	 * Control loop constants for both robots
+	 */
+	public static double kTurnInPlaceSpeed = 0.5;
+	// Unit Conversions for CANTalons
+	// TODO: Calculate the unit conversions for native units and inches, rpm, etc as needed
+	public static double kDegreeToDistance = 0;
 
-	//Encoder Turn in Place Controller gains
-	public static double kEncoderTurnKp = 0.07;
-	public static double kEncoderTurnKi = 0.01;
-	public static double kEncoderTurnKd = 0.007;
-	public static double kAcceptableEncoderTurnError = 2;
-	
-	// Gyro Turn in Place controller gains
-	public static double kGyroTurnKp = 0.195E-1;
-	public static double kGyroTurnKi = 0.04;
-	public static double kGyroTurnKd = 0.014E-1;
-	public static double kAcceptableGyroTurnError = 2;
-	public static double kAcceptableGyroTurnStopSpeed = 1.2;
-	public static double kTurnAngleSpeed = .35;
-	
-	// TurnInPlaceController gains
-	public static double kTurnMaxSpeedRadsPerSec = 4.5;
-	public static double kTurnMaxAccelRadsPerSec2 = 4.5;
-	public static double kTurnKp = 3.0;
-	public static double kTurnKi = 0.18;
-	public static double kTurnKd = 0.23;
-	public static double kTurnKv = 0.085;
-	public static double kTurnKa = 0.075;
-	public static double kTurnOnTargetError = 0.1;
-	
-	// !!! End of editable Constants! !!!
-	public static int kEndEditableArea = 0;
-
-	// CANTalon Tuning
-	public static float kPeakVoltage = 8.0f;
-
-	// Compressor Ports DON'T WORK
-	public static int kCompressorRelayPort = 0;
+	// Tolerances
+	public static double kAcceptableDrivePositionError = 100;
+	public static double kAcceptableTurnAngleError = 1;
+	public static double kAcceptableSliderPositionError;
 
 	/*
-	 * STEIK ELECTRONIC CONSTANTS
+	 * Control loops tuning - STEIK
+	 */
+
+	// Drive Position offboard control loop
+	public static double kSteikDriveDistancekP = 0;
+	public static double kSteikDriveDistancekI = 0;
+	public static double kSteikDriveDistancekD = 0;
+	public static double kSteikDriveDistancekF = 0;
+	public static int kSteikDriveDistancekIzone = 0;
+	public static double kSteikDriveDistancekRampRate = 0.0;
+
+	// Drive Velocity offboard control loop
+	public static double kSteikDriveVelocitykP = 0.0;
+	public static double kSteikDriveVelocitykI = 0;
+	public static double kSteikDriveVelocitykD = 0.0;
+	public static double kSteikDriveVelocitykF = 0;
+	public static int kSteikDriveVelocitykIzone = 0;
+	public static double kSteikDriveVelocitykRampRate = 0.0;
+
+	// Slider position offboard control loop
+
+	// Slider motion magic offboard control loop
+
+	// Slider potentiometer position onboard control loop
+	/*
+	 * CAN Talon Tuning - AEGIR
+	 */
+	// Unit Conversions
+	// TODO: Calculate the unit conversions for native units and inches, rpm, etc as needed
+
+	// Drive Position offboard control loop
+	public static double kAegirDriveDistancekP = 0;
+	public static double kAegirDriveDistancekI = 0;
+	public static double kAegirDriveDistancekD = 0;
+	public static double kAegirDriveDistancekF = 0;
+	public static int kAegirDriveDistancekIzone = 0;
+	public static double kAegirDriveDistancekRampRate = 0.0;
+
+	// Drive Velocity offboard control loop
+	public static double kAegirDriveVelocitykP = 0.0;
+	public static double kAegirDriveVelocitykI = 0;
+	public static double kAegirDriveVelocitykD = 0.0;
+	public static double kAegirDriveVelocitykF = 0;
+	public static int kAegirDriveVelocitykIzone = 0;
+	public static double kAegirDriveVelocityRampRate = 0.0;
+
+	// Slider position offboard control loop
+
+	// Slider motion magic offboard control loop
+
+	// Slider potentiometer position onboard control loop
+
+
+	/* !!! End of editable Constants! !!!
+	 **********************************************************************************
+	 */
+	public static int kEndEditableArea = 0;
+
+
+
+	/*
+	 * ************************************
+	 *  STEIK ELECTRONIC CONSTANTS
+	 * ************************************
 	 */
 	// DRIVETRAIN
 	public static int kSteikLeftDriveMasterDeviceID  = 0;
@@ -113,7 +139,9 @@ public class Constants extends ConstantsBase {
 	public static int kSteikClimberEncoderPortB = 0;
 
 	/*
-	 * AEGIR ELECTRONIC CONSTANTS
+	 * ************************************
+	 *  AEGIR ELECTRONIC CONSTANTS
+	 * ************************************
 	 */
 	public static int kAegirLeftDriveMasterDeviceID  = 0;
 	public static int kAegirLeftDriveSlaveDeviceID = 0;
@@ -156,17 +184,15 @@ public class Constants extends ConstantsBase {
 	public static int kAegirClimberMotorPDP = 0;
 	public static int kAegirClimberEncoderPortA = 0;
 	public static int kAegirClimberEncoderPortB = 0;
+
 	// !!! Physical constants
+	// TODO: Ailyn insert the autonomous constants here
 
 	// !!! Loop rate of normal Looper
 	public static double kControlLoopsDt = 0.005;
 
 	// !!! Loop rate of subsystem updates
 	public static double kSubsystemLooperDt = 0.005;
-
-	// LegacyDrive parameters
-	public static double kDriveEncoderCountsPerRev = 250.0;
-	public static double kDriveWheelSizeInches = 8; //pneumatic wheels
 
 
 	@Override

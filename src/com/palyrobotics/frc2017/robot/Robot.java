@@ -10,9 +10,8 @@ import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.Dashboard;
-import com.palyrobotics.frc2017.util.LegacyDrive;
-import com.palyrobotics.frc2017.util.SubsystemLooper;
-import com.palyrobotics.frc2017.util.DriveSignal;
+import com.palyrobotics.frc2017.util.archive.SubsystemLooper;
+import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.palyrobotics.frc2017.robot.team254.lib.util.RobotData;
 import com.palyrobotics.frc2017.robot.team254.lib.util.SystemManager;
 
@@ -63,7 +62,7 @@ public class Robot extends IterativeRobot {
 			try {
 				mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSimpleSlider, mSpatula, mIntake, mClimber);
 			} catch (Exception e) {
-				
+				System.exit(1);
 			}
 			mSubsystemLooper.register(mDrive);
 			mSubsystemLooper.register(mFlippers);
@@ -71,18 +70,11 @@ public class Robot extends IterativeRobot {
 			mSubsystemLooper.register(mSpatula);
 			mSubsystemLooper.register(mIntake);
 			mSubsystemLooper.register(mClimber);
-		} else if (Constants.kRobotName == Constants.RobotName.TYR) {
-			try {
-				mHardwareUpdater = new HardwareUpdater(LegacyDrive.getInstance());
-			} catch (Exception e) {
-				
-			}
-			mSubsystemLooper.register(LegacyDrive.getInstance());
 		} else {
 			try {
 				mHardwareUpdater = new HardwareUpdater(mDrive);
 			} catch (Exception e) {
-				
+				System.exit(1);
 			}
 			mSubsystemLooper.register(mDrive);
 		}
@@ -141,8 +133,8 @@ public class Robot extends IterativeRobot {
 		mHardwareUpdater.updateSubsystems();
 		
 		// Update sensorTable with encoder distances
-		sensorTable.putString("left", String.valueOf(robotState.drivePose.getLeftDistance()));
-		sensorTable.putString("right", String.valueOf(robotState.drivePose.getRightDistance()));
+		sensorTable.putString("left", String.valueOf(robotState.drivePose.leftEnc));
+		sensorTable.putString("right", String.valueOf(robotState.drivePose.rightEnc));
 		mDashboard.update();
 	}
 
@@ -161,7 +153,7 @@ public class Robot extends IterativeRobot {
 		mSubsystemLooper.stop();
 
 		// Stop controllers
-		mDrive.setOpenLoop(DriveSignal.getNeutralSignal());
+		mDrive.setNeutral();
 
 		// Manually run garbage collector
 		System.gc();

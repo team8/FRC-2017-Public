@@ -11,8 +11,8 @@ public class TestAutoMode extends AutoMode {
 	// Current configured to test gyro turn angle
 
 	@Override
-	protected void routine() throws AutoModeEndedException {
-		drive.setBangBangTurnAngleSetpoint(90);
+	protected void execute() throws AutoModeEndedException {
+		drive.setTurnAngleSetpoint(90);
 //		drive.setDistanceSetpoint(1);
 	}
 

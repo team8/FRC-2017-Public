@@ -2,6 +2,8 @@ package com.palyrobotics.frc2017.util;
 
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.util.archive.CheesyDriveHelper;
+import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertFalse;

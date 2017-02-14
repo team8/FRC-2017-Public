@@ -2,24 +2,25 @@ package com.palyrobotics.frc2017.auto;
 
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.RoutineManager;
-import com.palyrobotics.frc2017.config.Commands;
 
 public abstract class AutoModeBase {
     protected double updateRate = 1.0 / 50.0;
     protected boolean active = false;
 
-    protected abstract void routine() throws AutoModeEndedException;
+    protected abstract void execute() throws AutoModeEndedException;
     public abstract String toString();
     public abstract void prestart();
     private RoutineManager mRoutineManager;
-    private Commands mCommands;
 
-    public void run(Commands commands, RoutineManager routineManager) {
+    /**
+     * Runs this routine
+     * @param routineManager Routine manager to send commands to
+     */
+    public void run(RoutineManager routineManager) {
     	this.mRoutineManager = routineManager;
-    	this.mCommands = commands;
         active = true;
         try {
-            routine();
+            execute();
         } catch (AutoModeEndedException e) {
             System.out.println("Auto mode done, ended early");
             return;
@@ -43,7 +44,7 @@ public abstract class AutoModeBase {
     }
 
     public void runRoutine(Routine routine) {
-    	mRoutineManager.addNewRoutine(mCommands, routine);
+    	mRoutineManager.addNewRoutine(routine);
     }
     
 }

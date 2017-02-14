@@ -5,7 +5,6 @@ import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 
-import com.palyrobotics.frc2016.behavior.*;
 import com.palyrobotics.frc2017.config.Commands;
 import org.junit.Test;
 
@@ -27,8 +26,8 @@ public class RoutineManagerTest {
 		mRoutineManager.reset(commands);
 		SampleRoutine mRoutine = new SampleRoutine();
 		DrivetrainRoutine mDriveRoutine = new DrivetrainRoutine();
-		mRoutineManager.addNewRoutine(commands, mRoutine);
-		mRoutineManager.addNewRoutine(commands, mDriveRoutine);
+		mRoutineManager.addNewRoutine(mRoutine);
+		mRoutineManager.addNewRoutine(mDriveRoutine);
 		// TODO: Test actual functionality of the reset method
 		mRoutineManager.reset(commands);
 		assertThat("Routines were not emptied", mRoutineManager.getCurrentRoutines().isEmpty(), equalTo(true));

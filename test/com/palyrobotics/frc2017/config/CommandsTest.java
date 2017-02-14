@@ -1,7 +1,7 @@
 package com.palyrobotics.frc2017.config;
 
 import com.palyrobotics.frc2017.subsystems.Drive;
-import com.palyrobotics.frc2017.util.DriveSignal;
+import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import org.junit.Test;
 
 import java.util.Optional;

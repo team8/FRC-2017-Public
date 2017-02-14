@@ -1,13 +1,13 @@
 package com.palyrobotics.frc2017.subsystems.controllers;
 
 import com.palyrobotics.frc2017.config.Constants2016;
-import com.palyrobotics.frc2017.util.LegacyDrive;
+import com.palyrobotics.frc2017.util.archive.LegacyDrive;
 import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.util.DriveSignal;
-import com.palyrobotics.frc2017.robot.team254.lib.util.Pose;
+import com.palyrobotics.frc2017.util.archive.DriveSignal;
+import com.palyrobotics.frc2017.robot.team254.lib.util.LegacyPose;
 
 public class EncoderTurnAngleController implements LegacyDrive.DriveController {
-	private Pose mCachedPose;
+	private LegacyPose mCachedPose;
 
 	private double mMaxVel;
 	private double mLeftTarget;
@@ -25,15 +25,13 @@ public class EncoderTurnAngleController implements LegacyDrive.DriveController {
 	private double mRightI;
 	private double mRightD;
 	
-	public EncoderTurnAngleController(Pose priorSetpoint, double angle, double maxVel) {
+	public EncoderTurnAngleController(LegacyPose priorSetpoint, double angle, double maxVel) {
 		this.mMaxVel = maxVel;
 		
 		if(Constants.kRobotName == Constants.RobotName.DERICA) {
 			kDegreeToDistance = Constants2016.kDericaDegreeToDistance;
-		} else if(Constants.kRobotName == Constants.RobotName.TYR) {
-			kDegreeToDistance = Constants2016.kTyrDegreeToDistance;
 		} else {
-			kDegreeToDistance = 1;
+			kDegreeToDistance = Constants.kDegreeToDistance;
 		}
 		
 		mLeftTarget = priorSetpoint.getLeftDistance() + angle * kDegreeToDistance;
@@ -41,7 +39,7 @@ public class EncoderTurnAngleController implements LegacyDrive.DriveController {
 	}
 	
 	@Override
-	public DriveSignal update(Pose pose) {
+	public DriveSignal update(LegacyPose pose) {
 		mLeftP = mLeftTarget - pose.getLeftDistance();
 		mRightP = mRightTarget - pose.getRightDistance();
 		
@@ -52,9 +50,9 @@ public class EncoderTurnAngleController implements LegacyDrive.DriveController {
 		mRightD = -pose.getRightVelocity();
 		
 		mLeftSpeed = Math.max(-mMaxVel, 
-				Math.min(mMaxVel, Constants.kEncoderTurnKp * mLeftP + Constants.kEncoderTurnKi * mLeftI + Constants.kEncoderTurnKd * mLeftD));
+				Math.min(mMaxVel, Constants2016.kEncoderTurnKp * mLeftP + Constants2016.kEncoderTurnKi * mLeftI + Constants2016.kEncoderTurnKd * mLeftD));
 		mRightSpeed = Math.max(-mMaxVel, 
-				Math.min(mMaxVel, Constants.kEncoderTurnKp * mRightP + Constants.kEncoderTurnKi * mRightI + Constants.kEncoderTurnKd * mRightD));
+				Math.min(mMaxVel, Constants2016.kEncoderTurnKp * mRightP + Constants2016.kEncoderTurnKi * mRightI + Constants2016.kEncoderTurnKd * mRightD));
 		DriveSignal output = DriveSignal.getNeutralSignal();
 		output.leftMotor.setPercentVBus(mLeftSpeed);
 		output.rightMotor.setPercentVBus(mRightSpeed);
@@ -62,15 +60,8 @@ public class EncoderTurnAngleController implements LegacyDrive.DriveController {
 	}
 
 	@Override
-	public Pose getCurrentSetpoint() {
-//		return new Pose(
-//				HardwareAdaptor.kDrive.m_left_encoder.getDistance(),//leftTarget,
-//				HardwareAdaptor.kDrive.m_right_encoder.getDistance(),//rightTarget,
-//				HardwareAdaptor.kDrive.m_left_encoder.getRate(),//leftSpeed,
-//				HardwareAdaptor.kDrive.m_right_encoder.getRate(),//rightSpeed,
-//				Math.toRadians(HardwareAdaptor.kDrive.m_gyro.getAngle()),
-//				HardwareAdaptor.kDrive.m_gyro.getRate());
-		return new Pose(
+	public LegacyPose getCurrentSetpoint() {
+		return new LegacyPose(
 				mLeftTarget,
 				mRightTarget,
 				mLeftSpeed,
@@ -81,8 +72,8 @@ public class EncoderTurnAngleController implements LegacyDrive.DriveController {
 
 	@Override
 	public boolean onTarget() {
-		if(Math.abs(mLeftP / kDegreeToDistance) < Constants.kAcceptableEncoderTurnError && 
-				Math.abs(mRightP / kDegreeToDistance) < Constants.kAcceptableEncoderTurnError && mLeftD == 0 && mRightD == 0) {
+		if(Math.abs(mLeftP / kDegreeToDistance) < Constants2016.kAcceptableEncoderTurnError &&
+				Math.abs(mRightP / kDegreeToDistance) < Constants2016.kAcceptableEncoderTurnError && mLeftD == 0 && mRightD == 0) {
 			return true;
 		} else return false;
 	}

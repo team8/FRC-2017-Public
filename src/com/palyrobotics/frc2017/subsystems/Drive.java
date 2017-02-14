@@ -2,22 +2,19 @@ package com.palyrobotics.frc2017.subsystems;
 
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.subsystems.controllers.CANTalonDriveController;
 import com.palyrobotics.frc2017.util.*;
-import com.palyrobotics.frc2017.robot.team254.lib.util.Pose;
+import com.palyrobotics.frc2017.robot.team254.lib.util.LegacyPose;
 import com.palyrobotics.frc2017.subsystems.controllers.BangBangTurnAngleController;
-import com.palyrobotics.frc2017.subsystems.controllers.EncoderTurnAngleController;
-import com.palyrobotics.frc2017.subsystems.controllers.GyroTurnAngleController;
-import com.palyrobotics.frc2017.subsystems.controllers.team254.DriveFinishLineController;
-import com.palyrobotics.frc2017.subsystems.controllers.team254.DrivePathController;
-import com.palyrobotics.frc2017.subsystems.controllers.team254.DriveStraightController;
-import com.palyrobotics.frc2017.subsystems.controllers.team254.TimedOpenLoopController;
-import com.palyrobotics.frc2017.subsystems.controllers.team254.TurnInPlaceController;
 import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.robot.team254.lib.trajectory.Path;
+import com.palyrobotics.frc2017.util.archive.CheesyDriveHelper;
+import com.palyrobotics.frc2017.util.archive.DriveSignal;
+import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
 
 /**
  * Represents the drivetrain
  * Uses controllers or cheesydrivehelper/proportionaldrivehelper to calculate DriveSignal
+ * @author Nihar
  */
 public class Drive extends Subsystem implements SubsystemLoop {
 	private static Drive instance = new Drive();
@@ -25,14 +22,18 @@ public class Drive extends Subsystem implements SubsystemLoop {
 		return instance;
 	}
 
-	public enum DriveState {CHEZY, CONTROLLER, OPEN_LOOP, NEUTRAL}
+	/* Various control states for the drivetrain
+	 * Chezy - chezy drive with joystick values, offboard - can talon offboard loop
+	 * on board - control loop calculated in code, open loop - use drive outputs passed in through commands
+	 * neutral - do nothing
+	 */
+	public enum DriveState {CHEZY, OFF_BOARD_CONTROLLER, ON_BOARD_CONTROLLER, OPEN_LOOP, NEUTRAL}
 	private DriveState mState = DriveState.NEUTRAL;
 
-	// Helper classes to calculate teleop output
+	// Helper class to calculate teleop output
 	private CheesyDriveHelper mCDH = new CheesyDriveHelper();
-//	private ProportionalDriveHelper mPDH = new ProportionalDriveHelper();
 
-	private LegacyDrive.DriveController mController = null;
+	private Drive.DriveController mController = null;
 
 	// Encoder DPP
 	private final double kInchesPerTick;
@@ -40,8 +41,8 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	private final double kTurnSlipFactor; // Measure empirically
 	public final double kInchesToTicks;
 
-	// Cache poses to not allocated at 200Hz
-	private Pose mCachedPose = new Pose(0, 0, 0, 0, 0, 0);
+	// Cache poses to not be allocating at 200Hz
+	private Pose mCachedPose = new Pose(0, 0, 0, 0, 0, 0, 0, 0);
 	// Cached robot state, updated by looper
 	private RobotState mCachedRobotState;
 	// Stores output
@@ -49,13 +50,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 
 	private Drive() {
 		super("Drive");
-		if (Constants.kRobotName == Constants.RobotName.TYR) {
-			kWheelbaseWidth = 26.0;
-			kTurnSlipFactor = 1.2;
-			kInchesPerTick = 0.184;
-			kInchesToTicks = 1400 / (2 * 3.1415 * 3.5);
-		}
-		else if (Constants.kRobotName == Constants.RobotName.DERICA) {
+		if (Constants.kRobotName == Constants.RobotName.DERICA) {
 			kWheelbaseWidth = 22.0;
 			kTurnSlipFactor = 1.2;
 			kInchesPerTick = 0.07033622;
@@ -90,28 +85,32 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	 */
 	@Override
 	public void update(Commands commands, RobotState state) {
-		// TODO: UNDO
 		mCachedRobotState = state;
 		boolean mIsNewState = (mState == commands.wantedDriveState) ? false : true;
 		Commands.Setpoints setpoints = commands.robotSetpoints;
-		// Call methods associated with any setpoints that are present
-		// Encoder drive distance routine
-//		setpoints.encoder_drive_setpoint.ifPresent(this.setDistanceSetpoint(setpoints.encoder_drive_setpoint));
 
 		switch(commands.wantedDriveState) {
 			case CHEZY:
 				setDriveOutputs(mCDH.cheesyDrive(commands, mCachedRobotState));
 				break;
-			case CONTROLLER:
+			case OFF_BOARD_CONTROLLER:
 				if (mIsNewState) {
-					//setDriveOutputs
+					// If no controller set yet, shift to neutral and wait for next cycle to try again
+					if (mController == null) {
+						setDriveOutputs(DriveSignal.getNeutralSignal());
+						System.err.println("No offboard controller to use!");
+						mState = DriveState.NEUTRAL;
+						return;
+					}
+					setDriveOutputs(mController.update(mCachedRobotState));
 				}
-				System.out.println("Left "+ state.leftClosedLoopError);
-				if (state.leftClosedLoopError < Constants.kAcceptableDriveError) {
-					System.out.println("Talons reached setpoint!");
-				}
-//				setDriveOutputs(mController.update(getPhysicalPose()));
 				break;
+			case ON_BOARD_CONTROLLER:
+				if (mController == null) {
+					System.err.println("No onboard controller to use!");
+				} else {
+					setDriveOutputs(mController.update(mCachedRobotState));
+				}
 			case OPEN_LOOP:
 				setDriveOutputs(commands.robotSetpoints.drivePowerSetpoint.get());
 			case NEUTRAL:
@@ -131,77 +130,20 @@ public class Drive extends Subsystem implements SubsystemLoop {
 		mSignal = signal;
 	}
 
-	public void setOpenLoop(DriveSignal signal) {
+	/**
+	 * Used when external reset of drivetrain is desired
+	 */
+	public void setNeutral() {
 		mController = null;
-		setDriveOutputs(signal);
+		setDriveOutputs(DriveSignal.getNeutralSignal());
 	}
 
-	public void setDistanceSetpoint(double distance) {
-		setDistanceSetpoint(distance, Constants.kDriveMaxSpeedInchesPerSec);
-	}
-	public void setDistanceSetpoint(double distance, double velocity) {
-		// 0 < vel < max_vel
-		double velToUse = Math.min(Constants.kDriveMaxSpeedInchesPerSec, Math.max(velocity, 0));
-		mController = new DriveStraightController(
-				getPoseToContinueFrom(false),
-				distance,
-				velToUse);
+	public void setCANTalonController(DriveSignal signal) {
+		mController = new CANTalonDriveController(signal);
 	}
 
-	public void setAutoAlignSetpoint(double heading) {
-		// Check if already turning to that setpoint
-		if(mController instanceof GyroTurnAngleController) {
-//			if(m_controller.getCurrentSetpoint().getHeading()-getPhysicalPose().getHeading() != heading) {
-//				// New auto align iteration
-//				System.out.println("New auto align setpoint");
-//				setGyroTurnAngleSetpoint(heading);
-//			}
-		} else {
-			System.out.println("Started auto align controller");
-			setGyroTurnAngleSetpoint(heading, 0.45);
-		}
-	}
-
-	public void setTimerDriveSetpoint(double velocity, double time) {
-		mController = (LegacyDrive.DriveController) new TimedOpenLoopController(velocity, time, 0, 1.5);
-	}
-
-	public void setTimerDriveSetpoint(double velocity, double time, double decelTime) {
-		mController = (LegacyDrive.DriveController) new TimedOpenLoopController(velocity, time, 0, decelTime);
-	}
-
-	public void setTimerDriveSetpoint(double startPower, double timeFullOn, double endPower, double timeToDecel) {
-		mController = (LegacyDrive.DriveController) new TimedOpenLoopController(startPower, timeFullOn, endPower, timeToDecel);
-
-	}
-
-	public void setTurnSetpoint(double heading) {
-		setTurnSetpoint(heading, Constants.kTurnMaxSpeedRadsPerSec);
-	}
-
-	public void setTurnSetpoint(double heading, double velocity) {
-		velocity = Math.min(Constants.kTurnMaxSpeedRadsPerSec, Math.max(velocity, 0));
-		mController = new TurnInPlaceController(getPoseToContinueFrom(true), heading, velocity);
-	}
-
-	public void setEncoderTurnAngleSetpoint(double heading) {
-		setEncoderTurnAngleSetpoint(heading, 1);
-	}
-
-	public void setEncoderTurnAngleSetpoint(double heading, double maxVel) {
-		mController = new EncoderTurnAngleController(getPoseToContinueFrom(true), heading, maxVel);
-	}
-
-	public void setGyroTurnAngleSetpoint(double heading) {
-		setGyroTurnAngleSetpoint(heading, 0.7);
-	}
-
-	public void setGyroTurnAngleSetpoint(double heading, double maxVel) {
-		mController = new GyroTurnAngleController(getPoseToContinueFrom(true), heading, maxVel);
-	}
-
-	public void setBangBangTurnAngleSetpoint(double heading) {
-		mController = new BangBangTurnAngleController(getPoseToContinueFrom(true), heading);
+	public void setTurnAngleSetpoint(double heading) {
+		mController = new BangBangTurnAngleController(mCachedPose, heading);
 	}
 
 	// Wipes current controller
@@ -209,54 +151,32 @@ public class Drive extends Subsystem implements SubsystemLoop {
 		mController = null;
 	}
 
-	public void setPathSetpoint(Path path) {
-		resetController();
-		mController = new DrivePathController(path);
-	}
-
-	public void setFinishLineSetpoint(double distance, double heading) {
-		resetController();
-		mController = new DriveFinishLineController(distance, heading, 1.0);
-	}
-
-	private Pose getPoseToContinueFrom(boolean forTurnController) {
-		if (!forTurnController && mController instanceof TurnInPlaceController) {
-			Pose poseToUse = getPhysicalPose();
-			poseToUse.heading = ((TurnInPlaceController) mController).getHeadingGoal();
-			poseToUse.headingVelocity = 0;
-			return poseToUse;
-		} else if (mController == null || (mController instanceof DriveStraightController && forTurnController)) {
-			return getPhysicalPose();
-		} else if (mController instanceof DriveFinishLineController) {
-			return getPhysicalPose();
-		} else if (mController.onTarget()) {
-			return mController.getCurrentSetpoint();
-		} else {
-			return getPhysicalPose();
-		}
-	}
-
 	/**
 	 * @return The pose according to the current sensor state
 	 */
-	public Pose getPhysicalPose() {
+	public Pose getPose() {
 		// If drivetrain has not had first update yet, return initial robot pose of 0,0,0,0,0,0
 		if(mCachedRobotState == null) {
-			return new Pose(0,0,0,0,0,0);
+			return new Pose(0,0,0,0,0,0, 0, 0);
 		}
-		mCachedPose = mCachedRobotState.drivePose;
 		return mCachedPose;
 	}
 
-	public LegacyDrive.DriveController getController() {
+	public Drive.DriveController getController() {
 		return mController;
 	}
 
 	public boolean controllerOnTarget() {
-		return (mCachedRobotState.leftClosedLoopError < Constants.kAcceptableDriveError) && (mCachedRobotState.rightClosedLoopError < Constants.kAcceptableDriveError);
+		return (mController==null || mController.onTarget());
 	}
 
 	public boolean hasController() {
 		return mController != null;
+	}
+
+	public interface DriveController {
+		DriveSignal update(RobotState state);
+		Pose getSetpoint();
+		boolean onTarget();
 	}
 }
