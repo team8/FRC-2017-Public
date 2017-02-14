@@ -7,7 +7,6 @@ import org.json.simple.JSONArray;
 
 import com.palyrobotics.frc2017.auto.modes.DoNothingAutoMode;
 import com.palyrobotics.frc2017.auto.modes.TestAutoMode;
-import com.palyrobotics.frc2017.util.Dashboard;
 
 import java.util.ArrayList;
 
@@ -36,7 +35,7 @@ public class AutoModeSelector {
 		mAutoModes.add(auto);
 	}
 
-	public AutoModeSelector() {
+	private AutoModeSelector() {
 		registerAutonomous(new TestAutoMode());
 
 		registerAutonomous(new DoNothingAutoMode());
@@ -119,10 +118,9 @@ public class AutoModeSelector {
 	 * Called during disabled in order to access dashbord and set auto mode
 	 * @return false if unable to set automode
 	 */
-	public boolean setFromDashboard() {
-		String selection = Dashboard.getInstance().getSelectedAutoMode();
+	public boolean setFromDashboard(String selection) {
 		if(!setAutoModeByName(selection)) {
-			Dashboard.getInstance().getTable().putString("autopath", getAutoMode().toString());
+			System.err.println("Did not find requested auto mode");
 			return false;
 		}
 		return true;

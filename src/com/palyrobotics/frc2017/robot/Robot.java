@@ -9,9 +9,7 @@ import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.subsystems.*;
-import com.palyrobotics.frc2017.util.Dashboard;
 import com.palyrobotics.frc2017.util.archive.SubsystemLooper;
-import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.palyrobotics.frc2017.robot.team254.lib.util.RobotData;
 import com.palyrobotics.frc2017.robot.team254.lib.util.SystemManager;
 
@@ -29,11 +27,11 @@ public class Robot extends IterativeRobot {
 	private static Commands commands = new Commands();
 	public static Commands getCommands() {return commands;}
 
-	private static OperatorInterface operatorInterface = OperatorInterface.getInstance();
+	private OperatorInterface operatorInterface = OperatorInterface.getInstance();
 	// Instantiate separate thread controls
 	private SubsystemLooper mSubsystemLooper = new SubsystemLooper();
 	private RoutineManager mRoutineManager = new RoutineManager();
-	private AutoModeExecuter mAutoModeExecuter = new AutoModeExecuter(commands, mRoutineManager);
+	private AutoModeExecuter mAutoModeExecuter = new AutoModeExecuter(mRoutineManager);
 	private DashboardManager mDashboardManager = DashboardManager.getInstance();
 
 	// Subsystem controllers
@@ -46,9 +44,6 @@ public class Robot extends IterativeRobot {
 
 	// Hardware Updater
 	private HardwareUpdater mHardwareUpdater;
-
-	private Dashboard mDashboard = Dashboard.getInstance();
-	NetworkTable sensorTable;
 
 	static {
 		SystemManager.getInstance().add(new RobotData());
@@ -80,9 +75,6 @@ public class Robot extends IterativeRobot {
 		}
 		
 		mHardwareUpdater.initHardware();
-		//        SystemManager.getInstance().add(routineManager);
-		sensorTable = NetworkTable.getTable("Sensor");
-		mDashboard.init();
 		System.out.println("End robotInit()");
 	}
 
@@ -105,8 +97,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousPeriodic() {
-		mRoutineManager.update(commands);
-		mDashboard.update();
+		commands = mRoutineManager.update(commands);
 		mHardwareUpdater.updateSensors(robotState);
 		mHardwareUpdater.updateSubsystems();
 	}
@@ -131,11 +122,6 @@ public class Robot extends IterativeRobot {
 
 		//Update the hardware
 		mHardwareUpdater.updateSubsystems();
-		
-		// Update sensorTable with encoder distances
-		sensorTable.putString("left", String.valueOf(robotState.drivePose.leftEnc));
-		sensorTable.putString("right", String.valueOf(robotState.drivePose.rightEnc));
-		mDashboard.update();
 	}
 
 	@Override
@@ -163,8 +149,5 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void disabledPeriodic() {
-		if(Dashboard.getInstance().getSelectedAutoMode() != "-1") {
-			AutoModeSelector.getInstance().setFromDashboard();
-		}
 	}
 }

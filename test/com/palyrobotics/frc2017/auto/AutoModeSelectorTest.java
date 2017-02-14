@@ -25,7 +25,7 @@ public class AutoModeSelectorTest {
 		
 	@Test
 	public void testGetAutoMode() throws IndexOutOfBoundsException {
-		AutoModeSelector auto = new AutoModeSelector();
+		AutoModeSelector auto = AutoModeSelector.getInstance();
 
 		// Using automodes registered in constructor
 		assertThat("Incorrect auto mode retrieved", auto.getAutoMode().getClass(), equalTo(new TestAutoMode().getClass()));
@@ -35,7 +35,7 @@ public class AutoModeSelectorTest {
 	
 	@Test
 	public void testGetAutoModeList() {
-		AutoModeSelector auto = new AutoModeSelector();
+		AutoModeSelector auto = AutoModeSelector.getInstance();
 		
 		ArrayList<String> correct = new ArrayList<String>();
 		correct.add("DoNothing");
@@ -49,7 +49,7 @@ public class AutoModeSelectorTest {
 	// TODO: BROKEN WITH NEW AUTO MODES
 	@Test
 	public void testSetAutoModeByName() {
-		AutoModeSelector auto = new AutoModeSelector();
+		AutoModeSelector auto = AutoModeSelector.getInstance();
 		// 0 DoNothing
 		// 1 Test
 		auto.registerAutonomous(new DoNothingAutoMode());	// 2
@@ -58,16 +58,21 @@ public class AutoModeSelectorTest {
 		assertThat("Found auto mode when none exists", auto.setAutoModeByName("WaitForwardBackward"), equalTo(false));
 		assertThat("Auto mode has been registered", auto.setAutoModeByName("Trajectory"), equalTo(true));
 	}
-	
+
+	/**
+	 * Test that new autonomous modes are registered
+	 */
 	@Test
 	public void testRegisterAutonomous() {
-		AutoModeSelector auto = new AutoModeSelector();
+		AutoModeSelector auto = AutoModeSelector.getInstance();
+		int initSize = auto.getAutoModeList().size();
+		ArrayList<String> autoNames = auto.getAutoModeList();
+		AutoMode newAuto = new DoNothingAutoMode();
+		autoNames.add(newAuto.toString());
+		auto.registerAutonomous(newAuto);
 
-		ArrayList<String> correct = new ArrayList<String>();
-		correct.add("DoNothing");
-		correct.add("Test");
-		correct.add("DoNothing");
-		auto.registerAutonomous(new DoNothingAutoMode());
-		assertThat("AutoModeSelected was constructed incorrectly", auto.getAutoModeList(), equalTo(correct));
+		// Index of the newest auto mode should be the original list length
+		assertThat("AutoMode was registered incorrectly", auto.getAutoMode(initSize), equalTo(newAuto));
+		assertThat("AutoMode was registered incorrectly", auto.getAutoModeList(), equalTo(autoNames));
 	}
 }

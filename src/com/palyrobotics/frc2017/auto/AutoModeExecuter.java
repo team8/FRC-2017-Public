@@ -3,16 +3,17 @@ package com.palyrobotics.frc2017.auto;
 import com.palyrobotics.frc2017.behavior.RoutineManager;
 import com.palyrobotics.frc2017.config.Commands;
 
+/**
+ * Runs an auto mode on its own thread, needs a routine manager
+ */
 public class AutoModeExecuter {
     private AutoModeBase mAutoMode;
     private Thread mThread = null;
     
     private RoutineManager mRoutineManager;
-    private Commands mCommands;
-    
-    public AutoModeExecuter(Commands initialCommands, RoutineManager routineManager) {
-    	this.mRoutineManager = routineManager;
 
+    public AutoModeExecuter(RoutineManager routineManager) {
+    	this.mRoutineManager = routineManager;
     }
     
     public void setAutoMode(AutoModeBase newAutoMode) {
@@ -31,7 +32,6 @@ public class AutoModeExecuter {
             });
             mThread.start();
         }
-
     }
 
     public void stop() {
