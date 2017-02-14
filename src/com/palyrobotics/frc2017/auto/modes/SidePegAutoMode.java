@@ -6,6 +6,8 @@ import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.BBTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
+import com.palyrobotics.frc2017.config.Constants;
+import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
@@ -15,57 +17,85 @@ import java.util.ArrayList;
  * Created by Nihar on 2/11/17.
  */
 public class SidePegAutoMode extends AutoMode {
-	public final double kSidePegDriveDistance = 10;
 	// Might pivot differently when turning left vs right
-	public final double kSidePegLeftTurnAngleDegrees = -60;
-	public final double getkSidePegRightTurnAngleDegrees = 60;
+	public final double kSidePegTurnAngleDegrees = 60;
 
 	// Represents the peg we are going for
 	public enum SideAutoVariant {
 		LEFT, RIGHT
 	}
 	private final SideAutoVariant mVariant;
+	private SequentialRoutine mSequentialRoutine;
+	
+	private double kP, kI, kD, kF, kRampRate;
+	private int kIzone;
 
 	private DriveSignal driveForward = DriveSignal.getNeutralSignal();
 	private DriveSignal driveToAirship = DriveSignal.getNeutralSignal();
 
 	public SidePegAutoMode(SideAutoVariant direction) {
 		mVariant = direction;
-		driveForward.leftMotor = new CANTalonOutput();
-		driveForward.leftMotor.setPosition(0, 0, 0, 0, 0, 0, 0);
-		driveForward.rightMotor = new CANTalonOutput();
-		driveForward.rightMotor.setPosition(0, 0, 0, 0, 0, 0, 0);
-
-		driveToAirship.leftMotor = new CANTalonOutput();
-		driveToAirship.leftMotor.setPosition(0, 0, 0, 0, 0, 0, 0);
-		driveToAirship.rightMotor = new CANTalonOutput();
-		driveToAirship.rightMotor.setPosition(0, 0, 0, 0, 0, 0, 0);
+		switch (Constants.kRobotName) {
+			case DERICA:
+				kP = Constants2016.kDericaPositionkP;
+				kI = Constants2016.kDericaPositionkI;
+				kD = Constants2016.kDericaPositionkD;
+				kF = Constants2016.kDericaPositionkF;
+				kIzone = Constants2016.kDericaPositionkIzone;
+				kRampRate = Constants2016.kDericaPositionRampRate;
+			case AEGIR:
+				kP = Constants.kAegirDriveDistancekP;
+				kI = Constants.kAegirDriveDistancekI;
+				kD = Constants.kAegirDriveDistancekD;
+				kF = Constants.kAegirDriveDistancekF;
+				kIzone = Constants.kAegirDriveDistancekIzone;
+				kRampRate = Constants.kAegirDriveDistancekRampRate;
+			case STEIK:
+				kP = Constants.kSteikDriveDistancekP;
+				kI = Constants.kSteikDriveDistancekI;
+				kD = Constants.kSteikDriveDistancekD;
+				kF = Constants.kSteikDriveDistancekF;
+				kIzone = Constants.kSteikDriveDistancekIzone;
+				kRampRate = Constants.kSteikDriveDistancekRampRate;
+		}
 	}
 
 	@Override
 	protected void execute() throws AutoModeEndedException {
+		runRoutine(mSequentialRoutine);
+	}
+
+	@Override
+	public void prestart() {
+		System.out.println("Starting "+this.toString()+" Auto Mode");
+		
+		driveForward.leftMotor = new CANTalonOutput();
+		driveForward.leftMotor.setPosition(Constants.kSidePegDistanceForwardInches, kP, kI, kD, kF, kIzone, kRampRate);
+		driveForward.rightMotor = new CANTalonOutput();
+		driveForward.rightMotor.setPosition(Constants.kSidePegDistanceForwardInches, kP, kI, kD, kF, kIzone, kRampRate);
+
+		driveToAirship.leftMotor = new CANTalonOutput();
+		driveToAirship.leftMotor.setPosition(Constants.kSidePegDistanceToAirshipInches, kP, kI, kD, kF, kIzone, kRampRate);
+		driveToAirship.rightMotor = new CANTalonOutput();
+		driveToAirship.rightMotor.setPosition(Constants.kSidePegDistanceToAirshipInches, kP, kI, kD, kD, kIzone, kRampRate);
+		
 		ArrayList<Routine> score = new ArrayList<Routine>();
 		score.add(new CANTalonRoutine(driveToAirship));
 //		score.add(slider score auto)
 
 		ArrayList<Routine> sequence = new ArrayList<Routine>();
-		sequence.add(new CANTalonRoutine(driveToAirship));
+		sequence.add(new CANTalonRoutine(driveForward));
 		if (mVariant == SideAutoVariant.LEFT) {
-			sequence.add(new BBTurnAngleRoutine(60));
+			sequence.add(new BBTurnAngleRoutine(-kSidePegTurnAngleDegrees));
 		} else {
-			sequence.add(new BBTurnAngleRoutine(-60));
+			sequence.add(new BBTurnAngleRoutine(kSidePegTurnAngleDegrees));
 		}
-		SequentialRoutine sequentialRoutine = new SequentialRoutine(sequence);
-		runRoutine(sequentialRoutine);
+		sequence.add(new CANTalonRoutine(driveToAirship));
+		mSequentialRoutine = new SequentialRoutine(sequence);
 	}
-
+	
 	@Override
 	public String toString() {
 		return (mVariant == SideAutoVariant.LEFT) ? "LeftPeg" : "RightPeg";
-	}
-
-	@Override
-	public void prestart() {
-		System.out.println("Starting "+this.toString()+" auto mode");
 	}
 }

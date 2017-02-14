@@ -27,6 +27,8 @@ public class Pose {
 		this.leftEnc = 0; this.leftEncVelocity = 0; this.leftSpeed = 0;
 		this.rightEnc = 0; this.rightEncVelocity = 0; this.rightSpeed = 0;
 		this.heading = 0; this.headingVelocity = 0;
+		this.leftError = Optional.empty();
+		this.rightError = Optional.empty();
 	}
 	public Pose(double leftEnc, double leftEncVelocity, double leftSpeed,
 				double rightEnc, double rightEncVelocity, double rightSpeed,
@@ -42,7 +44,6 @@ public class Pose {
 		this.heading = heading;
 		this.headingVelocity = headingVelocity;
 	}
-
 	public Pose(double leftEnc, double leftEncVelocity, double leftSpeed,
 				double rightEnc, double rightEncVelocity, double rightSpeed,
 				double heading, double headingVelocity) {
@@ -54,6 +55,8 @@ public class Pose {
 		this.rightSpeed = rightSpeed;
 		this.heading = heading;
 		this.headingVelocity = headingVelocity;
+		this.leftError = Optional.empty();
+		this.rightError = Optional.empty();
 	}
 
 	// TODO: Copy and equals methods
@@ -69,5 +72,18 @@ public class Pose {
 		copy.leftError = (this.leftError.isPresent()) ? Optional.of(this.leftError.get()) : Optional.empty();
 		copy.rightError = (this.rightError.isPresent()) ? Optional.of(this.rightError.get()) : Optional.empty();
 		return copy;
+	}
+	
+	public boolean equals(Pose other) {
+		return this.leftEnc == other.leftEnc &&
+				this.leftEncVelocity == other.leftEncVelocity &&
+				this.leftSpeed == other.leftSpeed &&
+				this.rightEnc == other.rightEnc &&
+				this.rightEncVelocity == other.rightEncVelocity &&
+				this.rightSpeed == other.rightSpeed &&
+				this.leftError.equals(other.leftError) &&
+				this.rightError.equals(other.rightError) &&
+				this.heading == other.heading &&
+				this.headingVelocity == other.headingVelocity;
 	}
 }

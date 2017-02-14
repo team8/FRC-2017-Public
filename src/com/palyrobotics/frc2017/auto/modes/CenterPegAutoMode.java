@@ -22,41 +22,41 @@ public class CenterPegAutoMode extends AutoMode {
 		NOTHING, CROSS_LEFT, CROSS_RIGHT
 	}
 	private final CenterAutoVariant mVariant;
-	private SequentialRoutine sequentialRoutine;
+	private SequentialRoutine mSequentialRoutine;
 
-	private double kp, ki, kd, kf, kRampRate;
-	private int kizone;
+	private double kP, kI, kD, kF, kRampRate;
+	private int kIzone;
 
 	public CenterPegAutoMode(CenterAutoVariant direction) {
 		mVariant = direction;
 		switch (Constants.kRobotName) {
 			case DERICA:
-				kp = Constants2016.kDericaPositionkP;
-				ki = Constants2016.kDericaPositionkI;
-				kd = Constants2016.kDericaPositionkD;
-				kf = Constants2016.kDericaPositionkF;
-				kizone = Constants2016.kDericaPositionkIzone;
+				kP = Constants2016.kDericaPositionkP;
+				kI = Constants2016.kDericaPositionkI;
+				kD = Constants2016.kDericaPositionkD;
+				kF = Constants2016.kDericaPositionkF;
+				kIzone = Constants2016.kDericaPositionkIzone;
 				kRampRate = Constants2016.kDericaPositionRampRate;
 			case AEGIR:
-				kp = Constants.kAegirDriveDistancekP;
-				ki = Constants.kAegirDriveDistancekI;
-				kd = Constants.kAegirDriveDistancekD;
-				kf = Constants.kAegirDriveDistancekF;
-				kizone = Constants.kAegirDriveDistancekIzone;
+				kP = Constants.kAegirDriveDistancekP;
+				kI = Constants.kAegirDriveDistancekI;
+				kD = Constants.kAegirDriveDistancekD;
+				kF = Constants.kAegirDriveDistancekF;
+				kIzone = Constants.kAegirDriveDistancekIzone;
 				kRampRate = Constants.kAegirDriveDistancekRampRate;
 			case STEIK:
-				kp = Constants.kSteikDriveDistancekP;
-				ki = Constants.kSteikDriveDistancekI;
-				kd = Constants.kSteikDriveDistancekD;
-				kf = Constants.kSteikDriveDistancekF;
-				kizone = Constants.kSteikDriveDistancekIzone;
+				kP = Constants.kSteikDriveDistancekP;
+				kI = Constants.kSteikDriveDistancekI;
+				kD = Constants.kSteikDriveDistancekD;
+				kF = Constants.kSteikDriveDistancekF;
+				kIzone = Constants.kSteikDriveDistancekIzone;
 				kRampRate = Constants.kSteikDriveDistancekRampRate;
 		}
 	}
 
 	@Override
 	protected void execute() throws AutoModeEndedException {
-		runRoutine(sequentialRoutine);
+		runRoutine(mSequentialRoutine);
 	}
 
 	@Override
@@ -66,24 +66,24 @@ public class CenterPegAutoMode extends AutoMode {
 		ArrayList<Routine> sequence = new ArrayList<Routine>();
 		// Straight drive distance to the center peg
 		DriveSignal driveForward = DriveSignal.getNeutralSignal();
-		driveForward.leftMotor.setPosition(10, kp, ki, kd, kf, kizone, kRampRate);
-		driveForward.rightMotor.setPosition(10, kp, ki, kd, kf, kizone, kRampRate);
+		driveForward.leftMotor.setPosition(Constants.kCenterPegDistanceInches, kP, kI, kD, kF, kIzone, kRampRate);
+		driveForward.rightMotor.setPosition(Constants.kCenterPegDistanceInches, kP, kI, kD, kF, kIzone, kRampRate);
 		sequence.add(new CANTalonRoutine(driveForward));
 		sequence.add(new TimeoutRoutine(2.5));
 
 		// Back off from the peg after 2.5 seconds
 		DriveSignal driveBack = DriveSignal.getNeutralSignal();
-		driveBack.leftMotor.setPosition(-5, kp, ki, kd, kf, kizone, kRampRate);
-		driveBack.rightMotor.setPosition(-5, kp, ki, kd, kf, kizone, kRampRate);
+		driveBack.leftMotor.setPosition(-5, kP, kI, kD, kF, kIzone, kRampRate);
+		driveBack.rightMotor.setPosition(-5, kP, kI, kD, kF, kIzone, kRampRate);
 
 		// If variant includes a cross, drive past the airship after turn angle
 		DriveSignal passAirship = DriveSignal.getNeutralSignal();
-		passAirship.leftMotor.setPosition(7, kp, ki, kd, kf, kizone, kRampRate);
-		passAirship.rightMotor.setPosition(7, kp, ki, kd, kf, kizone, kRampRate);
+		passAirship.leftMotor.setPosition(7, kP, kI, kD, kF, kIzone, kRampRate);
+		passAirship.rightMotor.setPosition(7, kP, kI, kD, kF, kIzone, kRampRate);
 
 		DriveSignal crossOver = DriveSignal.getNeutralSignal();
-		crossOver.leftMotor.setPosition(15, kp, ki, kd, kf, kizone, kRampRate);
-		crossOver.rightMotor.setPosition(15, kp, ki, kd, kf, kizone, kRampRate);
+		crossOver.leftMotor.setPosition(15, kP, kI, kD, kF, kIzone, kRampRate);
+		crossOver.rightMotor.setPosition(15, kP, kI, kD, kF, kIzone, kRampRate);
 		switch (mVariant) {
 			case NOTHING:
 				break;
@@ -91,6 +91,7 @@ public class CenterPegAutoMode extends AutoMode {
 				sequence.add(new CANTalonRoutine(driveBack));
 				sequence.add(new BBTurnAngleRoutine(-20));
 				sequence.add(new CANTalonRoutine(passAirship));
+				sequence.add(new BBTurnAngleRoutine(20));
 				sequence.add(new CANTalonRoutine(crossOver));
 				log += " and crossing left";
 				break;
@@ -98,12 +99,13 @@ public class CenterPegAutoMode extends AutoMode {
 				sequence.add(new CANTalonRoutine(driveBack));
 				sequence.add(new BBTurnAngleRoutine(20));
 				sequence.add(new CANTalonRoutine(passAirship));
+				sequence.add(new BBTurnAngleRoutine(-20));
 				sequence.add(new CANTalonRoutine(crossOver));
 				log += " and crossing right";
 				break;
 		}
 
-		sequentialRoutine = new SequentialRoutine(sequence);
+		mSequentialRoutine = new SequentialRoutine(sequence);
 		System.out.println(log);
 	}
 	@Override

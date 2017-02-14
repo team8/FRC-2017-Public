@@ -189,9 +189,8 @@ public class Constants extends ConstantsBase {
 	// TODO: Ailyn insert the autonomous constants here
 	public static double kBaseLineDistanceInches = 93.3;
 	public static double kCenterPegDistanceInches = 110;
-	public static double kSidePegDistanceAInches = 122.5688;
-	public static double kSidePegDistanceBInches = 17.5688;
-	public static double kSidePegTurnAngleDeg = 60;
+	public static double kSidePegDistanceForwardInches = 122.5688;
+	public static double kSidePegDistanceToAirshipInches = 17.5688;
 
 	// !!! Loop rate of normal Looper
 	public static double kControlLoopsDt = 0.005;

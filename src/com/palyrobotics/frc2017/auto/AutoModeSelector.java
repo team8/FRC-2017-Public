@@ -1,5 +1,6 @@
 package com.palyrobotics.frc2017.auto;
 
+import com.palyrobotics.frc2017.auto.modes.BaseLineAutoMode;
 import com.palyrobotics.frc2017.auto.modes.CenterPegAutoMode;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode;
 import org.json.simple.JSONArray;
@@ -39,6 +40,8 @@ public class AutoModeSelector {
 		registerAutonomous(new TestAutoMode());
 
 		registerAutonomous(new DoNothingAutoMode());
+		
+		registerAutonomous(new BaseLineAutoMode());
 
 		registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.CenterAutoVariant.NOTHING));
 		registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.CenterAutoVariant.CROSS_LEFT));
