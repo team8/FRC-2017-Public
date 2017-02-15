@@ -12,10 +12,12 @@ public class DriveSignal {
 	}
 
 	public static DriveSignal getNeutralSignal() {
-		CANTalonOutput neutral = new CANTalonOutput();
-		neutral.setPercentVBus(0);
+		CANTalonOutput leftNeutral = new CANTalonOutput();
+		CANTalonOutput rightNeutral = new CANTalonOutput();
+		leftNeutral.setPercentVBus(0);
+		rightNeutral.setPercentVBus(0);
 
-		return new DriveSignal(neutral, neutral);
+		return new DriveSignal(leftNeutral, rightNeutral);
 	}
 
 	@Override

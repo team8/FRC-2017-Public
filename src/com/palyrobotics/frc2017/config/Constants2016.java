@@ -31,12 +31,12 @@ public class Constants2016 {
 	// !!! Electrical constants (do not change at runtime, lol)
 
 	// Motors
-	public static int kDericaLeftDriveMasterDeviceID = 1;
-	public static int kDericaLeftDriveSlaveDeviceID  = 4;
+	public static int kDericaLeftDriveMasterDeviceID = 3;
+	public static int kDericaLeftDriveSlaveDeviceID  = 2;
 	public static int kDericaLeftDriveFrontMotorPDP = 14;
 	public static int kDericaLeftDriveBackMotorPDP = 3;
-	public static int kDericaRightDriveMasterDeviceID = 3;
-	public static int kDericaRightDriveSlaveDeviceID = 2;
+	public static int kDericaRightDriveMasterDeviceID = 4;
+	public static int kDericaRightDriveSlaveDeviceID = 1;
 	public static int kDericaRightDriveFrontMotorPDP = 15;
 	public static int kDericaRightDriveBackMotorPDP = 2;
 	// DIO Encoders

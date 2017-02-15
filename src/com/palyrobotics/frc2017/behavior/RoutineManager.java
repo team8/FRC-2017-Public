@@ -74,7 +74,7 @@ public class RoutineManager implements Tappable {
 				output = routine.update(output);
 			}
 		}
-
+		
 		// Remove routines that finished
 		for(Routine routine : routinesToRemove) {
 			System.out.println("Completed routine: " + routine.getName());
@@ -92,8 +92,10 @@ public class RoutineManager implements Tappable {
 			}
 			newRoutine.start();
 			runningRoutines.add(newRoutine);
-			routinesToAdd.clear();
+			
 		}
+		
+		routinesToAdd.clear();
 
 		// Set TROUT routine_request
 		if (output.cancelCurrentRoutines) {

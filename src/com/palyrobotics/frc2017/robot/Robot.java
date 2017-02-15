@@ -82,6 +82,9 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		System.out.println("Start autonomousInit()");
 		robotState.gamePeriod = RobotState.GamePeriod.AUTO;
+		
+		// Start control loops
+		mSubsystemLooper.start();
 
 		mDrive.resetController();
 		
@@ -90,8 +93,7 @@ public class Robot extends IterativeRobot {
 		// Prestart auto mode
 		mode.prestart();
 		mAutoModeExecuter.start();
-		// Start control loops
-		mSubsystemLooper.start();
+		
 		System.out.println("End autonomousInit()");
 	}
 
@@ -119,7 +121,6 @@ public class Robot extends IterativeRobot {
 		// Gets joystick commands
 		// Updates commands based on routines
 		commands = mRoutineManager.update(operatorInterface.updateCommands(commands));
-
 		//Update the hardware
 		mHardwareUpdater.updateSubsystems();
 	}
