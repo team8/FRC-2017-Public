@@ -6,6 +6,9 @@ import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.palyrobotics.frc2017.robot.team254.lib.util.LegacyPose;
 
+/**
+ * Reference code for old turn angle using encoders
+ */
 public class EncoderTurnAngleController implements LegacyDrive.DriveController {
 	private LegacyPose mCachedPose;
 
@@ -31,7 +34,7 @@ public class EncoderTurnAngleController implements LegacyDrive.DriveController {
 		if(Constants.kRobotName == Constants.RobotName.DERICA) {
 			kDegreeToDistance = Constants2016.kDericaDegreeToDistance;
 		} else {
-			kDegreeToDistance = Constants.kDegreeToDistance;
+			kDegreeToDistance = 0;
 		}
 		
 		mLeftTarget = priorSetpoint.getLeftDistance() + angle * kDegreeToDistance;

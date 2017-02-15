@@ -22,8 +22,7 @@ public class Constants extends ConstantsBase {
 	public static double kTurnInPlaceSpeed = 0.5;
 	// Unit Conversions for CANTalons
 	// TODO: Calculate the unit conversions for native units and inches, rpm, etc as needed
-	public static double kDegreeToDistance = 0;
-	public static double kInchesToTicks = 0;
+	public static double kDriveInchesToTicks = 0;
 
 	// Tolerances
 	public static double kAcceptableDrivePositionError = 100;

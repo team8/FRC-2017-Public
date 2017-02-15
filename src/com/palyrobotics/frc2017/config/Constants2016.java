@@ -35,8 +35,8 @@ public class Constants2016 {
 	public static int kDericaLeftDriveSlaveDeviceID  = 2;
 	public static int kDericaLeftDriveFrontMotorPDP = 14;
 	public static int kDericaLeftDriveBackMotorPDP = 3;
-	public static int kDericaRightDriveMasterDeviceID = 4;
-	public static int kDericaRightDriveSlaveDeviceID = 1;
+	public static int kDericaRightDriveMasterDeviceID = 1;
+	public static int kDericaRightDriveSlaveDeviceID = 4;
 	public static int kDericaRightDriveFrontMotorPDP = 15;
 	public static int kDericaRightDriveBackMotorPDP = 2;
 	// DIO Encoders

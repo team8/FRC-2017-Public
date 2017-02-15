@@ -86,10 +86,10 @@ public class CANTalonTester {
 			right_master.enableForwardSoftLimit(false);
 			right_master.enableReverseSoftLimit(false);
 
-//			left_master.setForwardSoftLimit(15 * kInchesToTicks);
-//			left_master.setReverseSoftLimit(-15 * kInchesToTicks);
-//			right_master.setForwardSoftLimit(15 * kInchesToTicks);
-//			right_master.setReverseSoftLimit(-15 * kInchesToTicks);
+//			left_master.setForwardSoftLimit(15 * kDriveInchesToTicks);
+//			left_master.setReverseSoftLimit(-15 * kDriveInchesToTicks);
+//			right_master.setForwardSoftLimit(15 * kDriveInchesToTicks);
+//			right_master.setReverseSoftLimit(-15 * kDriveInchesToTicks);
 //			left_master.enableForwardSoftLimit(true);
 //			left_master.enableReverseSoftLimit(true);
 //			right_master.enableReverseSoftLimit(true);
@@ -130,8 +130,8 @@ public class CANTalonTester {
 	public void update() {
 		System.out.println("CANTalonTester Update");
 		//System.out.println(state);
-		//System.out.println("Left inches: "+ left_master.getPosition() / kInchesToTicks);
-		//System.out.println("Right inches: "+ right_master.getPosition() / kInchesToTicks);
+		//System.out.println("Left inches: "+ left_master.getPosition() / kDriveInchesToTicks);
+		//System.out.println("Right inches: "+ right_master.getPosition() / kDriveInchesToTicks);
 		System.out.println("Target: " + 5 * INCHES_TO_TICKS);
 		System.out.println("Left speed: " + left_master.getSpeed());
 		System.out.println("Right speed: " + right_master.getSpeed());

@@ -2,6 +2,7 @@ package com.palyrobotics.frc2017.robot;
 
 import com.ctre.CANTalon;
 import com.palyrobotics.frc2017.config.Constants;
+import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
@@ -143,7 +144,7 @@ class HardwareUpdater {
 		HardwareAdapter.getInstance().getFlippers().leftSolenoid.set(mFlippers.getFlipperSignal().leftFlipper);
 		HardwareAdapter.getInstance().getFlippers().rightSolenoid.set(mFlippers.getFlipperSignal().rightFlipper);
 		// SLIDER
-		updateCANTalonSRX(HardwareAdapter.getInstance().getSimpleSlider().sliderMotor, mSlider.getOutput());
+		updateCANTalonSRX(HardwareAdapter.getInstance().getSimpleSlider().sliderMotor, mSlider.getOutput(), 1);
 		// SPATULA
 		HardwareAdapter.getInstance().getSpatula().spatulaSolenoid.set(mSpatula.getOutput());
 		// INTAKE
@@ -158,14 +159,23 @@ class HardwareUpdater {
 	 * Uses CANTalonOutput and can run off-board control loops through SRX
 	 */
 	private void updateDrivetrain() {
-		updateCANTalonSRX(HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon, mDrive.getDriveSignal().leftMotor);
-		updateCANTalonSRX(HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon, mDrive.getDriveSignal().rightMotor);
+		double leftScalar = 1;
+		double rightScalar = 1;
+		if (mDrive.getDriveSignal().leftMotor.getControlMode() == CANTalon.TalonControlMode.Position) {
+			leftScalar = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks : Constants.kDriveInchesToTicks;
+		}
+		if (mDrive.getDriveSignal().rightMotor.getControlMode() == CANTalon.TalonControlMode.Position) {
+			rightScalar = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks : Constants.kDriveInchesToTicks;
+		}
+		updateCANTalonSRX(HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon, mDrive.getDriveSignal().leftMotor, leftScalar);
+		updateCANTalonSRX(HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon, mDrive.getDriveSignal().rightMotor, rightScalar);
 	}
 
 	/**
 	 * Helper method for processing a CANTalonOutput for an SRX
+	 * @param scalar For converting to native units if needed
 	 */
-	private void updateCANTalonSRX(CANTalon talon, CANTalonOutput output) {
+	private void updateCANTalonSRX(CANTalon talon, CANTalonOutput output, double scalar) {
 		if(talon.getControlMode() != output.getControlMode()) {
 			talon.changeControlMode(output.getControlMode());
 			if(output.getControlMode().isPID()) {
@@ -178,7 +188,7 @@ class HardwareUpdater {
 		}
 		// Don't resend setpoint if that is the currently running loop
 		if(talon.getSetpoint() != output.getSetpoint()) {
-			talon.setSetpoint(output.getSetpoint());
+			talon.setSetpoint(output.getSetpoint() * scalar);
 		}
 	}
 }

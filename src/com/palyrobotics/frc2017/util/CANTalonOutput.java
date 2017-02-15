@@ -81,14 +81,11 @@ public class CANTalonOutput {
 
 	/**
 	 * Sets Talon to TalonControlMode.Position
-	 * @param setpoint in inches
+	 * @param setpoint for drivesignal, use inches, which get converted in HardwareUpdater, otherwise native units
 	 * @param p,i,d, f, izone, rampRate parameters for control loop
 	 */
 	public void setPosition(double setpoint, double p, double i, double d, double f, int izone, double rampRate) {
 		controlMode = CANTalon.TalonControlMode.Position;
-		// Convert to encoder ticks
-		this.setpoint = (Constants.kRobotName == Constants.RobotName.DERICA) ? 
-				setpoint * Constants2016.kDericaInchesToTicks : Constants.kInchesToTicks;
 		setPID(p, i, d, f, izone, rampRate);
 	}
 	/**
@@ -122,6 +119,12 @@ public class CANTalonOutput {
 		setPID(p, i, d, f, izone, rampRate);
 	}
 
+	/**
+	 * Uses the CANTalon 1D motion profile generator
+	 * @param setpoint target position in native units
+	 * @param accel max acceleration and deceleration
+	 * @param cruiseVelocity cruise velocity to max out at
+	 */
 	public void setMotionMagic(double setpoint, double accel, double cruiseVelocity, double p, double i, double d, double f, int izone, double rampRate) {
 		controlMode = CANTalon.TalonControlMode.MotionMagic;
 		this.setpoint = setpoint;
