@@ -12,7 +12,6 @@ import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.Dashboard;
 import com.palyrobotics.frc2017.util.LegacyDrive;
 import com.palyrobotics.frc2017.util.SubsystemLooper;
-import com.palyrobotics.frc2017.util.SubsystemPrintingLooper;
 import com.palyrobotics.frc2017.util.DriveSignal;
 import com.palyrobotics.frc2017.robot.team254.lib.util.RobotData;
 import com.palyrobotics.frc2017.robot.team254.lib.util.SystemManager;
@@ -34,7 +33,6 @@ public class Robot extends IterativeRobot {
 	private static OperatorInterface operatorInterface = OperatorInterface.getInstance();
 	// Instantiate separate thread controls
 	private SubsystemLooper mSubsystemLooper = new SubsystemLooper();
-	private SubsystemPrintingLooper mSubsystemPrintingLooper = new SubsystemPrintingLooper();
 	private RoutineManager mRoutineManager = new RoutineManager();
 	private AutoModeExecuter mAutoModeExecuter = new AutoModeExecuter(commands, mRoutineManager);
 	private DashboardManager mDashboardManager = DashboardManager.getInstance();
@@ -73,7 +71,6 @@ public class Robot extends IterativeRobot {
 			mSubsystemLooper.register(mSpatula);
 			mSubsystemLooper.register(mIntake);
 			mSubsystemLooper.register(mClimber);
-			mSubsystemPrintingLooper.register(mSlider);
 		} else if (Constants.kRobotName == Constants.RobotName.TYR) {
 			try {
 				mHardwareUpdater = new HardwareUpdater(LegacyDrive.getInstance());
@@ -111,7 +108,6 @@ public class Robot extends IterativeRobot {
 		mAutoModeExecuter.start();
 		// Start control loops
 		mSubsystemLooper.start();
-		mSubsystemPrintingLooper.start();
 		System.out.println("End autonomousInit()");
 	}
 
@@ -130,7 +126,6 @@ public class Robot extends IterativeRobot {
 		mRoutineManager.reset(commands);
 		commands = operatorInterface.updateCommands(commands);
 		mSubsystemLooper.start();
-		mSubsystemPrintingLooper.start();
 		System.out.println("End teleopInit()");
 	}
 
@@ -164,7 +159,6 @@ public class Robot extends IterativeRobot {
 
 		// Stop control loops
 		mSubsystemLooper.stop();
-		mSubsystemPrintingLooper.stop();
 
 		// Stop controllers
 		mDrive.setOpenLoop(DriveSignal.getNeutralSignal());
