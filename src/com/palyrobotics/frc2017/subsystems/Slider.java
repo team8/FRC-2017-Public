@@ -106,6 +106,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	@Override
 	public void update(Commands commands, RobotState robotState) {
 		mRobotState = robotState;
+		mSimpleSlider.update(commands, robotState);
 	}
 	
 	/**
