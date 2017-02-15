@@ -58,4 +58,10 @@ public class SimpleClimber extends Subsystem implements SubsystemLoop {
 	public double getOutput() {
 		return climberSpeed;
 	}
+
+	@Override
+	public void printStatus() {
+		// TODO Auto-generated method stub
+		
+	}
 }

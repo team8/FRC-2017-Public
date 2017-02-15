@@ -67,4 +67,10 @@ public class Flippers extends Subsystem implements SubsystemLoop {
 		return mFlipperSignal;
 	}
 
+	@Override
+	public void printStatus() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

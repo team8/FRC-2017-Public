@@ -52,4 +52,10 @@ public class Intake extends Subsystem implements SubsystemLoop {
 		return mOutput;
 	}
 
+	@Override
+	public void printStatus() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

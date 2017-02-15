@@ -106,6 +106,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	@Override
 	public void update(Commands commands, RobotState robotState) {
 		mRobotState = robotState;
+		mSimpleSlider.update(commands, robotState);
 	}
 	
 	/**
@@ -284,5 +285,16 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	 */
 	private void setSetpointsVision() {
 		//TODO: actually write this
+	}
+	
+	public void printStatus() {
+		System.out.println("Slider Status:");
+		System.out.println("State is " + mState.toString());
+		System.out.println("Output is " + mOutput.getSetpoint() + " with CANTalon in " + mOutput.getControlMode());
+		System.out.println("Encoder value is " + mRobotState.sliderEncoder);
+		System.out.println("Potentiometer value is " + mRobotState.sliderPotentiometer);
+		System.out.println("Left HFX value is " + mRobotState.sliderLeftHFX);
+		System.out.println("Right HFX value is " + mRobotState.sliderRightHFX);
+		System.out.println();
 	}
 }

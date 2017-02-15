@@ -163,6 +163,8 @@ public class Constants extends ConstantsBase {
 
 	// !!! Loop rate of subsystem updates
 	public static double kSubsystemLooperDt = 0.005;
+	
+	public static double kSubsystemPrintingLooperDt = 1.0;
 
 	// LegacyDrive parameters
 	public static double kDriveEncoderCountsPerRev = 250.0;

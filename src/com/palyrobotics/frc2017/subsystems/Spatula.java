@@ -67,4 +67,10 @@ public class Spatula extends Subsystem implements SubsystemLoop {
 	public SpatulaState getState() {
 		return mState;
 	}
+
+	@Override
+	public void printStatus() {
+		// TODO Auto-generated method stub
+		
+	}
 }
