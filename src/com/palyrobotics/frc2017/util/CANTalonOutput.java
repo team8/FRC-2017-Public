@@ -87,7 +87,15 @@ public class CANTalonOutput {
 	public void setPosition(double setpoint, double p, double i, double d, double f, int izone, double rampRate) {
 		controlMode = CANTalon.TalonControlMode.Position;
 		setPID(p, i, d, f, izone, rampRate);
+		this.setpoint = setpoint;
 	}
+	
+	public void setPosition(CANTalonOutputFactory canTalon) {
+		controlMode = CANTalon.TalonControlMode.Position;
+		setPID(canTalon.P, canTalon.I, canTalon.D, canTalon.F, canTalon.izone, canTalon.rampRate);
+		this.setpoint = canTalon.distance;
+	}
+	
 	/**
 	 * Sets Talon to standard -1 to 1 voltage control
 	 * @param power
@@ -171,4 +179,35 @@ public class CANTalonOutput {
 		controlMode = CANTalon.TalonControlMode.Follower;
 		this.masterDeviceID = masterDeviceID;
 	} */
+	
+	/**
+	 * Class used to get a set point with all the CANTalon constants.  This is better
+	 * than calling the setDistance(...) everytime because the constants only need to be added once.
+	 *
+	 * @author Robbie Selwyn
+	 *
+	 */
+	public static class CANTalonOutputFactory {
+		
+		public double P,I,D, F, rampRate;
+		public int izone;
+		public int profile;
+		
+		public double distance;
+		
+		public CANTalonOutputFactory(double p, double i, double d, double f, int izone, double rampRate) {
+			this.P = p;
+			this.I = i;
+			this.D = d;
+			this.F = f;
+			this.izone = izone;
+			this.rampRate = rampRate;
+		}
+		
+		public CANTalonOutputFactory withDistance(double distance) {
+			this.distance = distance;
+			return this;
+		}
+		
+	}
 }

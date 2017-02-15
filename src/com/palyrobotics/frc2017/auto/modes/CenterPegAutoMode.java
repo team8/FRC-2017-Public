@@ -9,6 +9,7 @@ import com.palyrobotics.frc2017.behavior.routines.drive.BBTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
+import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
 import java.util.ArrayList;
@@ -24,33 +25,33 @@ public class CenterPegAutoMode extends AutoMode {
 	private final CenterAutoVariant mVariant;
 	private SequentialRoutine mSequentialRoutine;
 
-	private double kP, kI, kD, kF, kRampRate;
+	private CANTalonOutput.CANTalonOutputFactory distanceProvider;
 	private int kIzone;
 
 	public CenterPegAutoMode(CenterAutoVariant direction) {
 		mVariant = direction;
 		switch (Constants.kRobotName) {
 			case DERICA:
-				kP = Constants2016.kDericaPositionkP;
-				kI = Constants2016.kDericaPositionkI;
-				kD = Constants2016.kDericaPositionkD;
-				kF = Constants2016.kDericaPositionkF;
-				kIzone = Constants2016.kDericaPositionkIzone;
-				kRampRate = Constants2016.kDericaPositionRampRate;
+				distanceProvider = new CANTalonOutput.CANTalonOutputFactory(Constants2016.kDericaPositionkP, 
+																			Constants2016.kDericaPositionkI, 
+																			Constants2016.kDericaPositionkD,
+																			Constants2016.kDericaPositionkF, 
+																			Constants2016.kDericaPositionkIzone,
+																			Constants2016.kDericaPositionRampRate);
 			case AEGIR:
-				kP = Constants.kAegirDriveDistancekP;
-				kI = Constants.kAegirDriveDistancekI;
-				kD = Constants.kAegirDriveDistancekD;
-				kF = Constants.kAegirDriveDistancekF;
-				kIzone = Constants.kAegirDriveDistancekIzone;
-				kRampRate = Constants.kAegirDriveDistancekRampRate;
+				distanceProvider = new CANTalonOutput.CANTalonOutputFactory(Constants.kAegirDriveDistancekP, 
+																			Constants.kAegirDriveDistancekI, 
+																			Constants.kAegirDriveDistancekD,
+																			Constants.kAegirDriveDistancekF, 
+																			Constants.kAegirDriveDistancekIzone,
+																			Constants.kAegirDriveDistancekRampRate);
 			case STEIK:
-				kP = Constants.kSteikDriveDistancekP;
-				kI = Constants.kSteikDriveDistancekI;
-				kD = Constants.kSteikDriveDistancekD;
-				kF = Constants.kSteikDriveDistancekF;
-				kIzone = Constants.kSteikDriveDistancekIzone;
-				kRampRate = Constants.kSteikDriveDistancekRampRate;
+				distanceProvider = new CANTalonOutput.CANTalonOutputFactory(Constants.kSteikDriveDistancekP, 
+																			Constants.kSteikDriveDistancekI, 
+																			Constants.kSteikDriveDistancekD,
+																			Constants.kSteikDriveDistancekF, 
+																			Constants.kSteikDriveDistancekIzone,
+																			Constants.kSteikDriveDistancekRampRate);
 		}
 	}
 
@@ -66,24 +67,24 @@ public class CenterPegAutoMode extends AutoMode {
 		ArrayList<Routine> sequence = new ArrayList<Routine>();
 		// Straight drive distance to the center peg
 		DriveSignal driveForward = DriveSignal.getNeutralSignal();
-		driveForward.leftMotor.setPosition(Constants.kCenterPegDistanceInches, kP, kI, kD, kF, kIzone, kRampRate);
-		driveForward.rightMotor.setPosition(Constants.kCenterPegDistanceInches, kP, kI, kD, kF, kIzone, kRampRate);
+		driveForward.leftMotor.setPosition(distanceProvider.withDistance(Constants.kCenterPegDistanceInches));
+		driveForward.rightMotor.setPosition(distanceProvider.withDistance(Constants.kCenterPegDistanceInches));
 		sequence.add(new CANTalonRoutine(driveForward));
 		sequence.add(new TimeoutRoutine(2.5));
 
 		// Back off from the peg after 2.5 seconds
 		DriveSignal driveBack = DriveSignal.getNeutralSignal();
-		driveBack.leftMotor.setPosition(-5, kP, kI, kD, kF, kIzone, kRampRate);
-		driveBack.rightMotor.setPosition(-5, kP, kI, kD, kF, kIzone, kRampRate);
+		driveBack.leftMotor.setPosition(distanceProvider.withDistance(-5));
+		driveBack.rightMotor.setPosition(distanceProvider.withDistance(-5));
 
 		// If variant includes a cross, drive past the airship after turn angle
 		DriveSignal passAirship = DriveSignal.getNeutralSignal();
-		passAirship.leftMotor.setPosition(7, kP, kI, kD, kF, kIzone, kRampRate);
-		passAirship.rightMotor.setPosition(7, kP, kI, kD, kF, kIzone, kRampRate);
+		passAirship.leftMotor.setPosition(distanceProvider.withDistance(7));
+		passAirship.rightMotor.setPosition(distanceProvider.withDistance(7));
 
 		DriveSignal crossOver = DriveSignal.getNeutralSignal();
-		crossOver.leftMotor.setPosition(15, kP, kI, kD, kF, kIzone, kRampRate);
-		crossOver.rightMotor.setPosition(15, kP, kI, kD, kF, kIzone, kRampRate);
+		crossOver.leftMotor.setPosition(distanceProvider.withDistance(15));
+		crossOver.rightMotor.setPosition(distanceProvider.withDistance(15));
 		switch (mVariant) {
 			case NOTHING:
 				break;
