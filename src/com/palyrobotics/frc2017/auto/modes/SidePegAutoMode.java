@@ -26,38 +26,15 @@ public class SidePegAutoMode extends AutoMode {
 	}
 	private final SideAutoVariant mVariant;
 	private SequentialRoutine mSequentialRoutine;
-	
-	private double kP, kI, kD, kF, kRampRate;
-	private int kIzone;
 
+	private CANTalonOutput.CANTalonOutputFactory distanceProvider;
+	
 	private DriveSignal driveForward = DriveSignal.getNeutralSignal();
 	private DriveSignal driveToAirship = DriveSignal.getNeutralSignal();
 
 	public SidePegAutoMode(SideAutoVariant direction) {
 		mVariant = direction;
-		switch (Constants.kRobotName) {
-			case DERICA:
-				kP = Constants2016.kDericaPositionkP;
-				kI = Constants2016.kDericaPositionkI;
-				kD = Constants2016.kDericaPositionkD;
-				kF = Constants2016.kDericaPositionkF;
-				kIzone = Constants2016.kDericaPositionkIzone;
-				kRampRate = Constants2016.kDericaPositionRampRate;
-			case AEGIR:
-				kP = Constants.kAegirDriveDistancekP;
-				kI = Constants.kAegirDriveDistancekI;
-				kD = Constants.kAegirDriveDistancekD;
-				kF = Constants.kAegirDriveDistancekF;
-				kIzone = Constants.kAegirDriveDistancekIzone;
-				kRampRate = Constants.kAegirDriveDistancekRampRate;
-			case STEIK:
-				kP = Constants.kSteikDriveDistancekP;
-				kI = Constants.kSteikDriveDistancekI;
-				kD = Constants.kSteikDriveDistancekD;
-				kF = Constants.kSteikDriveDistancekF;
-				kIzone = Constants.kSteikDriveDistancekIzone;
-				kRampRate = Constants.kSteikDriveDistancekRampRate;
-		}
+		distanceProvider = new CANTalonOutput.CANTalonOutputFactory();
 	}
 
 	@Override
@@ -70,14 +47,14 @@ public class SidePegAutoMode extends AutoMode {
 		System.out.println("Starting "+this.toString()+" Auto Mode");
 		
 		driveForward.leftMotor = new CANTalonOutput();
-		driveForward.leftMotor.setPosition(Constants.kSidePegDistanceForwardInches, kP, kI, kD, kF, kIzone, kRampRate);
+		driveForward.leftMotor.setPosition(distanceProvider.withDistance(Constants.kSidePegDistanceForwardInches));
 		driveForward.rightMotor = new CANTalonOutput();
-		driveForward.rightMotor.setPosition(Constants.kSidePegDistanceForwardInches, kP, kI, kD, kF, kIzone, kRampRate);
+		driveForward.rightMotor.setPosition(distanceProvider.withDistance(Constants.kSidePegDistanceForwardInches));
 
 		driveToAirship.leftMotor = new CANTalonOutput();
-		driveToAirship.leftMotor.setPosition(Constants.kSidePegDistanceToAirshipInches, kP, kI, kD, kF, kIzone, kRampRate);
+		driveToAirship.leftMotor.setPosition(distanceProvider.withDistance(Constants.kSidePegDistanceToAirshipInches));
 		driveToAirship.rightMotor = new CANTalonOutput();
-		driveToAirship.rightMotor.setPosition(Constants.kSidePegDistanceToAirshipInches, kP, kI, kD, kD, kIzone, kRampRate);
+		driveToAirship.rightMotor.setPosition(distanceProvider.withDistance(Constants.kSidePegDistanceToAirshipInches));
 		
 		ArrayList<Routine> score = new ArrayList<Routine>();
 		score.add(new CANTalonRoutine(driveToAirship));

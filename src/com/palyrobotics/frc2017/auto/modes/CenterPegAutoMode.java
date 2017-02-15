@@ -26,7 +26,6 @@ public class CenterPegAutoMode extends AutoMode {
 	private SequentialRoutine mSequentialRoutine;
 
 	private CANTalonOutput.CANTalonOutputFactory distanceProvider;
-	private int kIzone;
 
 	public CenterPegAutoMode(CenterAutoVariant direction) {
 		mVariant = direction;
