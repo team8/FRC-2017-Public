@@ -20,6 +20,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	public static Slider getInstance() {
 		return instance;
 	}
+
 	
 	//all code assumes that right is 0 and left and center are both positive on both pot and encoder
 	
@@ -58,21 +59,13 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	private boolean[] isHFXFunctional = {true, true};
 	private boolean isPotentiometerFunctional;
 
-	private CANTalonOutput mOutput;
+	private CANTalonOutput mOutput = new CANTalonOutput();
 
 	private final static double mCalibratingVoltage = 0.2;
 	
 	//Positioning constants
-	private final static HashMap<SliderTarget,Double> mEncoderTargetPositions = new HashMap<SliderTarget,Double>(); //TODO: find actual values
-	private final static HashMap<SliderTarget,Double> mPotentiometerTargetPositions = new HashMap<SliderTarget,Double>();
-	static {
-		mEncoderTargetPositions.put(SliderTarget.LEFT, 0.0);
-		mEncoderTargetPositions.put(SliderTarget.CENTER, 0.0);
-		mEncoderTargetPositions.put(SliderTarget.RIGHT, 0.0);
-		mPotentiometerTargetPositions.put(SliderTarget.LEFT, 0.0);
-		mPotentiometerTargetPositions.put(SliderTarget.CENTER, 0.0);
-		mPotentiometerTargetPositions.put(SliderTarget.RIGHT, 0.0);
-	}
+	private final HashMap<SliderTarget,Double> mEncoderTargetPositions = new HashMap<SliderTarget,Double>(); //TODO: find actual values
+	private final HashMap<SliderTarget,Double> mPotentiometerTargetPositions = new HashMap<SliderTarget,Double>();
 	
 	//PID constants
 	private final static double kP[] = {0, 0};
@@ -93,7 +86,6 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	
 	@Override
 	public void start() {
-		mOutput = new CANTalonOutput();
 		mState = SliderState.IDLE;
 		mTarget = SliderTarget.NONE;
 		mOutput.setPercentVBus(0);
@@ -122,7 +114,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	 * @param master the object calling the method
 	 * @throws IllegalAccessException if master not a routine
 	 */
-	public void update(Commands commands,  Object master) throws IllegalAccessException {
+	public void run(Commands commands,  Object master) throws IllegalAccessException {
 		//Throws an exception if called by an object that isn't a routine
 		if(!(master instanceof Routine)) {
 			throw new IllegalAccessException();
@@ -175,6 +167,12 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	private Slider() {
 		super("Slider");
 		mState = SliderState.IDLE;
+		mEncoderTargetPositions.put(SliderTarget.LEFT, 0.0);
+		mEncoderTargetPositions.put(SliderTarget.CENTER, 0.0);
+		mEncoderTargetPositions.put(SliderTarget.RIGHT, 0.0);
+		mPotentiometerTargetPositions.put(SliderTarget.LEFT, 0.0);
+		mPotentiometerTargetPositions.put(SliderTarget.CENTER, 0.0);
+		mPotentiometerTargetPositions.put(SliderTarget.RIGHT, 0.0);
 	}
 	/**
 	 * A getter for the output for the slider

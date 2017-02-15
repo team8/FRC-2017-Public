@@ -17,7 +17,7 @@ public class ManualSliderControlRoutine extends Routine {
 	@Override
 	public Commands update(Commands commands) {
 		try {
-			slider.update(commands, this);
+			slider.run(commands, this);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}		
@@ -28,7 +28,7 @@ public class ManualSliderControlRoutine extends Routine {
 	public Commands cancel(Commands commands) {
 		commands.wantedSliderState = SliderState.IDLE;
 		try {
-			slider.update(commands, this);
+			slider.run(commands, this);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}

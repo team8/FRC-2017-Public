@@ -17,7 +17,7 @@ public class SilderDistancePositioningRoutine extends Routine {
 	@Override
 	public Commands update(Commands commands) {
 		try {
-			slider.update(commands, this);
+			slider.run(commands, this);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
@@ -31,7 +31,7 @@ public class SilderDistancePositioningRoutine extends Routine {
 			return commands;
 		}
 		try {
-			slider.update(commands, this);
+			slider.run(commands, this);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}

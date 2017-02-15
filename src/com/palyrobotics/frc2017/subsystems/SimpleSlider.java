@@ -8,19 +8,12 @@ import com.palyrobotics.frc2017.util.SubsystemLoop;
 
 /**
  * STEIK SIMPLE SLIDER:
-<<<<<<< HEAD
- * Chain that slides the Spatula and ramp left and right.  Simple Slider utilizes a motor that is controlled by two buttons for left and right. 
-=======
- * Effectively is a rotating chain that slides the Spatula and ramp left and right.  
- * The Simple Slider utilizes a motor that is controlled by two buttons for left and right. 
->>>>>>> origin/simple-slider-setup
+ * Chain that slides the Spatula and ramp left and right.  Simple Slider utilizes a motor and is controlled by the Slider class. 
  * The Slider should only move when the Spatula is up.
  * @author Sophia Vera 
  * @author Amelia Mao
- * 
- * 
  */
-public class SimpleSlider  extends Subsystem implements SubsystemLoop  {
+public class SimpleSlider  extends Subsystem implements SubsystemLoop {
 	//Creates Singleton class
 	private static SimpleSlider instance = new SimpleSlider();
 	public static SimpleSlider getInstance() {
@@ -38,17 +31,7 @@ public class SimpleSlider  extends Subsystem implements SubsystemLoop  {
 		IDLE, //Slider is not moving
 		MANUAL
 	}
-	
-	@Override
-	public void start() {		
-	
-	}
-	
-	@Override
-	public void stop() {
-		
-	}
-	
+
 	/**
 	 * Updates the Slider's motor output
 	 */
@@ -66,5 +49,17 @@ public class SimpleSlider  extends Subsystem implements SubsystemLoop  {
 	
 	public CANTalonOutput getOutput(){
 		return mOutput;
+	}
+
+	@Override
+	public void start() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		
 	}
 }
