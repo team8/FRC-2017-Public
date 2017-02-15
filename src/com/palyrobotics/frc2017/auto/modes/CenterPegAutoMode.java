@@ -30,29 +30,7 @@ public class CenterPegAutoMode extends AutoMode {
 
 	public CenterPegAutoMode(CenterAutoVariant direction) {
 		mVariant = direction;
-		switch (Constants.kRobotName) {
-			case DERICA:
-				distanceProvider = new CANTalonOutput.CANTalonOutputFactory(Constants2016.kDericaPositionkP, 
-																			Constants2016.kDericaPositionkI, 
-																			Constants2016.kDericaPositionkD,
-																			Constants2016.kDericaPositionkF, 
-																			Constants2016.kDericaPositionkIzone,
-																			Constants2016.kDericaPositionRampRate);
-			case AEGIR:
-				distanceProvider = new CANTalonOutput.CANTalonOutputFactory(Constants.kAegirDriveDistancekP, 
-																			Constants.kAegirDriveDistancekI, 
-																			Constants.kAegirDriveDistancekD,
-																			Constants.kAegirDriveDistancekF, 
-																			Constants.kAegirDriveDistancekIzone,
-																			Constants.kAegirDriveDistancekRampRate);
-			case STEIK:
-				distanceProvider = new CANTalonOutput.CANTalonOutputFactory(Constants.kSteikDriveDistancekP, 
-																			Constants.kSteikDriveDistancekI, 
-																			Constants.kSteikDriveDistancekD,
-																			Constants.kSteikDriveDistancekF, 
-																			Constants.kSteikDriveDistancekIzone,
-																			Constants.kSteikDriveDistancekRampRate);
-		}
+		distanceProvider = new CANTalonOutput.CANTalonOutputFactory();
 	}
 
 	@Override

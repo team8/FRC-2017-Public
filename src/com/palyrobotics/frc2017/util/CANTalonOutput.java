@@ -11,7 +11,7 @@ import com.palyrobotics.frc2017.config.Constants2016;
  * Allows configuration for offboard SRX calculations
  */
 public class CANTalonOutput {
-	
+
 	/**
 	 * Prevent null pointer exceptions
 	 */
@@ -25,7 +25,7 @@ public class CANTalonOutput {
 	// Used for motion magic
 	public double accel;
 	public double cruiseVel;
-	
+
 	/**
 	 * Default constructor
 	 */
@@ -33,8 +33,9 @@ public class CANTalonOutput {
 		controlMode = CANTalon.TalonControlMode.Disabled;
 		setpoint = 0;
 		profile = 0;
+		setPID(0,0,0,0,0,0);
 	}
-	
+
 	/**
 	 * Copy constructor
 	 * @param talon output to copy
@@ -50,7 +51,7 @@ public class CANTalonOutput {
 		this.rampRate = talon.rampRate;
 		this.profile = talon.profile;
 	}
-	
+
 	public CANTalon.TalonControlMode getControlMode() {
 		return controlMode;
 	}
@@ -89,13 +90,13 @@ public class CANTalonOutput {
 		setPID(p, i, d, f, izone, rampRate);
 		this.setpoint = setpoint;
 	}
-	
+
 	public void setPosition(CANTalonOutputFactory canTalon) {
 		controlMode = CANTalon.TalonControlMode.Position;
 		setPID(canTalon.P, canTalon.I, canTalon.D, canTalon.F, canTalon.izone, canTalon.rampRate);
 		this.setpoint = canTalon.distance;
 	}
-	
+
 	/**
 	 * Sets Talon to standard -1 to 1 voltage control
 	 * @param power
@@ -147,7 +148,7 @@ public class CANTalonOutput {
 	public void setDisabled() {
 		this.controlMode = CANTalon.TalonControlMode.Disabled;
 	}
-	
+
 	public String toString() {
 		String name = "";
 		if (controlMode == null) {
@@ -179,7 +180,7 @@ public class CANTalonOutput {
 		controlMode = CANTalon.TalonControlMode.Follower;
 		this.masterDeviceID = masterDeviceID;
 	} */
-	
+
 	/**
 	 * Class used to get a set point with all the CANTalon constants.  This is better
 	 * than calling the setDistance(...) everytime because the constants only need to be added once.
@@ -188,13 +189,13 @@ public class CANTalonOutput {
 	 *
 	 */
 	public static class CANTalonOutputFactory {
-		
+
 		public double P,I,D, F, rampRate;
 		public int izone;
 		public int profile;
-		
+
 		public double distance;
-		
+
 		public CANTalonOutputFactory(double p, double i, double d, double f, int izone, double rampRate) {
 			this.P = p;
 			this.I = i;
@@ -203,11 +204,37 @@ public class CANTalonOutput {
 			this.izone = izone;
 			this.rampRate = rampRate;
 		}
-		
+
+		public CANTalonOutputFactory() {
+			switch (Constants.kRobotName) {
+			case DERICA:
+				new CANTalonOutput.CANTalonOutputFactory(Constants2016.kDericaPositionkP, 
+						Constants2016.kDericaPositionkI, 
+						Constants2016.kDericaPositionkD,
+						Constants2016.kDericaPositionkF, 
+						Constants2016.kDericaPositionkIzone,
+						Constants2016.kDericaPositionRampRate);
+			case AEGIR:
+				new CANTalonOutput.CANTalonOutputFactory(Constants.kAegirDriveDistancekP, 
+						Constants.kAegirDriveDistancekI, 
+						Constants.kAegirDriveDistancekD,
+						Constants.kAegirDriveDistancekF, 
+						Constants.kAegirDriveDistancekIzone,
+						Constants.kAegirDriveDistancekRampRate);
+			case STEIK:
+				new CANTalonOutput.CANTalonOutputFactory(Constants.kSteikDriveDistancekP, 
+						Constants.kSteikDriveDistancekI, 
+						Constants.kSteikDriveDistancekD,
+						Constants.kSteikDriveDistancekF, 
+						Constants.kSteikDriveDistancekIzone,
+						Constants.kSteikDriveDistancekRampRate);
+			}
+		}
+
 		public CANTalonOutputFactory withDistance(double distance) {
 			this.distance = distance;
 			return this;
 		}
-		
+
 	}
 }
