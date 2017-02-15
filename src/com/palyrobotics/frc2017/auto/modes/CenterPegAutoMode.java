@@ -52,33 +52,33 @@ public class CenterPegAutoMode extends AutoMode {
 
 		// Back off from the peg after 2.5 seconds
 		DriveSignal driveBack = DriveSignal.getNeutralSignal();
-		driveBack.leftMotor.setPosition(distanceProvider.withDistance(-5));
-		driveBack.rightMotor.setPosition(distanceProvider.withDistance(-5));
+		driveBack.leftMotor.setPosition(distanceProvider.withDistance(-25));
+		driveBack.rightMotor.setPosition(distanceProvider.withDistance(-25));
 
 		// If variant includes a cross, drive past the airship after turn angle
 		DriveSignal passAirship = DriveSignal.getNeutralSignal();
-		passAirship.leftMotor.setPosition(distanceProvider.withDistance(7));
-		passAirship.rightMotor.setPosition(distanceProvider.withDistance(7));
+		passAirship.leftMotor.setPosition(distanceProvider.withDistance(50));
+		passAirship.rightMotor.setPosition(distanceProvider.withDistance(50));
 
 		DriveSignal crossOver = DriveSignal.getNeutralSignal();
-		crossOver.leftMotor.setPosition(distanceProvider.withDistance(15));
-		crossOver.rightMotor.setPosition(distanceProvider.withDistance(15));
+		crossOver.leftMotor.setPosition(distanceProvider.withDistance(20));
+		crossOver.rightMotor.setPosition(distanceProvider.withDistance(20));
 		switch (mVariant) {
 			case NOTHING:
 				break;
 			case CROSS_LEFT:
 				sequence.add(new CANTalonRoutine(driveBack));
-				sequence.add(new BBTurnAngleRoutine(-20));
+				sequence.add(new BBTurnAngleRoutine(-90));
 				sequence.add(new CANTalonRoutine(passAirship));
-				sequence.add(new BBTurnAngleRoutine(20));
+				sequence.add(new BBTurnAngleRoutine(90));
 				sequence.add(new CANTalonRoutine(crossOver));
 				log += " and crossing left";
 				break;
 			case CROSS_RIGHT:
 				sequence.add(new CANTalonRoutine(driveBack));
-				sequence.add(new BBTurnAngleRoutine(20));
+				sequence.add(new BBTurnAngleRoutine(90));
 				sequence.add(new CANTalonRoutine(passAirship));
-				sequence.add(new BBTurnAngleRoutine(-20));
+				sequence.add(new BBTurnAngleRoutine(-90));
 				sequence.add(new CANTalonRoutine(crossOver));
 				log += " and crossing right";
 				break;

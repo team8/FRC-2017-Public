@@ -57,12 +57,11 @@ public class OperatorInterface {
 		if(prevCommands.wantedDriveState != Drive.DriveState.OFF_BOARD_CONTROLLER) {
 			newCommands.wantedDriveState = Drive.DriveState.CHEZY;
 		}
-		
+
 		// TODO: Change how routines are commanded
 		if (mOperatorStick.getRawButton(4)) {
 			newCommands.addWantedRoutine(new EncoderDriveRoutine(500));
 		}
-		//TODO figure out Steik controls
 
 		// Flippers
 		//TODO figure out flipper controls
@@ -73,30 +72,31 @@ public class OperatorInterface {
 		} else if (mOperatorStick.getRawButton(1)) {
 			newCommands.wantedFlipperSignal.leftFlipper = DoubleSolenoid.Value.kReverse;
 		}
-		// Slider
-		if (mOperatorStick.getRawButton(0)){
-			prevCommands.wantedSimpleSliderState = SimpleSlider.SimpleSliderState.IDLE;
-		} else if(mOperatorStick.getRawButton(0)){
-			prevCommands.wantedSimpleSliderState = SimpleSlider.SimpleSliderState.MANUAL;
-		}
 		//Right Flipper
 		if (mOperatorStick.getRawButton(1)) {
 			newCommands.wantedFlipperSignal.rightFlipper = DoubleSolenoid.Value.kForward;
 		} else if (mOperatorStick.getRawButton(1)) {
 			newCommands.wantedFlipperSignal.rightFlipper = DoubleSolenoid.Value.kReverse;
 		}
-		
+
+		// Slider
+		if (mOperatorStick.getRawButton(0)){
+			newCommands.wantedSimpleSliderState = SimpleSlider.SimpleSliderState.IDLE;
+		} else if(mOperatorStick.getRawButton(0)){
+			newCommands.wantedSimpleSliderState = SimpleSlider.SimpleSliderState.MANUAL;
+		}
+
 		// Spatula
 		if (mOperatorStick.getRawButton(3)) {
-			prevCommands.wantedSpatulaState = Spatula.SpatulaState.UP;
+			newCommands.wantedSpatulaState = Spatula.SpatulaState.UP;
 		} else if (mOperatorStick.getRawButton(2)) {
-			prevCommands.wantedSpatulaState = Spatula.SpatulaState.DOWN;
+			newCommands.wantedSpatulaState = Spatula.SpatulaState.DOWN;
 		}
-		
+
 		// Intake
 		if (mOperatorStick.getRawButton(1)) {
 			newCommands.wantedIntakeState = Intake.IntakeState.INTAKE;
-		} else if (mOperatorStick.getRawButton(1)) {
+		} else if (mOperatorStick.getRawButton(11)) {
 			newCommands.wantedIntakeState = Intake.IntakeState.EXPEL;
 		} else {
 			newCommands.wantedIntakeState = Intake.IntakeState.IDLE;

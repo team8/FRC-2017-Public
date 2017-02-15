@@ -97,20 +97,20 @@ class HardwareUpdater {
 	void updateSensors(RobotState robotState) {
 		robotState.drivePose.heading = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getAngle();
 		robotState.drivePose.headingVelocity = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getRate();
-			CANTalon leftMasterTalon = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon;
-			CANTalon rightMasterTalon = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon;
-			robotState.drivePose.leftEnc = leftMasterTalon.getEncPosition();
-			robotState.drivePose.leftEncVelocity = leftMasterTalon.getEncVelocity();
-			robotState.drivePose.leftSpeed = leftMasterTalon.getSpeed();
-			robotState.drivePose.rightEnc = rightMasterTalon.getEncPosition();
-			robotState.drivePose.rightEncVelocity = rightMasterTalon.getEncVelocity();
-			robotState.drivePose.rightSpeed = rightMasterTalon.getSpeed();
+		CANTalon leftMasterTalon = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon;
+		CANTalon rightMasterTalon = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon;
+		robotState.drivePose.leftEnc = leftMasterTalon.getEncPosition();
+		robotState.drivePose.leftEncVelocity = leftMasterTalon.getEncVelocity();
+		robotState.drivePose.leftSpeed = leftMasterTalon.getSpeed();
+		robotState.drivePose.rightEnc = rightMasterTalon.getEncPosition();
+		robotState.drivePose.rightEncVelocity = rightMasterTalon.getEncVelocity();
+		robotState.drivePose.rightSpeed = rightMasterTalon.getSpeed();
 
-			robotState.drivePose.leftError = Optional.of(leftMasterTalon.getClosedLoopError());
-			robotState.drivePose.rightError = Optional.of(rightMasterTalon.getClosedLoopError());
+		robotState.drivePose.leftError = Optional.of(leftMasterTalon.getClosedLoopError());
+		robotState.drivePose.rightError = Optional.of(rightMasterTalon.getClosedLoopError());
 		if(Constants.kRobotName == Constants.RobotName.AEGIR || Constants.kRobotName == Constants.RobotName.STEIK) {
 			robotState.sliderEncoder = HardwareAdapter.SliderHardware.getInstance().sliderMotor.getPosition();
-//			robotState.sliderEncoder = HardwareAdapter.SliderHardware.getInstance().sliderEncoder.getDistance();
+			//			robotState.sliderEncoder = HardwareAdapter.SliderHardware.getInstance().sliderEncoder.getDistance();
 			robotState.sliderPotentiometer = HardwareAdapter.SliderHardware.getInstance().sliderPotentiometer.get();
 			robotState.sliderRightHFX = HardwareAdapter.SliderHardware.getInstance().sliderRightHFX.get();
 			robotState.sliderLeftHFX = HardwareAdapter.SliderHardware.getInstance().sliderLeftHFX.get();
