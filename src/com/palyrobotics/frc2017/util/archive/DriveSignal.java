@@ -25,4 +25,9 @@ public class DriveSignal {
 		return ((DriveSignal) obj).leftMotor.equals(this.leftMotor) &&
 				((DriveSignal) obj).rightMotor.equals(this.rightMotor);
 	}
+
+	@Override
+	public String toString() {
+		return "left:"+leftMotor.toString()+" right:"+rightMotor.toString();
+	}
 }

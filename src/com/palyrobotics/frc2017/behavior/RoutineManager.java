@@ -43,16 +43,19 @@ public class RoutineManager implements Tappable {
 	/** Wipes all current routines <br />
 	 * Pass in the commands so that routines can clean up
 	 * @param commands
+	 * @return modified commands if needed
 	 */
-	public void reset(Commands commands) {
+	public Commands reset(Commands commands) {
+		Commands output = commands.copy();
 		// Cancel all running routines
 		if(runningRoutines.size() != 0) {
 			for(Routine routine : runningRoutines) {
-				routine.cancel(commands);
+				output = routine.cancel(output);
 			}
 		}
 		// Empty the running routines
 		runningRoutines.clear();
+		return output;
 	}
 
 	/**
@@ -61,7 +64,7 @@ public class RoutineManager implements Tappable {
 	 * @return Modified commands
 	 */
 	public Commands update(Commands commands) {
-		routinesToRemove = new ArrayList<Routine>();
+		routinesToRemove = new ArrayList<>();
 		Commands output = commands.copy();
 		// Update all running routines
 		for(Routine routine : runningRoutines) {
@@ -81,7 +84,7 @@ public class RoutineManager implements Tappable {
 			runningRoutines.remove(routine);
 		}
 
-		// Add newest routines
+		// Add newest routines after current routines may have finished, start them, and update them
 		for (Routine newRoutine : routinesToAdd) {
 			// combine running routines w/ new routine to check for shared subsystems
 			ArrayList<Routine> conflicts = conflictingRoutines(runningRoutines, newRoutine);
@@ -91,17 +94,17 @@ public class RoutineManager implements Tappable {
 				runningRoutines.remove(routine);
 			}
 			newRoutine.start();
+			output = newRoutine.update(output);
 			runningRoutines.add(newRoutine);
-			
 		}
 		
 		routinesToAdd.clear();
 
-		// Set TROUT routine_request
 		if (output.cancelCurrentRoutines) {
 			System.out.println("Cancel routine button");
-			this.reset(output);
+			output = this.reset(output);
 		} else if(!output.wantedRoutines.isEmpty()) {
+			// Routines requested by newly added routines
 			for(Routine routine : output.wantedRoutines) {
 				addNewRoutine(routine);
 			}

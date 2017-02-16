@@ -3,6 +3,7 @@ package com.palyrobotics.frc2017.behavior.routines.drive;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.subsystems.Drive;
+import com.palyrobotics.frc2017.subsystems.controllers.CANTalonDriveController;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.palyrobotics.frc2017.util.Subsystem;
 
@@ -38,7 +39,8 @@ public class CANTalonRoutine extends Routine {
 
 	@Override
 	public boolean finished() {
-		return drive.controllerOnTarget();
+		// Wait for controller to be added before finshing routine
+		return !drive.hasController() || drive.getController().getClass() == CANTalonDriveController.class && drive.controllerOnTarget();
 	}
 
 	@Override

@@ -74,11 +74,10 @@ class HardwareUpdater {
 		leftSlaveTalon.enable();
 		rightMasterTalon.enable();
 		rightSlaveTalon.enable();
-		// Configure master talon feedback devises
+		// Configure master talon feedback devices
 		leftMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		rightMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		leftMasterTalon.reverseSensor(true);
-		rightMasterTalon.reverseOutput(true);
 
 		// Zero encoders
 		leftMasterTalon.setEncPosition(0);

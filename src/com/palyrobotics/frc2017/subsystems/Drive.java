@@ -34,6 +34,8 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	private CheesyDriveHelper mCDH = new CheesyDriveHelper();
 
 	private Drive.DriveController mController = null;
+	// Used for off board controllers to be called only once
+	private boolean newController = false;
 
 	// Encoder DPP
 	private final double kInchesPerTick;
@@ -86,7 +88,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	@Override
 	public void update(Commands commands, RobotState state) {
 		mCachedRobotState = state;
-		boolean mIsNewState = (mState == commands.wantedDriveState) ? false : true;
+		boolean mIsNewState = !(mState == commands.wantedDriveState);
 		Commands.Setpoints setpoints = commands.robotSetpoints;
 
 		switch(commands.wantedDriveState) {
@@ -94,7 +96,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 				setDriveOutputs(mCDH.cheesyDrive(commands, mCachedRobotState));
 				break;
 			case OFF_BOARD_CONTROLLER:
-				if (mIsNewState) {
+				if (newController) {
 					// If no controller set yet, shift to neutral and wait for next cycle to try again
 					if (mController == null) {
 						setDriveOutputs(DriveSignal.getNeutralSignal());
@@ -103,6 +105,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 						return;
 					}
 					setDriveOutputs(mController.update(mCachedRobotState));
+					newController = false;
 				}
 				break;
 			case ON_BOARD_CONTROLLER:
@@ -140,6 +143,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 
 	public void setCANTalonController(DriveSignal signal) {
 		mController = new CANTalonDriveController(signal);
+		newController = true;
 	}
 
 	public void setTurnAngleSetpoint(double heading) {

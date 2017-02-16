@@ -18,7 +18,7 @@ import org.junit.rules.ExpectedException;
 /**
  * Created by Nihar on 1/22/17.
  * Unit tests for {@link RoutineManager}
- * @author Nihar
+ * @author Ailyn
  */
 public class RoutineManagerTest {
 	private RoutineManager mRoutineManager = new RoutineManager();
@@ -40,7 +40,8 @@ public class RoutineManagerTest {
 		mRoutineManager.addNewRoutine(mRoutine);
 		mRoutineManager.update(commands);
 		assertThat("New routine was not added correctly", mRoutineManager.getCurrentRoutines(), equalTo(correct));
-		
+
+		// Sets sample routine to isFinished
 		mRoutine.cancel(commands);
 		mRoutine.update(commands);
 		assertThat("Finished routines not removed correctly", mRoutineManager.getCurrentRoutines().isEmpty(), equalTo(true));
@@ -66,7 +67,8 @@ public class RoutineManagerTest {
 		DrivetrainRoutine mDriveRoutine = new DrivetrainRoutine();
 		mRoutineManager.addNewRoutine(mRoutine);
 		mRoutineManager.addNewRoutine(mDriveRoutine);
-		
+
+		// TODO: This throws a null pointer exception!
 		mRoutineManager.update(commands);
 		
 		// TODO: Test actual functionality of the reset method

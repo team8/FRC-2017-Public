@@ -36,30 +36,34 @@ public class AutoModeSelectorTest {
 	@Test
 	public void testGetAutoModeList() {
 		AutoModeSelector auto = AutoModeSelector.getInstance();
-		
-		ArrayList<String> correct = new ArrayList<String>();
-		correct.add("Test");
-		correct.add("DoNothing");
-		correct.add("BaseLine");
-		correct.add("CenterPeg");
-		correct.add("CenterPeg_CrossLeft");
-		correct.add("CenterPeg_CrossRight");
-		correct.add("LeftPeg");
-		correct.add("RightPeg");
-		correct.add("DoNothing");	// this one is registered during testRegisterAutonomous()
+
+		// TODO: Hard coded is sketchy
+		ArrayList<String> expectedAutoModeList = new ArrayList<String>();
+		expectedAutoModeList.add("Test");
+		expectedAutoModeList.add("DoNothing");
+		expectedAutoModeList.add("BaseLine");
+		expectedAutoModeList.add("CenterPeg");
+		expectedAutoModeList.add("CenterPeg_CrossLeft");
+		expectedAutoModeList.add("CenterPeg_CrossRight");
+		expectedAutoModeList.add("LeftPeg");
+		expectedAutoModeList.add("RightPeg");
+		expectedAutoModeList.add("DoNothing");	// TODO: sometimes test is run individually, "this one is registered during testRegisterAutonomous()"
 		ArrayList<String> test = auto.getAutoModeList();
 		
-		assertThat("Not all auto modes were retrieved", test.size(), equalTo(correct.size()));
-		assertThat("Auto modes are incorrect", test, equalTo(correct));
+		assertThat("Not all auto modes were retrieved", test.size(), equalTo(expectedAutoModeList.size()));
+		assertThat("Auto modes are incorrect", test, equalTo(expectedAutoModeList));
 	}
 
-	// TODO: BROKEN WITH NEW AUTO MODES
 	@Test
 	public void testSetAutoModeByName() {
 		AutoModeSelector auto = AutoModeSelector.getInstance();
-		//there should now be two DoNothingAutoModes (registered in a separate unit tests)
-		assertThat("Did not catch duplicates", auto.setAutoModeByName("DoNothing"), equalTo(false));
-		assertThat("Found auto mode when none exists", auto.setAutoModeByName("WaitForwardBackward"), equalTo(false));
+		// Intentionally register two copies of the same auto mode class
+		auto.registerAutonomous(new DoNothingAutoMode());
+		auto.registerAutonomous(new DoNothingAutoMode());
+		assertThat("Should not set auto mode when duplicates exist", auto.setAutoModeByName("DoNothing"), equalTo(false));
+		assertThat("Found auto mode when none exists", auto.setAutoModeByName("1234"), equalTo(false));
+
+		// TODO: Use a sample auto mode to guarantee it has exactly 1 copy
 		assertThat("Auto mode has been registered", auto.setAutoModeByName("CenterPeg"), equalTo(true));
 	}
 

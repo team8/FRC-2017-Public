@@ -9,6 +9,7 @@ import com.palyrobotics.frc2017.config.Constants2016;
  * Mocks the output of a CANTalon's configuration
  * Allows passthrough of -1 to 1 mSignal
  * Allows configuration for offboard SRX calculations
+ * @author Nihar
  */
 public class CANTalonOutput {
 
@@ -97,10 +98,14 @@ public class CANTalonOutput {
 		this.setpoint = setpoint;
 	}
 
-	public void setPosition(CANTalonOutputFactory canTalon) {
+	/**
+	 * Constructs Position control mode using CANTalonOutputFactory
+	 * @param factory
+	 */
+	public void setPosition(CANTalonOutputFactory factory) {
 		controlMode = CANTalon.TalonControlMode.Position;
-		setPID(canTalon.P, canTalon.I, canTalon.D, canTalon.F, canTalon.izone, canTalon.rampRate);
-		this.setpoint = canTalon.distance;
+		setPID(factory.P, factory.I, factory.D, factory.F, factory.izone, factory.rampRate);
+		this.setpoint = factory.distance;
 	}
 
 	/**

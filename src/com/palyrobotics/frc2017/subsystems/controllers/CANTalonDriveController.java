@@ -5,6 +5,7 @@ import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.robot.team254.lib.util.LegacyPose;
 import com.palyrobotics.frc2017.subsystems.Drive;
+import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Pose;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
@@ -16,9 +17,15 @@ import com.palyrobotics.frc2017.util.archive.DriveSignal;
 public class CANTalonDriveController implements Drive.DriveController {
 	private final DriveSignal mSignal;
 
-	private RobotState mCachedState;
+	private RobotState mCachedState = null;
+
+	/**
+	 * Constructs a drive controller to store a signal <br />
+	 * @param signal
+	 */
 	public CANTalonDriveController(DriveSignal signal) {
-		this.mSignal = signal;
+		// Use copy constructors and prevent the signal passed in from being modified externally
+		this.mSignal = new DriveSignal(new CANTalonOutput(signal.leftMotor), new CANTalonOutput(signal.rightMotor));
 	}
 
 	@Override
@@ -59,6 +66,9 @@ public class CANTalonDriveController implements Drive.DriveController {
 
 	@Override
 	public boolean onTarget() {
+		if (mCachedState == null) {
+			return false;
+		}
 		double tolerance = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kAcceptableDrivePositionError : Constants.kAcceptableDrivePositionError;
 		if (!mCachedState.drivePose.leftError.isPresent() || !mCachedState.drivePose.rightError.isPresent()) {
 			System.err.println("Talon closed loop error not found!");

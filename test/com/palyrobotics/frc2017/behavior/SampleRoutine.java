@@ -1,6 +1,9 @@
 package com.palyrobotics.frc2017.behavior;
 
 import com.palyrobotics.frc2017.config.Commands;
+import com.palyrobotics.frc2017.subsystems.Drive;
+import com.palyrobotics.frc2017.subsystems.Intake;
+import com.palyrobotics.frc2017.subsystems.Spatula;
 import com.palyrobotics.frc2017.util.Subsystem;
 
 /**
@@ -18,13 +21,13 @@ public class SampleRoutine extends Routine {
 
 	@Override
 	public Commands update(Commands commands) {
-		return null;
+		return commands;
 	}
 
 	@Override
 	public Commands cancel(Commands commands) {
 		isFinished = true;
-		return null;
+		return commands;
 	}
 
 	@Override
@@ -34,11 +37,12 @@ public class SampleRoutine extends Routine {
 
 	@Override
 	public Subsystem[] getRequiredSubsystems() {
+		// Intentionally empty so as to not conflict
 		return new Subsystem[3];
 	}
 
 	@Override
 	public String getName() {
-		return null;
+		return "SampleRoutine";
 	}
 }

@@ -1,14 +1,42 @@
 package com.palyrobotics.frc2017.util;
 
+import com.ctre.CANTalon;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 /**
  * Created by Nihar on 2/3/17.
  */
 public class CANTalonOutputTest {
+	/**
+	 * Test that CANTalon outputs are being configured correctly
+	 * TODO: Not all accounted for
+	 */
+	@Test
+	public void testConfigurations() throws Exception {
+		CANTalonOutput testOutput = new CANTalonOutput();
+		// Test vbus configuration
+		testOutput.setPercentVBus(0.5);
+		assertThat("Percent vbus setpoint incorrect", testOutput.getSetpoint(), equalTo(0.5));
+		assertThat("Percent vbus control mode incorrect", testOutput.getControlMode(), equalTo(CANTalon.TalonControlMode.PercentVbus));
+		testOutput = new CANTalonOutput();
+
+		// Test position configuration w/o factory used
+		testOutput.setPosition(10, 1, 0, 0.1, 0, 0, 0);
+		assertThat("Position setpoint incorrect", testOutput.getSetpoint(), equalTo(10.0));
+		assertThat("Position control mode incorrect", testOutput.getControlMode(), equalTo(CANTalon.TalonControlMode.Position));
+		// TODO: test the PIDF izone ramprate
+		testOutput = new CANTalonOutput();
+		// Test position configuration w/o factory used
+		CANTalonOutput.CANTalonOutputFactory factory = new CANTalonOutput.CANTalonOutputFactory(1,0,0.1, 0, 0, 0);
+		testOutput.setPosition(factory.withDistance(10));
+		assertThat("Position setpoint incorrect", testOutput.getSetpoint(), equalTo(10.0));
+		assertThat("Position control mode incorrect", testOutput.getControlMode(), equalTo(CANTalon.TalonControlMode.Position));
+	}
+
 	/**
 	 * Test equals method works
 	 * @throws Exception
