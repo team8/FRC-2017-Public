@@ -34,6 +34,9 @@ public class CANTalonOutput {
 		setpoint = 0;
 		profile = 0;
 		setPID(0,0,0,0,0,0);
+		
+		accel = 0;
+		cruiseVel = 0;
 	}
 
 	/**
@@ -49,6 +52,9 @@ public class CANTalonOutput {
 		this.F = talon.F;
 		this.izone = talon.izone;
 		this.rampRate = talon.rampRate;
+		this.profile = talon.profile;
+		
+		this.accel = talon.accel;
 		this.profile = talon.profile;
 	}
 
@@ -203,6 +209,8 @@ public class CANTalonOutput {
 			this.F = f;
 			this.izone = izone;
 			this.rampRate = rampRate;
+			this.profile = 0;
+			this.distance = 0;
 		}
 
 		public CANTalonOutputFactory() {

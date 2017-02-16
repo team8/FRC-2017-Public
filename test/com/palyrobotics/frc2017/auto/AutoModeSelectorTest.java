@@ -28,7 +28,7 @@ public class AutoModeSelectorTest {
 		AutoModeSelector auto = AutoModeSelector.getInstance();
 
 		// Using automodes registered in constructor
-		assertThat("Incorrect auto mode retrieved", auto.getAutoMode().getClass(), equalTo(new TestAutoMode().getClass()));
+		assertThat("Incorrect auto mode retrieved", auto.getAutoMode().getClass(), equalTo(new BaseLineAutoMode().getClass()));
 		
 		// Check index out of bounds
 	}
@@ -38,8 +38,15 @@ public class AutoModeSelectorTest {
 		AutoModeSelector auto = AutoModeSelector.getInstance();
 		
 		ArrayList<String> correct = new ArrayList<String>();
-		correct.add("DoNothing");
 		correct.add("Test");
+		correct.add("DoNothing");
+		correct.add("BaseLine");
+		correct.add("CenterPeg");
+		correct.add("CenterPeg_CrossLeft");
+		correct.add("CenterPeg_CrossRight");
+		correct.add("LeftPeg");
+		correct.add("RightPeg");
+		correct.add("DoNothing");	// this one is registered during testRegisterAutonomous()
 		ArrayList<String> test = auto.getAutoModeList();
 		
 		assertThat("Not all auto modes were retrieved", test.size(), equalTo(correct.size()));
@@ -50,13 +57,10 @@ public class AutoModeSelectorTest {
 	@Test
 	public void testSetAutoModeByName() {
 		AutoModeSelector auto = AutoModeSelector.getInstance();
-		// 0 DoNothing
-		// 1 Test
-		auto.registerAutonomous(new DoNothingAutoMode());	// 2
-
+		//there should now be two DoNothingAutoModes (registered in a separate unit tests)
 		assertThat("Did not catch duplicates", auto.setAutoModeByName("DoNothing"), equalTo(false));
 		assertThat("Found auto mode when none exists", auto.setAutoModeByName("WaitForwardBackward"), equalTo(false));
-		assertThat("Auto mode has been registered", auto.setAutoModeByName("Trajectory"), equalTo(true));
+		assertThat("Auto mode has been registered", auto.setAutoModeByName("CenterPeg"), equalTo(true));
 	}
 
 	/**
