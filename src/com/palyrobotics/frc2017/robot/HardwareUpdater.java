@@ -74,14 +74,20 @@ class HardwareUpdater {
 		leftSlaveTalon.enable();
 		rightMasterTalon.enable();
 		rightSlaveTalon.enable();
+		
 		// Configure master talon feedback devices
 		leftMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		rightMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
-		leftMasterTalon.reverseSensor(true);
-
+		
 		// Zero encoders
 		leftMasterTalon.setEncPosition(0);
 		rightMasterTalon.setEncPosition(0);
+		
+		//Reverse right side
+		rightMasterTalon.reverseOutput(true);
+		rightMasterTalon.setInverted(true);
+		rightMasterTalon.reverseSensor(true);
+
 
 		// Set slave talons to follower mode
 		leftSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
@@ -98,15 +104,15 @@ class HardwareUpdater {
 		robotState.drivePose.headingVelocity = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getRate();
 		CANTalon leftMasterTalon = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon;
 		CANTalon rightMasterTalon = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon;
-		robotState.drivePose.leftEnc = leftMasterTalon.getEncPosition();
+		robotState.drivePose.leftEnc = leftMasterTalon.getPosition();
 		robotState.drivePose.leftEncVelocity = leftMasterTalon.getEncVelocity();
 		robotState.drivePose.leftSpeed = leftMasterTalon.getSpeed();
-		robotState.drivePose.rightEnc = rightMasterTalon.getEncPosition();
+		//rightEnc is not getEncPosition() because that returns the absolute position, not the inverted one, which we want.
+		robotState.drivePose.rightEnc = rightMasterTalon.getPosition();
 		robotState.drivePose.rightEncVelocity = rightMasterTalon.getEncVelocity();
 		robotState.drivePose.rightSpeed = rightMasterTalon.getSpeed();
-
-		robotState.drivePose.leftError = Optional.of(leftMasterTalon.getClosedLoopError());
-		robotState.drivePose.rightError = Optional.of(rightMasterTalon.getClosedLoopError());
+		robotState.drivePose.leftError = Optional.of(leftMasterTalon.getError());
+		robotState.drivePose.rightError = Optional.of(rightMasterTalon.getError());
 		if(Constants.kRobotName == Constants.RobotName.AEGIR || Constants.kRobotName == Constants.RobotName.STEIK) {
 			robotState.sliderEncoder = HardwareAdapter.SliderHardware.getInstance().sliderMotor.getPosition();
 			//			robotState.sliderEncoder = HardwareAdapter.SliderHardware.getInstance().sliderEncoder.getDistance();
@@ -177,7 +183,7 @@ class HardwareUpdater {
 	private void updateCANTalonSRX(CANTalon talon, CANTalonOutput output, double scalar) {
 		if(talon.getControlMode() != output.getControlMode()) {
 			talon.changeControlMode(output.getControlMode());
-			if(output.getControlMode().isPID()) {
+			if(output.getControlMode().isPID() || output.getControlMode() == CANTalon.TalonControlMode.Position) {
 				talon.setPID(output.P, output.I, output.D, output.F, output.izone, output.rampRate, output.profile);
 			}
 			if (output.getControlMode() == CANTalon.TalonControlMode.MotionMagic) {
@@ -187,7 +193,8 @@ class HardwareUpdater {
 		}
 		// Don't resend setpoint if that is the currently running loop
 		if(talon.getSetpoint() != output.getSetpoint()) {
-			talon.setSetpoint(output.getSetpoint() * scalar);
+//			System.out.println("encoder position: " + talon.getEncPosition());
+			talon.set(output.getSetpoint() * scalar);
 		}
 	}
 }

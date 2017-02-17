@@ -20,8 +20,8 @@ public class Pose {
 	public double rightEncVelocity;
 	public double rightSpeed;
 
-	public Optional<Integer> leftError;
-	public Optional<Integer> rightError;
+	public Optional<Double> leftError;
+	public Optional<Double> rightError;
 
 	public Pose() {
 		this.leftEnc = 0; this.leftEncVelocity = 0; this.leftSpeed = 0;
@@ -32,7 +32,7 @@ public class Pose {
 	}
 	public Pose(double leftEnc, double leftEncVelocity, double leftSpeed,
 				double rightEnc, double rightEncVelocity, double rightSpeed,
-				int leftError, int rightError, double heading, double headingVelocity) {
+				double leftError, double rightError, double heading, double headingVelocity) {
 		this.leftEnc = leftEnc;
 		this.leftEncVelocity = leftEncVelocity;
 		this.leftSpeed = leftSpeed;

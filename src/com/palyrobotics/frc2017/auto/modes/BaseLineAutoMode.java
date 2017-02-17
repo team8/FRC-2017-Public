@@ -15,6 +15,12 @@ public class BaseLineAutoMode extends AutoMode {
 
 	public BaseLineAutoMode() {
 		distanceProvider = new CANTalonOutput.CANTalonOutputFactory();
+		distanceProvider.P = 0.1;
+		distanceProvider.I = 0.00025;
+		distanceProvider.D = 1;
+		distanceProvider.F = 0;
+		distanceProvider.izone = 750;
+		distanceProvider.rampRate = 0;
 	}
 
 	@Override

@@ -104,20 +104,32 @@ public class Drive extends Subsystem implements SubsystemLoop {
 						mState = DriveState.NEUTRAL;
 						return;
 					}
-					setDriveOutputs(mController.update(mCachedRobotState));
 					newController = false;
+				}
+				
+				if(mController == null) {
+					System.err.println("No offboard controller to use!");
+					commands.wantedDriveState = DriveState.NEUTRAL;
+				} else {
+					setDriveOutputs(mController.update(mCachedRobotState));
 				}
 				break;
 			case ON_BOARD_CONTROLLER:
 				if (mController == null) {
 					System.err.println("No onboard controller to use!");
+					commands.wantedDriveState = DriveState.NEUTRAL;
 				} else {
 					setDriveOutputs(mController.update(mCachedRobotState));
 				}
 			case OPEN_LOOP:
 				setDriveOutputs(commands.robotSetpoints.drivePowerSetpoint.get());
 			case NEUTRAL:
+				resetController();
 				setDriveOutputs(DriveSignal.getNeutralSignal());
+				
+				if(mCachedRobotState.gamePeriod.equals(RobotState.GamePeriod.TELEOP)) {
+					commands.wantedDriveState = DriveState.CHEZY;
+				}
 				break;
 		}
 		

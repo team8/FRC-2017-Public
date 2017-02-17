@@ -19,7 +19,7 @@ public class PoseTest {
 		assertThat("Poses should not be equal", pose.equals(other), equalTo(false));
 		
 		pose = new Pose();	// reset
-		pose.leftError = Optional.of(5);
+		pose.leftError = Optional.of(5.0);
 		assertThat("Optionals should not be equal", pose.equals(other), equalTo(false));
 	}
 	
@@ -36,7 +36,7 @@ public class PoseTest {
 		copy = pose.copy();
 		assertThat("Poses are not equal", pose.equals(copy), equalTo(true));
 		
-		pose.rightError = Optional.of(5);
+		pose.rightError = Optional.of(5.0);
 		copy = pose.copy();
 		assertThat("Poses are not equal", pose.equals(copy), equalTo(true));
 	}
