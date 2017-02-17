@@ -27,12 +27,13 @@ public class BBTurnAngleRoutine extends Routine {
 	
 	@Override
 	public void start() {
+		System.out.println("start bb turn angle");
 		drive.setNeutral();
 		mState = States.START;
 	}
 
 	@Override
-	public Commands update(Commands commands) {		
+	public Commands update(Commands commands) {	
 		switch(mState) {
 		case START:
 			System.out.println("Set setpoint: " + mAngle);

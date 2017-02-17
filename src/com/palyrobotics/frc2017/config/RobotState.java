@@ -1,5 +1,6 @@
 package com.palyrobotics.frc2017.config;
 
+import com.ctre.CANTalon.TalonControlMode;
 import com.palyrobotics.frc2017.robot.team254.lib.util.LegacyPose;
 import com.palyrobotics.frc2017.util.Pose;
 
@@ -16,6 +17,12 @@ public class RobotState {
 	// Updated by autoInit, teleopInit, disabledInit
 	public GamePeriod gamePeriod;
 
+	public TalonControlMode leftControlMode;
+	public TalonControlMode rightControlMode;
+	
+	public double leftSetpoint;
+	public double rightStepoint;
+	
 	// Tracks total voltage from kPDP
 	public double totalVoltageDraw;
 

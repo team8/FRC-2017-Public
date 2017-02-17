@@ -21,6 +21,7 @@ public class BaseLineAutoMode extends AutoMode {
 		distanceProvider.F = 0;
 		distanceProvider.izone = 750;
 		distanceProvider.rampRate = 0;
+		
 	}
 
 	@Override

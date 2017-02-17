@@ -26,14 +26,15 @@ public class SequentialRoutine extends Routine {
 
 	@Override
 	public Commands update(Commands commands) {
+		Commands output = commands.copy();
 		if(mIsDone) {
-			return commands;
+			return output;
 		}
 		// Update the current routine
-		commands = mRoutines.get(mRunningRoutineIndex).update(commands);
+		output = mRoutines.get(mRunningRoutineIndex).update(output);
 		// Keep moving to next routine if the current routine is finished
 		while(mRoutines.get(mRunningRoutineIndex).finished()) {
-			commands = mRoutines.get(mRunningRoutineIndex).cancel(commands);
+			output = mRoutines.get(mRunningRoutineIndex).cancel(output);
 			if(mRunningRoutineIndex <= mRoutines.size()-1) {
 				mRunningRoutineIndex++;
 			}
@@ -48,7 +49,7 @@ public class SequentialRoutine extends Routine {
 			mRoutines.get(mRunningRoutineIndex).start();
 			// TODO: Update the new routine once or no?
 		}
-		return commands;
+		return output;
 	}
 
 	@Override
@@ -73,9 +74,9 @@ public class SequentialRoutine extends Routine {
 
 	@Override
 	public String getName() {
-		String name = "SequentialRoutine of";
+		String name = "SequentialRoutine of ";
 		for(Routine routine : mRoutines) {
-			name+= routine.getName();
+			name+= (routine.getName() + " ");
 		}
 		return name;
 	}

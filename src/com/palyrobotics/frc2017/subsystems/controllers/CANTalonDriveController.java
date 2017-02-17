@@ -69,12 +69,14 @@ public class CANTalonDriveController implements Drive.DriveController {
 		if (mCachedState == null) {
 			return false;
 		}
-		double tolerance = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kAcceptableDrivePositionError : Constants.kAcceptableDrivePositionError;
+		double positionTolerance = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kAcceptableDrivePositionError : Constants.kAcceptableDrivePositionError;
+		double velocityTolerance = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kAcceptableDriveVelocityError : Constants.kAcceptableDriveVelocityError;
 		if (!mCachedState.drivePose.leftError.isPresent() || !mCachedState.drivePose.rightError.isPresent()) {
 			System.err.println("Talon closed loop error not found!");
 			return false;
 		}
 		
-		return (Math.abs(mCachedState.drivePose.leftError.get()) < tolerance) && (Math.abs(mCachedState.drivePose.rightError.get()) < tolerance);
+		return (Math.abs(mCachedState.drivePose.leftError.get()) < positionTolerance) && (Math.abs(mCachedState.drivePose.rightError.get()) < positionTolerance
+				&& Math.abs(mCachedState.drivePose.leftEncVelocity) < velocityTolerance && Math.abs(mCachedState.drivePose.rightEncVelocity) < velocityTolerance);
 	}
 }

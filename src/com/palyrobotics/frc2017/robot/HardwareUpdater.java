@@ -75,6 +75,11 @@ class HardwareUpdater {
 		rightMasterTalon.enable();
 		rightSlaveTalon.enable();
 		
+		leftMasterTalon.configPeakOutputVoltage(12, -12);
+		rightMasterTalon.configPeakOutputVoltage(12, -12);
+		leftSlaveTalon.configPeakOutputVoltage(12, -12);
+		rightSlaveTalon.configPeakOutputVoltage(12, -12);
+		
 		// Configure master talon feedback devices
 		leftMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		rightMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
@@ -100,6 +105,10 @@ class HardwareUpdater {
 	 * Updates all the sensor data taken from the hardware
 	 */
 	void updateSensors(RobotState robotState) {
+		robotState.leftControlMode = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getControlMode();
+		robotState.rightControlMode = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getControlMode();
+		robotState.leftSetpoint = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getSetpoint();
+		robotState.rightStepoint = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getSetpoint();
 		robotState.drivePose.heading = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getAngle();
 		robotState.drivePose.headingVelocity = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getRate();
 		CANTalon leftMasterTalon = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon;
@@ -166,6 +175,8 @@ class HardwareUpdater {
 	private void updateDrivetrain() {
 		double leftScalar = 1;
 		double rightScalar = 1;
+		
+		//NOTE: If these are changed, change corresponding scalar in CANTalonRoutine. Otherwise it will not stop.
 		if (mDrive.getDriveSignal().leftMotor.getControlMode() == CANTalon.TalonControlMode.Position) {
 			leftScalar = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks : Constants.kDriveInchesToTicks;
 		}
@@ -194,7 +205,6 @@ class HardwareUpdater {
 		}
 		// Don't resend setpoint if that is the currently running loop
 		if(talon.getSetpoint() != output.getSetpoint()) {
-//			System.out.println("encoder position: " + talon.getEncPosition());
 			talon.set(output.getSetpoint() * scalar);
 		}
 	}

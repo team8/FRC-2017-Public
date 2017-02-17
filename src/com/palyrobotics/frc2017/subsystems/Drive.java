@@ -79,6 +79,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 
 	@Override
 	public void start() {
+		
 	}
 
 	/**
@@ -102,11 +103,15 @@ public class Drive extends Subsystem implements SubsystemLoop {
 					if (mController == null) {
 						setDriveOutputs(DriveSignal.getNeutralSignal());
 						System.err.println("No offboard controller to use!");
+						newController = false;
 						mState = DriveState.NEUTRAL;
 						return;
 					}
 					setDriveOutputs(mController.update(mCachedRobotState));
 					newController = false;
+				}
+				if(mController == null) {
+					commands.wantedDriveState = DriveState.NEUTRAL;
 				}
 				break;
 			case ON_BOARD_CONTROLLER:
@@ -119,11 +124,15 @@ public class Drive extends Subsystem implements SubsystemLoop {
 			case OPEN_LOOP:
 				setDriveOutputs(commands.robotSetpoints.drivePowerSetpoint.get());
 			case NEUTRAL:
-				System.out.println("in neutral");
-				resetController();
+				if(!newController && mIsNewState) {
+					resetController();
+				}
 				setDriveOutputs(DriveSignal.getNeutralSignal());
 				
 				if(mCachedRobotState.gamePeriod.equals(RobotState.GamePeriod.TELEOP)) {
+					if(mIsNewState) {
+						resetController();
+					}
 					commands.wantedDriveState = DriveState.CHEZY;
 				}
 				break;
@@ -150,14 +159,13 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	}
 
 	public void setCANTalonController(DriveSignal signal) {
-		System.out.println("setting cantalon controller");
 		mController = new CANTalonDriveController(signal);
 		newController = true;
-		
 	}
 
 	public void setTurnAngleSetpoint(double heading) {
 		mController = new BangBangTurnAngleController(mCachedPose, heading);
+		newController = true;
 	}
 
 	// Wipes current controller

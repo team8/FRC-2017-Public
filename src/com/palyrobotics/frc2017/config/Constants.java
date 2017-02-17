@@ -26,6 +26,7 @@ public class Constants extends ConstantsBase {
 
 	// Tolerances
 	public static double kAcceptableDrivePositionError = 100;
+	public static double kAcceptableDriveVelocityError = 40;
 	public static double kAcceptableTurnAngleError = 1;
 	public static double kAcceptableSliderPositionError;
 

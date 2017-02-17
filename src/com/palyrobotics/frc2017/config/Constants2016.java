@@ -18,6 +18,7 @@ public class Constants2016 {
 	public static double kDericaPositionRampRate = 0.0;
 
 	public static double kAcceptableDrivePositionError = 150;
+	public static double kAcceptableDriveVelocityError = 40;
 
 	// Velocity control loop
 	public static double kDericaVelocitykP = 3.0;

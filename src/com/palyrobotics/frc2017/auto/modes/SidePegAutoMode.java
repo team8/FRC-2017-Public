@@ -46,11 +46,16 @@ public class SidePegAutoMode extends AutoMode {
 	
 	private DriveSignal driveTowardsNeutralZone = DriveSignal.getNeutralSignal();
 	
-	
 	public SidePegAutoMode(SideAutoVariant direction, PostSideAutoVariant postDrive) {
 		mVariant = direction;
 		mPost = postDrive;
 		distanceProvider = new CANTalonOutput.CANTalonOutputFactory();
+		distanceProvider.P = 0.15;
+		distanceProvider.I = 0.0002;
+		distanceProvider.D = 1;
+		distanceProvider.F = 0;
+		distanceProvider.izone = 750;
+		distanceProvider.rampRate = 0;
 	}
 
 	@Override
@@ -84,7 +89,6 @@ public class SidePegAutoMode extends AutoMode {
 			sequence.add(new BBTurnAngleRoutine(kSidePegTurnAngleDegrees));
 		}
 		sequence.add(new CANTalonRoutine(driveToAirship));
-		mSequentialRoutine = new SequentialRoutine(sequence);
 		
 		// Add the variants
 		backUp.leftMotor = new CANTalonOutput();
@@ -153,6 +157,8 @@ public class SidePegAutoMode extends AutoMode {
 				sequence.add(new CANTalonRoutine(driveTowardsNeutralZone));
 				break;				
 		}
+		
+		mSequentialRoutine = new SequentialRoutine(sequence);
 	}
 	
 	@Override
