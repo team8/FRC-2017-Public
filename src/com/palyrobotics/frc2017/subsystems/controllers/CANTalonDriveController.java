@@ -74,6 +74,7 @@ public class CANTalonDriveController implements Drive.DriveController {
 			System.err.println("Talon closed loop error not found!");
 			return false;
 		}
+		
 		return (Math.abs(mCachedState.drivePose.leftError.get()) < tolerance) && (Math.abs(mCachedState.drivePose.rightError.get()) < tolerance);
 	}
 }

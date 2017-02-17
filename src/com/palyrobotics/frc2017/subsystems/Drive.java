@@ -90,7 +90,6 @@ public class Drive extends Subsystem implements SubsystemLoop {
 		mCachedRobotState = state;
 		boolean mIsNewState = !(mState == commands.wantedDriveState);
 		Commands.Setpoints setpoints = commands.robotSetpoints;
-
 		switch(commands.wantedDriveState) {
 			case CHEZY:
 				setDriveOutputs(mCDH.cheesyDrive(commands, mCachedRobotState));
@@ -111,6 +110,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 					System.err.println("No offboard controller to use!");
 					commands.wantedDriveState = DriveState.NEUTRAL;
 				} else {
+					System.out.println("setting drive outputs");
 					setDriveOutputs(mController.update(mCachedRobotState));
 				}
 				break;
@@ -124,6 +124,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 			case OPEN_LOOP:
 				setDriveOutputs(commands.robotSetpoints.drivePowerSetpoint.get());
 			case NEUTRAL:
+				System.out.println("in neutral");
 				resetController();
 				setDriveOutputs(DriveSignal.getNeutralSignal());
 				
@@ -154,8 +155,10 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	}
 
 	public void setCANTalonController(DriveSignal signal) {
+		System.out.println("setting cantalon controller");
 		mController = new CANTalonDriveController(signal);
 		newController = true;
+		
 	}
 
 	public void setTurnAngleSetpoint(double heading) {

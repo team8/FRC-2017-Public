@@ -30,6 +30,12 @@ public class CenterPegAutoMode extends AutoMode {
 	public CenterPegAutoMode(CenterAutoVariant direction) {
 		mVariant = direction;
 		distanceProvider = new CANTalonOutput.CANTalonOutputFactory();
+		distanceProvider.P = 0.1;
+		distanceProvider.I = 0.00025;
+		distanceProvider.D = 1;
+		distanceProvider.F = 0;
+		distanceProvider.izone = 750;
+		distanceProvider.rampRate = 0;
 	}
 
 	@Override
@@ -46,6 +52,7 @@ public class CenterPegAutoMode extends AutoMode {
 		DriveSignal driveForward = DriveSignal.getNeutralSignal();
 		driveForward.leftMotor.setPosition(distanceProvider.withDistance(Constants.kCenterPegDistanceInches));
 		driveForward.rightMotor.setPosition(distanceProvider.withDistance(Constants.kCenterPegDistanceInches));
+		
 		sequence.add(new CANTalonRoutine(driveForward));
 		sequence.add(new TimeoutRoutine(2.5));
 

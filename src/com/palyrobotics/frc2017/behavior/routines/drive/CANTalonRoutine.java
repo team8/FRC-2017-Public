@@ -20,11 +20,13 @@ public class CANTalonRoutine extends Routine {
 
 	@Override
 	public void start() {
+		System.out.println("cantalon routine started");
 		drive.setCANTalonController(mSignal);
 	}
 
 	@Override
 	public Commands update(Commands commands) {
+		System.out.println("msignal setpoint: " + mSignal.leftMotor.getSetpoint());
 		Commands output = commands.copy();
 		output.wantedDriveState = Drive.DriveState.OFF_BOARD_CONTROLLER;
 		return output;
@@ -32,6 +34,7 @@ public class CANTalonRoutine extends Routine {
 
 	@Override
 	public Commands cancel(Commands commands) {
+		System.out.println("cantalon routine finished");
 		Commands output = commands.copy();
 		output.wantedDriveState = Drive.DriveState.NEUTRAL;
 		return output;
@@ -40,6 +43,8 @@ public class CANTalonRoutine extends Routine {
 	@Override
 	public boolean finished() {
 		// Wait for controller to be added before finshing routine
+		System.out.println("no controller: " + !drive.hasController());
+		System.out.println("controller on target: " + drive.controllerOnTarget());
 		return !drive.hasController() || drive.getController().getClass() == CANTalonDriveController.class && drive.controllerOnTarget();
 	}
 

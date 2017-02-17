@@ -29,11 +29,13 @@ public class TimeoutRoutine extends Routine {
 
     @Override
     public Commands cancel(Commands commands) {
+    	System.out.println("timeout routine finished");
     	return commands;
     }
 
     @Override
     public void start() {
+    	System.out.println("timeout routine started");
         timeStart = System.currentTimeMillis();
     }
 

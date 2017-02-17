@@ -30,16 +30,20 @@ public class SequentialRoutine extends Routine {
 			return commands;
 		}
 		// Update the current routine
-		mRoutines.get(mRunningRoutineIndex).update(commands);
+		commands = mRoutines.get(mRunningRoutineIndex).update(commands);
 		// Keep moving to next routine if the current routine is finished
 		while(mRoutines.get(mRunningRoutineIndex).finished()) {
-			mRoutines.get(mRunningRoutineIndex).cancel(commands);
-			mRunningRoutineIndex++;
+			commands = mRoutines.get(mRunningRoutineIndex).cancel(commands);
+			if(mRunningRoutineIndex <= mRoutines.size()-1) {
+				mRunningRoutineIndex++;
+			}
+			
 			// If final routine is finished, don't update anything
 			if(mRunningRoutineIndex > mRoutines.size()-1) {
 				mIsDone = true;
 				break;
 			}
+			
 			// Start the next routine
 			mRoutines.get(mRunningRoutineIndex).start();
 			// TODO: Update the new routine once or no?
@@ -49,7 +53,11 @@ public class SequentialRoutine extends Routine {
 
 	@Override
 	public Commands cancel(Commands commands) {
-		mRoutines.get(mRunningRoutineIndex).cancel(commands);
+		//If not all routines finished, cancel the current routine. Otherwise everything is already finished.
+		if(mRunningRoutineIndex < mRoutines.size()) {
+			mRoutines.get(mRunningRoutineIndex).cancel(commands);
+		}
+		
 		return commands;
 	}
 
