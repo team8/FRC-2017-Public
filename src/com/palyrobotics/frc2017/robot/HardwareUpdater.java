@@ -24,8 +24,9 @@ class HardwareUpdater {
 	/**
 	 * Hardware Updater for Steik/Aegir
 	 */
-	HardwareUpdater(Drive drive, Flippers flippers, Slider slider, Spatula spatula, Intake intake, Climber climber) throws Exception {
-		if(Constants.kRobotName != Constants.RobotName.AEGIR && Constants.kRobotName != Constants.RobotName.STEIK) {
+	HardwareUpdater(Drive drive, Flippers flippers, Slider slider, Spatula spatula, Intake intake, Climber climber)
+			throws Exception {
+		if (Constants.kRobotName != Constants.RobotName.AEGIR && Constants.kRobotName != Constants.RobotName.STEIK) {
 			System.out.println("Incompatible robot name and hardware!");
 			throw new Exception();
 		}
@@ -39,10 +40,11 @@ class HardwareUpdater {
 
 	/**
 	 * Hardware updater for Derica
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
 	HardwareUpdater(Drive drive) throws Exception {
-		if(Constants.kRobotName != Constants.RobotName.DERICA) {
+		if (Constants.kRobotName != Constants.RobotName.DERICA) {
 			System.out.println("Incompatible robot name and hardware!");
 			throw new Exception();
 		}
@@ -59,7 +61,8 @@ class HardwareUpdater {
 		CANTalon rightMasterTalon = HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon;
 		CANTalon rightSlaveTalon = HardwareAdapter.getInstance().getDrivetrain().rightSlaveTalon;
 
-		// Enable all talons' brake mode and disables forward and reverse soft limits
+		// Enable all talons' brake mode and disables forward and reverse soft
+		// limits
 		leftMasterTalon.enableBrakeMode(true);
 		leftSlaveTalon.enableBrakeMode(true);
 		rightSlaveTalon.enableBrakeMode(true);
@@ -75,30 +78,62 @@ class HardwareUpdater {
 		rightMasterTalon.enable();
 		rightSlaveTalon.enable();
 		
-		leftMasterTalon.configPeakOutputVoltage(12, -12);
-		rightMasterTalon.configPeakOutputVoltage(12, -12);
-		leftSlaveTalon.configPeakOutputVoltage(12, -12);
-		rightSlaveTalon.configPeakOutputVoltage(12, -12);
-		
 		// Configure master talon feedback devices
 		leftMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		rightMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
-		
+
 		// Zero encoders
 		leftMasterTalon.setEncPosition(0);
 		rightMasterTalon.setEncPosition(0);
-		
-		//Reverse right side
+
+		// Reverse right side
 		rightMasterTalon.reverseOutput(true);
 		rightMasterTalon.setInverted(true);
 		rightMasterTalon.reverseSensor(true);
-
 
 		// Set slave talons to follower mode
 		leftSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
 		leftSlaveTalon.set(leftMasterTalon.getDeviceID());
 		rightSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
 		rightSlaveTalon.set(rightMasterTalon.getDeviceID());
+
+		// Slider
+		// Reset and turn on the Talon
+		CANTalon sliderTalon = HardwareAdapter.SliderHardware.getInstance().sliderMotor;
+		sliderTalon.reset();
+		sliderTalon.clearStickyFaults();
+		sliderTalon.enable();
+		sliderTalon.enableControl();
+
+		// Limit the Talon output
+		sliderTalon.configMaxOutputVoltage(Constants.kSliderMaxVoltage);
+		sliderTalon.configPeakOutputVoltage(Constants.kSliderMaxVoltage, -Constants.kSliderMaxVoltage);
+		sliderTalon.setVoltageRampRate(Integer.MAX_VALUE);
+
+		// Set up the Talon to read from a relative CTRE mag encoder sensor
+		sliderTalon.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Absolute);
+		sliderTalon.setPosition(0);
+		sliderTalon.setEncPosition(0);
+		sliderTalon.setPulseWidthPosition(0);
+
+		// Climber
+		// Reset and turn on the Talon
+		CANTalon climberTalon = HardwareAdapter.SliderHardware.getInstance().sliderMotor;
+		climberTalon.reset();
+		climberTalon.clearStickyFaults();
+		climberTalon.enable();
+		climberTalon.enableControl();
+
+		// Limit the Talon output
+		climberTalon.configMaxOutputVoltage(Constants.kClimberMaxVoltage);
+		climberTalon.configPeakOutputVoltage(Constants.kClimberMaxVoltage, -Constants.kClimberMaxVoltage);
+		climberTalon.setVoltageRampRate(Integer.MAX_VALUE);
+
+		// Set up the Talon to read from a relative CTRE mag encoder sensor
+		climberTalon.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Absolute);
+		climberTalon.setPosition(0);
+		climberTalon.setEncPosition(0);
+		climberTalon.setPulseWidthPosition(0);
 	}
 
 	/**
@@ -116,28 +151,29 @@ class HardwareUpdater {
 		robotState.drivePose.leftEnc = leftMasterTalon.getPosition();
 		robotState.drivePose.leftEncVelocity = leftMasterTalon.getEncVelocity();
 		robotState.drivePose.leftSpeed = leftMasterTalon.getSpeed();
-		//rightEnc is not getEncPosition() because that returns the absolute position, not the inverted one, which we want.
+		// rightEnc is not getEncPosition() because that returns the absolute
+		// position, not the inverted one, which we want.
 		robotState.drivePose.rightEnc = rightMasterTalon.getPosition();
 		robotState.drivePose.rightEncVelocity = rightMasterTalon.getEncVelocity();
 		robotState.drivePose.rightSpeed = rightMasterTalon.getSpeed();
 		robotState.drivePose.leftError = Optional.of(leftMasterTalon.getError());
 		robotState.drivePose.rightError = Optional.of(rightMasterTalon.getError());
-		if(Constants.kRobotName == Constants.RobotName.AEGIR || Constants.kRobotName == Constants.RobotName.STEIK) {
+		if (Constants.kRobotName == Constants.RobotName.AEGIR || Constants.kRobotName == Constants.RobotName.STEIK) {
 			robotState.sliderEncoder = HardwareAdapter.SliderHardware.getInstance().sliderMotor.getPosition();
 			robotState.sliderPotentiometer = HardwareAdapter.SliderHardware.getInstance().sliderPotentiometer.get();
-			robotState.sliderRightHFX = HardwareAdapter.SliderHardware.getInstance().sliderRightHFX.get();
-			robotState.sliderLeftHFX = HardwareAdapter.SliderHardware.getInstance().sliderLeftHFX.get();
 		}
 
 		// Update kPDP current draw
 		if (Constants.kRobotName == Constants.RobotName.STEIK) {
-			robotState.climberCurrentDraw = HardwareAdapter.getInstance().kPDP.getCurrent(Constants.kSteikClimberMotorPDP);
+			robotState.climberCurrentDraw = HardwareAdapter.getInstance().kPDP
+					.getCurrent(Constants.kSteikClimberMotorPDP);
 		} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
-			robotState.climberCurrentDraw = HardwareAdapter.getInstance().kPDP.getCurrent(Constants.kAegirClimberMotorPDP);
+			robotState.climberCurrentDraw = HardwareAdapter.getInstance().kPDP
+					.getCurrent(Constants.kAegirClimberMotorPDP);
 		}
 
-		if (HardwareAdapter.getInstance().getClimber().climberEncoder != null) {
-			robotState.climberEncoder = HardwareAdapter.getInstance().getClimber().climberEncoder.get();
+		if (HardwareAdapter.getInstance().getClimber().climberMotor != null) {
+			robotState.climberEncoder = HardwareAdapter.getInstance().getClimber().climberMotor.getPosition();
 		}
 	}
 
@@ -168,8 +204,8 @@ class HardwareUpdater {
 	}
 
 	/**
-	 * Updates the drivetrain on Derica, Steik, Aegir
-	 * Uses CANTalonOutput and can run off-board control loops through SRX
+	 * Updates the drivetrain on Derica, Steik, Aegir Uses CANTalonOutput and
+	 * can run off-board control loops through SRX
 	 */
 	private void updateDrivetrain() {
 		double leftScalar = 1;
@@ -177,22 +213,27 @@ class HardwareUpdater {
 		
 		//NOTE: If these are changed, change corresponding scalar in CANTalonRoutine. Otherwise it will not stop.
 		if (mDrive.getDriveSignal().leftMotor.getControlMode() == CANTalon.TalonControlMode.Position) {
-			leftScalar = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks : Constants.kDriveInchesToTicks;
+			leftScalar = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+					: Constants.kDriveInchesToTicks;
 		}
 		if (mDrive.getDriveSignal().rightMotor.getControlMode() == CANTalon.TalonControlMode.Position) {
-			rightScalar = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks : Constants.kDriveInchesToTicks;
+			rightScalar = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+					: Constants.kDriveInchesToTicks;
 		}
 		
 		updateCANTalonSRX(HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon, mDrive.getDriveSignal().leftMotor, leftScalar);
 		updateCANTalonSRX(HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon, mDrive.getDriveSignal().rightMotor, rightScalar);
+
 	}
 
 	/**
 	 * Helper method for processing a CANTalonOutput for an SRX
-	 * @param scalar For converting to native units if needed
+	 * 
+	 * @param scalar
+	 *            For converting to native units if needed
 	 */
 	private void updateCANTalonSRX(CANTalon talon, CANTalonOutput output, double scalar) {
-		if(talon.getControlMode() != output.getControlMode()) {
+		if (talon.getControlMode() != output.getControlMode()) {
 			talon.changeControlMode(output.getControlMode());
 			if(output.getControlMode().isPID()) {
 				talon.setPID(output.gains.P, output.gains.I, output.gains.D, output.gains.F, output.gains.izone, output.gains.rampRate, output.profile);

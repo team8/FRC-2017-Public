@@ -33,6 +33,33 @@ public class Constants extends ConstantsBase {
 	// Unit Conversions
 	// TODO: Calculate the unit conversions for native units and inches, rpm, etc as needed
 
+	// Drive Position offboard control loop
+	public static double kAegirDriveDistancekP = 0;
+	public static double kAegirDriveDistancekI = 0;
+	public static double kAegirDriveDistancekD = 0;
+	public static double kAegirDriveDistancekF = 0;
+	public static int kAegirDriveDistancekIzone = 0;
+	public static double kAegirDriveDistancekRampRate = 0.0;
+
+	// Drive Velocity offboard control loop
+	public static double kAegirDriveVelocitykP = 0.0;
+	public static double kAegirDriveVelocitykI = 0;
+	public static double kAegirDriveVelocitykD = 0.0;
+	public static double kAegirDriveVelocitykF = 0;
+	public static int kAegirDriveVelocitykIzone = 0;
+	public static double kAegirDriveVelocityRampRate = 0.0;
+	
+		// Slider position offboard control loop
+
+	// Slider motion magic offboard control loop
+
+	// Slider potentiometer position onboard control loop
+
+	
+	public static double kSliderMaxVoltage = 4.0;
+	public static double kClimberMaxVoltage = 5.0;
+
+	
 	/* !!! End of editable Constants! !!!
 	 **********************************************************************************
 	 */
@@ -62,12 +89,8 @@ public class Constants extends ConstantsBase {
 	public static int kSteikRightFlipperPortRetract = 0;
 
 	//SLIDER
-	public static int kSteikSliderEncoderDIOA = 0;
-	public static int kSteikSliderEncoderDIOB = 0;
 	public static int kSteikSliderMotorDeviceID = 0;
 	public static int kSteikSliderMotorSpeed = 0;
-	public static int kSteikLeftSliderHallEffectSensor = 0;
-	public static int kSteikRightSliderHallEffectSensor = 0;
 	public static int kSteikSliderPotentiometer = 0;
 	public static int kSteikSliderPotentiometerFullRange = 0;
 	public static int kSteikSliderPotentiometerOffset;
@@ -85,20 +108,18 @@ public class Constants extends ConstantsBase {
 	//CLIMBER
 	public static int kSteikClimberMotorDeviceID = 0;
 	public static int kSteikClimberMotorPDP = 0;
-	public static int kSteikClimberEncoderPortA = 0;
-	public static int kSteikClimberEncoderPortB = 0;
 
 	/*
 	 * ************************************
 	 *  AEGIR ELECTRONIC CONSTANTS
 	 * ************************************
 	 */
-	public static int kAegirLeftDriveMasterDeviceID  = 0;
-	public static int kAegirLeftDriveSlaveDeviceID = 0;
+	public static int kAegirLeftDriveMasterDeviceID  = 1;
+	public static int kAegirLeftDriveSlaveDeviceID = 2;
 	public static int kAegirLeftDriveFrontMotorPDP = 0;
 	public static int kAegirLeftDriveBackMotorPDP = 0;
-	public static int kAegirRightDriveMasterDeviceID = 0;
-	public static int kAegirRightDriveSlaveDeviceID = 0;
+	public static int kAegirRightDriveMasterDeviceID = 4;
+	public static int kAegirRightDriveSlaveDeviceID = 5;
 	public static int kAegirRightDriveFrontMotorPDP = 0;
 	public static int kAegirRightDriveBackMotorPDP = 0;
 
@@ -109,13 +130,9 @@ public class Constants extends ConstantsBase {
 	public static int kAegirRightFlipperPortRetract = 0;
 
 	// SLIDER
-	public static int kAegirSliderEncoderDIOA = 0;
-	public static int kAegirSliderEncoderDIOB = 0;
-	public static int kAegirSliderMotorDeviceID = 0;
+	public static int kAegirSliderMotorDeviceID = 10;
 	public static int kAegirSliderMotorSpeed = 0;
-	public static int kAegirLeftSliderHallEffectSensor = 0;
-	public static int kAegirRightSliderHallEffectSensor = 0;
-	public static int kAegirSliderPotentiometer = 0;
+	public static int kAegirSliderPotentiometer = 3;
 	public static int kAegirSliderPotentiometerFullRange = 0;
 	public static int kAegirSliderPotentiometerOffset;
 
@@ -130,10 +147,8 @@ public class Constants extends ConstantsBase {
 	public static int kAegirRightIntakeMotorPDP = 0;
 
 	// CLIMBER
-	public static int kAegirClimberMotorDeviceID = 0;
+	public static int kAegirClimberMotorDeviceID = 9;
 	public static int kAegirClimberMotorPDP = 0;
-	public static int kAegirClimberEncoderPortA = 0;
-	public static int kAegirClimberEncoderPortB = 0;
 
 	// !!! Physical constants
 	// TODO: Ailyn insert the autonomous constants here

@@ -102,24 +102,20 @@ public class HardwareAdapter {
 			return instance;
 		}
 		public final CANTalon sliderMotor;
-		public final Encoder sliderEncoder;
 		public final AnalogPotentiometer sliderPotentiometer;
-		public final DigitalInput sliderLeftHFX;
-		public final DigitalInput sliderRightHFX;
 		
 		private SliderHardware() {
 			if(Constants.kRobotName == Constants.RobotName.STEIK) {
 				sliderMotor = new CANTalon(Constants.kSteikSliderMotorDeviceID);
-				sliderEncoder = new Encoder(Constants.kSteikSliderEncoderDIOA, Constants.kSteikSliderEncoderDIOB);
 				sliderPotentiometer = new AnalogPotentiometer(Constants.kSteikSliderPotentiometer, Constants.kSteikSliderPotentiometerFullRange, Constants.kSteikSliderPotentiometerOffset);
-				sliderLeftHFX = new DigitalInput(Constants.kSteikLeftSliderHallEffectSensor);
-				sliderRightHFX = new DigitalInput(Constants.kSteikRightSliderHallEffectSensor);
-			} else {
+			} 
+			else if (Constants.kRobotName == Constants.RobotName.AEGIR){
+				sliderMotor = new CANTalon(Constants.kAegirSliderMotorDeviceID);
+				sliderPotentiometer = new AnalogPotentiometer(Constants.kAegirSliderPotentiometer, Constants.kAegirSliderPotentiometerFullRange, Constants.kAegirSliderPotentiometerOffset);
+			}
+			else {
 				sliderMotor = null;
-				sliderEncoder = null;
 				sliderPotentiometer = null;
-				sliderLeftHFX = null;
-				sliderRightHFX = null;
 			}
 		}
 	}
@@ -154,16 +150,16 @@ public class HardwareAdapter {
 		protected static IntakeHardware getInstance() {
 			return instance;
 		}
-		public final CANSD540 leftIntakeMotor;
-		public final CANSD540 rightIntakeMotor;
+		public final VictorSP leftIntakeMotor;
+		public final VictorSP rightIntakeMotor;
 
 		private IntakeHardware() {
 			if (Constants.kRobotName == Constants.RobotName.AEGIR) {
-				leftIntakeMotor = new CANSD540(Constants.kAegirLeftIntakeMotorDeviceID);
-				rightIntakeMotor = new CANSD540(Constants.kAegirRightIntakeMotorDeviceID);
+				leftIntakeMotor = new VictorSP(Constants.kAegirLeftIntakeMotorDeviceID);
+				rightIntakeMotor = new VictorSP(Constants.kAegirRightIntakeMotorDeviceID);
 			} else if (Constants.kRobotName == Constants.RobotName.STEIK) {
-				leftIntakeMotor = new CANSD540(Constants.kSteikLeftIntakeMotorDeviceID);
-				rightIntakeMotor = new CANSD540(Constants.kSteikRightIntakeMotorDeviceID);
+				leftIntakeMotor = new VictorSP(Constants.kSteikLeftIntakeMotorDeviceID);
+				rightIntakeMotor = new VictorSP(Constants.kSteikRightIntakeMotorDeviceID);
 			} else {
 				leftIntakeMotor = null;
 				rightIntakeMotor = null;
@@ -180,19 +176,15 @@ public class HardwareAdapter {
 		protected static ClimberHardware getInstance(){
 			return instance;
 		}
-		public final CANSD540 climberMotor;
-		public final Encoder climberEncoder;
+		public final CANTalon climberMotor;
 		
 		private ClimberHardware() {
 			if (Constants.kRobotName == Constants.RobotName.AEGIR) {
-				climberMotor = new CANSD540(Constants.kAegirClimberMotorDeviceID);
-				climberEncoder = new Encoder(Constants.kAegirClimberEncoderPortA, Constants.kAegirClimberEncoderPortB);
+				climberMotor = new CANTalon(Constants.kAegirClimberMotorDeviceID);
 			} else if (Constants.kRobotName == Constants.RobotName.STEIK) {
-				climberMotor = new CANSD540(Constants.kSteikClimberMotorDeviceID);
-				climberEncoder = new Encoder(Constants.kSteikClimberEncoderPortA, Constants.kSteikClimberEncoderPortB);
+				climberMotor = new CANTalon(Constants.kSteikClimberMotorDeviceID);
 			} else {
 				climberMotor = null;
-				climberEncoder = null;
 			}
 		}
 	}

@@ -36,5 +36,5 @@ public class RobotState {
 
 	// Climber
 	public double climberCurrentDraw;
-	public int climberEncoder;
+	public double climberEncoder;
 }

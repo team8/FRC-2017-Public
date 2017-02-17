@@ -24,7 +24,7 @@ public class Climber extends Subsystem implements SubsystemLoop {
 	// TODO Find constants
 
 	// Store for PD loop
-	private int mPrevEnc;
+	private double mPrevEnc;
 	private static final double kP = 0.1;
 	private static final double kD = 0.01;
 
@@ -35,7 +35,7 @@ public class Climber extends Subsystem implements SubsystemLoop {
 	public static final double kRopeGrabSpeed = 0.5;	// Turn slowly while waiting to catch rope
 	public static final double kClimbSpeed = 1;
 
-	private int mTarget = -1; // Encoder endpoint
+	private double mTarget = -1; // Encoder endpoint
 	private DashboardValue mDv;
 
 	public enum ClimberState {
