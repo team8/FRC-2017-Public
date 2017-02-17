@@ -89,8 +89,10 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	public void update(Commands commands, RobotState state) {
 		mCachedRobotState = state;
 		boolean mIsNewState = !(mState == commands.wantedDriveState);
+		mState = commands.wantedDriveState;
 		Commands.Setpoints setpoints = commands.robotSetpoints;
-		switch(commands.wantedDriveState) {
+		
+		switch(mState) {
 			case CHEZY:
 				setDriveOutputs(mCDH.cheesyDrive(commands, mCachedRobotState));
 				break;
@@ -103,15 +105,8 @@ public class Drive extends Subsystem implements SubsystemLoop {
 						mState = DriveState.NEUTRAL;
 						return;
 					}
-					newController = false;
-				}
-				
-				if(mController == null) {
-					System.err.println("No offboard controller to use!");
-					commands.wantedDriveState = DriveState.NEUTRAL;
-				} else {
-					System.out.println("setting drive outputs");
 					setDriveOutputs(mController.update(mCachedRobotState));
+					newController = false;
 				}
 				break;
 			case ON_BOARD_CONTROLLER:
