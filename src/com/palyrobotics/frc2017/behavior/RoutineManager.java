@@ -72,7 +72,6 @@ public class RoutineManager implements Tappable {
 				output = routine.cancel(output);
 				routinesToRemove.add(routine);
 			} else {
-				System.out.println("Updating routine: " + routine.getName());
 				output = routine.update(output);
 			}
 		}
@@ -84,14 +83,13 @@ public class RoutineManager implements Tappable {
 
 		// Set TROUT routine_request
 		if (output.cancelCurrentRoutines) {
-			System.out.println("Cancel routine button");
 			reset(output);
 		} else if(!output.wantedRoutines.isEmpty()) {
 			for(Routine routine : output.wantedRoutines) {
+				System.out.println("Adding routine: " +routine.getName());
 				addNewRoutine(output, routine);
 			}
 		}
-
 		//clears the wanted routines every update cycle
 		output.wantedRoutines.clear();
 		return output;

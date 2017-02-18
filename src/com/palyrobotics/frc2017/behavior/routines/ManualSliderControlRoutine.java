@@ -11,13 +11,16 @@ public class ManualSliderControlRoutine extends Routine {
 	private static final Subsystem[] required = {Slider.getInstance()};
 	
 	@Override
-	public void start() {		
+	public void start() {	
+		System.out.println("Starting manual");
 	}
 
 	@Override
 	public Commands update(Commands commands) {
 		try {
-			slider.run(commands, this);
+			Commands newCommands = commands.copy();
+			newCommands.wantedSliderState = SliderState.MANUAL;
+			slider.run(newCommands, this);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}		
@@ -27,6 +30,7 @@ public class ManualSliderControlRoutine extends Routine {
 	@Override
 	public Commands cancel(Commands commands) {
 		commands.wantedSliderState = SliderState.IDLE;
+		System.out.println("Canceling manual slider control");
 		try {
 			slider.run(commands, this);
 		} catch (IllegalAccessException e) {

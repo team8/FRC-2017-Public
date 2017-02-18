@@ -6,7 +6,7 @@ public class Constants extends ConstantsBase {
 	public enum RobotName {
 		STEIK, AEGIR, TYR, DERICA
 	}
-	public static final RobotName kRobotName = RobotName.DERICA;
+	public static final RobotName kRobotName = RobotName.AEGIR;
 
 	// Chezy LegacyDrive tuning
 	public static double kDriveSensitivity = .85;
@@ -133,7 +133,7 @@ public class Constants extends ConstantsBase {
 	// SLIDER
 	public static int kAegirSliderEncoderDIOA = 0;
 	public static int kAegirSliderEncoderDIOB = 0;
-	public static int kAegirSliderMotorDeviceID = 0;
+	public static int kAegirSliderMotorDeviceID = 10;
 	public static int kAegirSliderMotorSpeed = 0;
 	public static int kAegirLeftSliderHallEffectSensor = 0;
 	public static int kAegirRightSliderHallEffectSensor = 0;

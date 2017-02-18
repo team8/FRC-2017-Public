@@ -120,7 +120,15 @@ public class HardwareAdapter {
 				sliderPotentiometer = new AnalogPotentiometer(Constants.kSteikSliderPotentiometer, Constants.kSteikSliderPotentiometerFullRange, Constants.kSteikSliderPotentiometerOffset);
 				sliderLeftHFX = new DigitalInput(Constants.kSteikLeftSliderHallEffectSensor);
 				sliderRightHFX = new DigitalInput(Constants.kSteikRightSliderHallEffectSensor);
-			} else {
+			}
+			else if(Constants.kRobotName == Constants.RobotName.AEGIR) {
+				sliderMotor = new CANTalon(Constants.kAegirSliderMotorDeviceID);
+				sliderEncoder = null;
+				sliderPotentiometer = null;
+				sliderLeftHFX = null;
+				sliderRightHFX = null;
+			}
+			else {
 				sliderMotor = null;
 				sliderEncoder = null;
 				sliderPotentiometer = null;

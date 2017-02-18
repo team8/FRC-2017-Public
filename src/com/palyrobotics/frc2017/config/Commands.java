@@ -34,7 +34,6 @@ public class Commands {
 	public Flippers.FlipperSignal wantedFlipperSignal = new Flippers.FlipperSignal(
 			DoubleSolenoid.Value.kForward, DoubleSolenoid.Value.kForward);
 	public Slider.SliderState wantedSliderState = Slider.SliderState.IDLE;
-	public SimpleSlider.SimpleSliderState wantedSimpleSliderState = SimpleSlider.SimpleSliderState.IDLE;
 	public Spatula.SpatulaState wantedSpatulaState = Spatula.SpatulaState.UP;
 	public Intake.IntakeState wantedIntakeState = Intake.IntakeState.IDLE;
 	public Climber.ClimberState wantedClimberState = Climber.ClimberState.IDLE;
@@ -47,6 +46,7 @@ public class Commands {
 				return;
 			}
 		}
+		System.out.println("Adding a wanted routine");
 		wantedRoutines.add(wantedRoutine);
 	}
 	
@@ -110,6 +110,7 @@ public class Commands {
 		copy.wantedDriveState = this.wantedDriveState;
 		copy.wantedFlipperSignal = this.wantedFlipperSignal;
 		copy.wantedSpatulaState = this.wantedSpatulaState;
+		copy.wantedSliderState = this.wantedSliderState;
 		copy.wantedIntakeState = this.wantedIntakeState;
 		copy.wantedClimberState = this.wantedClimberState;
 
@@ -118,6 +119,7 @@ public class Commands {
 		copy.rightStickInput = this.rightStickInput;
 		copy.operatorStickInput = this.operatorStickInput;
 
+		copy.wantedRoutines = this.wantedRoutines;
 		// Copy robot setpoints
 		copy.robotSetpoints = new Setpoints();
 		// Copy optionals that are present

@@ -139,6 +139,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 				mOutput.setPercentVBus(0);
 				break;
 			case MANUAL:
+				System.out.println("Manual");
 				mTarget = SliderTarget.NONE;
 				mOutput = mSimpleSlider.getOutput();
 				break;
@@ -290,11 +291,11 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	public void printStatus() {
 		System.out.println("Slider Status:");
 		System.out.println("State is " + mState.toString());
-		System.out.println("Output is " + mOutput.getSetpoint() + " with CANTalon in " + mOutput.getControlMode());
-		System.out.println("Encoder value is " + mRobotState.sliderEncoder);
-		System.out.println("Potentiometer value is " + mRobotState.sliderPotentiometer);
-		System.out.println("Left HFX value is " + mRobotState.sliderLeftHFX);
-		System.out.println("Right HFX value is " + mRobotState.sliderRightHFX);
+//		System.out.println("Output is " + mOutput.getSetpoint() + " with CANTalon in " + mOutput.getControlMode());
+//		System.out.println("Encoder value is " + mRobotState.sliderEncoder);
+//		System.out.println("Potentiometer value is " + mRobotState.sliderPotentiometer);
+//		System.out.println("Left HFX value is " + mRobotState.sliderLeftHFX);
+//		System.out.println("Right HFX value is " + mRobotState.sliderRightHFX);
 		System.out.println();
 	}
 }

@@ -22,29 +22,19 @@ public class SimpleSlider  extends Subsystem implements SubsystemLoop {
 	
 	public SimpleSlider() {
 		super("Simple Slider");
+		mOutput = new CANTalonOutput();
 	}
 	
 	private CANTalonOutput mOutput;
 	public static double kMotorScaleFactor = 0.5;
 	
-	public enum SimpleSliderState {
-		IDLE, //Slider is not moving
-		MANUAL
-	}
 
 	/**
 	 * Updates the Slider's motor output
 	 */
 	@Override
 	public void update(Commands commands, RobotState robotState) {
-		switch (commands.wantedSimpleSliderState){
-		case IDLE:
-			mOutput.setPercentVBus(0);
-			break;
-		case MANUAL:
-			mOutput.setPercentVBus(commands.operatorStickInput.x * kMotorScaleFactor);
-			break;
-		}
+		mOutput.setPercentVBus(commands.operatorStickInput.x * kMotorScaleFactor);
 	}
 	
 	public CANTalonOutput getOutput(){
@@ -61,5 +51,10 @@ public class SimpleSlider  extends Subsystem implements SubsystemLoop {
 	public void stop() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void printStatus() {
+
 	}
 }

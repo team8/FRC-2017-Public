@@ -114,6 +114,7 @@ public class OperatorInterface {
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.NONE;
 			newCommands.addWantedRoutine(new ManualSliderControlRoutine());
 		}
+		newCommands.operatorStickInput.x = mOperatorStick.getX();
 		
 		// Spatula
 		if (mOperatorStick.getRawButton(3)) {
