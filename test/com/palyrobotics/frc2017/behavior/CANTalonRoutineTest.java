@@ -2,6 +2,7 @@ package com.palyrobotics.frc2017.behavior;
 
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.config.Commands;
+import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.subsystems.controllers.CANTalonDriveController;
@@ -22,8 +23,8 @@ public class CANTalonRoutineTest {
 	public void basicTest() throws Exception {
 		// Construct arbitrary offboard position loop drive signal
 		DriveSignal mSignal = DriveSignal.getNeutralSignal();
-		mSignal.leftMotor.setPosition(10, 0, 0, 0, 0, 0 , 0);
-		mSignal.rightMotor.setPosition(10, 0, 0, 0, 0, 0, 0);
+		mSignal.leftMotor.setPosition(10, Gains.aegirPosition);
+		mSignal.rightMotor.setPosition(10, Gains.aegirPosition);
 		CANTalonRoutine mRoutine = new CANTalonRoutine(mSignal);
 
 		RoutineManager routineManager = new RoutineManager();

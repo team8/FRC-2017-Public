@@ -9,6 +9,7 @@ import com.palyrobotics.frc2017.behavior.routines.drive.BBTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
+import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
@@ -25,17 +26,15 @@ public class CenterPegAutoMode extends AutoMode {
 	private final CenterAutoVariant mVariant;
 	private SequentialRoutine mSequentialRoutine;
 
-	private CANTalonOutput.CANTalonOutputFactory distanceProvider;
+	private Gains mGains;
 
 	public CenterPegAutoMode(CenterAutoVariant direction) {
 		mVariant = direction;
-		distanceProvider = new CANTalonOutput.CANTalonOutputFactory();
-		distanceProvider.P = 0.1;
-		distanceProvider.I = 0.00025;
-		distanceProvider.D = 1;
-		distanceProvider.F = 0;
-		distanceProvider.izone = 750;
-		distanceProvider.rampRate = 0;
+		if(Constants.kRobotName == Constants.RobotName.DERICA) {
+			mGains = Gains.dericaPosition;
+		} else {
+			mGains = (Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikPosition : Gains.aegirPosition;
+		}
 	}
 
 	@Override
@@ -50,25 +49,25 @@ public class CenterPegAutoMode extends AutoMode {
 		ArrayList<Routine> sequence = new ArrayList<Routine>();
 		// Straight drive distance to the center peg
 		DriveSignal driveForward = DriveSignal.getNeutralSignal();
-		driveForward.leftMotor.setPosition(distanceProvider.withDistance(Constants.kCenterPegDistanceInches));
-		driveForward.rightMotor.setPosition(distanceProvider.withDistance(Constants.kCenterPegDistanceInches));
+		driveForward.leftMotor.setPosition(Constants.kCenterPegDistanceInches, mGains);
+		driveForward.rightMotor.setPosition(Constants.kCenterPegDistanceInches, mGains);
 		
 		sequence.add(new CANTalonRoutine(driveForward));
 		sequence.add(new TimeoutRoutine(2.5));
 
 		// Back off from the peg after 2.5 seconds
 		DriveSignal driveBack = DriveSignal.getNeutralSignal();
-		driveBack.leftMotor.setPosition(distanceProvider.withDistance(-25));
-		driveBack.rightMotor.setPosition(distanceProvider.withDistance(-25));
+		driveBack.leftMotor.setPosition(-25, mGains);
+		driveBack.rightMotor.setPosition(-25, mGains);
 
 		// If variant includes a cross, drive past the airship after turn angle
 		DriveSignal passAirship = DriveSignal.getNeutralSignal();
-		passAirship.leftMotor.setPosition(distanceProvider.withDistance(50));
-		passAirship.rightMotor.setPosition(distanceProvider.withDistance(50));
+		passAirship.leftMotor.setPosition(50, mGains);
+		passAirship.rightMotor.setPosition(50, mGains);
 
 		DriveSignal crossOver = DriveSignal.getNeutralSignal();
-		crossOver.leftMotor.setPosition(distanceProvider.withDistance(20));
-		crossOver.rightMotor.setPosition(distanceProvider.withDistance(20));
+		crossOver.leftMotor.setPosition(20, mGains);
+		crossOver.rightMotor.setPosition(20, mGains);
 		switch (mVariant) {
 			case NOTHING:
 				break;

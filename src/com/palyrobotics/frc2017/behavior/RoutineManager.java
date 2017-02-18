@@ -73,7 +73,6 @@ public class RoutineManager implements Tappable {
 				output = routine.cancel(output);
 				routinesToRemove.add(routine);
 			} else {
-//				System.out.println("Updating routine: " + routine.getName());
 				output = routine.update(output);
 			}
 		}

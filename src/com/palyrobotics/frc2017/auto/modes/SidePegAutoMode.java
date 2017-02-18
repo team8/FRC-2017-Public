@@ -8,6 +8,7 @@ import com.palyrobotics.frc2017.behavior.routines.drive.BBTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
+import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
@@ -35,7 +36,7 @@ public class SidePegAutoMode extends AutoMode {
 	private final PostSideAutoVariant mPost;
 	private SequentialRoutine mSequentialRoutine;
 
-	private CANTalonOutput.CANTalonOutputFactory distanceProvider;
+	private Gains mGains;
 	
 	private DriveSignal driveForward = DriveSignal.getNeutralSignal();
 	private DriveSignal driveToAirship = DriveSignal.getNeutralSignal();
@@ -49,13 +50,11 @@ public class SidePegAutoMode extends AutoMode {
 	public SidePegAutoMode(SideAutoVariant direction, PostSideAutoVariant postDrive) {
 		mVariant = direction;
 		mPost = postDrive;
-		distanceProvider = new CANTalonOutput.CANTalonOutputFactory();
-		distanceProvider.P = 0.15;
-		distanceProvider.I = 0.0002;
-		distanceProvider.D = 1;
-		distanceProvider.F = 0;
-		distanceProvider.izone = 750;
-		distanceProvider.rampRate = 0;
+		if(Constants.kRobotName == Constants.RobotName.DERICA) {
+			mGains = Gains.dericaPosition;
+		} else {
+			mGains = (Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikPosition : Gains.aegirPosition;
+		}
 	}
 
 	@Override
@@ -67,15 +66,11 @@ public class SidePegAutoMode extends AutoMode {
 	public void prestart() {
 		System.out.println("Starting "+this.toString()+" Auto Mode");
 		
-		driveForward.leftMotor = new CANTalonOutput();
-		driveForward.leftMotor.setPosition(distanceProvider.withDistance(Constants.kSidePegDistanceForwardInches));
-		driveForward.rightMotor = new CANTalonOutput();
-		driveForward.rightMotor.setPosition(distanceProvider.withDistance(Constants.kSidePegDistanceForwardInches));
+		driveForward.leftMotor.setPosition(Constants.kSidePegDistanceForwardInches, mGains);
+		driveForward.rightMotor.setPosition(Constants.kSidePegDistanceForwardInches, mGains);
 
-		driveToAirship.leftMotor = new CANTalonOutput();
-		driveToAirship.leftMotor.setPosition(distanceProvider.withDistance(Constants.kSidePegDistanceToAirshipInches));
-		driveToAirship.rightMotor = new CANTalonOutput();
-		driveToAirship.rightMotor.setPosition(distanceProvider.withDistance(Constants.kSidePegDistanceToAirshipInches));
+		driveToAirship.leftMotor.setPosition(Constants.kSidePegDistanceToAirshipInches, mGains);
+		driveToAirship.rightMotor.setPosition(Constants.kSidePegDistanceToAirshipInches, mGains);
 		
 		ArrayList<Routine> score = new ArrayList<Routine>();
 		score.add(new CANTalonRoutine(driveToAirship));
@@ -91,26 +86,18 @@ public class SidePegAutoMode extends AutoMode {
 		sequence.add(new CANTalonRoutine(driveToAirship));
 		
 		// Add the variants
-		backUp.leftMotor = new CANTalonOutput();
-		backUp.leftMotor.setPosition(distanceProvider.withDistance(-3));
-		backUp.rightMotor = new CANTalonOutput();
-		backUp.rightMotor.setPosition(distanceProvider.withDistance(-3));
+		backUp.leftMotor.setPosition(-3, mGains);
+		backUp.rightMotor.setPosition(-3, mGains);
 		
 		// distance to the line that is perpendicular to and intersects the hopper
-		driveToPerpendicular.leftMotor = new CANTalonOutput();
-		driveToPerpendicular.leftMotor.setPosition(distanceProvider.withDistance(4));
-		driveToPerpendicular.rightMotor = new CANTalonOutput();
-		driveToPerpendicular.rightMotor.setPosition(distanceProvider.withDistance(4));
+		driveToPerpendicular.leftMotor.setPosition(4, mGains);
+		driveToPerpendicular.rightMotor.setPosition(4, mGains);
 		
-		backUpIntoHopper.leftMotor = new CANTalonOutput();
-		backUpIntoHopper.leftMotor.setPosition(distanceProvider.withDistance(-8));
-		backUpIntoHopper.rightMotor = new CANTalonOutput();
-		backUpIntoHopper.rightMotor.setPosition(distanceProvider.withDistance(-8));
+		backUpIntoHopper.leftMotor.setPosition(-8, mGains);
+		backUpIntoHopper.rightMotor.setPosition(-8, mGains);
 		
-		driveTowardsNeutralZone.leftMotor = new CANTalonOutput();
-		driveTowardsNeutralZone.leftMotor.setPosition(distanceProvider.withDistance(15));
-		driveTowardsNeutralZone.rightMotor = new CANTalonOutput();
-		driveTowardsNeutralZone.rightMotor.setPosition(distanceProvider.withDistance(15));
+		driveTowardsNeutralZone.leftMotor.setPosition(15, mGains);
+		driveTowardsNeutralZone.rightMotor.setPosition(15, mGains);
 		
 		/**
 		 * VARIANTS WORK AS FOLLOWS:

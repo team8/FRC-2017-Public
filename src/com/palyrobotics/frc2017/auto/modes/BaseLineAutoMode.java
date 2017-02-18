@@ -5,23 +5,21 @@ import com.palyrobotics.frc2017.auto.AutoModeEndedException;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
+import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
 public class BaseLineAutoMode extends AutoMode {
 	private CANTalonRoutine mRoutine;
 	
-	private CANTalonOutput.CANTalonOutputFactory distanceProvider;
+	private Gains mGains;
 
 	public BaseLineAutoMode() {
-		distanceProvider = new CANTalonOutput.CANTalonOutputFactory();
-		distanceProvider.P = 0.1;
-		distanceProvider.I = 0.00025;
-		distanceProvider.D = 1;
-		distanceProvider.F = 0;
-		distanceProvider.izone = 750;
-		distanceProvider.rampRate = 0;
-		
+		if(Constants.kRobotName == Constants.RobotName.DERICA) {
+			mGains = Gains.dericaPosition;
+		} else {
+			mGains = (Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikPosition : Gains.aegirPosition;
+		}
 	}
 
 	@Override
@@ -34,8 +32,8 @@ public class BaseLineAutoMode extends AutoMode {
 		System.out.println("Starting Base Line Auto Mode");
 		
 		DriveSignal driveForward = DriveSignal.getNeutralSignal();
-		driveForward.leftMotor.setPosition(distanceProvider.withDistance(Constants.kBaseLineDistanceInches));
-		driveForward.rightMotor.setPosition(distanceProvider.withDistance(Constants.kBaseLineDistanceInches));
+		driveForward.leftMotor.setPosition(Constants.kBaseLineDistanceInches, mGains);
+		driveForward.rightMotor.setPosition(Constants.kBaseLineDistanceInches, mGains);
 		mRoutine = new CANTalonRoutine(driveForward);
 	}
 

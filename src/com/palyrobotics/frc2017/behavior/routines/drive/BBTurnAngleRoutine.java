@@ -38,7 +38,7 @@ public class BBTurnAngleRoutine extends Routine {
 		case START:
 			System.out.println("Set setpoint: " + mAngle);
 			drive.setTurnAngleSetpoint(mAngle);
-			commands.wantedDriveState = Drive.DriveState.OFF_BOARD_CONTROLLER;
+			commands.wantedDriveState = Drive.DriveState.ON_BOARD_CONTROLLER;
 			mState = States.TURNING;
 			break;
 			

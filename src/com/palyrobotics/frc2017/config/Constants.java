@@ -29,60 +29,9 @@ public class Constants extends ConstantsBase {
 	public static double kAcceptableDriveVelocityError = 40;
 	public static double kAcceptableTurnAngleError = 1;
 	public static double kAcceptableSliderPositionError;
-
-	/*
-	 * Control loops tuning - STEIK
-	 */
-
-	// Drive Position offboard control loop
-	public static double kSteikDriveDistancekP = 0;
-	public static double kSteikDriveDistancekI = 0;
-	public static double kSteikDriveDistancekD = 0;
-	public static double kSteikDriveDistancekF = 0;
-	public static int kSteikDriveDistancekIzone = 0;
-	public static double kSteikDriveDistancekRampRate = 0.0;
-
-	// Drive Velocity offboard control loop
-	public static double kSteikDriveVelocitykP = 0.0;
-	public static double kSteikDriveVelocitykI = 0;
-	public static double kSteikDriveVelocitykD = 0.0;
-	public static double kSteikDriveVelocitykF = 0;
-	public static int kSteikDriveVelocitykIzone = 0;
-	public static double kSteikDriveVelocitykRampRate = 0.0;
-
-	// Slider position offboard control loop
-
-	// Slider motion magic offboard control loop
-
-	// Slider potentiometer position onboard control loop
-	/*
-	 * CAN Talon Tuning - AEGIR
-	 */
+	
 	// Unit Conversions
 	// TODO: Calculate the unit conversions for native units and inches, rpm, etc as needed
-
-	// Drive Position offboard control loop
-	public static double kAegirDriveDistancekP = 0;
-	public static double kAegirDriveDistancekI = 0;
-	public static double kAegirDriveDistancekD = 0;
-	public static double kAegirDriveDistancekF = 0;
-	public static int kAegirDriveDistancekIzone = 0;
-	public static double kAegirDriveDistancekRampRate = 0.0;
-
-	// Drive Velocity offboard control loop
-	public static double kAegirDriveVelocitykP = 0.0;
-	public static double kAegirDriveVelocitykI = 0;
-	public static double kAegirDriveVelocitykD = 0.0;
-	public static double kAegirDriveVelocitykF = 0;
-	public static int kAegirDriveVelocitykIzone = 0;
-	public static double kAegirDriveVelocityRampRate = 0.0;
-
-	// Slider position offboard control loop
-
-	// Slider motion magic offboard control loop
-
-	// Slider potentiometer position onboard control loop
-
 
 	/* !!! End of editable Constants! !!!
 	 **********************************************************************************
@@ -111,7 +60,7 @@ public class Constants extends ConstantsBase {
 	public static int kSteikLeftFlipperPortRetract = 0;
 	public static int kSteikRightFlipperPortExtend = 0;
 	public static int kSteikRightFlipperPortRetract = 0;
-	
+
 	//SLIDER
 	public static int kSteikSliderEncoderDIOA = 0;
 	public static int kSteikSliderEncoderDIOB = 0;
@@ -126,13 +75,13 @@ public class Constants extends ConstantsBase {
 	//SPATULA
 	public static int kSteikSpatulaPortExtend = 0;
 	public static int kSteikSpatulaPortRetract = 0;
-	
+
 	//INTAKE
 	public static int kSteikLeftIntakeMotorDeviceID = 0;
 	public static int kSteikLeftIntakeMotorPDP = 0;
 	public static int kSteikRightIntakeMotorDeviceID = 0;
 	public static int kSteikRightIntakeMotorPDP = 0;
-	
+
 	//CLIMBER
 	public static int kSteikClimberMotorDeviceID = 0;
 	public static int kSteikClimberMotorPDP = 0;

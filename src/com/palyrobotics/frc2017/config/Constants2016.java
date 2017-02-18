@@ -9,24 +9,8 @@ public class Constants2016 {
 	public static double kDericaInchesToTicks = 1400 / (2 * 3.1415 * 3.5);
 	public static double kDericaInchesToDegrees = 42 / 180.0;
 
-	// Position control loop
-	public static double kDericaPositionkP = 0.4;
-	public static double kDericaPositionkI = 0;
-	public static double kDericaPositionkD = 4;
-	public static double kDericaPositionkF = 0;
-	public static int kDericaPositionkIzone = 0;
-	public static double kDericaPositionRampRate = 0.0;
-
 	public static double kAcceptableDrivePositionError = 150;
 	public static double kAcceptableDriveVelocityError = 40;
-
-	// Velocity control loop
-	public static double kDericaVelocitykP = 3.0;
-	public static double kDericaVelocitykI = 0;
-	public static double kDericaVelocitykD = 50.0;
-	public static double kDericaVelocitykF = 2.122;
-	public static int kDericaVelocitykIzone = 0;
-	public static double kDericaVelocityRampRate = 0.0;
 
 	public static double kAutoIntakeSpeed = 1.0;
 	// !!! Electrical constants (do not change at runtime, lol)

@@ -124,7 +124,6 @@ class HardwareUpdater {
 		robotState.drivePose.rightError = Optional.of(rightMasterTalon.getError());
 		if(Constants.kRobotName == Constants.RobotName.AEGIR || Constants.kRobotName == Constants.RobotName.STEIK) {
 			robotState.sliderEncoder = HardwareAdapter.SliderHardware.getInstance().sliderMotor.getPosition();
-			//			robotState.sliderEncoder = HardwareAdapter.SliderHardware.getInstance().sliderEncoder.getDistance();
 			robotState.sliderPotentiometer = HardwareAdapter.SliderHardware.getInstance().sliderPotentiometer.get();
 			robotState.sliderRightHFX = HardwareAdapter.SliderHardware.getInstance().sliderRightHFX.get();
 			robotState.sliderLeftHFX = HardwareAdapter.SliderHardware.getInstance().sliderLeftHFX.get();
@@ -195,17 +194,14 @@ class HardwareUpdater {
 	private void updateCANTalonSRX(CANTalon talon, CANTalonOutput output, double scalar) {
 		if(talon.getControlMode() != output.getControlMode()) {
 			talon.changeControlMode(output.getControlMode());
-			if(output.getControlMode().isPID() || output.getControlMode() == CANTalon.TalonControlMode.Position) {
-				talon.setPID(output.P, output.I, output.D, output.F, output.izone, output.rampRate, output.profile);
+			if(output.getControlMode().isPID()) {
+				talon.setPID(output.gains.P, output.gains.I, output.gains.D, output.gains.F, output.gains.izone, output.gains.rampRate, output.profile);
 			}
 			if (output.getControlMode() == CANTalon.TalonControlMode.MotionMagic) {
 				talon.setMotionMagicAcceleration(output.accel);
 				talon.setMotionMagicCruiseVelocity(output.cruiseVel);
 			}
 		}
-		// Don't resend setpoint if that is the currently running loop
-		if(talon.getSetpoint() != output.getSetpoint()) {
-			talon.set(output.getSetpoint() * scalar);
-		}
+		talon.set(output.getSetpoint() * scalar);
 	}
 }

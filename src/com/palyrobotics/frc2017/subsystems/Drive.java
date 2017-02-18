@@ -179,7 +179,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	public Pose getPose() {
 		// If drivetrain has not had first update yet, return initial robot pose of 0,0,0,0,0,0
 		if(mCachedRobotState == null) {
-			return new Pose(0,0,0,0,0,0, 0, 0);
+			return new Pose(0,0,0,0,0,0,0,0);
 		}
 		return mCachedPose;
 	}

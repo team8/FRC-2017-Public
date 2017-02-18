@@ -16,7 +16,7 @@ import com.palyrobotics.frc2017.util.Subsystem;
  * Should be used to set the drivetrain to an offboard closed loop cantalon
  */
 public class CANTalonRoutine extends Routine {
-	Commands output;
+	private Commands output;
 	private final DriveSignal mSignal;
 	
 	public CANTalonRoutine(DriveSignal controller) {

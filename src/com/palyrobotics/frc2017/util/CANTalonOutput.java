@@ -3,6 +3,7 @@ package com.palyrobotics.frc2017.util;
 import com.ctre.CANTalon;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
+import com.palyrobotics.frc2017.config.Gains;
 
 /**
  * Created by Nihar on 1/14/17.
@@ -19,9 +20,8 @@ public class CANTalonOutput {
 	private CANTalon.TalonControlMode controlMode;
 	// PercentVBus, Speed, Current, Voltage, not Follower, MotionProfile, MotionMagic
 	private double setpoint;	// Encoder ticks
-	public double P,I,D, F, rampRate;
-	public int izone;
 	public int profile;
+	public Gains gains;
 
 	// Used for motion magic
 	public double accel;
@@ -34,7 +34,7 @@ public class CANTalonOutput {
 		controlMode = CANTalon.TalonControlMode.Disabled;
 		setpoint = 0;
 		profile = 0;
-		setPID(0,0,0,0,0,0);
+		gains = new Gains(0,0,0,0,0,0);
 		
 		accel = 0;
 		cruiseVel = 0;
@@ -47,16 +47,21 @@ public class CANTalonOutput {
 	public CANTalonOutput(CANTalonOutput talon) {
 		this.controlMode = talon.getControlMode();
 		this.setpoint = talon.getSetpoint();
-		this.P = talon.P;
-		this.I = talon.I;
-		this.D = talon.D;
-		this.F = talon.F;
-		this.izone = talon.izone;
-		this.rampRate = talon.rampRate;
 		this.profile = talon.profile;
+		this.gains = talon.gains;
 		
 		this.accel = talon.accel;
 		this.profile = talon.profile;
+	}
+	
+	public CANTalonOutput(CANTalon.TalonControlMode controlMode, Gains gains, double setpoint) {
+		this.controlMode = controlMode;
+		this.setpoint = setpoint;
+		profile = 0;
+		this.gains = gains;
+		
+		accel = 0;
+		cruiseVel = 0;
 	}
 
 	public CANTalon.TalonControlMode getControlMode() {
@@ -67,45 +72,24 @@ public class CANTalonOutput {
 		return setpoint;
 	}
 
-	private void setPID(double p, double i, double d, double f, int izone, double rampRate) {
-		this.P = p;
-		this.I = i;
-		this.D = d;
-		this.F = f;
-		this.izone = izone;
-		this.rampRate = rampRate;
-	}
-
 	/**
 	 * Sets Talon to TalonControlMode.Speed, velocity target control loop
 	 * @param speed, target velocity (from -1023019 to 10230?)
-	 * @param p,i,d, f, izone, rampRate parameters for control loop
 	 */
-	public void setSpeed(double speed, double p, double i, double d, double f, int izone, double rampRate) {
+	public void setSpeed(double speed, Gains gains) {
 		controlMode = CANTalon.TalonControlMode.Speed;
 		setpoint = speed;
-		setPID(p, i, d, f, izone, rampRate);
+		this.gains = gains;
 	}
 
 	/**
 	 * Sets Talon to TalonControlMode.Position
-	 * @param setpoint for drivesignal, use inches, which get converted in HardwareUpdater, otherwise native units
-	 * @param p,i,d, f, izone, rampRate parameters for control loop
+	 * @param setpoint, target distance
 	 */
-	public void setPosition(double setpoint, double p, double i, double d, double f, int izone, double rampRate) {
+	public void setPosition(double setpoint, Gains gains) {
 		controlMode = CANTalon.TalonControlMode.Position;
-		setPID(p, i, d, f, izone, rampRate);
 		this.setpoint = setpoint;
-	}
-
-	/**
-	 * Constructs Position control mode using CANTalonOutputFactory
-	 * @param factory
-	 */
-	public void setPosition(CANTalonOutputFactory factory) {
-		controlMode = CANTalon.TalonControlMode.Position;
-		setPID(factory.P, factory.I, factory.D, factory.F, factory.izone, factory.rampRate);
-		this.setpoint = factory.distance;
+		this.gains = gains;
 	}
 
 	/**
@@ -120,12 +104,10 @@ public class CANTalonOutput {
 	/**
 	 * Sets Talon to TalonControlMode.Voltage
 	 * @param voltage in volts
-	 * @param p,i,d, f, izone, rampRate parameters for control loop
 	 */
-	public void setVoltage(double voltage, double p, double i, double d, double f, int izone, double rampRate) {
+	public void setVoltage(double voltage) {
 		controlMode = CANTalon.TalonControlMode.Voltage;
 		setpoint = voltage;
-		setPID(p, i, d, f, izone, rampRate);
 	}
 
 	/**
@@ -133,10 +115,9 @@ public class CANTalonOutput {
 	 * @param current in amps
 	 * @param p,i,d, f, izone, rampRate parameters for control loop
 	 */
-	public void setCurrent(double current, double p, double i, double d, double f, int izone, double rampRate) {
+	public void setCurrent(double current) {
 		controlMode = CANTalon.TalonControlMode.Current;
 		setpoint = current;
-		setPID(p, i, d, f, izone, rampRate);
 	}
 
 	/**
@@ -145,12 +126,11 @@ public class CANTalonOutput {
 	 * @param accel max acceleration and deceleration
 	 * @param cruiseVelocity cruise velocity to max out at
 	 */
-	public void setMotionMagic(double setpoint, double accel, double cruiseVelocity, double p, double i, double d, double f, int izone, double rampRate) {
+	public void setMotionMagic(double setpoint, double accel, double cruiseVelocity) {
 		controlMode = CANTalon.TalonControlMode.MotionMagic;
 		this.setpoint = setpoint;
 		this.accel = accel;
 		this.cruiseVel = cruiseVelocity;
-		setPID(p, i, d, f, izone, rampRate);
 	}
 
 	/**
@@ -178,12 +158,7 @@ public class CANTalonOutput {
 	public boolean equals(Object other) {
 		return ((CANTalonOutput) other).getSetpoint() == this.getSetpoint() && 
 				((CANTalonOutput) other).controlMode == this.controlMode &&
-				((CANTalonOutput) other).P == this.P && 
-				((CANTalonOutput) other).I == this.I && 
-				((CANTalonOutput) other).D == this.D && 
-				((CANTalonOutput) other).F == this.F && 
-				((CANTalonOutput) other).izone == this.izone && 
-				((CANTalonOutput) other).rampRate == this.rampRate;
+				((CANTalonOutput) other).gains.equals(this.gains);
 	}
 
 	/* Should not be used as talon's should be set to slave mode when initialized
@@ -191,63 +166,4 @@ public class CANTalonOutput {
 		controlMode = CANTalon.TalonControlMode.Follower;
 		this.masterDeviceID = masterDeviceID;
 	} */
-
-	/**
-	 * Class used to get a set point with all the CANTalon constants.  This is better
-	 * than calling the setDistance(...) everytime because the constants only need to be added once.
-	 *
-	 * @author Robbie Selwyn
-	 *
-	 */
-	public static class CANTalonOutputFactory {
-
-		public double P,I,D, F, rampRate;
-		public int izone;
-		public int profile;
-
-		public double distance;
-
-		public CANTalonOutputFactory(double p, double i, double d, double f, int izone, double rampRate) {
-			this.P = p;
-			this.I = i;
-			this.D = d;
-			this.F = f;
-			this.izone = izone;
-			this.rampRate = rampRate;
-			this.profile = 0;
-			this.distance = 0;
-		}
-
-		public CANTalonOutputFactory() {
-			switch (Constants.kRobotName) {
-			case DERICA:
-				new CANTalonOutput.CANTalonOutputFactory(Constants2016.kDericaPositionkP, 
-						Constants2016.kDericaPositionkI, 
-						Constants2016.kDericaPositionkD,
-						Constants2016.kDericaPositionkF, 
-						Constants2016.kDericaPositionkIzone,
-						Constants2016.kDericaPositionRampRate);
-			case AEGIR:
-				new CANTalonOutput.CANTalonOutputFactory(Constants.kAegirDriveDistancekP, 
-						Constants.kAegirDriveDistancekI, 
-						Constants.kAegirDriveDistancekD,
-						Constants.kAegirDriveDistancekF, 
-						Constants.kAegirDriveDistancekIzone,
-						Constants.kAegirDriveDistancekRampRate);
-			case STEIK:
-				new CANTalonOutput.CANTalonOutputFactory(Constants.kSteikDriveDistancekP, 
-						Constants.kSteikDriveDistancekI, 
-						Constants.kSteikDriveDistancekD,
-						Constants.kSteikDriveDistancekF, 
-						Constants.kSteikDriveDistancekIzone,
-						Constants.kSteikDriveDistancekRampRate);
-			}
-		}
-
-		public CANTalonOutputFactory withDistance(double distance) {
-			this.distance = distance;
-			return this;
-		}
-
-	}
 }
