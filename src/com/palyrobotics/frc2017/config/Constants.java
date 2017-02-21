@@ -6,7 +6,7 @@ public class Constants extends ConstantsBase {
 	public enum RobotName {
 		STEIK, AEGIR, DERICA
 	}
-	public static final RobotName kRobotName = RobotName.DERICA;
+	public static final RobotName kRobotName = RobotName.AEGIR;
 
 	// Cheesy Drive tuning
 	public static double kDriveSensitivity = .85;
@@ -75,12 +75,16 @@ public class Constants extends ConstantsBase {
 	// DRIVETRAIN
 	public static int kSteikLeftDriveMasterDeviceID  = 0;
 	public static int kSteikLeftDriveSlaveDeviceID = 0;
+	public static int kSteikLeftDriveOtherSlaveDeviceID = 0;
 	public static int kSteikLeftDriveFrontMotorPDP = 0;
 	public static int kSteikLeftDriveBackMotorPDP = 0;
+	public static int kSteikLeftDriveThirdMotorPDP = 0;
 	public static int kSteikRightDriveMasterDeviceID = 0;
 	public static int kSteikRightDriveSlaveDeviceID = 0;
+	public static int kSteikRightDriveOtherSlaveDeviceID = 0;
 	public static int kSteikRightDriveFrontMotorPDP = 0;
 	public static int kSteikRightDriveBackMotorPDP = 0;
+	public static int kSteikRightDriveThirdMotorPDP = 0;
 
 	//FLIPPERS
 	public static int kSteikLeftFlipperPortExtend = 0;
@@ -116,18 +120,22 @@ public class Constants extends ConstantsBase {
 	 */
 	public static int kAegirLeftDriveMasterDeviceID  = 1;
 	public static int kAegirLeftDriveSlaveDeviceID = 2;
+	public static int kAegirLeftDriveOtherSlaveDeviceID = 3;
 	public static int kAegirLeftDriveFrontMotorPDP = 0;
 	public static int kAegirLeftDriveBackMotorPDP = 0;
-	public static int kAegirRightDriveMasterDeviceID = 4;
+	public static int kAegirLeftDriveThirdMotorPDP = 0;
+	public static int kAegirRightDriveMasterDeviceID = 6;
 	public static int kAegirRightDriveSlaveDeviceID = 5;
+	public static int kAegirRightDriveOtherSlaveDeviceID = 4;
 	public static int kAegirRightDriveFrontMotorPDP = 0;
 	public static int kAegirRightDriveBackMotorPDP = 0;
-
+	public static int kAegirRightDriveThirdMotorPDP = 0;
+	
 	// FLIPPER
 	public static int kAegirLeftFlipperPortExtend = 0;
-	public static int kAegirLeftFlipperPortRetract = 0;
-	public static int kAegirRightFlipperPortExtend = 0;
-	public static int kAegirRightFlipperPortRetract = 0;
+	public static int kAegirLeftFlipperPortRetract = 1;
+	public static int kAegirRightFlipperPortExtend = 2;
+	public static int kAegirRightFlipperPortRetract = 3;
 
 	// SLIDER
 	public static int kAegirSliderMotorDeviceID = 10;
@@ -137,14 +145,14 @@ public class Constants extends ConstantsBase {
 	public static int kAegirSliderPotentiometerOffset;
 
 	//SPATULA
-	public static int kAegirSpatulaPortExtend = 0;
-	public static int kAegirSpatulaPortRetract = 0;
+	public static int kAegirSpatulaPortExtend = 4;
+	public static int kAegirSpatulaPortRetract = 5;
 
 	//INTAKE
-	public static int kAegirLeftIntakeMotorDeviceID = 0;
-	public static int kAegirLeftIntakeMotorPDP = 0;
-	public static int kAegirRightIntakeMotorDeviceID = 0;
-	public static int kAegirRightIntakeMotorPDP = 0;
+	public static int kAegirLeftIntakeMotorDeviceID = 14;
+	public static int kAegirLeftIntakeMotorPDP = 11;
+	public static int kAegirRightIntakeMotorDeviceID = 12;
+	public static int kAegirRightIntakeMotorPDP = 13;
 
 	// CLIMBER
 	public static int kAegirClimberMotorDeviceID = 9;

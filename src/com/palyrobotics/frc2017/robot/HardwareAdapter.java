@@ -31,8 +31,10 @@ public class HardwareAdapter {
 		}
 		public final CANTalon leftSlaveTalon;
 		public final CANTalon leftMasterTalon;
+		public final CANTalon secondLeftSlaveTalon;
 		public final CANTalon rightSlaveTalon;
 		public final CANTalon rightMasterTalon;
+		public final CANTalon secondRightSlaveTalon;
 
 		// If encoders are wired directly to RIO use the following objects
 //		public final Encoder leftEncoder;
@@ -43,22 +45,28 @@ public class HardwareAdapter {
 			if(Constants.kRobotName == Constants.RobotName.DERICA) {
 				leftMasterTalon = new CANTalon(Constants2016.kDericaLeftDriveMasterDeviceID);
 				leftSlaveTalon = new CANTalon(Constants2016.kDericaLeftDriveSlaveDeviceID);
+				secondLeftSlaveTalon = null;
 				rightMasterTalon = new CANTalon(Constants2016.kDericaRightDriveMasterDeviceID);
 				rightSlaveTalon = new CANTalon(Constants2016.kDericaRightDriveSlaveDeviceID);
-
+				secondRightSlaveTalon = null;
 				gyro = new ADXRS453_Gyro();
 				// no shifter solenoid
 			} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
 				leftMasterTalon = new CANTalon(Constants.kAegirLeftDriveMasterDeviceID);
 				leftSlaveTalon = new CANTalon(Constants.kAegirLeftDriveSlaveDeviceID);
+				secondLeftSlaveTalon = new CANTalon(Constants.kAegirLeftDriveOtherSlaveDeviceID);
 				rightMasterTalon = new CANTalon(Constants.kAegirRightDriveMasterDeviceID);
 				rightSlaveTalon = new CANTalon(Constants.kAegirRightDriveSlaveDeviceID);
+				secondRightSlaveTalon = new CANTalon(Constants.kAegirRightDriveOtherSlaveDeviceID);
+				
 				gyro = new ADXRS453_Gyro();
 			} else {
 				leftMasterTalon = new CANTalon(Constants.kSteikLeftDriveMasterDeviceID);
 				leftSlaveTalon = new CANTalon(Constants.kSteikLeftDriveSlaveDeviceID);
+				secondLeftSlaveTalon = new CANTalon(Constants.kSteikLeftDriveOtherSlaveDeviceID);
 				rightMasterTalon = new CANTalon(Constants.kSteikRightDriveMasterDeviceID);
 				rightSlaveTalon = new CANTalon(Constants.kSteikRightDriveSlaveDeviceID);
+				secondRightSlaveTalon = new CANTalon(Constants.kSteikRightDriveOtherSlaveDeviceID);
 				gyro = new ADXRS453_Gyro();
 			}
 		}

@@ -58,25 +58,33 @@ class HardwareUpdater {
 		HardwareAdapter.getInstance().getDrivetrain().gyro.calibrate();
 		CANTalon leftMasterTalon = HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon;
 		CANTalon leftSlaveTalon = HardwareAdapter.getInstance().getDrivetrain().leftSlaveTalon;
+		CANTalon otherLeftSlaveTalon = HardwareAdapter.getInstance().getDrivetrain().secondLeftSlaveTalon;
 		CANTalon rightMasterTalon = HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon;
 		CANTalon rightSlaveTalon = HardwareAdapter.getInstance().getDrivetrain().rightSlaveTalon;
-
+		CANTalon otherRightSlaveTalon = HardwareAdapter.getInstance().getDrivetrain().secondRightSlaveTalon;
+		
 		// Enable all talons' brake mode and disables forward and reverse soft
 		// limits
 		leftMasterTalon.enableBrakeMode(true);
 		leftSlaveTalon.enableBrakeMode(true);
+		otherLeftSlaveTalon.enableBrakeMode(true);
 		rightSlaveTalon.enableBrakeMode(true);
 		rightMasterTalon.enableBrakeMode(true);
+		otherRightSlaveTalon.enableBrakeMode(true);
 		leftMasterTalon.enableForwardSoftLimit(false);
 		leftMasterTalon.enableReverseSoftLimit(false);
+		otherLeftSlaveTalon.enableForwardSoftLimit(false);
 		rightMasterTalon.enableForwardSoftLimit(false);
 		rightMasterTalon.enableReverseSoftLimit(false);
-
+		otherRightSlaveTalon.enableForwardSoftLimit(false);
+		
 		// Enable all the talons
 		leftMasterTalon.enable();
 		leftSlaveTalon.enable();
+		otherLeftSlaveTalon.enable();
 		rightMasterTalon.enable();
 		rightSlaveTalon.enable();
+		otherRightSlaveTalon.enable();
 		
 		// Configure master talon feedback devices
 		leftMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
@@ -94,8 +102,12 @@ class HardwareUpdater {
 		// Set slave talons to follower mode
 		leftSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
 		leftSlaveTalon.set(leftMasterTalon.getDeviceID());
+		otherLeftSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
+		otherLeftSlaveTalon.set(leftMasterTalon.getDeviceID());
 		rightSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
 		rightSlaveTalon.set(rightMasterTalon.getDeviceID());
+		otherRightSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
+		otherRightSlaveTalon.set(rightMasterTalon.getDeviceID());
 
 		// Slider
 		// Reset and turn on the Talon
