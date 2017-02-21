@@ -72,24 +72,24 @@ class HardwareUpdater {
 		// limits
 		leftMasterTalon.enableBrakeMode(true);
 		leftSlave1Talon.enableBrakeMode(true);
-		otherLeftSlaveTalon.enableBrakeMode(true);
+//		otherLeftSlaveTalon.enableBrakeMode(true);
 		rightSlaveTalon.enableBrakeMode(true);
 		rightMasterTalon.enableBrakeMode(true);
-		otherRightSlaveTalon.enableBrakeMode(true);
+//		otherRightSlaveTalon.enableBrakeMode(true);
 		leftMasterTalon.enableForwardSoftLimit(false);
 		leftMasterTalon.enableReverseSoftLimit(false);
-		otherLeftSlaveTalon.enableForwardSoftLimit(false);
+//		otherLeftSlaveTalon.enableForwardSoftLimit(false);
 		rightMasterTalon.enableForwardSoftLimit(false);
 		rightMasterTalon.enableReverseSoftLimit(false);
-		otherRightSlaveTalon.enableForwardSoftLimit(false);
+//		otherRightSlaveTalon.enableForwardSoftLimit(false);
 		
 		// Enable all the talons
 		leftMasterTalon.enable();
 		leftSlave1Talon.enable();
-		otherLeftSlaveTalon.enable();
+//		otherLeftSlaveTalon.enable();
 		rightMasterTalon.enable();
 		rightSlaveTalon.enable();
-		otherRightSlaveTalon.enable();
+//		otherRightSlaveTalon.enable();
 		
 		leftMasterTalon.configPeakOutputVoltage(12, -12);
 		rightMasterTalon.configPeakOutputVoltage(12, -12);
@@ -112,12 +112,12 @@ class HardwareUpdater {
 		// Set slave talons to follower mode
 		leftSlave1Talon.changeControlMode(CANTalon.TalonControlMode.Follower);
 		leftSlave1Talon.set(leftMasterTalon.getDeviceID());
-		otherLeftSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
-		otherLeftSlaveTalon.set(leftMasterTalon.getDeviceID());
+//		otherLeftSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
+//		otherLeftSlaveTalon.set(leftMasterTalon.getDeviceID());
 		rightSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
 		rightSlaveTalon.set(rightMasterTalon.getDeviceID());
-		otherRightSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
-		otherRightSlaveTalon.set(rightMasterTalon.getDeviceID());
+//		otherRightSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
+//		otherRightSlaveTalon.set(rightMasterTalon.getDeviceID());
 	
 		if (Constants.kRobotName == RobotName.AEGIR || Constants.kRobotName == RobotName.STEIK) {
 			//Climber setup

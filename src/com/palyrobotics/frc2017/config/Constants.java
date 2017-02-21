@@ -6,7 +6,7 @@ public class Constants extends ConstantsBase {
 	public enum RobotName {
 		STEIK, AEGIR, DERICA
 	}
-	public static final RobotName kRobotName = RobotName.AEGIR;
+	public static final RobotName kRobotName = RobotName.DERICA;
 
 	// Cheesy Drive tuning
 	public static double kDriveSensitivity = .85;
@@ -20,17 +20,19 @@ public class Constants extends ConstantsBase {
 	 * Control loop constants for both robots
 	 */
 	public static double kTurnInPlaceSpeed = 0.5;
+	public static double kTurnEncoderMaxAccel = 10;
+	public static double kTurnEncoderMaxVel = 10;
 	// Unit Conversions for CANTalons
 	// TODO: Calculate the unit conversions for native units and inches, rpm, etc as needed
-	public static double kDriveInchesToTicks = 29.1;
 	/*
 	 * Measured 100 in = 2910 ticks
 	 */
+public static double kDriveInchesToTicks = 29.1;
+public static double kDriveDegreesToTicks = 1000;
 	public static final double kPotentiometerRightPos = 2172;
 	public static final double kPotentiometerLeftPos = 3452;
 	public static final double kPotentiometerCenterPos = (kPotentiometerRightPos + kPotentiometerLeftPos) / 2;
 	
-
 	// Tolerances
 	public static double kAcceptableDrivePositionError = 100;
 	public static double kAcceptableDriveVelocityError = 40;

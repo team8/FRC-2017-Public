@@ -130,6 +130,7 @@ public class CANTalonOutput {
 		this.gains = gains;
 		this.accel = accel;
 		this.cruiseVel = cruiseVelocity;
+		this.gains = gains;
 	}
 
 	/**

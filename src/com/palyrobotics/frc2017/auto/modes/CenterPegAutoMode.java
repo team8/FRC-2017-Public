@@ -7,6 +7,7 @@ import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.BBTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
+import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
@@ -72,17 +73,17 @@ public class CenterPegAutoMode extends AutoMode {
 				break;
 			case CROSS_LEFT:
 				sequence.add(new CANTalonRoutine(driveBack));
-				sequence.add(new BBTurnAngleRoutine(-90));
+				sequence.add(new EncoderTurnAngleRoutine(-90));
 				sequence.add(new CANTalonRoutine(passAirship));
-				sequence.add(new BBTurnAngleRoutine(90));
+				sequence.add(new EncoderTurnAngleRoutine(90));
 				sequence.add(new CANTalonRoutine(crossOver));
 				log += " and crossing left";
 				break;
 			case CROSS_RIGHT:
 				sequence.add(new CANTalonRoutine(driveBack));
-				sequence.add(new BBTurnAngleRoutine(90));
+				sequence.add(new EncoderTurnAngleRoutine(90));
 				sequence.add(new CANTalonRoutine(passAirship));
-				sequence.add(new BBTurnAngleRoutine(-90));
+				sequence.add(new EncoderTurnAngleRoutine(-90));
 				sequence.add(new CANTalonRoutine(crossOver));
 				log += " and crossing right";
 				break;

@@ -7,6 +7,7 @@ import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.BBTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
+import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
@@ -79,9 +80,9 @@ public class SidePegAutoMode extends AutoMode {
 		ArrayList<Routine> sequence = new ArrayList<Routine>();
 		sequence.add(new CANTalonRoutine(driveForward));
 		if (mVariant == SideAutoVariant.LEFT) {
-			sequence.add(new BBTurnAngleRoutine(-kSidePegTurnAngleDegrees));
+			sequence.add(new EncoderTurnAngleRoutine(-kSidePegTurnAngleDegrees));
 		} else {
-			sequence.add(new BBTurnAngleRoutine(kSidePegTurnAngleDegrees));
+			sequence.add(new EncoderTurnAngleRoutine(kSidePegTurnAngleDegrees));
 		}
 		sequence.add(new CANTalonRoutine(driveToAirship));
 		sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
@@ -121,15 +122,15 @@ public class SidePegAutoMode extends AutoMode {
 			case HIT_CLOSE_HOPPER:
 				sequence.add(new CANTalonRoutine(backUp));
 				if (mVariant == SideAutoVariant.LEFT) {
-					sequence.add(new BBTurnAngleRoutine(kSidePegTurnAngleDegrees));
+					sequence.add(new EncoderTurnAngleRoutine(kSidePegTurnAngleDegrees));
 				} else {
-					sequence.add(new BBTurnAngleRoutine(-kSidePegTurnAngleDegrees));
+					sequence.add(new EncoderTurnAngleRoutine(-kSidePegTurnAngleDegrees));
 				}
 				sequence.add(new CANTalonRoutine(driveToPerpendicular));
 				if (mVariant == SideAutoVariant.LEFT) {
-					sequence.add(new BBTurnAngleRoutine(90));
+					sequence.add(new EncoderTurnAngleRoutine(90));
 				} else {
-					sequence.add(new BBTurnAngleRoutine(-90));
+					sequence.add(new EncoderTurnAngleRoutine(-90));
 				}
 				sequence.add(new CANTalonRoutine(backUpIntoHopper));
 				break;
@@ -137,12 +138,12 @@ public class SidePegAutoMode extends AutoMode {
 			case MOVE_TO_LOADING_STATION:
 				sequence.add(new CANTalonRoutine(backUp));
 				if (mVariant == SideAutoVariant.LEFT) {
-					sequence.add(new BBTurnAngleRoutine(kSidePegTurnAngleDegrees));
+					sequence.add(new EncoderTurnAngleRoutine(kSidePegTurnAngleDegrees));
 				} else {
-					sequence.add(new BBTurnAngleRoutine(-kSidePegTurnAngleDegrees));
+					sequence.add(new EncoderTurnAngleRoutine(-kSidePegTurnAngleDegrees));
 				}
 				sequence.add(new CANTalonRoutine(driveToPerpendicular));
-				if (mVariant == SideAutoVariant.LEFT) sequence.add(new BBTurnAngleRoutine(25));
+				if (mVariant == SideAutoVariant.LEFT) sequence.add(new EncoderTurnAngleRoutine(25));
 				sequence.add(new CANTalonRoutine(driveTowardsNeutralZone));
 				break;				
 		}

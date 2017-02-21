@@ -3,6 +3,7 @@ package com.palyrobotics.frc2017.subsystems;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.subsystems.controllers.CANTalonDriveController;
+import com.palyrobotics.frc2017.subsystems.controllers.EncoderTurnAngleController;
 import com.palyrobotics.frc2017.util.*;
 import com.palyrobotics.frc2017.subsystems.controllers.BangBangTurnAngleController;
 import com.palyrobotics.frc2017.config.Constants;
@@ -101,7 +102,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 					System.err.println("No offboard controller to use!");
 					break;
 				}
-				setDriveOutputs(mController.update(mCachedRobotState));				
+				setDriveOutputs(mController.update(mCachedRobotState));
 				break;
 			case ON_BOARD_CONTROLLER:
 				if (mController == null) {
@@ -154,6 +155,11 @@ public class Drive extends Subsystem implements SubsystemLoop {
 
 	public void setTurnAngleSetpoint(double heading) {
 		mController = new BangBangTurnAngleController(mCachedPose, heading);
+		newController = true;
+	}
+	
+	public void setTurnAngleEncoderSetpoint(double angle) {
+		mController = new EncoderTurnAngleController(mCachedPose, angle, Constants.kTurnEncoderMaxVel, Constants.kTurnEncoderMaxAccel);
 		newController = true;
 	}
 
