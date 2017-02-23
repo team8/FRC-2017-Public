@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import com.palyrobotics.frc2017.behavior.Routine;
-import com.palyrobotics.frc2017.subsystems.*;
-import com.palyrobotics.frc2017.util.CANTalonOutput;
-import com.palyrobotics.frc2017.util.DriveSignal;
+import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.palyrobotics.frc2017.subsystems.SimpleClimber;
 import com.palyrobotics.frc2017.subsystems.Climber;
 import com.palyrobotics.frc2017.subsystems.Drive;

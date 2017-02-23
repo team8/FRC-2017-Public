@@ -13,25 +13,27 @@ import com.palyrobotics.frc2017.util.Subsystem;
 
 import java.util.*;
 
+/**
+ * Handles the updating of commands by passing them to each running routine. <br />
+ * @author Nihar, Ailyn
+ */
 public class RoutineManager implements Tappable {
 	// Routines that are being run
 	private ArrayList<Routine> runningRoutines = new ArrayList<Routine>();
 	private ArrayList<Routine> routinesToRemove = new ArrayList<Routine>();
+	private ArrayList<Routine> routinesToAdd = new ArrayList<Routine>();
 
-	public void addNewRoutine(Commands commands, Routine newRoutine) {
+	/**
+	 * Stores the new routine to be added in next update cycle <br />
+	 * Will automatically cancel any existing routines with the same subsystems
+	 * @param newRoutine
+	 */
+	public void addNewRoutine(Routine newRoutine) {
 		if(newRoutine == null) {
 			System.err.println("Tried to add null routine to routine manager!");
 			throw new NullPointerException();
 		}
-		// combine running routines w/ new routine to check for shared subsystems
-		ArrayList<Routine> conflicts = conflictingRoutines(runningRoutines, newRoutine);
-		for(Routine routine : conflicts) {
-			routine.cancel(commands);
-			System.out.println("Canceling routine " + routine.getName());
-			runningRoutines.remove(routine);
-		}
-		newRoutine.start();
-		runningRoutines.add(newRoutine);
+		routinesToAdd.add(newRoutine);
 	}
 
 	public ArrayList<Routine> getCurrentRoutines() {
@@ -41,16 +43,19 @@ public class RoutineManager implements Tappable {
 	/** Wipes all current routines <br />
 	 * Pass in the commands so that routines can clean up
 	 * @param commands
+	 * @return modified commands if needed
 	 */
-	public void reset(Commands commands) {
+	public Commands reset(Commands commands) {
+		Commands output = commands.copy();
 		// Cancel all running routines
 		if(runningRoutines.size() != 0) {
 			for(Routine routine : runningRoutines) {
-				routine.cancel(commands);
+				output = routine.cancel(output);
 			}
 		}
 		// Empty the running routines
 		runningRoutines.clear();
+		return output;
 	}
 
 	/**
@@ -59,36 +64,48 @@ public class RoutineManager implements Tappable {
 	 * @return Modified commands
 	 */
 	public Commands update(Commands commands) {
-		// If current routine exists and is finished, nullify it
-		//		if (m_cur_routine != null && m_cur_routine.isFinished()) {
-		//			System.out.println("Routine cancel called");
-		//			setNewRoutine(null);
-		//		}
-		routinesToRemove = new ArrayList<Routine>();
+		routinesToRemove = new ArrayList<>();
 		Commands output = commands.copy();
+		// Update all running routines
 		for(Routine routine : runningRoutines) {
 			if(routine.finished()) {
 				System.out.println("Routine cancel called");
 				output = routine.cancel(output);
 				routinesToRemove.add(routine);
 			} else {
-				System.out.println("Updating routine: " + routine.getName());
 				output = routine.update(output);
 			}
 		}
-
+		
+		// Remove routines that finished
 		for(Routine routine : routinesToRemove) {
-			System.out.println("Removing routine: " + routine.getName());
+			System.out.println("Completed routine: " + routine.getName());
 			runningRoutines.remove(routine);
 		}
 
-		// Set TROUT routine_request
+		// Add newest routines after current routines may have finished, start them, and update them
+		for (Routine newRoutine : routinesToAdd) {
+			// combine running routines w/ new routine to check for shared subsystems
+			ArrayList<Routine> conflicts = conflictingRoutines(runningRoutines, newRoutine);
+			for(Routine routine : conflicts) {
+				output = routine.cancel(output);
+				System.out.println("Canceling routine " + routine.getName());
+				runningRoutines.remove(routine);
+			}
+			newRoutine.start();
+			output = newRoutine.update(output);
+			runningRoutines.add(newRoutine);
+		}
+		
+		routinesToAdd.clear();
+
 		if (output.cancelCurrentRoutines) {
 			System.out.println("Cancel routine button");
-			reset(output);
+			output = this.reset(output);
 		} else if(!output.wantedRoutines.isEmpty()) {
+			// Routines requested by newly added routines
 			for(Routine routine : output.wantedRoutines) {
-				addNewRoutine(output, routine);
+				addNewRoutine(routine);
 			}
 		}
 
@@ -145,7 +162,6 @@ public class RoutineManager implements Tappable {
 		return superset.toArray(new Subsystem[superset.size()]);
 	}
 
-	@Deprecated
 	/**
 	 * Finds overlapping subsystems
 	 * Not optimized

@@ -25,50 +25,62 @@ public class AutoModeSelectorTest {
 		
 	@Test
 	public void testGetAutoMode() throws IndexOutOfBoundsException {
-		AutoModeSelector auto = new AutoModeSelector();
+		AutoModeSelector auto = AutoModeSelector.getInstance();
 
 		// Using automodes registered in constructor
-		assertThat("Incorrect auto mode retrieved", auto.getAutoMode().getClass(), equalTo(new TestAutoMode().getClass()));
+		assertThat("Incorrect auto mode retrieved", auto.getAutoMode().getClass(), equalTo(new BaseLineAutoMode().getClass()));
 		
 		// Check index out of bounds
 	}
 	
 	@Test
 	public void testGetAutoModeList() {
-		AutoModeSelector auto = new AutoModeSelector();
-		
-		ArrayList<String> correct = new ArrayList<String>();
-		correct.add("DoNothing");
-		correct.add("Test");
+		AutoModeSelector auto = AutoModeSelector.getInstance();
+
+		// TODO: Hard coded is sketchy
+		ArrayList<String> expectedAutoModeList = new ArrayList<String>();
+		expectedAutoModeList.add("Test");
+		expectedAutoModeList.add("DoNothing");
+		expectedAutoModeList.add("BaseLine");
+		expectedAutoModeList.add("CenterPeg");
+		expectedAutoModeList.add("CenterPeg_CrossLeft");
+		expectedAutoModeList.add("CenterPeg_CrossRight");
+		expectedAutoModeList.add("LeftPeg");
+		expectedAutoModeList.add("RightPeg");
+		expectedAutoModeList.add("DoNothing");	// TODO: sometimes test is run individually, "this one is registered during testRegisterAutonomous()"
 		ArrayList<String> test = auto.getAutoModeList();
 		
-		assertThat("Not all auto modes were retrieved", test.size(), equalTo(correct.size()));
-		assertThat("Auto modes are incorrect", test, equalTo(correct));
+		assertThat("Not all auto modes were retrieved", test.size(), equalTo(expectedAutoModeList.size()));
+		assertThat("Auto modes are incorrect", test, equalTo(expectedAutoModeList));
 	}
-	
+
 	@Test
 	public void testSetAutoModeByName() {
-		AutoModeSelector auto = new AutoModeSelector();
-		// 0 DoNothing
-		// 1 Test
-		auto.registerAutonomous(new DoNothingAutoMode());	// 2
-		auto.registerAutonomous(new DriveForwardAutoMode());	// 3
-		auto.registerAutonomous(new TrajectoryAutoMode());	// 4
+		AutoModeSelector auto = AutoModeSelector.getInstance();
+		// Intentionally register two copies of the same auto mode class
+		auto.registerAutonomous(new DoNothingAutoMode());
+		auto.registerAutonomous(new DoNothingAutoMode());
+		assertThat("Should not set auto mode when duplicates exist", auto.setAutoModeByName("DoNothing"), equalTo(false));
+		assertThat("Found auto mode when none exists", auto.setAutoModeByName("1234"), equalTo(false));
 
-		assertThat("Did not catch duplicates", auto.setAutoModeByName("DoNothing"), equalTo(false));
-		assertThat("Found auto mode when none exists", auto.setAutoModeByName("WaitForwardBackward"), equalTo(false));
-		assertThat("Auto mode has been registered", auto.setAutoModeByName("Trajectory"), equalTo(true));
+		// TODO: Use a sample auto mode to guarantee it has exactly 1 copy
+		assertThat("Auto mode has been registered", auto.setAutoModeByName("CenterPeg"), equalTo(true));
 	}
-	
+
+	/**
+	 * Test that new autonomous modes are registered
+	 */
 	@Test
 	public void testRegisterAutonomous() {
-		AutoModeSelector auto = new AutoModeSelector();
+		AutoModeSelector auto = AutoModeSelector.getInstance();
+		int initSize = auto.getAutoModeList().size();
+		ArrayList<String> autoNames = auto.getAutoModeList();
+		AutoMode newAuto = new DoNothingAutoMode();
+		autoNames.add(newAuto.toString());
+		auto.registerAutonomous(newAuto);
 
-		ArrayList<String> correct = new ArrayList<String>();
-		correct.add("DoNothing");
-		correct.add("Test");
-		correct.add("DoNothing");
-		auto.registerAutonomous(new DoNothingAutoMode());
-		assertThat("AutoModeSelected was constructed incorrectly", auto.getAutoModeList(), equalTo(correct));
+		// Index of the newest auto mode should be the original list length
+		assertThat("AutoMode was registered incorrectly", auto.getAutoMode(initSize), equalTo(newAuto));
+		assertThat("AutoMode was registered incorrectly", auto.getAutoModeList(), equalTo(autoNames));
 	}
 }

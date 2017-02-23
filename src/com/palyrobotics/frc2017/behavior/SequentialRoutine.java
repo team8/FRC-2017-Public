@@ -26,30 +26,39 @@ public class SequentialRoutine extends Routine {
 
 	@Override
 	public Commands update(Commands commands) {
+		Commands output = commands.copy();
 		if(mIsDone) {
-			return commands;
+			return output;
 		}
 		// Update the current routine
-		mRoutines.get(mRunningRoutineIndex).update(commands);
+		output = mRoutines.get(mRunningRoutineIndex).update(output);
 		// Keep moving to next routine if the current routine is finished
 		while(mRoutines.get(mRunningRoutineIndex).finished()) {
-			mRoutines.get(mRunningRoutineIndex).cancel(commands);
-			mRunningRoutineIndex++;
+			output = mRoutines.get(mRunningRoutineIndex).cancel(output);
+			if(mRunningRoutineIndex <= mRoutines.size()-1) {
+				mRunningRoutineIndex++;
+			}
+			
 			// If final routine is finished, don't update anything
 			if(mRunningRoutineIndex > mRoutines.size()-1) {
 				mIsDone = true;
 				break;
 			}
+			
 			// Start the next routine
 			mRoutines.get(mRunningRoutineIndex).start();
 			// TODO: Update the new routine once or no?
 		}
-		return commands;
+		return output;
 	}
 
 	@Override
 	public Commands cancel(Commands commands) {
-		mRoutines.get(mRunningRoutineIndex).cancel(commands);
+		//If not all routines finished, cancel the current routine. Otherwise everything is already finished.
+		if(mRunningRoutineIndex < mRoutines.size()) {
+			mRoutines.get(mRunningRoutineIndex).cancel(commands);
+		}
+		
 		return commands;
 	}
 
@@ -65,9 +74,9 @@ public class SequentialRoutine extends Routine {
 
 	@Override
 	public String getName() {
-		String name = "SequentialRoutine of";
+		String name = "SequentialRoutine of ";
 		for(Routine routine : mRoutines) {
-			name+= routine.getName();
+			name+= (routine.getName() + " ");
 		}
 		return name;
 	}

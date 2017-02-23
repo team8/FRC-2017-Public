@@ -1,21 +1,16 @@
 package com.palyrobotics.frc2017.robot;
 
 import com.palyrobotics.frc2017.subsystems.*;
-import com.palyrobotics.frc2017.util.CANTalonOutput;
-import com.palyrobotics.frc2017.util.DriveSignal;
-import com.palyrobotics.frc2017.util.LegacyDrive;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 
 import com.palyrobotics.frc2017.behavior.Routine;
-import com.palyrobotics.frc2017.behavior.routines.EncoderDriveRoutine;
+import com.palyrobotics.frc2017.behavior.routines.drive.EncoderDriveRoutine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Commands.*;
 import com.palyrobotics.frc2017.config.Commands.JoystickInput.XboxInput;
-import com.palyrobotics.frc2017.subsystems.Climber.ClimberState;
 import com.palyrobotics.frc2017.subsystems.Intake;
 import com.palyrobotics.frc2017.subsystems.Spatula;
-import com.palyrobotics.frc2017.subsystems.Spatula.SpatulaState;
 
 /**
  * Used to produce Commands {@link Commands} from human input
@@ -59,15 +54,14 @@ public class OperatorInterface {
 	 */
 	public Commands updateCommands(Commands prevCommands) {
 		Commands newCommands = prevCommands.copy();
-		if(prevCommands.wantedDriveState != Drive.DriveState.CONTROLLER) {
+		if(prevCommands.wantedDriveState != Drive.DriveState.OFF_BOARD_CONTROLLER) {
 			newCommands.wantedDriveState = Drive.DriveState.CHEZY;
 		}
-		
+
 		// TODO: Change how routines are commanded
 		if (mOperatorStick.getRawButton(4)) {
 			newCommands.addWantedRoutine(new EncoderDriveRoutine(500));
 		}
-		//TODO figure out Steik controls
 
 		// Flippers
 		//TODO figure out flipper controls
@@ -78,30 +72,31 @@ public class OperatorInterface {
 		} else if (mOperatorStick.getRawButton(1)) {
 			newCommands.wantedFlipperSignal.leftFlipper = DoubleSolenoid.Value.kReverse;
 		}
-		// Slider
-		if (mOperatorStick.getRawButton(0)){
-			prevCommands.wantedSimpleSliderState = SimpleSlider.SimpleSliderState.IDLE;
-		} else if(mOperatorStick.getRawButton(0)){
-			prevCommands.wantedSimpleSliderState = SimpleSlider.SimpleSliderState.MANUAL;
-		}
 		//Right Flipper
 		if (mOperatorStick.getRawButton(1)) {
 			newCommands.wantedFlipperSignal.rightFlipper = DoubleSolenoid.Value.kForward;
 		} else if (mOperatorStick.getRawButton(1)) {
 			newCommands.wantedFlipperSignal.rightFlipper = DoubleSolenoid.Value.kReverse;
 		}
-		
+
+		// Slider
+		if (mOperatorStick.getRawButton(0)){
+			newCommands.wantedSimpleSliderState = SimpleSlider.SimpleSliderState.IDLE;
+		} else if(mOperatorStick.getRawButton(0)){
+			newCommands.wantedSimpleSliderState = SimpleSlider.SimpleSliderState.MANUAL;
+		}
+
 		// Spatula
 		if (mOperatorStick.getRawButton(3)) {
-			prevCommands.wantedSpatulaState = Spatula.SpatulaState.UP;
+			newCommands.wantedSpatulaState = Spatula.SpatulaState.UP;
 		} else if (mOperatorStick.getRawButton(2)) {
-			prevCommands.wantedSpatulaState = Spatula.SpatulaState.DOWN;
+			newCommands.wantedSpatulaState = Spatula.SpatulaState.DOWN;
 		}
-		
+
 		// Intake
 		if (mOperatorStick.getRawButton(1)) {
 			newCommands.wantedIntakeState = Intake.IntakeState.INTAKE;
-		} else if (mOperatorStick.getRawButton(1)) {
+		} else if (mOperatorStick.getRawButton(11)) {
 			newCommands.wantedIntakeState = Intake.IntakeState.EXPEL;
 		} else {
 			newCommands.wantedIntakeState = Intake.IntakeState.IDLE;

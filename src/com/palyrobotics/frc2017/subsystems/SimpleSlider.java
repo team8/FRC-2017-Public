@@ -4,7 +4,7 @@ import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Subsystem;
-import com.palyrobotics.frc2017.util.SubsystemLoop;
+import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
 
 /**
  * STEIK SIMPLE SLIDER:

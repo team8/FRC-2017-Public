@@ -40,13 +40,7 @@ public class HardwareAdapter {
 		public final ADXRS453_Gyro gyro;
 
 		private DrivetrainHardware() {
-			if (Constants.kRobotName == Constants.RobotName.TYR) {
-				leftSlaveTalon = new CANTalon(Constants2016.kTyrLeftDriveFrontMotorDeviceID);
-				leftMasterTalon = new CANTalon(Constants2016.kTyrLeftDriveBackMotorDeviceID);
-				rightSlaveTalon = new CANTalon(Constants2016.kTyrRightDriveFrontMotorDeviceID);
-				rightMasterTalon = new CANTalon(Constants2016.kTyrRightDriveBackMotorDeviceID);
-				gyro = new ADXRS453_Gyro();
-			} else if(Constants.kRobotName == Constants.RobotName.DERICA) {
+			if(Constants.kRobotName == Constants.RobotName.DERICA) {
 				leftMasterTalon = new CANTalon(Constants2016.kDericaLeftDriveMasterDeviceID);
 				leftSlaveTalon = new CANTalon(Constants2016.kDericaLeftDriveSlaveDeviceID);
 				rightMasterTalon = new CANTalon(Constants2016.kDericaRightDriveMasterDeviceID);

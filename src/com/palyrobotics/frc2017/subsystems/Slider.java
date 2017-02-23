@@ -6,14 +6,17 @@ import java.util.Optional;
 import com.ctre.CANTalon.TalonControlMode;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
+import com.palyrobotics.frc2017.config.Constants;
+import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Subsystem;
-import com.palyrobotics.frc2017.util.SubsystemLoop;
+import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
 
 /**
  * Created by Nihar on 1/28/17.
- * TODO: All
+ * @author Prashanti
+ * Controls the slider subsystem,
  */
 public class Slider extends Subsystem implements SubsystemLoop {
 	private static Slider instance = new Slider();
@@ -37,7 +40,6 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		CENTER,
 		RIGHT
 	}
-	
 	
 	private SimpleSlider mSimpleSlider = SimpleSlider.getInstance();
 	private RobotState mRobotState;
@@ -75,12 +77,10 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	}
 	
 	//PID constants
-	private final static double kP[] = {0, 0};
-	private final static double kI[] = {0, 0};
-	private final static double kD[] = {0, 0};
-	private final static double kF[] = {0, 0};
-	private final static double rampRate[] = {0 , 0};
-	private final static int izone[] = {0, 0};
+	private static final Gains mEncoderGains = 
+			(Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikSliderEncoder : Gains.aegirSliderEncoder;
+	private static final Gains mPotentiometerGains = 
+			(Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikSliderPotentiometer : Gains.aegirSliderPotentiometer;
 	private final static int potentiometer = 0;
 	private final static int encoder = 1;
 	private final static double[] tolerance = {0, 0};
@@ -117,7 +117,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	}
 	
 	/**
-	 * Updates the output based on commands
+	 * Takes in new set of commands, must be called by a routine!
 	 * @param commands the commands
 	 * @param master the object calling the method
 	 * @throws IllegalAccessException if master not a routine
@@ -177,7 +177,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		mState = SliderState.IDLE;
 	}
 	/**
-	 * A getter for the output for the slider
+	 * Get the output for the slider motor
 	 * @return the output
 	 */
 	public CANTalonOutput getOutput() {
@@ -208,15 +208,15 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		double potentiometerValue = mRobotState.sliderPotentiometer;
 		if(previousPotentiometer.isPresent() && integralPotentiometerPositioning.isPresent()) {
 			mOutput.setPercentVBus(Math.max(-1, Math.min(1, 
-					kP[potentiometer]*(mPotentiometerTargetPositions.get(mTarget) - potentiometerValue) +
-					kI[potentiometer]*integralPotentiometerPositioning.get() +
-					kD[potentiometer]*(previousPotentiometer.get()-potentiometerValue))));
+					mPotentiometerGains.P*(mPotentiometerTargetPositions.get(mTarget) - potentiometerValue) +
+					mPotentiometerGains.I*integralPotentiometerPositioning.get() +
+					mPotentiometerGains.D*(previousPotentiometer.get()-potentiometerValue))));
 			integralPotentiometerPositioning= Optional.of((integralPotentiometerPositioning.get() + mPotentiometerTargetPositions.get(mTarget) - potentiometerValue));
 			previousPotentiometer = Optional.of(potentiometerValue);
 		}
 		else {
 			mOutput.setPercentVBus(Math.max(-1, Math.min(1, 
-					kP[potentiometer]*(mPotentiometerTargetPositions.get(mTarget) - potentiometerValue))));
+					mPotentiometerGains.P*(mPotentiometerTargetPositions.get(mTarget) - potentiometerValue))));
 			integralPotentiometerPositioning= Optional.of(mPotentiometerTargetPositions.get(mTarget) - potentiometerValue);
 			previousPotentiometer = Optional.of(potentiometerValue);
 		}
@@ -269,8 +269,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 			}
 		}
 		else if (isEncoderFunctional){
-			mOutput.setPosition(getRealEncoderPosition(mEncoderTargetPositions.get(mTarget)),
-							kP[encoder], kI[encoder], kD[encoder], kF[encoder], izone[encoder], rampRate[encoder]);
+			mOutput.setPosition(getRealEncoderPosition(mEncoderTargetPositions.get(mTarget)), mEncoderGains);
 			if(onTargetEncoderPositioning()) {
 				mState = SliderState.IDLE;
 				mTarget = SliderTarget.NONE;

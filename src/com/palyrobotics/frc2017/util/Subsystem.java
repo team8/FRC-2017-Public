@@ -2,9 +2,9 @@ package com.palyrobotics.frc2017.util;
 
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
 
 public abstract class Subsystem implements SubsystemLoop {
-	protected Dashboard dashboard = Dashboard.getInstance();
 	private String mName;
 
 	public Subsystem(String name) {

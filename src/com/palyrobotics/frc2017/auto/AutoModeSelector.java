@@ -1,20 +1,25 @@
 package com.palyrobotics.frc2017.auto;
 
+import com.palyrobotics.frc2017.auto.modes.BaseLineAutoMode;
+import com.palyrobotics.frc2017.auto.modes.CenterPegAutoMode;
+import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode;
 import org.json.simple.JSONArray;
 
 import com.palyrobotics.frc2017.auto.modes.DoNothingAutoMode;
 import com.palyrobotics.frc2017.auto.modes.TestAutoMode;
-import com.palyrobotics.frc2017.util.Dashboard;
 
 import java.util.ArrayList;
 
+/**
+ * @author Nihar, based off Team 254 2015
+ */
 public class AutoModeSelector {
 	private static AutoModeSelector instance = null;
 	private ArrayList<AutoMode> mAutoModes = new ArrayList<AutoMode>();
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
-	int selectedIndex = 1;
+	int selectedIndex = 2;
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
 			instance = new AutoModeSelector();
@@ -30,9 +35,23 @@ public class AutoModeSelector {
 		mAutoModes.add(auto);
 	}
 
-	public AutoModeSelector() {
-		registerAutonomous(new DoNothingAutoMode());
+	private AutoModeSelector() {
 		registerAutonomous(new TestAutoMode());
+
+		registerAutonomous(new DoNothingAutoMode());
+		
+		registerAutonomous(new BaseLineAutoMode());
+
+		registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.CenterAutoVariant.NOTHING));
+		registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.CenterAutoVariant.CROSS_LEFT));
+		registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.CenterAutoVariant.CROSS_RIGHT));
+
+		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.LEFT, SidePegAutoMode.PostSideAutoVariant.NONE));
+		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RIGHT, SidePegAutoMode.PostSideAutoVariant.NONE));
+		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.LEFT, SidePegAutoMode.PostSideAutoVariant.HIT_CLOSE_HOPPER));
+		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RIGHT, SidePegAutoMode.PostSideAutoVariant.HIT_CLOSE_HOPPER));
+		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.LEFT, SidePegAutoMode.PostSideAutoVariant.MOVE_TO_LOADING_STATION));
+		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RIGHT, SidePegAutoMode.PostSideAutoVariant.MOVE_TO_LOADING_STATION));
 	}
 
 	/**
@@ -103,10 +122,9 @@ public class AutoModeSelector {
 	 * Called during disabled in order to access dashbord and set auto mode
 	 * @return false if unable to set automode
 	 */
-	public boolean setFromDashboard() {
-		String selection = Dashboard.getInstance().getSelectedAutoMode();
+	public boolean setFromDashboard(String selection) {
 		if(!setAutoModeByName(selection)) {
-			Dashboard.getInstance().getTable().putString("autopath", getAutoMode().toString());
+			System.err.println("Did not find requested auto mode");
 			return false;
 		}
 		return true;

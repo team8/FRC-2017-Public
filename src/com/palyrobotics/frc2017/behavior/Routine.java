@@ -2,7 +2,7 @@ package com.palyrobotics.frc2017.behavior;
 
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.subsystems.*;
-import com.palyrobotics.frc2017.util.LegacyDrive;
+import com.palyrobotics.frc2017.util.archive.LegacyDrive;
 import com.palyrobotics.frc2017.util.Subsystem;
 
 
