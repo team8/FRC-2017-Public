@@ -2,14 +2,14 @@ package com.palyrobotics.frc2017.behavior.routines.scoring;
 
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
+import com.palyrobotics.frc2017.subsystems.Slider;
+import com.palyrobotics.frc2017.subsystems.Spatula;
 import com.palyrobotics.frc2017.subsystems.Slider.SliderState;
 import com.palyrobotics.frc2017.subsystems.Spatula.SpatulaState;
 import com.palyrobotics.frc2017.util.Subsystem;
 
-public class SliderDistancePositioningAutocorrectRoutine extends Routine {
-	
-	private Subsystem[] required = {slider, spatula};
-	enum DistancePositioningState {
+public class SliderDistancePositioningAutocorrectRoutine extends Routine {	
+	private enum DistancePositioningState {
 		RAISING,
 		MOVING
 	}
@@ -20,14 +20,14 @@ public class SliderDistancePositioningAutocorrectRoutine extends Routine {
 	
 	@Override
 	public void start() {
-		if(spatula.getState() == SpatulaState.DOWN) {
+		if (spatula.getState() == SpatulaState.DOWN) {
+			System.out.println("Autocorrecting spatula!");
 			mState = DistancePositioningState.RAISING;
 		}
 		else {
 			mState = DistancePositioningState.MOVING;
 		}
-		startTime = System.currentTimeMillis();
-		
+		startTime = System.currentTimeMillis();		
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class SliderDistancePositioningAutocorrectRoutine extends Routine {
 			if(System.currentTimeMillis() - startTime > raiseTime) {
 				mState = DistancePositioningState.MOVING;
 			}
-			//TODO: spatula code (is it supposed to have an update method like slider???? that takes a routine???
+			commands.wantedSpatulaState = Spatula.SpatulaState.UP;
 			break;
 		default:
 			break;
@@ -70,7 +70,7 @@ public class SliderDistancePositioningAutocorrectRoutine extends Routine {
 
 	@Override
 	public Subsystem[] getRequiredSubsystems() {
-		return required;
+		return new Subsystem[]{Slider.getInstance(), Spatula.getInstance()};
 	}
 
 	@Override

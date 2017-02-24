@@ -20,17 +20,18 @@ public class Gains {
 	public static final int kSteikDriveVelocitykIzone = 0;
 	public static final double kSteikDriveVelocitykRampRate = 0.0;
 
+	// Slider motion magic offboard control loop
+	
 	// Slider position offboard control loop
-	public static final double kSteikSliderEncoderkP = 0;
+	public static final double kSteikSliderEncoderkP = 0.1;
 	public static final double kSteikSliderEncoderkI = 0;
 	public static final double kSteikSliderEncoderkD = 0;
 	public static final double kSteikSliderEncoderkF = 0;
 	public static final int kSteikSliderEncoderkIzone = 0;
 	public static final double kSteikSliderEncoderkRampRate = 0;
 
-	// Slider motion magic offboard control loop
 	// Slider potentiometer position onboard control loop
-	public static final double kSteikSliderPotentiometerkP = 0;
+	public static final double kSteikSliderPotentiometerkP = 0.1;
 	public static final double kSteikSliderPotentiometerkI = 0;
 	public static final double kSteikSliderPotentiometerkD = 0;
 	public static final double kSteikSliderPotentiometerkF = 0;
@@ -55,18 +56,19 @@ public class Gains {
 	public static final double kAegirDriveVelocitykF = 0;
 	public static final int kAegirDriveVelocitykIzone = 0;
 	public static final double kAegirDriveVelocitykRampRate = 0.0;
+	
+	// Slider motion magic offboard control loop
 
 	// Slider position offboard control loop
-	public static final double kAegirSliderEncoderkP = 0;
+	public static final double kAegirSliderEncoderkP = 0.1;
 	public static final double kAegirSliderEncoderkI = 0;
 	public static final double kAegirSliderEncoderkD = 0;
 	public static final double kAegirSliderEncoderkF = 0;
 	public static final int kAegirSliderEncoderkIzone = 0;
 	public static final double kAegirSliderEncoderkRampRate = 0;
 
-	// Slider motion magic offboard control loop
 	// Slider potentiometer position onboard control loop
-	public static final double kAegirSliderPotentiometerkP = 0;
+	public static final double kAegirSliderPotentiometerkP = 0.1;
 	public static final double kAegirSliderPotentiometerkI = 0;
 	public static final double kAegirSliderPotentiometerkD = 0;
 	public static final double kAegirSliderPotentiometerkF = 0;

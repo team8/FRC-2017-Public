@@ -1,9 +1,12 @@
 package com.palyrobotics.frc2017.config;
 
+import com.palyrobotics.frc2017.behavior.Routine;
+import com.palyrobotics.frc2017.behavior.SampleRoutine;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -54,5 +57,8 @@ public class CommandsTest {
 
 		assertThat("Copy modified original setpoints",
 				mCommands.robotSetpoints.drivePowerSetpoint.get(), equalTo(DriveSignal.getNeutralSignal()));
+		
+		System.out.println(copy.cancelCurrentRoutines);
+		System.out.println(copy.wantedRoutines);
 	}
 }

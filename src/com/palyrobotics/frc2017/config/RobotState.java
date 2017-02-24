@@ -31,8 +31,6 @@ public class RobotState {
 
 	public double sliderPotentiometer;
 	public double sliderEncoder;
-	public boolean sliderLeftHFX;
-	public boolean sliderRightHFX;
 
 	// Climber
 	public double climberCurrentDraw;

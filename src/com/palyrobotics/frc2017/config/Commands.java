@@ -5,12 +5,10 @@ import java.util.Optional;
 
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
-import com.palyrobotics.frc2017.subsystems.SimpleClimber;
 import com.palyrobotics.frc2017.subsystems.Climber;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.subsystems.Flippers;
 import com.palyrobotics.frc2017.subsystems.Intake;
-import com.palyrobotics.frc2017.subsystems.SimpleSlider;
 import com.palyrobotics.frc2017.subsystems.Slider;
 import com.palyrobotics.frc2017.subsystems.Spatula;
 
@@ -31,11 +29,10 @@ public class Commands {
 	public Drive.DriveState wantedDriveState = Drive.DriveState.NEUTRAL;
 	public Flippers.FlipperSignal wantedFlipperSignal = new Flippers.FlipperSignal(
 			DoubleSolenoid.Value.kForward, DoubleSolenoid.Value.kForward);
-	public Slider.SliderState wantedSliderState = Slider.SliderState.IDLE;
+	public Slider.SliderState wantedSliderState = Slider.SliderState.ENCODER_POSITIONING;
 	public Spatula.SpatulaState wantedSpatulaState = Spatula.SpatulaState.UP;
 	public Intake.IntakeState wantedIntakeState = Intake.IntakeState.IDLE;
 	public Climber.ClimberState wantedClimberState = Climber.ClimberState.IDLE;
-	public SimpleClimber.ClimberState wantedSimpleClimberState = SimpleClimber.ClimberState.IDLE;
 
 	public void addWantedRoutine(Routine wantedRoutine) {
 		for(Routine routine : wantedRoutines) {
@@ -117,7 +114,10 @@ public class Commands {
 		copy.rightStickInput = this.rightStickInput;
 		copy.operatorStickInput = this.operatorStickInput;
 
-		copy.wantedRoutines = this.wantedRoutines;
+		for (Routine r : this.wantedRoutines) {
+			copy.wantedRoutines.add(r);
+		}
+		
 		// Copy robot setpoints
 		copy.robotSetpoints = new Setpoints();
 		// Copy optionals that are present

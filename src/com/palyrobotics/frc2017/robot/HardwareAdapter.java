@@ -206,8 +206,8 @@ public class HardwareAdapter {
 			return instance;
 		}
 
-		public final Joystick leftStick = new Joystick(0);
-		public final Joystick rightStick = new Joystick(1);
+		public final Joystick driveStick = new Joystick(0);
+		public final Joystick turnStick = new Joystick(1);
 		public final Joystick operatorStick = new Joystick(2);
 
 		private Joysticks() {

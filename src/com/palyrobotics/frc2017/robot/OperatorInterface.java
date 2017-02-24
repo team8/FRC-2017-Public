@@ -32,8 +32,8 @@ public class OperatorInterface {
 	private OperatorInterface() {}
 
 	private HardwareAdapter.Joysticks mJoysticks = HardwareAdapter.getInstance().getJoysticks();
-	private Joystick mLeftStick = mJoysticks.leftStick;
-	private Joystick mRightStick = mJoysticks.rightStick;
+	private Joystick mDriveStick = mJoysticks.driveStick;
+	private Joystick mTurnStick = mJoysticks.turnStick;
 	private Joystick mOperatorStick = mJoysticks.operatorStick;
 	
 	// Adjust parameters as needed, default for now
@@ -84,8 +84,19 @@ public class OperatorInterface {
 		}
 		
 		// Slider
-		if (mOperatorStick.getRawButton(8)) {
-			newCommands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
+		if (mOperatorStick.getRawButton(1)) {
+			newCommands.wantedSliderState = Slider.SliderState.IDLE;
+			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.NONE;
+		} else if (mOperatorStick.getRawButton(4)) {	// opposite of preferred thumb position
+			newCommands.wantedSliderState = Slider.SliderState.MANUAL;
+			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.NONE;
+			newCommands.addWantedRoutine(new ManualSliderControlRoutine());
+		} else if (mOperatorStick.getRawButton(5)) {	// preferred thumb position
+			newCommands.wantedSliderState = Slider.SliderState.ENCODER_POSITIONING;
+			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.CENTER;
+			newCommands.addWantedRoutine(new SliderDistancePositioningRoutine());
+		} else if (mOperatorStick.getRawButton(8)) {
+			newCommands.wantedSliderState = Slider.SliderState.ENCODER_POSITIONING;
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.LEFT;
 			if (sliderLeft.twice()) {
 				newCommands.addWantedRoutine(new SliderDistancePositioningAutocorrectRoutine());
@@ -93,21 +104,13 @@ public class OperatorInterface {
 				newCommands.addWantedRoutine(new SliderDistancePositioningRoutine());
 			}
 		} else if (mOperatorStick.getRawButton(9)) {
-			newCommands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
+			newCommands.wantedSliderState = Slider.SliderState.ENCODER_POSITIONING;
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.RIGHT;
 			if (sliderRight.twice()) {
 				newCommands.addWantedRoutine(new SliderDistancePositioningAutocorrectRoutine());
 			} else {
 				newCommands.addWantedRoutine(new SliderDistancePositioningRoutine());
 			}
-		} else if (mOperatorStick.getRawButton(5)) {	// preferred thumb position
-			newCommands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
-			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.CENTER;
-			newCommands.addWantedRoutine(new SliderDistancePositioningRoutine());
-		} else if (mOperatorStick.getRawButton(4)) {	// opposite of preferred thumb position
-			newCommands.wantedSliderState = Slider.SliderState.MANUAL;
-			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.NONE;
-			newCommands.addWantedRoutine(new ManualSliderControlRoutine());
 		}
 		newCommands.operatorStickInput.x = mOperatorStick.getX();
 		
@@ -143,9 +146,9 @@ public class OperatorInterface {
 
 		newCommands.operatorStickInput = new XboxInput(mOperatorStick.getX(), mOperatorStick.getY(), mOperatorStick.getX(), mOperatorStick.getY());
 		// Left Stick trigger cancels current routine
-		newCommands.cancelCurrentRoutines = mLeftStick.getTrigger();
-		newCommands.leftStickInput = new JoystickInput(mLeftStick.getX(), mLeftStick.getY(), mLeftStick.getTrigger());
-		newCommands.rightStickInput = new JoystickInput(mRightStick.getX(), mRightStick.getY(), mRightStick.getTrigger());
+		newCommands.cancelCurrentRoutines = mDriveStick.getTrigger();
+		newCommands.leftStickInput = new JoystickInput(mDriveStick.getX(), mDriveStick.getY(), mDriveStick.getTrigger());
+		newCommands.rightStickInput = new JoystickInput(mTurnStick.getX(), mTurnStick.getY(), mTurnStick.getTrigger());
 
 		return newCommands;
 	}

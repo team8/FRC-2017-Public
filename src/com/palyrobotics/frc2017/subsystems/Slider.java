@@ -30,9 +30,9 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	public enum SliderState {
 		IDLE,
 		MANUAL,
-		AUTOMATIC_POSITIONING,
-		VISION_POSITIONING,
-		CALIBRATING
+		ENCODER_POSITIONING,
+		POTENTIOMETER_POSITIONING,	// only used when encoder broken
+		VISION_POSITIONING,			// unused
 	}
 	
 	public enum SliderTarget {
@@ -42,28 +42,20 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		RIGHT
 	}
 	
-	private SimpleSlider mSimpleSlider = SimpleSlider.getInstance();
-	private RobotState mRobotState;
-	private boolean isCalibrated = false;
-
 	private SliderState mState;
 	private SliderTarget mTarget;
+	
+	private RobotState mRobotState;
 
 	private double mEncoderOffset;
-	private final double potentiometerHFXValue[] = {0.0, 0.0};
 	
-	private final int right = 0;
-	private final int left = 1;
-
+	//Potentiometer PID
+	private Optional<Double> previousPotentiometer = Optional.empty();
+	private Optional<Double> integralPotentiometer = Optional.empty();
 	
 	//Sensor functionality fields
-	private boolean isEncoderFunctional;
-	private boolean[] isHFXFunctional = {true, true};
-	private boolean isPotentiometerFunctional;
-
-	private CANTalonOutput mOutput = new CANTalonOutput();
-
-	private final static double mCalibratingVoltage = 0.2;
+	private boolean isEncoderFunctional = true;
+	private boolean isPotentiometerFunctional = false;
 	
 	//Positioning constants
 	private final HashMap<SliderTarget,Double> mEncoderTargetPositions = new HashMap<SliderTarget,Double>(); //TODO: find actual values
@@ -74,15 +66,31 @@ public class Slider extends Subsystem implements SubsystemLoop {
 			(Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikSliderEncoder : Gains.aegirSliderEncoder;
 	private static final Gains mPotentiometerGains = 
 			(Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikSliderPotentiometer : Gains.aegirSliderPotentiometer;
-	private final static int potentiometer = 0;
-	private final static int encoder = 1;
-	private final static double[] tolerance = {0, 0};
 	
-	private Optional<Double> previousPotentiometer = Optional.empty();
-	private Optional<Double> integralPotentiometerPositioning = Optional.empty();
+	//Miscellaneous constants
+	private static final double kScalar = 0.5;
+	private static final double kCalibratingVoltage = 0.2;
+	private static final double kMaxVoltage = 0.5;
+	private static final int kPotentiometerTolerance = 0;
+	private static final int kEncoderTolerance = 0;
+	private static final int kCalibrationSetpoint = 0;
 	
+	private CANTalonOutput mOutput = new CANTalonOutput();
 	
-	private final static double maxVoltage = 0.5;
+	private Slider() {
+		super("Slider");
+		
+		if (isEncoderFunctional) mState = SliderState.ENCODER_POSITIONING;
+		else if (isPotentiometerFunctional) mState = SliderState.POTENTIOMETER_POSITIONING;
+		else mState = SliderState.MANUAL;
+		
+		mEncoderTargetPositions.put(SliderTarget.LEFT, 0.0);
+		mEncoderTargetPositions.put(SliderTarget.CENTER, 0.0);
+		mEncoderTargetPositions.put(SliderTarget.RIGHT, 0.0);
+		mPotentiometerTargetPositions.put(SliderTarget.LEFT, 0.0);
+		mPotentiometerTargetPositions.put(SliderTarget.CENTER, 0.0);
+		mPotentiometerTargetPositions.put(SliderTarget.RIGHT, 0.0);
+	}
 	
 	@Override
 	public void start() {
@@ -106,7 +114,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	@Override
 	public void update(Commands commands, RobotState robotState) {
 		mRobotState = robotState;
-		mSimpleSlider.update(commands, robotState);
+		mState = commands.wantedSliderState;
 	}
 	
 	/**
@@ -120,20 +128,10 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		if(!(master instanceof Routine)) {
 			throw new IllegalAccessException();
 		}
-		//Switches to the wanted state unless it is calibrating and the wanted state is not manuel or idle
-		if(mState != SliderState.CALIBRATING || commands.wantedSliderState == SliderState.IDLE || commands.wantedSliderState == SliderState.MANUAL) {
-			mState = commands.wantedSliderState;
-		}
+		
+		mState = commands.wantedSliderState;
+		
 		switch(mState) {
-			case AUTOMATIC_POSITIONING:
-				//Automatic calibrating
-				if(!isCalibrated) {
-					mState = SliderState.CALIBRATING;
-					break;
-				}
-				mTarget = commands.robotSetpoints.sliderSetpoint;
-				setSetpointsDistance();
-				break;
 			case IDLE:
 				mTarget = SliderTarget.NONE;
 				mOutput.setPercentVBus(0);
@@ -141,86 +139,20 @@ public class Slider extends Subsystem implements SubsystemLoop {
 			case MANUAL:
 				System.out.println("Manual");
 				mTarget = SliderTarget.NONE;
-				mOutput = mSimpleSlider.getOutput();
+				mOutput.setPercentVBus(Math.max(-kMaxVoltage, Math.min(kMaxVoltage, commands.operatorStickInput.x * kScalar)));
 				break;
-			case CALIBRATING:
-				if(isCalibrated) {
-					break;
-				}
-				if(mRobotState.sliderRightHFX || (!isHFXFunctional[right] && isPotentiometerFunctional && 
-							mRobotState.sliderPotentiometer < potentiometerHFXValue[right])) {
-					mEncoderOffset = mRobotState.sliderEncoder;
-					mState = SliderState.IDLE;
-					isCalibrated = true;
-					break;
-				}
-				else {
-					mOutput.setPercentVBus(mCalibratingVoltage);
-					break;
-				}
-			case VISION_POSITIONING:
+			case ENCODER_POSITIONING:
+				mTarget = commands.robotSetpoints.sliderSetpoint;
+				setSetpointsEncoder();
+				break;
+			case POTENTIOMETER_POSITIONING:
+				mTarget = commands.robotSetpoints.sliderSetpoint;
+				setSetpointsPotentiometer();
+				break;
+			case VISION_POSITIONING:	// unused
 				setSetpointsVision();
 				break;
-			default:
-				break;
 		}
-	}
-
-	private Slider() {
-		super("Slider");
-		mState = SliderState.IDLE;
-		mEncoderTargetPositions.put(SliderTarget.LEFT, 0.0);
-		mEncoderTargetPositions.put(SliderTarget.CENTER, 0.0);
-		mEncoderTargetPositions.put(SliderTarget.RIGHT, 0.0);
-		mPotentiometerTargetPositions.put(SliderTarget.LEFT, 0.0);
-		mPotentiometerTargetPositions.put(SliderTarget.CENTER, 0.0);
-		mPotentiometerTargetPositions.put(SliderTarget.RIGHT, 0.0);
-	}
-	/**
-	 * Get the output for the slider motor
-	 * @return the output
-	 */
-	public CANTalonOutput getOutput() {
-		//limits the voltage now cause I'm too lazy to do it when it's set
-		if(mOutput.getControlMode() == TalonControlMode.PercentVbus) {
-			mOutput.setPercentVBus(Math.max(-maxVoltage, Math.min(maxVoltage, mOutput.getSetpoint())));
-		}
-		return mOutput;
-	}
-	
-	/**
-	 * Takes an adjusted position (which is absolute) and uses the offset to get the actual encoder value
-	 * @param adjustedPosition
-	 * @return the actual position that corresponds to the adjusted position
-	 */
-	private double getRealEncoderPosition(double adjustedPosition) {
-		if(!isCalibrated) {
-			throw new UnsupportedOperationException();
-		}
-		return adjustedPosition + mEncoderOffset;
-	}
-	
-	/**
-	 * Updates the control loop for positioning using the potentiometer
-	 * @return whether the control loop is on target
-	 */
-	private boolean updatePotentiometerAutomaticPositioning() {
-		double potentiometerValue = mRobotState.sliderPotentiometer;
-		if(previousPotentiometer.isPresent() && integralPotentiometerPositioning.isPresent()) {
-			mOutput.setPercentVBus(Math.max(-1, Math.min(1, 
-					mPotentiometerGains.P*(mPotentiometerTargetPositions.get(mTarget) - potentiometerValue) +
-					mPotentiometerGains.I*integralPotentiometerPositioning.get() +
-					mPotentiometerGains.D*(previousPotentiometer.get()-potentiometerValue))));
-			integralPotentiometerPositioning= Optional.of((integralPotentiometerPositioning.get() + mPotentiometerTargetPositions.get(mTarget) - potentiometerValue));
-			previousPotentiometer = Optional.of(potentiometerValue);
-		}
-		else {
-			mOutput.setPercentVBus(Math.max(-1, Math.min(1, 
-					mPotentiometerGains.P*(mPotentiometerTargetPositions.get(mTarget) - potentiometerValue))));
-			integralPotentiometerPositioning= Optional.of(mPotentiometerTargetPositions.get(mTarget) - potentiometerValue);
-			previousPotentiometer = Optional.of(potentiometerValue);
-		}
-		return onTargetPotentiometerPositioning();
 	}
 	
 	/**
@@ -231,7 +163,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		if(mTarget == SliderTarget.NONE) {
 			return true;
 		}
-		return Math.abs(mRobotState.sliderPotentiometer - mPotentiometerTargetPositions.get(mTarget)) < tolerance[potentiometer];
+		return Math.abs(mRobotState.sliderPotentiometer - mPotentiometerTargetPositions.get(mTarget)) < kPotentiometerTolerance;
 	}
 	
 	/**
@@ -242,41 +174,50 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		if(mTarget == SliderTarget.NONE) {
 			return true;
 		}
-		return Math.abs(mRobotState.sliderEncoder - mEncoderTargetPositions.get(mTarget)) < tolerance[encoder]
-					&& (!isPotentiometerFunctional || 
-							Math.abs(mRobotState.sliderPotentiometer - mPotentiometerTargetPositions.get(mTarget)) < tolerance[potentiometer]);
+		return Math.abs(mRobotState.sliderEncoder - mEncoderTargetPositions.get(mTarget)) < kEncoderTolerance
+					&& (!isPotentiometerFunctional || onTargetPotentiometerPositioning());
 	}
 	
 	/**
-	 * Getter for the slider state
-	 * @return the current slider state
+	 * Updates encoder automatic positioning on the slider
 	 */
-	public SliderState getSliderState() {
-		return mState;
+	private void setSetpointsEncoder() {
+		if (onTargetEncoderPositioning()) {
+			mTarget = SliderTarget.NONE;
+		} else {
+			mOutput.setPosition(getRealEncoderPosition(mEncoderTargetPositions.get(mTarget)), mEncoderGains);
+		}
+	}
+	
+	private void setSetpointsPotentiometer() {
+		if (onTargetPotentiometerPositioning()) {
+			mTarget = SliderTarget.NONE;
+			previousPotentiometer = Optional.empty();
+			integralPotentiometer = Optional.empty();
+		} else {
+			updatePotentiometerAutomaticPositioning();
+		}
 	}
 	
 	/**
-	 * Updates the control loops for automatic positioning on the slider for both encoder and potentiometer loops
+	 * Updates the control loop for positioning using the potentiometer
 	 * @return whether the control loop is on target
 	 */
-	private void setSetpointsDistance() {
-		if(!isEncoderFunctional && isPotentiometerFunctional) {
-			if(updatePotentiometerAutomaticPositioning()) {
-				mState = SliderState.IDLE;
-				mTarget = SliderTarget.NONE;
-				previousPotentiometer = Optional.empty();
-				integralPotentiometerPositioning = Optional.empty();
-			}
-		}
-		else if (isEncoderFunctional){
-			mOutput.setPosition(getRealEncoderPosition(mEncoderTargetPositions.get(mTarget)), mEncoderGains);
-			if(onTargetEncoderPositioning()) {
-				mState = SliderState.IDLE;
-				mTarget = SliderTarget.NONE;
-			}
+	private void updatePotentiometerAutomaticPositioning() {
+		double potentiometerValue = mRobotState.sliderPotentiometer;
+		if(previousPotentiometer.isPresent() && integralPotentiometer.isPresent()) {
+			mOutput.setPercentVBus(Math.max(-1, Math.min(1, 
+					mPotentiometerGains.P * (mPotentiometerTargetPositions.get(mTarget) - potentiometerValue) +
+					mPotentiometerGains.I * integralPotentiometer.get() +
+					mPotentiometerGains.D * (previousPotentiometer.get() - potentiometerValue))));
+			integralPotentiometer = Optional.of((integralPotentiometer.get() + mPotentiometerTargetPositions.get(mTarget) - potentiometerValue));
+			previousPotentiometer = Optional.of(potentiometerValue);
 		}
 		else {
-			System.out.println("Calling an automatic positioning state with no distance sensors");
+			mOutput.setPercentVBus(Math.max(-1, Math.min(1, 
+					mPotentiometerGains.P * (mPotentiometerTargetPositions.get(mTarget) - potentiometerValue))));
+			integralPotentiometer = Optional.of(mPotentiometerTargetPositions.get(mTarget) - potentiometerValue);
+			previousPotentiometer = Optional.of(potentiometerValue);
 		}
 	}
 	
@@ -287,14 +228,40 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		//TODO: actually write this
 	}
 	
+	public boolean onTarget() {
+		return onTargetEncoderPositioning() || onTargetPotentiometerPositioning();
+	}
+	
+	/**
+	 * Takes an adjusted position (which is absolute) and uses the offset to get the actual encoder value
+	 * @param adjustedPosition
+	 * @return the actual position that corresponds to the adjusted position
+	 */
+	private double getRealEncoderPosition(double adjustedPosition) {
+		return adjustedPosition + mEncoderOffset;
+	}
+	
+	/**
+	 * @return the current slider state
+	 */
+	public SliderState getSliderState() {
+		return mState;
+	}
+	
+	/**
+	 * Get the output for the slider motor
+	 * @return the output
+	 */
+	public CANTalonOutput getOutput() {
+		return mOutput;
+	}
+	
 	public void printStatus() {
 		System.out.println("Slider Status:");
 		System.out.println("State is " + mState.toString());
 //		System.out.println("Output is " + mOutput.getSetpoint() + " with CANTalon in " + mOutput.getControlMode());
 //		System.out.println("Encoder value is " + mRobotState.sliderEncoder);
 //		System.out.println("Potentiometer value is " + mRobotState.sliderPotentiometer);
-//		System.out.println("Left HFX value is " + mRobotState.sliderLeftHFX);
-//		System.out.println("Right HFX value is " + mRobotState.sliderRightHFX);
 		System.out.println();
 	}
 }

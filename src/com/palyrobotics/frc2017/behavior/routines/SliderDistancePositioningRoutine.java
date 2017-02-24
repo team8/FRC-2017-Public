@@ -2,34 +2,44 @@ package com.palyrobotics.frc2017.behavior.routines;
 
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
+import com.palyrobotics.frc2017.subsystems.Slider;
+import com.palyrobotics.frc2017.subsystems.Spatula;
 import com.palyrobotics.frc2017.subsystems.Slider.SliderState;
 import com.palyrobotics.frc2017.subsystems.Spatula.SpatulaState;
 import com.palyrobotics.frc2017.util.Subsystem;
 
 public class SliderDistancePositioningRoutine extends Routine {
-	
-	private Subsystem[] required = {slider, spatula};
+	// Whether this routine is allowed to run or not
+	private boolean mAllowed;
 	
 	@Override
-	public void start() {		
+	public void start() {
+		if (spatula.getState() == SpatulaState.DOWN) {
+			mAllowed = false;
+		} else {
+			mAllowed = true;
+		}
 	}
 
 	@Override
 	public Commands update(Commands commands) {
+		if (mAllowed) {
+			commands.wantedSliderState = Slider.SliderState.ENCODER_POSITIONING;
+		} else {
+			commands.wantedSliderState = Slider.SliderState.IDLE;
+		}
 		try {
 			slider.run(commands, this);
 		} catch (IllegalAccessException e) {
+			System.err.println("Slider position routine rejected!");
 			e.printStackTrace();
 		}
-		
 		return commands;
 	}
 
 	@Override
 	public Commands cancel(Commands commands) {
-		if(spatula.getState() == SpatulaState.DOWN) {
-			return commands;
-		}
+		commands.wantedSliderState = Slider.SliderState.IDLE;
 		try {
 			slider.run(commands, this);
 		} catch (IllegalAccessException e) {
@@ -40,12 +50,12 @@ public class SliderDistancePositioningRoutine extends Routine {
 
 	@Override
 	public boolean finished() {
-		return spatula.getState() == SpatulaState.DOWN || slider.getSliderState() == SliderState.IDLE;
+		return !mAllowed || slider.onTarget();
 	}
 
 	@Override
 	public Subsystem[] getRequiredSubsystems() {
-		return required;
+		return new Subsystem[]{Slider.getInstance(), Spatula.getInstance()};
 	}
 
 	@Override

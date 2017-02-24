@@ -6,24 +6,21 @@ import com.palyrobotics.frc2017.subsystems.Slider;
 import com.palyrobotics.frc2017.subsystems.Slider.SliderState;
 import com.palyrobotics.frc2017.util.Subsystem;
 
-public class ManualSliderControlRoutine extends Routine {
-	
-	private static final Subsystem[] required = {Slider.getInstance()};
-	
+public class ManualSliderControlRoutine extends Routine {	
 	@Override
 	public void start() {	
-		System.out.println("Starting manual");
+		System.out.println("Manually controlling slider");
 	}
 
 	@Override
 	public Commands update(Commands commands) {
 		try {
-			Commands newCommands = commands.copy();
-			newCommands.wantedSliderState = SliderState.MANUAL;
-			slider.run(newCommands, this);
+			commands.wantedSliderState = SliderState.MANUAL;
+			slider.run(commands, this);
 		} catch (IllegalAccessException e) {
+			System.err.println("Manual Slider Routine rejected!");
 			e.printStackTrace();
-		}		
+		}	
 		return commands;
 	}
 
@@ -46,7 +43,7 @@ public class ManualSliderControlRoutine extends Routine {
 
 	@Override
 	public Subsystem[] getRequiredSubsystems() {
-		return required;
+		return new Subsystem[]{Slider.getInstance()};
 	}
 
 	@Override

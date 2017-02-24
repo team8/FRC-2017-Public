@@ -36,4 +36,6 @@ public abstract class Routine {
     public abstract Subsystem[] getRequiredSubsystems();
     // Force override of getName()
     public abstract String getName();
+    @Override
+    public String toString() { return getName(); }
 }
