@@ -9,8 +9,6 @@ import com.palyrobotics.frc2017.behavior.routines.drive.EncoderDriveRoutine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Commands.*;
 import com.palyrobotics.frc2017.config.Commands.JoystickInput.XboxInput;
-import com.palyrobotics.frc2017.subsystems.Intake;
-import com.palyrobotics.frc2017.subsystems.Spatula;
 
 /**
  * Used to produce Commands {@link Commands} from human input
@@ -80,9 +78,9 @@ public class OperatorInterface {
 		}
 
 		// Slider
-		if (mOperatorStick.getRawButton(0)){
+		if (mOperatorStick.getRawButton(1)){
 			newCommands.wantedSimpleSliderState = SimpleSlider.SimpleSliderState.IDLE;
-		} else if(mOperatorStick.getRawButton(0)){
+		} else if(mOperatorStick.getRawButton(1)){
 			newCommands.wantedSimpleSliderState = SimpleSlider.SimpleSliderState.MANUAL;
 		}
 
@@ -101,15 +99,19 @@ public class OperatorInterface {
 		} else {
 			newCommands.wantedIntakeState = Intake.IntakeState.IDLE;
 		}
+		
 		// Climber
-		if (mOperatorStick.getRawButton(7)) { // overall cancel button
-			newCommands.wantedClimberState = Climber.ClimberState.IDLE;
-		}
-		if (mOperatorStick.getRawButton(10)) {
+//		if (mOperatorStick.getRawButton(7)) { // overall cancel button for automatic
+//			newCommands.wantedClimberState = Climber.ClimberState.IDLE;
+//		} else if (mOperatorStick.getRawButton(6)) {
+//			newCommands.wantedClimberState = Climber.ClimberState.WAITING_FOR_ROPE;
+//		} else if (mOperatorStick.getY() > 0) {
+//			newCommands.wantedClimberState = Climber.ClimberState.MANUAL;
+//		}
+		if (mOperatorStick.getY() != 0) {
 			newCommands.wantedClimberState = Climber.ClimberState.MANUAL;
-		}
-		if (mOperatorStick.getRawButton(6)) {
-			newCommands.wantedClimberState = Climber.ClimberState.WAITING_FOR_ROPE;
+		} else {
+			newCommands.wantedClimberState = Climber.ClimberState.IDLE;
 		}
 
 		newCommands.operatorStickInput = new XboxInput(mOperatorStick.getX(), mOperatorStick.getY(), mOperatorStick.getX(), mOperatorStick.getY());

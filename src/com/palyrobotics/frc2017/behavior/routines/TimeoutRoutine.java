@@ -24,6 +24,7 @@ public class TimeoutRoutine extends Routine {
 
     @Override
     public Commands update(Commands commands) {
+    	System.out.println("time out routine updating");
     	return commands;
     }
 

@@ -135,6 +135,8 @@ public class Robot extends IterativeRobot {
 
 		// Stop routine_request
 		mRoutineManager.reset(commands);
+		
+		//commands = new Commands();	// reset commands
 
 		// Stop control loops
 		mSubsystemLooper.stop();

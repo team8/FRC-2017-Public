@@ -26,6 +26,11 @@ public class CANTalonRoutine extends Routine {
 	@Override
 	public void start() {
 		drive.setCANTalonController(mSignal);
+//		try {
+//			Thread.sleep(101);
+//		} catch(InterruptedException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	@Override

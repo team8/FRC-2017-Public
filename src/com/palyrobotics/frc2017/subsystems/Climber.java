@@ -1,9 +1,11 @@
 package com.palyrobotics.frc2017.subsystems;
 
 import com.palyrobotics.frc2017.config.Commands;
+import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
+import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Subsystem;
 import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
 
@@ -19,21 +21,20 @@ public class Climber extends Subsystem implements SubsystemLoop {
 		return instance;
 	}
 
-	private double mOutput = 0;
+	private CANTalonOutput mOutput = new CANTalonOutput();
 
 	// TODO Find constants
 
-	// Store for PD loop
-	private double mPrevEnc;
-	private static final double kP = 0.1;
-	private static final double kD = 0.01;
+	private int mPrevEnc;
+	private final Gains mGains = new Gains(0.1, 0, 0.01, 0, 0, 0);
 
 	public static final int kMinimumDeltaEnc = 1;	// Minimum amount encoder should be shifting
 	public static final int kEncoderTicksToTop = 100;
-	public static final float kClimbingTriggerCurrent = 2;
-	public static final float kStallingTriggerCurrent = 70;
+	public static final float kClimbingTriggerCurrent = 70;
+	public static final float kStallingTriggerCurrent = 130;
 	public static final double kRopeGrabSpeed = 0.5;	// Turn slowly while waiting to catch rope
-	public static final double kClimbSpeed = 1;
+	public static final double kClimbSpeed = 0.7;
+	public static final double kClimbScaleFactor = 0.5;
 
 	private double mTarget = -1; // Encoder endpoint
 	private DashboardValue mDv;
@@ -56,15 +57,19 @@ public class Climber extends Subsystem implements SubsystemLoop {
 	@Override
 	public void start() {
 		mState = ClimberState.IDLE;
+		mOutput.setPercentVBus(0);
 	}
 
 	@Override
 	public void stop() {
 		mState = ClimberState.IDLE;
+		mOutput.setPercentVBus(0);
 	}
 
 	@Override
 	public void update(Commands commands, RobotState robotState) {
+		boolean isNewState = !(mState == commands.wantedClimberState);
+		
 		// Sets mState
 		switch (commands.wantedClimberState) {
 		case IDLE:
@@ -73,7 +78,7 @@ public class Climber extends Subsystem implements SubsystemLoop {
 		case MANUAL:
 			mState = commands.wantedClimberState;
 			break;
-		case WAITING_FOR_ROPE:
+		case WAITING_FOR_ROPE:	// unused
 			// Climber is climbing
 			if (mState == Climber.ClimberState.CLIMBING_ENCODER_DISTANCE) {
 				// Too much current draw (stalling)
@@ -101,48 +106,45 @@ public class Climber extends Subsystem implements SubsystemLoop {
 				if (robotState.climberCurrentDraw > kClimbingTriggerCurrent) {
 					System.out.println("Rope has been caught, swithing to encoder climb");
 					mState = ClimberState.CLIMBING_ENCODER_DISTANCE;
-					mTarget = robotState.climberEncoder + kEncoderTicksToTop;	// Calculate endpoint
-					mPrevEnc = robotState.climberEncoder;	// Initialize for climb
 				} else {
 					mState = commands.wantedClimberState;
 				}
 			}
 			break;
-		case CLIMBING_ENCODER_DISTANCE:
+		case CLIMBING_ENCODER_DISTANCE:	//unused
 			// Should never occur because never set by OI
 			break;
 		}
 		// Calculates output
+		//System.out.println(mState);
 		switch (mState) {
 		case IDLE:
-			mOutput = 0;
+			mOutput.setPercentVBus(0);
 			break;
 		case MANUAL:
-			mOutput = kClimbSpeed;
+			mOutput.setPercentVBus(-commands.operatorStickInput.y * kClimbScaleFactor);
 			break;
-		case WAITING_FOR_ROPE:
-			mOutput = kRopeGrabSpeed;
+		case WAITING_FOR_ROPE:	// unused
+			mOutput.setPercentVBus(kRopeGrabSpeed);
 			break;
-		case CLIMBING_ENCODER_DISTANCE:
+		case CLIMBING_ENCODER_DISTANCE:	// unused
 			// PD loop
-			mOutput = kP * (mTarget - robotState.climberEncoder) 
-			+ kD * (mPrevEnc - robotState.climberEncoder);
-			mPrevEnc = robotState.climberEncoder;
+			if (isNewState) {
+				mOutput.setPosition(kEncoderTicksToTop, mGains);
+			}
 			break;
 		}
 		
-		if (mOutput == 0) {
+		if (mOutput.getSetpoint() == 0) {
 			mDv.updateValue("NOT MOVING");
-		}
-		else {
+		} else {
 			mDv.updateValue("MOVING");
 		}
-		
 		DashboardManager.getInstance().publishKVPair(mDv);
 	}
 
-	public double getOutput() {
-		System.out.println(mOutput);
+	public CANTalonOutput getOutput() {
+		//System.out.println(mOutput);
 		return mOutput;
 	}
 

@@ -29,37 +29,10 @@ public class Constants extends ConstantsBase {
 	public static double kAcceptableDriveVelocityError = 40;
 	public static double kAcceptableTurnAngleError = 1;
 	public static double kAcceptableSliderPositionError;
-	
-	// Unit Conversions
-	// TODO: Calculate the unit conversions for native units and inches, rpm, etc as needed
 
-	// Drive Position offboard control loop
-	public static double kAegirDriveDistancekP = 0;
-	public static double kAegirDriveDistancekI = 0;
-	public static double kAegirDriveDistancekD = 0;
-	public static double kAegirDriveDistancekF = 0;
-	public static int kAegirDriveDistancekIzone = 0;
-	public static double kAegirDriveDistancekRampRate = 0.0;
-
-	// Drive Velocity offboard control loop
-	public static double kAegirDriveVelocitykP = 0.0;
-	public static double kAegirDriveVelocitykI = 0;
-	public static double kAegirDriveVelocitykD = 0.0;
-	public static double kAegirDriveVelocitykF = 0;
-	public static int kAegirDriveVelocitykIzone = 0;
-	public static double kAegirDriveVelocityRampRate = 0.0;
-	
-		// Slider position offboard control loop
-
-	// Slider motion magic offboard control loop
-
-	// Slider potentiometer position onboard control loop
-
-	
 	public static double kSliderMaxVoltage = 4.0;
 	public static double kClimberMaxVoltage = 5.0;
 
-	
 	/* !!! End of editable Constants! !!!
 	 **********************************************************************************
 	 */
@@ -72,6 +45,9 @@ public class Constants extends ConstantsBase {
 	 *  STEIK ELECTRONIC CONSTANTS
 	 * ************************************
 	 */
+	// PDP
+	public static int kSteikPDPDeviceID = 11;
+	
 	// DRIVETRAIN
 	public static int kSteikLeftDriveMasterDeviceID  = 0;
 	public static int kSteikLeftDriveSlaveDeviceID = 0;
@@ -100,7 +76,7 @@ public class Constants extends ConstantsBase {
 	public static int kSteikSliderPotentiometerOffset;
 
 	//SPATULA
-	public static int kSteikSpatulaPortExtend = 0;
+	public static int kSteikSpatulaPortExtend = 1;
 	public static int kSteikSpatulaPortRetract = 0;
 
 	//INTAKE
@@ -110,8 +86,8 @@ public class Constants extends ConstantsBase {
 	public static int kSteikRightIntakeMotorPDP = 0;
 
 	//CLIMBER
-	public static int kSteikClimberMotorDeviceID = 0;
-	public static int kSteikClimberMotorPDP = 0;
+	public static int kSteikClimberMotorDeviceID = 9;
+	public static int kSteikClimberMotorPDP = 14;
 
 	/*
 	 * ************************************
@@ -145,8 +121,8 @@ public class Constants extends ConstantsBase {
 	public static int kAegirSliderPotentiometerOffset;
 
 	//SPATULA
-	public static int kAegirSpatulaPortExtend = 4;
-	public static int kAegirSpatulaPortRetract = 5;
+	public static int kAegirSpatulaPortExtend = 1;
+	public static int kAegirSpatulaPortRetract = 0;
 
 	//INTAKE
 	public static int kAegirLeftIntakeMotorDeviceID = 14;
@@ -156,7 +132,7 @@ public class Constants extends ConstantsBase {
 
 	// CLIMBER
 	public static int kAegirClimberMotorDeviceID = 9;
-	public static int kAegirClimberMotorPDP = 0;
+	public static int kAegirClimberMotorPDP = 14;
 
 	// !!! Physical constants
 	// TODO: Ailyn insert the autonomous constants here
