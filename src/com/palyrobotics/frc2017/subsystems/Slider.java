@@ -73,8 +73,6 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	private static final int kPotentiometerTolerance = 0;
 	private static final int kEncoderTolerance = 0;
 	private static final int kCalibrationSetpoint = 0;
-	private static final boolean isCalibrated = false;
-	private static final double kCenterPotPosition = 4;
 	
 	private CANTalonOutput mOutput = new CANTalonOutput();
 	
@@ -126,10 +124,6 @@ public class Slider extends Subsystem implements SubsystemLoop {
 			throw new IllegalAccessException();
 		}
 		
-		if(!isCalibrated) {
-			double distance_to_center = mRobotState.sliderPotentiometer - kCenterPotPosition;
-			mEncoderOffset =  mRobotState.sliderEncoder + (distance_to_center / 4096.0f) * 10.0f;
-		}
 		
 		mState = commands.wantedSliderState;
 		
