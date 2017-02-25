@@ -3,6 +3,7 @@ package com.palyrobotics.frc2017.robot;
 import com.palyrobotics.frc2017.auto.AutoMode;
 import com.palyrobotics.frc2017.auto.AutoModeExecuter;
 import com.palyrobotics.frc2017.auto.AutoModeSelector;
+import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.RoutineManager;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Constants;
@@ -13,6 +14,7 @@ import com.palyrobotics.frc2017.util.archive.SubsystemLooper;
 import com.palyrobotics.frc2017.robot.team254.lib.util.RobotData;
 import com.palyrobotics.frc2017.robot.team254.lib.util.SystemManager;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
@@ -37,7 +39,7 @@ public class Robot extends IterativeRobot {
 	// Subsystem controllers
 	private Drive mDrive = Drive.getInstance();
 	private Flippers mFlippers = Flippers.getInstance();
-	private Slider mSimpleSlider = Slider.getInstance();
+	private Slider mSlider = Slider.getInstance();
 	private Spatula mSpatula = Spatula.getInstance();
 	private Intake mIntake = Intake.getInstance();
 	private Climber mClimber = Climber.getInstance();
@@ -48,6 +50,8 @@ public class Robot extends IterativeRobot {
 	static {
 		SystemManager.getInstance().add(new RobotData());
 	}
+	
+	private AnalogInput pot = new AnalogInput(3);
 
 	@Override
 	public void robotInit() {
@@ -55,13 +59,13 @@ public class Robot extends IterativeRobot {
 
 		if (Constants.kRobotName == Constants.RobotName.STEIK || Constants.kRobotName == Constants.RobotName.AEGIR) {
 			try {
-				mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSimpleSlider, mSpatula, mIntake, mClimber);
+				mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSlider, mSpatula, mIntake, mClimber);
 			} catch (Exception e) {
 				System.exit(1);
 			}
 			mSubsystemLooper.register(mDrive);
 			mSubsystemLooper.register(mFlippers);
-			mSubsystemLooper.register(mSimpleSlider);
+			mSubsystemLooper.register(mSlider);
 			mSubsystemLooper.register(mSpatula);
 			mSubsystemLooper.register(mIntake);
 			mSubsystemLooper.register(mClimber);

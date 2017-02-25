@@ -116,7 +116,7 @@ public class HardwareAdapter {
 			if(Constants.kRobotName == Constants.RobotName.STEIK) {
 				sliderMotor = new CANTalon(Constants.kSteikSliderMotorDeviceID);
 				sliderPotentiometer = new AnalogPotentiometer(Constants.kSteikSliderPotentiometer, Constants.kSteikSliderPotentiometerFullRange, Constants.kSteikSliderPotentiometerOffset);
-			} 
+			}
 			else if (Constants.kRobotName == Constants.RobotName.AEGIR){
 				sliderMotor = new CANTalon(Constants.kAegirSliderMotorDeviceID);
 				sliderPotentiometer = new AnalogPotentiometer(Constants.kAegirSliderPotentiometer, Constants.kAegirSliderPotentiometerFullRange, Constants.kAegirSliderPotentiometerOffset);

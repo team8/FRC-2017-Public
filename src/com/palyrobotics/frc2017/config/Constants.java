@@ -146,6 +146,8 @@ public class Constants extends ConstantsBase {
 
 	// !!! Loop rate of subsystem updates
 	public static double kSubsystemLooperDt = 0.005;
+	
+	public static double kSubsystemPrintLooperDt = 1.0;
 
 
 	@Override

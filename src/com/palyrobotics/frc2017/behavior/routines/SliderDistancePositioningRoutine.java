@@ -1,36 +1,35 @@
-package com.palyrobotics.frc2017.behavior.routines.scoring;
+package com.palyrobotics.frc2017.behavior.routines;
 
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
-import com.palyrobotics.frc2017.subsystems.Slider;
 import com.palyrobotics.frc2017.subsystems.Slider.SliderState;
+import com.palyrobotics.frc2017.subsystems.Spatula.SpatulaState;
 import com.palyrobotics.frc2017.util.Subsystem;
 
-public class ManualSliderControlRoutine extends Routine {
+public class SliderDistancePositioningRoutine extends Routine {
 	
-	private static final Subsystem[] required = {Slider.getInstance()};
+	private Subsystem[] required = {slider, spatula};
 	
 	@Override
-	public void start() {	
-		System.out.println("Starting manual");
+	public void start() {		
 	}
 
 	@Override
 	public Commands update(Commands commands) {
 		try {
-			Commands newCommands = commands.copy();
-			newCommands.wantedSliderState = SliderState.MANUAL;
-			slider.run(newCommands, this);
+			slider.run(commands, this);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-		}		
+		}
+		
 		return commands;
 	}
 
 	@Override
 	public Commands cancel(Commands commands) {
-		commands.wantedSliderState = SliderState.IDLE;
-		System.out.println("Canceling manual slider control");
+		if(spatula.getState() == SpatulaState.DOWN) {
+			return commands;
+		}
 		try {
 			slider.run(commands, this);
 		} catch (IllegalAccessException e) {
@@ -41,7 +40,7 @@ public class ManualSliderControlRoutine extends Routine {
 
 	@Override
 	public boolean finished() {
-		return false;
+		return spatula.getState() == SpatulaState.DOWN || slider.getSliderState() == SliderState.IDLE;
 	}
 
 	@Override
@@ -51,7 +50,7 @@ public class ManualSliderControlRoutine extends Routine {
 
 	@Override
 	public String getName() {
-		return "Manual Slider Control Routine";
+		return "Slider Distance Positioning Routine";
 	}
 
 }

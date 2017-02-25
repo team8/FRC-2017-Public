@@ -23,6 +23,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	public static Slider getInstance() {
 		return instance;
 	}
+
 	
 	//all code assumes that right is 0 and left and center are both positive on both pot and encoder
 	
@@ -60,21 +61,13 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	private boolean[] isHFXFunctional = {true, true};
 	private boolean isPotentiometerFunctional;
 
-	private CANTalonOutput mOutput;
+	private CANTalonOutput mOutput = new CANTalonOutput();
 
 	private final static double mCalibratingVoltage = 0.2;
 	
 	//Positioning constants
-	private final static HashMap<SliderTarget,Double> mEncoderTargetPositions = new HashMap<SliderTarget,Double>(); //TODO: find actual values
-	private final static HashMap<SliderTarget,Double> mPotentiometerTargetPositions = new HashMap<SliderTarget,Double>();
-	static {
-		mEncoderTargetPositions.put(SliderTarget.LEFT, 0.0);
-		mEncoderTargetPositions.put(SliderTarget.CENTER, 0.0);
-		mEncoderTargetPositions.put(SliderTarget.RIGHT, 0.0);
-		mPotentiometerTargetPositions.put(SliderTarget.LEFT, 0.0);
-		mPotentiometerTargetPositions.put(SliderTarget.CENTER, 0.0);
-		mPotentiometerTargetPositions.put(SliderTarget.RIGHT, 0.0);
-	}
+	private final HashMap<SliderTarget,Double> mEncoderTargetPositions = new HashMap<SliderTarget,Double>(); //TODO: find actual values
+	private final HashMap<SliderTarget,Double> mPotentiometerTargetPositions = new HashMap<SliderTarget,Double>();
 	
 	//PID constants
 	private static final Gains mEncoderGains = 
@@ -93,7 +86,6 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	
 	@Override
 	public void start() {
-		mOutput = new CANTalonOutput();
 		mState = SliderState.IDLE;
 		mTarget = SliderTarget.NONE;
 		mOutput.setPercentVBus(0);
@@ -114,6 +106,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	@Override
 	public void update(Commands commands, RobotState robotState) {
 		mRobotState = robotState;
+		mSimpleSlider.update(commands, robotState);
 	}
 	
 	/**
@@ -122,7 +115,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	 * @param master the object calling the method
 	 * @throws IllegalAccessException if master not a routine
 	 */
-	public void update(Commands commands,  Object master) throws IllegalAccessException {
+	public void run(Commands commands,  Object master) throws IllegalAccessException {
 		//Throws an exception if called by an object that isn't a routine
 		if(!(master instanceof Routine)) {
 			throw new IllegalAccessException();
@@ -146,6 +139,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 				mOutput.setPercentVBus(0);
 				break;
 			case MANUAL:
+				System.out.println("Manual");
 				mTarget = SliderTarget.NONE;
 				mOutput = mSimpleSlider.getOutput();
 				break;
@@ -175,6 +169,12 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	private Slider() {
 		super("Slider");
 		mState = SliderState.IDLE;
+		mEncoderTargetPositions.put(SliderTarget.LEFT, 0.0);
+		mEncoderTargetPositions.put(SliderTarget.CENTER, 0.0);
+		mEncoderTargetPositions.put(SliderTarget.RIGHT, 0.0);
+		mPotentiometerTargetPositions.put(SliderTarget.LEFT, 0.0);
+		mPotentiometerTargetPositions.put(SliderTarget.CENTER, 0.0);
+		mPotentiometerTargetPositions.put(SliderTarget.RIGHT, 0.0);
 	}
 	/**
 	 * Get the output for the slider motor
@@ -285,5 +285,16 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	 */
 	private void setSetpointsVision() {
 		//TODO: actually write this
+	}
+	
+	public void printStatus() {
+		System.out.println("Slider Status:");
+		System.out.println("State is " + mState.toString());
+//		System.out.println("Output is " + mOutput.getSetpoint() + " with CANTalon in " + mOutput.getControlMode());
+//		System.out.println("Encoder value is " + mRobotState.sliderEncoder);
+//		System.out.println("Potentiometer value is " + mRobotState.sliderPotentiometer);
+//		System.out.println("Left HFX value is " + mRobotState.sliderLeftHFX);
+//		System.out.println("Right HFX value is " + mRobotState.sliderRightHFX);
+		System.out.println();
 	}
 }

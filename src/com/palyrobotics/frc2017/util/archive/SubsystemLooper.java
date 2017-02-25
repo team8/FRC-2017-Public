@@ -18,16 +18,24 @@ import java.util.List;
  * Based on Team 254 {@link Looper}
  */
 public class SubsystemLooper {
-	// SubsystemLoop update rate
-	private final double kPeriod = Constants.kSubsystemLooperDt;
-
-	private boolean mRunning;
-
-	private final Notifier mNotifier;
 	private final List<SubsystemLoop> mLoops;
+
+	// Used for the main loop
+	private boolean mRunning;
+	private final double kPeriod = Constants.kSubsystemLooperDt;
+	private final Notifier mNotifier;
 	private final Object mTaskRunningLock = new Object();
 	private double mTimeStamp = 0;
 	private double mDt = 0;
+
+	// Used for secondary printer loop
+	private boolean mPrinting = false;
+	private final double kPrintRate = Constants.kSubsystemPrintLooperDt;
+	private final Notifier mPrintNotifier;
+	private final Object mPrintingLock = new Object();
+	private double mPrintTimeStamp = 0;
+	private double mPrintDt = 0;
+
 	// Main method that is run at the update rate
 	private final CrashTrackingRunnable mRunnable = new CrashTrackingRunnable() {
 		@Override
@@ -46,11 +54,31 @@ public class SubsystemLooper {
 			}
 		}
 	};
+	// Secondary method that is run at a slower update rate to print to console
+	private final CrashTrackingRunnable mPrinterRunnable = new CrashTrackingRunnable() {
+		@Override
+		public void runCrashTracked() {
+			synchronized (mPrintingLock) {
+				if (mPrinting) {
+					double now = Timer.getFPGATimestamp();
+					for (SubsystemLoop loop : mLoops) {
+						loop.printStatus();
+					}
+					mPrintDt = now - mPrintTimeStamp;
+					mPrintTimeStamp = now;
+				}
+			}
+		}
+	};
+
 
 	public SubsystemLooper() {
-		mNotifier = new Notifier((Runnable) mRunnable);
-		mRunning = false;
 		mLoops = new ArrayList<>();
+		mNotifier = new Notifier(mRunnable);
+		mRunning = false;
+
+		mPrintNotifier = new Notifier(mPrinterRunnable);
+		mPrinting = false;
 	}
 
 	public synchronized void register(SubsystemLoop loop) {
@@ -75,6 +103,12 @@ public class SubsystemLooper {
 		} else {
 			System.out.println("SubsystemLooper already running");
 		}
+		if (!mPrinting) {
+			System.out.println("Starting subsystem printer");
+			mPrintTimeStamp = Timer.getFPGATimestamp();
+			mPrinting = true;
+			mPrintNotifier.startPeriodic(kPrintRate);
+		}
 	}
 
 	public synchronized void stop() {
@@ -89,6 +123,10 @@ public class SubsystemLooper {
 				}
 			}
 		}
+//		if (mPrinting) {
+//			System.out.println("Stopping subsystem printer");
+//			mPrinting = false;
+//		}
 	}
 
 	public void outputToSmartDashboard() {

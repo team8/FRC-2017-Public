@@ -151,4 +151,10 @@ public class Climber extends Subsystem implements SubsystemLoop {
 	public ClimberState getState() {
 		return mState;
 	}
+
+	@Override
+	public void printStatus() {
+		// TODO Auto-generated method stub
+		
+	}
 }

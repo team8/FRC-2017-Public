@@ -198,7 +198,14 @@ public class Drive extends Subsystem implements SubsystemLoop {
 
 	public interface DriveController {
 		DriveSignal update(RobotState state);
+
 		Pose getSetpoint();
+
 		boolean onTarget();
+	}
+
+	@Override
+	public void printStatus() {
+		// TODO Auto-generated method stub
 	}
 }

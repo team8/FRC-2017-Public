@@ -13,4 +13,5 @@ public interface SubsystemLoop {
 	public void start();
 	public void update(Commands commands, RobotState robotState);
 	public void stop();
+	public void printStatus();
 }
