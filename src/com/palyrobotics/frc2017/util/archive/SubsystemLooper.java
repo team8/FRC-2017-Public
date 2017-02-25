@@ -30,7 +30,7 @@ public class SubsystemLooper {
 
 	// Used for secondary printer loop
 	private boolean mPrinting = false;
-	private boolean mAllowPrinting = false;
+	private boolean mAllowPrinting = true;
 	private final double kPrintRate = Constants.kSubsystemPrintLooperDt;
 	private final Notifier mPrintNotifier;
 	private final Object mPrintingLock = new Object();

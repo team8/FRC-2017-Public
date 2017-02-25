@@ -136,13 +136,15 @@ class HardwareUpdater {
 			slider.enable();
 			slider.enableControl();
 			slider.configMaxOutputVoltage(Constants.kSliderMaxVoltage);
-			slider.configPeakOutputVoltage(Constants.kSliderMaxVoltage, -Constants.kSliderMaxVoltage);
+			slider.configPeakOutputVoltage(Constants.kSliderPeakOutputVoltage, -Constants.kSliderPeakOutputVoltage);
 
 			// Set up the Talon to read from a relative CTRE mag encoder sensor
 			slider.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Absolute);
-			slider.setPosition(0);
-			slider.setEncPosition(0);
-			slider.setPulseWidthPosition(0);
+			double current_pot_pos = HardwareAdapter.SliderHardware.getInstance().sliderPotentiometer.getValue();
+			double distance_to_center = current_pot_pos - Constants.kPotentiometerCenterPos;
+			double position_in_rev = (distance_to_center / 4096.0) * 10.0;
+			System.out.println(position_in_rev);
+			slider.setPosition(-position_in_rev);
 		}
 	}
 

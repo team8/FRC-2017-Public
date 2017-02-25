@@ -23,11 +23,11 @@ public class Gains {
 	// Slider motion magic offboard control loop
 	
 	// Slider position offboard control loop
-	public static final double kSteikSliderEncoderkP = 0.1;
-	public static final double kSteikSliderEncoderkI = 0;
-	public static final double kSteikSliderEncoderkD = 0;
+	public static final double kSteikSliderEncoderkP = 0.8;
+	public static final double kSteikSliderEncoderkI = 0.0066;
+	public static final double kSteikSliderEncoderkD = 8;
 	public static final double kSteikSliderEncoderkF = 0;
-	public static final int kSteikSliderEncoderkIzone = 0;
+	public static final int kSteikSliderEncoderkIzone = 120;
 	public static final double kSteikSliderEncoderkRampRate = 0;
 
 	// Slider potentiometer position onboard control loop
@@ -60,11 +60,11 @@ public class Gains {
 	// Slider motion magic offboard control loop
 
 	// Slider position offboard control loop
-	public static final double kAegirSliderEncoderkP = 0.1;
-	public static final double kAegirSliderEncoderkI = 0;
-	public static final double kAegirSliderEncoderkD = 0;
+	public static final double kAegirSliderEncoderkP = 0.8;
+	public static final double kAegirSliderEncoderkI = 0.0066;
+	public static final double kAegirSliderEncoderkD = 8;
 	public static final double kAegirSliderEncoderkF = 0;
-	public static final int kAegirSliderEncoderkIzone = 0;
+	public static final int kAegirSliderEncoderkIzone = 120;
 	public static final double kAegirSliderEncoderkRampRate = 0;
 
 	// Slider potentiometer position onboard control loop

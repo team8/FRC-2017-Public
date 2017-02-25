@@ -79,9 +79,9 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	private Slider() {
 		super("Slider");
 				
-		mEncoderTargetPositions.put(SliderTarget.LEFT, 0.0);
+		mEncoderTargetPositions.put(SliderTarget.LEFT, -1.0);
 		mEncoderTargetPositions.put(SliderTarget.CENTER, 0.0);
-		mEncoderTargetPositions.put(SliderTarget.RIGHT, 0.0);
+		mEncoderTargetPositions.put(SliderTarget.RIGHT, 1.0);
 		mPotentiometerTargetPositions.put(SliderTarget.LEFT, 0.0);
 		mPotentiometerTargetPositions.put(SliderTarget.CENTER, 0.0);
 		mPotentiometerTargetPositions.put(SliderTarget.RIGHT, 0.0);
@@ -187,7 +187,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		if (onTargetEncoderPositioning()) {
 			mTarget = SliderTarget.NONE;
 		} else {
-			mOutput.setPosition(getRealEncoderPosition(mEncoderTargetPositions.get(mTarget)), mEncoderGains);
+			mOutput.setPosition(mEncoderTargetPositions.get(mTarget), mEncoderGains);
 		}
 	}
 	
@@ -235,15 +235,6 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	}
 	
 	/**
-	 * Takes an adjusted position (which is absolute) and uses the offset to get the actual encoder value
-	 * @param adjustedPosition
-	 * @return the actual position that corresponds to the adjusted position
-	 */
-	private double getRealEncoderPosition(double adjustedPosition) {
-		return adjustedPosition + mEncoderOffset;
-	}
-	
-	/**
 	 * @return the current slider state
 	 */
 	public SliderState getSliderState() {
@@ -260,9 +251,10 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	
 	public void printStatus() {
 		System.out.println("Slider Status:");
-		System.out.println("State is " + mState.toString());
+//		System.out.println("State is " + mState.toString());
+		System.out.println("Target is " + mTarget.toString());
 //		System.out.println("Output is " + mOutput.getSetpoint() + " with CANTalon in " + mOutput.getControlMode());
-//		System.out.println("Encoder value is " + mRobotState.sliderEncoder);
+		System.out.println("Encoder value is " + mRobotState.sliderEncoder);
 //		System.out.println("Potentiometer value is " + mRobotState.sliderPotentiometer);
 		System.out.println();
 	}
