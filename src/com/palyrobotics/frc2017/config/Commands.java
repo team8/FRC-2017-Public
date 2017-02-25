@@ -29,7 +29,7 @@ public class Commands {
 	public Drive.DriveState wantedDriveState = Drive.DriveState.NEUTRAL;
 	public Flippers.FlipperSignal wantedFlipperSignal = new Flippers.FlipperSignal(
 			DoubleSolenoid.Value.kForward, DoubleSolenoid.Value.kForward);
-	public Slider.SliderState wantedSliderState = Slider.SliderState.ENCODER_POSITIONING;
+	public Slider.SliderState wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
 	public Spatula.SpatulaState wantedSpatulaState = Spatula.SpatulaState.UP;
 	public Intake.IntakeState wantedIntakeState = Intake.IntakeState.IDLE;
 	public Climber.ClimberState wantedClimberState = Climber.ClimberState.IDLE;
@@ -90,7 +90,8 @@ public class Commands {
 	// Stores Joystick values
 	public JoystickInput leftStickInput = new JoystickInput(0,0, false);
 	public JoystickInput rightStickInput = new JoystickInput(0,0, false);
-	public JoystickInput operatorStickInput = new JoystickInput(0, 0, false);
+	public JoystickInput sliderStickInput = new JoystickInput(0, 0, false);
+	public JoystickInput climberStickInput = new JoystickInput(0, 0, false);
 
 	// Allows you to cancel all running routines
 	public boolean cancelCurrentRoutines = false;
@@ -111,7 +112,8 @@ public class Commands {
 		copy.cancelCurrentRoutines = this.cancelCurrentRoutines;
 		copy.leftStickInput = this.leftStickInput;
 		copy.rightStickInput = this.rightStickInput;
-		copy.operatorStickInput = this.operatorStickInput;
+		copy.sliderStickInput = this.sliderStickInput;
+		copy.climberStickInput = this.climberStickInput;
 
 		for (Routine r : this.wantedRoutines) {
 			copy.wantedRoutines.add(r);

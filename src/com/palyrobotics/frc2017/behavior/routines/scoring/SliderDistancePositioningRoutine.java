@@ -2,12 +2,19 @@ package com.palyrobotics.frc2017.behavior.routines.scoring;
 
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
+import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.subsystems.Slider;
 import com.palyrobotics.frc2017.subsystems.Spatula;
 import com.palyrobotics.frc2017.subsystems.Slider.SliderState;
 import com.palyrobotics.frc2017.subsystems.Spatula.SpatulaState;
 import com.palyrobotics.frc2017.util.Subsystem;
 
+/**
+ * Moves the slider to a setpoint
+ * NOTE: When unit testing, set Robot.RobotState appropriately
+ * @author Prashanti
+ */
 public class SliderDistancePositioningRoutine extends Routine {
 	// Whether this routine is allowed to run or not
 	private boolean mAllowed;
@@ -24,7 +31,7 @@ public class SliderDistancePositioningRoutine extends Routine {
 	@Override
 	public Commands update(Commands commands) {
 		if (mAllowed) {
-			commands.wantedSliderState = Slider.SliderState.ENCODER_POSITIONING;
+			commands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
 		} else {
 			commands.wantedSliderState = Slider.SliderState.IDLE;
 		}
@@ -50,7 +57,11 @@ public class SliderDistancePositioningRoutine extends Routine {
 
 	@Override
 	public boolean finished() {
-		return !mAllowed || slider.onTarget();
+		if (Robot.getRobotState().gamePeriod == RobotState.GamePeriod.AUTO) {
+			return false;
+		} else {
+			return !mAllowed || slider.onTarget();
+		}
 	}
 
 	@Override

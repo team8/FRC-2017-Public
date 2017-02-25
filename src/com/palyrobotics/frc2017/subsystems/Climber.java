@@ -122,7 +122,7 @@ public class Climber extends Subsystem implements SubsystemLoop {
 			mOutput.setPercentVBus(0);
 			break;
 		case MANUAL:
-			mOutput.setPercentVBus(-commands.operatorStickInput.y * kClimbScaleFactor);
+			mOutput.setPercentVBus(-commands.climberStickInput.y * kClimbScaleFactor);
 			break;
 		case WAITING_FOR_ROPE:	// unused
 			mOutput.setPercentVBus(kRopeGrabSpeed);

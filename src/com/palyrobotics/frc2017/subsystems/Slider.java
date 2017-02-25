@@ -3,7 +3,6 @@ package com.palyrobotics.frc2017.subsystems;
 import java.util.HashMap;
 import java.util.Optional;
 
-import com.ctre.CANTalon.TalonControlMode;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Constants;
@@ -29,8 +28,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	public enum SliderState {
 		IDLE,
 		MANUAL,
-		ENCODER_POSITIONING,
-		POTENTIOMETER_POSITIONING,	// only used when encoder broken
+		AUTOMATIC_POSITIONING,
 		VISION_POSITIONING,			// unused
 	}
 	
@@ -45,8 +43,6 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	private SliderTarget mTarget;
 	
 	private RobotState mRobotState;
-
-	private double mEncoderOffset;
 	
 	//Potentiometer PID
 	private Optional<Double> previousPotentiometer = Optional.empty();
@@ -67,12 +63,8 @@ public class Slider extends Subsystem implements SubsystemLoop {
 			(Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikSliderPotentiometer : Gains.aegirSliderPotentiometer;
 	
 	//Miscellaneous constants
-	private static final double kScalar = 0.5;
-	private static final double kCalibratingVoltage = 0.2;
-	private static final double kMaxVoltage = 0.5;
 	private static final int kPotentiometerTolerance = 0;
 	private static final int kEncoderTolerance = 0;
-	private static final int kCalibrationSetpoint = 0;
 	
 	private CANTalonOutput mOutput = new CANTalonOutput();
 	
@@ -136,13 +128,15 @@ public class Slider extends Subsystem implements SubsystemLoop {
 				mTarget = SliderTarget.NONE;
 				setManualOutput(commands);
 				break;
-			case ENCODER_POSITIONING:
+			case AUTOMATIC_POSITIONING:
 				mTarget = commands.robotSetpoints.sliderSetpoint;
-				setSetpointsEncoder();
-				break;
-			case POTENTIOMETER_POSITIONING:
-				mTarget = commands.robotSetpoints.sliderSetpoint;
-				setSetpointsPotentiometer();
+				if (isEncoderFunctional) {
+					setSetpointsEncoder();
+				} else if (isPotentiometerFunctional) {
+					setSetpointsPotentiometer();
+				} else {
+					System.err.println("Attempting automatic positioning without sensors!");
+				}
 				break;
 			case VISION_POSITIONING:	// unused
 				setSetpointsVision();
@@ -154,7 +148,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	 * Encapsulate to use in both run and update methods
 	 */
 	private void setManualOutput(Commands commands) {
-		mOutput.setVoltage(commands.operatorStickInput.x*Constants.kSliderMaxVoltage);
+		mOutput.setVoltage(commands.sliderStickInput.x*Constants.kSliderMaxVoltage);
 	}
 	
 	/**

@@ -204,7 +204,8 @@ public class HardwareAdapter {
 
 		public final Joystick driveStick = new Joystick(0);
 		public final Joystick turnStick = new Joystick(1);
-		public final Joystick operatorStick = new Joystick(2);
+		public final Joystick sliderStick = new Joystick(2);
+		public final Joystick climberStick = new Joystick(3);
 
 		private Joysticks() {
 		}

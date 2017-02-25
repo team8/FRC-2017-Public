@@ -212,6 +212,7 @@ class HardwareUpdater {
 //		HardwareAdapter.getInstance().getIntake().rightIntakeMotor.set(-mIntake.getOutput());
 		// CLIMBER
 		updateCANTalonSRX(HardwareAdapter.getInstance().getClimber().climberMotor, mClimber.getOutput(), 1);
+		//System.out.println(mClimber.getOutput());
 	}
 
 	/**

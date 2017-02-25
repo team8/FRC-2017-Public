@@ -9,11 +9,9 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 
 import com.palyrobotics.frc2017.behavior.Routine;
-import com.palyrobotics.frc2017.behavior.routines.*;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Commands.*;
 import com.palyrobotics.frc2017.config.Commands.JoystickInput.XboxInput;
-import com.palyrobotics.frc2017.subsystems.Climber.ClimberState;
 import com.palyrobotics.frc2017.subsystems.Intake;
 import com.palyrobotics.frc2017.subsystems.Spatula;
 
@@ -35,7 +33,8 @@ public class OperatorInterface {
 	private HardwareAdapter.Joysticks mJoysticks = HardwareAdapter.getInstance().getJoysticks();
 	private Joystick mDriveStick = mJoysticks.driveStick;
 	private Joystick mTurnStick = mJoysticks.turnStick;
-	private Joystick mOperatorStick = mJoysticks.operatorStick;
+	private Joystick mSliderStick = mJoysticks.sliderStick;
+	private Joystick mClimberStick = mJoysticks.climberStick;
 	
 	// Adjust parameters as needed, default for now
 	private DoubleClickTimer sliderLeft = new DoubleClickTimer();
@@ -72,40 +71,40 @@ public class OperatorInterface {
 		//TODO figure out flipper controls
 		//TODO wait a certain amount of time before being able to toggle again
 		// Left Flipper
-		if (mOperatorStick.getRawButton(1)) {
+		if (mSliderStick.getRawButton(1)) {
 			newCommands.wantedFlipperSignal.leftFlipper = DoubleSolenoid.Value.kForward;
-		} else if (mOperatorStick.getRawButton(1)) {
+		} else if (mSliderStick.getRawButton(1)) {
 			newCommands.wantedFlipperSignal.leftFlipper = DoubleSolenoid.Value.kReverse;
 		}
 		//Right Flipper
-		if (mOperatorStick.getRawButton(1)) {
+		if (mSliderStick.getRawButton(1)) {
 			newCommands.wantedFlipperSignal.rightFlipper = DoubleSolenoid.Value.kForward;
-		} else if (mOperatorStick.getRawButton(1)) {
+		} else if (mSliderStick.getRawButton(1)) {
 			newCommands.wantedFlipperSignal.rightFlipper = DoubleSolenoid.Value.kReverse;
 		}
 		
 		// Slider
-		if (mOperatorStick.getRawButton(1)) {
+		if (mSliderStick.getRawButton(1)) {
 			newCommands.wantedSliderState = Slider.SliderState.IDLE;
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.NONE;
-		} else if (mOperatorStick.getRawButton(4)) {	// opposite of preferred thumb position
+		} else if (mSliderStick.getRawButton(4)) {	// opposite of preferred thumb position
 			newCommands.wantedSliderState = Slider.SliderState.MANUAL;
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.NONE;
 			newCommands.addWantedRoutine(new ManualSliderControlRoutine());
-		} else if (mOperatorStick.getRawButton(5)) {	// preferred thumb position
-			newCommands.wantedSliderState = Slider.SliderState.ENCODER_POSITIONING;
+		} else if (mSliderStick.getRawButton(5)) {	// preferred thumb position
+			newCommands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.CENTER;
 			newCommands.addWantedRoutine(new SliderDistancePositioningRoutine());
-		} else if (mOperatorStick.getRawButton(8)) {
-			newCommands.wantedSliderState = Slider.SliderState.ENCODER_POSITIONING;
+		} else if (mSliderStick.getRawButton(8)) {
+			newCommands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.LEFT;
 			if (sliderLeft.twice()) {
 				newCommands.addWantedRoutine(new SliderDistancePositioningAutocorrectRoutine());
 			} else {
 				newCommands.addWantedRoutine(new SliderDistancePositioningRoutine());
 			}
-		} else if (mOperatorStick.getRawButton(9)) {
-			newCommands.wantedSliderState = Slider.SliderState.ENCODER_POSITIONING;
+		} else if (mSliderStick.getRawButton(9)) {
+			newCommands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.RIGHT;
 			if (sliderRight.twice()) {
 				newCommands.addWantedRoutine(new SliderDistancePositioningAutocorrectRoutine());
@@ -113,43 +112,37 @@ public class OperatorInterface {
 				newCommands.addWantedRoutine(new SliderDistancePositioningRoutine());
 			}
 		}
-		newCommands.operatorStickInput.x = mOperatorStick.getX();
+		newCommands.sliderStickInput.x = mSliderStick.getX();
 		
 		// Spatula
-		if (mOperatorStick.getRawButton(3)) {
+		if (mSliderStick.getRawButton(3)) {
 			newCommands.wantedSpatulaState = Spatula.SpatulaState.UP;
-		} else if (mOperatorStick.getRawButton(2)) {
+		} else if (mSliderStick.getRawButton(2)) {
 			newCommands.wantedSpatulaState = Spatula.SpatulaState.DOWN;
 		}
 
 		// Intake
-		if (mOperatorStick.getRawButton(1)) {
+		if (mSliderStick.getRawButton(1)) {
 			newCommands.wantedIntakeState = Intake.IntakeState.INTAKE;
-		} else if (mOperatorStick.getRawButton(11)) {
+		} else if (mSliderStick.getRawButton(11)) {
 			newCommands.wantedIntakeState = Intake.IntakeState.EXPEL;
 		} else {
 			newCommands.wantedIntakeState = Intake.IntakeState.IDLE;
 		}
 		
 		// Climber
-//		if (mOperatorStick.getRawButton(7)) { // overall cancel button for automatic
-//			newCommands.wantedClimberState = Climber.ClimberState.IDLE;
-//		} else if (mOperatorStick.getRawButton(6)) {
-//			newCommands.wantedClimberState = Climber.ClimberState.WAITING_FOR_ROPE;
-//		} else if (mOperatorStick.getY() > 0) {
-//			newCommands.wantedClimberState = Climber.ClimberState.MANUAL;
-//		}
-		if (mOperatorStick.getY() != 0) {
+		if (mClimberStick.getY() != 0) {
 			newCommands.wantedClimberState = Climber.ClimberState.MANUAL;
 		} else {
 			newCommands.wantedClimberState = Climber.ClimberState.IDLE;
 		}
-
-		newCommands.operatorStickInput = new XboxInput(mOperatorStick.getX(), mOperatorStick.getY(), mOperatorStick.getX(), mOperatorStick.getY());
 		// Left Stick trigger cancels current routine
 		newCommands.cancelCurrentRoutines = mDriveStick.getTrigger();
+
 		newCommands.leftStickInput = new JoystickInput(mDriveStick.getX(), mDriveStick.getY(), mDriveStick.getTrigger());
 		newCommands.rightStickInput = new JoystickInput(mTurnStick.getX(), mTurnStick.getY(), mTurnStick.getTrigger());
+		newCommands.sliderStickInput = new JoystickInput(mSliderStick.getX(), mSliderStick.getY(), mSliderStick.getTrigger());
+		newCommands.climberStickInput = new JoystickInput(mClimberStick.getX(), mClimberStick.getY(), mClimberStick.getTrigger());
 
 		return newCommands;
 	}

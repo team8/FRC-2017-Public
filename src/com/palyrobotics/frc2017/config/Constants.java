@@ -34,8 +34,8 @@ public class Constants extends ConstantsBase {
 	public static double kAcceptableTurnAngleError = 1;
 	public static double kAcceptableSliderPositionError;
 
-	public static double kSliderMaxVoltage = 4.0;
-	public static double kSliderPeakOutputVoltage = 4.0;
+	public static double kSliderMaxVoltage = 6.0; // open loop limit
+	public static double kSliderPeakOutputVoltage = 4.0; // closed loop limit
 	public static double kClimberMaxVoltage = 5.0;
 
 	/* !!! End of editable Constants! !!!
