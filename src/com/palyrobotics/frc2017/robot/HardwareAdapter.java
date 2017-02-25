@@ -1,15 +1,11 @@
 package com.palyrobotics.frc2017.robot;
 
 import com.ctre.CANTalon;
-import com.mindsensors.CANSD540;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.robot.team254.lib.util.ADXRS453_Gyro;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.interfaces.Potentiometer;
-//TODO: Set the DPP's somehow
-
 /**
  * Represents all hardware components of the robot.
  * Singleton class. Should only be used in robot package, and 254lib.
@@ -29,9 +25,9 @@ public class HardwareAdapter {
 		protected static DrivetrainHardware getInstance() {
 			return instance;
 		}
-		public final CANTalon leftSlaveTalon;
+		public final CANTalon leftSlave1Talon;
 		public final CANTalon leftMasterTalon;
-		public final CANTalon secondLeftSlaveTalon;
+		public final CANTalon leftSlave2Talon;
 		public final CANTalon rightSlaveTalon;
 		public final CANTalon rightMasterTalon;
 		public final CANTalon secondRightSlaveTalon;
@@ -44,8 +40,8 @@ public class HardwareAdapter {
 		private DrivetrainHardware() {
 			if(Constants.kRobotName == Constants.RobotName.DERICA) {
 				leftMasterTalon = new CANTalon(Constants2016.kDericaLeftDriveMasterDeviceID);
-				leftSlaveTalon = new CANTalon(Constants2016.kDericaLeftDriveSlaveDeviceID);
-				secondLeftSlaveTalon = null;
+				leftSlave1Talon = new CANTalon(Constants2016.kDericaLeftDriveSlaveDeviceID);
+				leftSlave2Talon = null;
 				rightMasterTalon = new CANTalon(Constants2016.kDericaRightDriveMasterDeviceID);
 				rightSlaveTalon = new CANTalon(Constants2016.kDericaRightDriveSlaveDeviceID);
 				secondRightSlaveTalon = null;
@@ -53,21 +49,21 @@ public class HardwareAdapter {
 				// no shifter solenoid
 			} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
 				leftMasterTalon = new CANTalon(Constants.kAegirLeftDriveMasterDeviceID);
-				leftSlaveTalon = new CANTalon(Constants.kAegirLeftDriveSlaveDeviceID);
-				secondLeftSlaveTalon = new CANTalon(Constants.kAegirLeftDriveOtherSlaveDeviceID);
+				leftSlave1Talon = new CANTalon(Constants.kAegirLeftDriveSlaveDeviceID);
+				leftSlave2Talon = new CANTalon(Constants.kAegirLeftDriveOtherSlaveDeviceID);
 				rightMasterTalon = new CANTalon(Constants.kAegirRightDriveMasterDeviceID);
 				rightSlaveTalon = new CANTalon(Constants.kAegirRightDriveSlaveDeviceID);
 				secondRightSlaveTalon = new CANTalon(Constants.kAegirRightDriveOtherSlaveDeviceID);
 				
-				gyro = new ADXRS453_Gyro();
+				gyro = null;
 			} else {
 				leftMasterTalon = new CANTalon(Constants.kSteikLeftDriveMasterDeviceID);
-				leftSlaveTalon = new CANTalon(Constants.kSteikLeftDriveSlaveDeviceID);
-				secondLeftSlaveTalon = new CANTalon(Constants.kSteikLeftDriveOtherSlaveDeviceID);
+				leftSlave1Talon = new CANTalon(Constants.kSteikLeftDriveSlaveDeviceID);
+				leftSlave2Talon = new CANTalon(Constants.kSteikLeftDriveOtherSlaveDeviceID);
 				rightMasterTalon = new CANTalon(Constants.kSteikRightDriveMasterDeviceID);
 				rightSlaveTalon = new CANTalon(Constants.kSteikRightDriveSlaveDeviceID);
 				secondRightSlaveTalon = new CANTalon(Constants.kSteikRightDriveOtherSlaveDeviceID);
-				gyro = new ADXRS453_Gyro();
+				gyro = null;
 			}
 		}
 	}
@@ -110,16 +106,16 @@ public class HardwareAdapter {
 			return instance;
 		}
 		public final CANTalon sliderMotor;
-		public final AnalogPotentiometer sliderPotentiometer;
+		public final AnalogInput sliderPotentiometer;
 		
 		private SliderHardware() {
 			if(Constants.kRobotName == Constants.RobotName.STEIK) {
 				sliderMotor = new CANTalon(Constants.kSteikSliderMotorDeviceID);
-				sliderPotentiometer = new AnalogPotentiometer(Constants.kSteikSliderPotentiometer, Constants.kSteikSliderPotentiometerFullRange, Constants.kSteikSliderPotentiometerOffset);
+				sliderPotentiometer = new AnalogInput(Constants.kSteikSliderPotentiometer);
 			}
 			else if (Constants.kRobotName == Constants.RobotName.AEGIR){
 				sliderMotor = new CANTalon(Constants.kAegirSliderMotorDeviceID);
-				sliderPotentiometer = new AnalogPotentiometer(Constants.kAegirSliderPotentiometer, Constants.kAegirSliderPotentiometerFullRange, Constants.kAegirSliderPotentiometerOffset);
+				sliderPotentiometer = new AnalogInput(Constants.kAegirSliderPotentiometerPort);
 			}
 			else {
 				sliderMotor = null;
@@ -221,7 +217,7 @@ public class HardwareAdapter {
 	public FlippersHardware getFlippers() {
 		return FlippersHardware.getInstance();
 	}
-	public SliderHardware getSimpleSlider() {
+	public SliderHardware getSlider() {
 		return SliderHardware.getInstance();
 	}
 	public SpatulaHardware getSpatula() {

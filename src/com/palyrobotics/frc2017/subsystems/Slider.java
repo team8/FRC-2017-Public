@@ -23,7 +23,6 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	public static Slider getInstance() {
 		return instance;
 	}
-
 	
 	//all code assumes that right is 0 and left and center are both positive on both pot and encoder
 	
@@ -74,16 +73,14 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	private static final int kPotentiometerTolerance = 0;
 	private static final int kEncoderTolerance = 0;
 	private static final int kCalibrationSetpoint = 0;
+	private static final boolean isCalibrated = false;
+	private static final double kCenterPotPosition = 4;
 	
 	private CANTalonOutput mOutput = new CANTalonOutput();
 	
 	private Slider() {
 		super("Slider");
-		
-		if (isEncoderFunctional) mState = SliderState.ENCODER_POSITIONING;
-		else if (isPotentiometerFunctional) mState = SliderState.POTENTIOMETER_POSITIONING;
-		else mState = SliderState.MANUAL;
-		
+				
 		mEncoderTargetPositions.put(SliderTarget.LEFT, 0.0);
 		mEncoderTargetPositions.put(SliderTarget.CENTER, 0.0);
 		mEncoderTargetPositions.put(SliderTarget.RIGHT, 0.0);
@@ -129,6 +126,11 @@ public class Slider extends Subsystem implements SubsystemLoop {
 			throw new IllegalAccessException();
 		}
 		
+		if(!isCalibrated) {
+			double distance_to_center = mRobotState.sliderPotentiometer - kCenterPotPosition;
+			mEncoderOffset =  mRobotState.sliderEncoder + (distance_to_center / 4096.0f) * 10.0f;
+		}
+		
 		mState = commands.wantedSliderState;
 		
 		switch(mState) {
@@ -137,9 +139,8 @@ public class Slider extends Subsystem implements SubsystemLoop {
 				mOutput.setPercentVBus(0);
 				break;
 			case MANUAL:
-				System.out.println("Manual");
 				mTarget = SliderTarget.NONE;
-				mOutput.setPercentVBus(Math.max(-kMaxVoltage, Math.min(kMaxVoltage, commands.operatorStickInput.x * kScalar)));
+				setManualOutput(commands);
 				break;
 			case ENCODER_POSITIONING:
 				mTarget = commands.robotSetpoints.sliderSetpoint;
@@ -153,6 +154,13 @@ public class Slider extends Subsystem implements SubsystemLoop {
 				setSetpointsVision();
 				break;
 		}
+	}
+	
+	/**
+	 * Encapsulate to use in both run and update methods
+	 */
+	private void setManualOutput(Commands commands) {
+		mOutput.setVoltage(commands.operatorStickInput.x*Constants.kSliderMaxVoltage);
 	}
 	
 	/**

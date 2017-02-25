@@ -116,7 +116,7 @@ public class Constants extends ConstantsBase {
 	// SLIDER
 	public static int kAegirSliderMotorDeviceID = 10;
 	public static int kAegirSliderMotorSpeed = 0;
-	public static int kAegirSliderPotentiometer = 3;
+	public static int kAegirSliderPotentiometerPort = 3;
 	public static int kAegirSliderPotentiometerFullRange = 0;
 	public static int kAegirSliderPotentiometerOffset;
 

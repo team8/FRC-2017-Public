@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
  */
 public class Spatula extends Subsystem implements SubsystemLoop {
 	private static Spatula instance = new Spatula();
-	private SpatulaState mState;
+	private SpatulaState mState = SpatulaState.UP;
 	public static Spatula getInstance() {
 		return instance;
 	}
@@ -44,14 +44,13 @@ public class Spatula extends Subsystem implements SubsystemLoop {
 
 	@Override
 	public void update(Commands commands, RobotState robotState) {
-		//TODO forward vs reverse
 		switch (commands.wantedSpatulaState) {
 		case UP:
-			mOutput = DoubleSolenoid.Value.kForward;
+			mOutput = DoubleSolenoid.Value.kReverse;
 			mState = SpatulaState.UP;
 			break;
 		case DOWN:
-			mOutput = DoubleSolenoid.Value.kReverse;
+			mOutput = DoubleSolenoid.Value.kForward;
 			mState = SpatulaState.DOWN;
 			break;
 		}

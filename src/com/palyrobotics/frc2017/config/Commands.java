@@ -54,7 +54,6 @@ public class Commands {
 		
 		public Optional<DriveSignal> drivePowerSetpoint = Optional.empty();
 		public Slider.SliderTarget sliderSetpoint = Slider.SliderTarget.NONE;
-		public Optional<Double> sliderPowerSetpoint = Optional.empty();
 
 		/**
 		 * Resets all the setpoints
@@ -122,6 +121,7 @@ public class Commands {
 		copy.robotSetpoints = new Setpoints();
 		// Copy optionals that are present
 		robotSetpoints.drivePowerSetpoint.ifPresent((DriveSignal signal) -> copy.robotSetpoints.drivePowerSetpoint = Optional.of(signal));
+		copy.robotSetpoints.sliderSetpoint = robotSetpoints.sliderSetpoint;
 		return copy;
 	}
 }

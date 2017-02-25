@@ -1,4 +1,4 @@
-package com.palyrobotics.frc2017.behavior.routines;
+package com.palyrobotics.frc2017.behavior.routines.scoring;
 
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;

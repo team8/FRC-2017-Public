@@ -51,8 +51,6 @@ public class Robot extends IterativeRobot {
 		SystemManager.getInstance().add(new RobotData());
 	}
 	
-	private AnalogInput pot = new AnalogInput(3);
-
 	@Override
 	public void robotInit() {
 		System.out.println("Start robotInit() for "+Constants.kRobotName.toString());

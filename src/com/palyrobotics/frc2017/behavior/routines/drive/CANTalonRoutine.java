@@ -51,7 +51,7 @@ public class CANTalonRoutine extends Routine {
 	public boolean finished() {
 		double leftScalar = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks : Constants.kDriveInchesToTicks;
 		double rightScalar = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks : Constants.kDriveInchesToTicks;
-		if(mSignal.leftMotor.getSetpoint() * leftScalar != Robot.getRobotState().leftSetpoint || mSignal.rightMotor.getSetpoint() * rightScalar != Robot.getRobotState().rightStepoint 
+		if(mSignal.leftMotor.getSetpoint() * leftScalar != Robot.getRobotState().leftSetpoint || mSignal.rightMotor.getSetpoint() * rightScalar != Robot.getRobotState().rightSetpoint 
 				|| mSignal.leftMotor.getControlMode() != Robot.getRobotState().leftControlMode || mSignal.rightMotor.getControlMode() != Robot.getRobotState().rightControlMode) {
 			System.out.println("Mismatched desired talon and actual talon states!");
 			return false;

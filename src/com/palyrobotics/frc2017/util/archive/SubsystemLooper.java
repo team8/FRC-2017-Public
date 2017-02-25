@@ -30,6 +30,7 @@ public class SubsystemLooper {
 
 	// Used for secondary printer loop
 	private boolean mPrinting = false;
+	private boolean mAllowPrinting = false;
 	private final double kPrintRate = Constants.kSubsystemPrintLooperDt;
 	private final Notifier mPrintNotifier;
 	private final Object mPrintingLock = new Object();
@@ -59,7 +60,7 @@ public class SubsystemLooper {
 		@Override
 		public void runCrashTracked() {
 			synchronized (mPrintingLock) {
-				if (mPrinting) {
+				if (mPrinting && mAllowPrinting) {
 					double now = Timer.getFPGATimestamp();
 					for (SubsystemLoop loop : mLoops) {
 						loop.printStatus();

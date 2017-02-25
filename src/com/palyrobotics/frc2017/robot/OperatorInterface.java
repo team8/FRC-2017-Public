@@ -2,6 +2,7 @@ package com.palyrobotics.frc2017.robot;
 
 import com.palyrobotics.frc2017.behavior.routines.scoring.ManualSliderControlRoutine;
 import com.palyrobotics.frc2017.behavior.routines.scoring.SliderDistancePositioningAutocorrectRoutine;
+import com.palyrobotics.frc2017.behavior.routines.scoring.SliderDistancePositioningRoutine;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.DoubleClickTimer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;

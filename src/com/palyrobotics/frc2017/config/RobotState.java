@@ -21,7 +21,7 @@ public class RobotState {
 	public TalonControlMode rightControlMode;
 	
 	public double leftSetpoint;
-	public double rightStepoint;
+	public double rightSetpoint;
 	
 	// Tracks total voltage from kPDP
 	public double totalVoltageDraw;
