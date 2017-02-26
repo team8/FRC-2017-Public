@@ -6,7 +6,6 @@ import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.util.Pose;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
-import com.palyrobotics.frc2017.robot.team254.lib.util.LegacyPose;
 
 /**
  * Turns drivetrain using the gyroscope and bang-bang control loop

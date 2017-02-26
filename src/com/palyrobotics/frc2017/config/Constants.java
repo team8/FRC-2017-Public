@@ -67,30 +67,30 @@ public class Constants extends ConstantsBase {
 	public static int kSteikRightDriveBackMotorPDP = 0;
 	public static int kSteikRightDriveThirdMotorPDP = 0;
 
-	//FLIPPERS
+	// FLIPPERS
 	public static int kSteikLeftFlipperPortExtend = 0;
 	public static int kSteikLeftFlipperPortRetract = 0;
 	public static int kSteikRightFlipperPortExtend = 0;
 	public static int kSteikRightFlipperPortRetract = 0;
 
-	//SLIDER
+	// SLIDER
 	public static int kSteikSliderMotorDeviceID = 0;
 	public static int kSteikSliderMotorSpeed = 0;
 	public static int kSteikSliderPotentiometer = 0;
 	public static int kSteikSliderPotentiometerFullRange = 0;
 	public static int kSteikSliderPotentiometerOffset;
 
-	//SPATULA
+	// SPATULA
 	public static int kSteikSpatulaPortExtend = 1;
 	public static int kSteikSpatulaPortRetract = 0;
 
-	//INTAKE
+	// INTAKE
 	public static int kSteikLeftIntakeMotorDeviceID = 0;
 	public static int kSteikLeftIntakeMotorPDP = 0;
 	public static int kSteikRightIntakeMotorDeviceID = 0;
 	public static int kSteikRightIntakeMotorPDP = 0;
 
-	//CLIMBER
+	// CLIMBER
 	public static int kSteikClimberMotorDeviceID = 9;
 	public static int kSteikClimberMotorPDP = 14;
 
@@ -99,6 +99,10 @@ public class Constants extends ConstantsBase {
 	 *  AEGIR ELECTRONIC CONSTANTS
 	 * ************************************
 	 */
+	// PDP
+	public static int kAegirPDPDeviceID = 11;
+	
+	// DRIVETRAIN
 	public static int kAegirLeftDriveMasterDeviceID  = 1;
 	public static int kAegirLeftDriveSlaveDeviceID = 2;
 	public static int kAegirLeftDriveOtherSlaveDeviceID = 3;
@@ -112,7 +116,7 @@ public class Constants extends ConstantsBase {
 	public static int kAegirRightDriveBackMotorPDP = 0;
 	public static int kAegirRightDriveThirdMotorPDP = 0;
 	
-	// FLIPPER
+	// FLIPPERS
 	public static int kAegirLeftFlipperPortExtend = 0;
 	public static int kAegirLeftFlipperPortRetract = 1;
 	public static int kAegirRightFlipperPortExtend = 2;
@@ -125,11 +129,11 @@ public class Constants extends ConstantsBase {
 	public static int kAegirSliderPotentiometerFullRange = 0;
 	public static int kAegirSliderPotentiometerOffset;
 
-	//SPATULA
+	// SPATULA
 	public static int kAegirSpatulaPortExtend = 1;
 	public static int kAegirSpatulaPortRetract = 0;
 
-	//INTAKE
+	// INTAKE
 	public static int kAegirLeftIntakeMotorDeviceID = 14;
 	public static int kAegirLeftIntakeMotorPDP = 11;
 	public static int kAegirRightIntakeMotorDeviceID = 12;
@@ -140,9 +144,9 @@ public class Constants extends ConstantsBase {
 	public static int kAegirClimberMotorPDP = 14;
 
 	// !!! Physical constants
-	// TODO: Ailyn insert the autonomous constants here
 	public static double kBaseLineDistanceInches = 93.3;
 	public static double kCenterPegDistanceInches = 110;
+	// For side peg auto, robot starts 4 gear widths (44") from center of alliance wall
 	public static double kSidePegDistanceForwardInches = 122.5688;
 	public static double kSidePegDistanceToAirshipInches = 17.5688;
 

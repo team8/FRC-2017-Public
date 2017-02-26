@@ -47,7 +47,6 @@ public class SequentialRoutine extends Routine {
 			
 			// Start the next routine
 			mRoutines.get(mRunningRoutineIndex).start();
-			// TODO: Update the new routine once or no?
 		}
 		return output;
 	}
@@ -76,7 +75,7 @@ public class SequentialRoutine extends Routine {
 	public String getName() {
 		String name = "SequentialRoutine of ";
 		for(Routine routine : mRoutines) {
-			name+= (routine.getName() + " ");
+			name += (routine.getName() + " ");
 		}
 		return name;
 	}

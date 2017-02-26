@@ -3,7 +3,6 @@ package com.palyrobotics.frc2017.subsystems.controllers;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.RobotState;
-import com.palyrobotics.frc2017.robot.team254.lib.util.LegacyPose;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Pose;

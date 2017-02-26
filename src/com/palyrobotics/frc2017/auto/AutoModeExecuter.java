@@ -1,7 +1,6 @@
 package com.palyrobotics.frc2017.auto;
 
 import com.palyrobotics.frc2017.behavior.RoutineManager;
-import com.palyrobotics.frc2017.config.Commands;
 
 /**
  * Runs an auto mode on its own thread, needs a routine manager

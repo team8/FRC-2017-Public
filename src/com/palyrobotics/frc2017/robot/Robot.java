@@ -3,7 +3,6 @@ package com.palyrobotics.frc2017.robot;
 import com.palyrobotics.frc2017.auto.AutoMode;
 import com.palyrobotics.frc2017.auto.AutoModeExecuter;
 import com.palyrobotics.frc2017.auto.AutoModeSelector;
-import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.RoutineManager;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Constants;
@@ -14,9 +13,7 @@ import com.palyrobotics.frc2017.util.archive.SubsystemLooper;
 import com.palyrobotics.frc2017.robot.team254.lib.util.RobotData;
 import com.palyrobotics.frc2017.robot.team254.lib.util.SystemManager;
 
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Robot extends IterativeRobot {
 	// Instantiate singleton classes
@@ -138,8 +135,6 @@ public class Robot extends IterativeRobot {
 		// Stop routine_request
 		mRoutineManager.reset(commands);
 		
-		//commands = new Commands();	// reset commands
-
 		// Stop control loops
 		mSubsystemLooper.stop();
 

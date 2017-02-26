@@ -3,7 +3,6 @@ package com.palyrobotics.frc2017.config;
 import java.util.Optional;
 
 import com.ctre.CANTalon.TalonControlMode;
-import com.palyrobotics.frc2017.robot.team254.lib.util.LegacyPose;
 import com.palyrobotics.frc2017.util.Pose;
 
 /**
@@ -19,6 +18,7 @@ public class RobotState {
 	// Updated by autoInit, teleopInit, disabledInit
 	public GamePeriod gamePeriod;
 
+	// Drivetrain
 	public TalonControlMode leftControlMode;
 	public TalonControlMode rightControlMode;
 	
@@ -31,6 +31,7 @@ public class RobotState {
 	// Pose stores drivetrain sensor data
 	public Pose drivePose = new Pose(0,0,0,0,0, 0, 0,0,0,0);
 
+	// Slider
 	public double sliderPotentiometer;
 	public double sliderEncoder;
 	public double sliderVelocity;

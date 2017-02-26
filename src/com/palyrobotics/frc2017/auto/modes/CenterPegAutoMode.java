@@ -8,15 +8,14 @@ import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.BBTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.Gains;
-import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
 import java.util.ArrayList;
 
 /**
  * Created by Nihar on 2/11/17.
+ * BBTurnAngle might be replaced with EncoderTurnAngle if no gyro
  */
 public class CenterPegAutoMode extends AutoMode {
 	// Represents the variation of center peg auto based on what to do after scoring
@@ -53,7 +52,7 @@ public class CenterPegAutoMode extends AutoMode {
 		driveForward.rightMotor.setPosition(Constants.kCenterPegDistanceInches, mGains);
 		
 		sequence.add(new CANTalonRoutine(driveForward));
-		sequence.add(new TimeoutRoutine(2.5));
+		sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
 
 		// Back off from the peg after 2.5 seconds
 		DriveSignal driveBack = DriveSignal.getNeutralSignal();

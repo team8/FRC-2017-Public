@@ -4,7 +4,6 @@ import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.subsystems.controllers.CANTalonDriveController;
 import com.palyrobotics.frc2017.util.*;
-import com.palyrobotics.frc2017.robot.team254.lib.util.LegacyPose;
 import com.palyrobotics.frc2017.subsystems.controllers.BangBangTurnAngleController;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.util.archive.CheesyDriveHelper;

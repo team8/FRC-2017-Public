@@ -1,8 +1,6 @@
 package com.palyrobotics.frc2017.util;
 
 import com.ctre.CANTalon;
-import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.Gains;
 
 /**

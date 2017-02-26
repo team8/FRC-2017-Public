@@ -116,7 +116,6 @@ public class Climber extends Subsystem implements SubsystemLoop {
 			break;
 		}
 		// Calculates output
-		//System.out.println(mState);
 		switch (mState) {
 		case IDLE:
 			mOutput.setPercentVBus(0);
@@ -144,7 +143,6 @@ public class Climber extends Subsystem implements SubsystemLoop {
 	}
 
 	public CANTalonOutput getOutput() {
-		//System.out.println(mOutput);
 		return mOutput;
 	}
 

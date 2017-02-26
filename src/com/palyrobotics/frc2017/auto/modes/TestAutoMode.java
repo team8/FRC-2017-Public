@@ -8,12 +8,11 @@ import com.palyrobotics.frc2017.auto.AutoModeEndedException;
  * An AutoMode for running test autonomous
  */
 public class TestAutoMode extends AutoMode {
-	// Current configured to test gyro turn angle
+	// Currently configured to test gyro turn angle
 
 	@Override
 	protected void execute() throws AutoModeEndedException {
 		drive.setTurnAngleSetpoint(90);
-//		drive.setDistanceSetpoint(1);
 	}
 
 	@Override

@@ -48,7 +48,6 @@ public class SliderDistancePositioningAutocorrectRoutine extends Routine {
 			break;
 		case RAISING:
 			if(System.currentTimeMillis() - startTime > raiseTime) {
-				System.exit(1);
 				mState = DistancePositioningState.MOVING;
 			}
 			commands.wantedSpatulaState = Spatula.SpatulaState.UP;

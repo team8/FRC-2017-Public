@@ -97,7 +97,6 @@ public class Commands {
 	public boolean cancelCurrentRoutines = false;
 
 	/**
-	 *
 	 * @return a copy of these commands
 	 */
 	public Commands copy() {

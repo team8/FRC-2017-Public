@@ -4,18 +4,18 @@ import com.palyrobotics.frc2017.auto.AutoMode;
 import com.palyrobotics.frc2017.auto.AutoModeEndedException;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
+import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.BBTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.Gains;
-import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
 import java.util.ArrayList;
 
 /**
  * Created by Nihar on 2/11/17.
+ * BBTurnAngle might be replaced with EncoderTurnAngle if no gyro
  */
 public class SidePegAutoMode extends AutoMode {
 	// Might pivot differently when turning left vs right
@@ -84,7 +84,9 @@ public class SidePegAutoMode extends AutoMode {
 			sequence.add(new BBTurnAngleRoutine(kSidePegTurnAngleDegrees));
 		}
 		sequence.add(new CANTalonRoutine(driveToAirship));
+		sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
 		
+		//TODO: adjust distances
 		// Add the variants
 		backUp.leftMotor.setPosition(-3, mGains);
 		backUp.rightMotor.setPosition(-3, mGains);

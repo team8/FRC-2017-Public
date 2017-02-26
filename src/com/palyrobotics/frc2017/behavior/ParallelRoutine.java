@@ -64,7 +64,7 @@ public class ParallelRoutine extends Routine {
 	public String getName() {
 		String name = "ParallelRoutine of ";
 		for(Routine routine: mRoutines) {
-			name += routine.getName();
+			name += (routine.getName() + " ");
 		}
 		return name;
 	}

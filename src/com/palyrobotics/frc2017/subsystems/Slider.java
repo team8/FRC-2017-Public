@@ -175,7 +175,6 @@ public class Slider extends Subsystem implements SubsystemLoop {
 			return true;
 		}
 		if (!mRobotState.sliderClosedLoopError.isPresent()) {
-//			System.err.println("Closed loop error not found");
 			return false;
 		}
 		return Math.abs(mRobotState.sliderClosedLoopError.get()) < kEncoderTolerance && mRobotState.sliderVelocity == 0;

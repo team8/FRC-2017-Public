@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.*;
 public class HardwareAdapter {
 	// Hardware components at the top for maintenance purposes, variables and getters at bottom
 	/* 
-	 * DRIVETRAIN
+	 * DRIVETRAIN - 6 CANTalons
 	 */
 	public static class DrivetrainHardware {
 		private static DrivetrainHardware instance = new DrivetrainHardware();
@@ -46,7 +46,6 @@ public class HardwareAdapter {
 				rightSlaveTalon = new CANTalon(Constants2016.kDericaRightDriveSlaveDeviceID);
 				secondRightSlaveTalon = null;
 				gyro = new ADXRS453_Gyro();
-				// no shifter solenoid
 			} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
 				leftMasterTalon = new CANTalon(Constants.kAegirLeftDriveMasterDeviceID);
 				leftSlave1Talon = new CANTalon(Constants.kAegirLeftDriveSlaveDeviceID);
@@ -54,7 +53,6 @@ public class HardwareAdapter {
 				rightMasterTalon = new CANTalon(Constants.kAegirRightDriveMasterDeviceID);
 				rightSlaveTalon = new CANTalon(Constants.kAegirRightDriveSlaveDeviceID);
 				secondRightSlaveTalon = new CANTalon(Constants.kAegirRightDriveOtherSlaveDeviceID);
-				
 				gyro = null;
 			} else {
 				leftMasterTalon = new CANTalon(Constants.kSteikLeftDriveMasterDeviceID);
@@ -97,7 +95,7 @@ public class HardwareAdapter {
 	}
 
 	/**
-	 * SLIDER - 1 TalonSRX
+	 * SLIDER - 1 CANTalon
 	 */
 	public static class SliderHardware {
 		private static SliderHardware instance = new SliderHardware();
@@ -125,7 +123,7 @@ public class HardwareAdapter {
 	}
 
 	/**
-	 * SPATULA - one double solenoid
+	 * SPATULA - 1 double solenoid
 	 */
 	public static class SpatulaHardware {
 		private static SpatulaHardware instance = new SpatulaHardware();
@@ -146,7 +144,7 @@ public class HardwareAdapter {
 	}
 	
 	/*
-	 * INTAKE - two SD540C motors
+	 * INTAKE - 2 VictorSPs
 	 */
 	public static class IntakeHardware {
 		private static IntakeHardware instance = new IntakeHardware();
@@ -172,7 +170,7 @@ public class HardwareAdapter {
 	}
 
 	/*
-	 * CLIMBER - one SD540C motor
+	 * CLIMBER - 1 CANTalon
 	 */
 	public static class ClimberHardware {
 		private static ClimberHardware instance = new ClimberHardware();

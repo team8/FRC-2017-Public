@@ -9,10 +9,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 
 import com.palyrobotics.frc2017.behavior.Routine;
-import com.palyrobotics.frc2017.behavior.RoutineManager;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Commands.*;
-import com.palyrobotics.frc2017.config.Commands.JoystickInput.XboxInput;
 import com.palyrobotics.frc2017.subsystems.Intake;
 import com.palyrobotics.frc2017.subsystems.Spatula;
 
