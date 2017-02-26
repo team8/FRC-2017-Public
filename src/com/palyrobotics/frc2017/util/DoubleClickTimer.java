@@ -14,14 +14,14 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public class DoubleClickTimer {
 	//Default Values in milliseconds
-	public static final double DEFAULT_MIN_TOLERANCE = 200;
-	public static final double DEFAULT_MAX_TOLERANCE = 500;
-	public static final double DEFAULT_WAIT_TIME = 500;
+	public static final double DEFAULT_MIN_TOLERANCE = 0.2;
+	public static final double DEFAULT_MAX_TOLERANCE = 0.5;
+	public static final double DEFAULT_WAIT_TIME = 0.5;
 	
 	//Milliseconds
 	private double kMinTolerance, kMaxTolerance, kWaitTime;
 	
-	private double t_0, t_f;
+	private double t_0, now;
 	private boolean twice = false;
 	
 	private WaitTimer wait;
@@ -30,7 +30,12 @@ public class DoubleClickTimer {
 	 * Default Constructor
 	 */
 	public DoubleClickTimer() {
-		new DoubleClickTimer(DEFAULT_MIN_TOLERANCE, DEFAULT_MAX_TOLERANCE, DEFAULT_WAIT_TIME);
+		kMinTolerance = DEFAULT_MIN_TOLERANCE;
+		kMaxTolerance = DEFAULT_MAX_TOLERANCE;
+		kWaitTime = DEFAULT_WAIT_TIME;
+		
+		reset();
+		wait = new WaitTimer(kWaitTime);
 	}
 	
 	/**
@@ -39,7 +44,12 @@ public class DoubleClickTimer {
 	 * @param maxTolerance Upper limit for registering double click
 	 */
 	public DoubleClickTimer(double minTolerance, double maxTolerance) {
-		new DoubleClickTimer(minTolerance, maxTolerance, DEFAULT_WAIT_TIME);
+		kMinTolerance = minTolerance;
+		kMaxTolerance = maxTolerance;
+		kWaitTime = DEFAULT_WAIT_TIME;
+		
+		reset();
+		wait = new WaitTimer(kWaitTime);
 	}
 	
 	/**
@@ -54,7 +64,6 @@ public class DoubleClickTimer {
 		kWaitTime = waitTime;
 		
 		reset();
-		
 		wait = new WaitTimer(waitTime);
 	}
 	
@@ -63,7 +72,7 @@ public class DoubleClickTimer {
 	 */
 	private void reset() {
 		t_0 = -1;
-		t_f = -1;
+		now = -1;
 	}
 	
 	/**
@@ -72,7 +81,7 @@ public class DoubleClickTimer {
 	 */
 	private void register() {
 		if (t_0 == -1) t_0 = Timer.getFPGATimestamp();
-		else t_f = Timer.getFPGATimestamp();
+		else now = Timer.getFPGATimestamp();
 	}
 	
 	/**
@@ -86,23 +95,23 @@ public class DoubleClickTimer {
 		if (twice) {
 			if (wait.timeout()) {
 				twice = false;
-				return false;
+				return true;
 			}
-			else return true;
+			else return false;
 		}
 		
 		register();
-					
+		
 		//Pass if nothing has been registered
-		if (t_0 == -1 || t_f == -1) return false;
+		if (t_0 == -1 || now == -1) return false;
 		
 		//Reset timer if tolerance was passed
-		if (t_f - t_0 > kMaxTolerance) {
+		if (now - t_0 > kMaxTolerance) {
 			reset();
 			twice = false;
 		}
 		//Register as double click if within tolerance
-		else if (t_f - t_0 >= kMinTolerance && t_f - t_0 <= kMaxTolerance) {
+		else if (now - t_0 >= kMinTolerance && now - t_0 <= kMaxTolerance) {
 			System.out.println("double click");
 			reset();
 			twice = true;

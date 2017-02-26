@@ -8,15 +8,20 @@ import com.palyrobotics.frc2017.subsystems.Slider.SliderState;
 import com.palyrobotics.frc2017.subsystems.Spatula.SpatulaState;
 import com.palyrobotics.frc2017.util.Subsystem;
 
+/** 
+ * Autocorrects -> only tells the slider to move once safe (spatula up)
+ * @author Prashanti, Nihar, Ailyn
+ *
+ */
 public class SliderDistancePositioningAutocorrectRoutine extends Routine {	
 	private enum DistancePositioningState {
 		RAISING,
 		MOVING
 	}
-	private DistancePositioningState mState;
+	private DistancePositioningState mState = DistancePositioningState.RAISING;
 	
 	private double startTime;
-	private static final double raiseTime = 2000;
+	private static final double raiseTime = 1000;
 	
 	@Override
 	public void start() {
@@ -27,13 +32,14 @@ public class SliderDistancePositioningAutocorrectRoutine extends Routine {
 		else {
 			mState = DistancePositioningState.MOVING;
 		}
-		startTime = System.currentTimeMillis();		
+		startTime = System.currentTimeMillis();
 	}
 
 	@Override
 	public Commands update(Commands commands) {
 		switch(mState) {
 		case MOVING:
+			commands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
 			try {
 				slider.run(commands, this);
 			} catch (IllegalAccessException e) {
@@ -42,9 +48,11 @@ public class SliderDistancePositioningAutocorrectRoutine extends Routine {
 			break;
 		case RAISING:
 			if(System.currentTimeMillis() - startTime > raiseTime) {
+				System.exit(1);
 				mState = DistancePositioningState.MOVING;
 			}
 			commands.wantedSpatulaState = Spatula.SpatulaState.UP;
+			commands.wantedSliderState = Slider.SliderState.WAITING;
 			break;
 		default:
 			break;
@@ -65,7 +73,7 @@ public class SliderDistancePositioningAutocorrectRoutine extends Routine {
 
 	@Override
 	public boolean finished() {
-		return slider.getSliderState() == SliderState.IDLE;
+		return slider.onTarget();
 	}
 
 	@Override

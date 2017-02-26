@@ -22,12 +22,16 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	public static Slider getInstance() {
 		return instance;
 	}
+	//Miscellaneous constants
+	private static final int kPotentiometerTolerance = 0;
+	private static final int kEncoderTolerance = 40;
 	
 	//all code assumes that right is 0 and left and center are both positive on both pot and encoder
 	
 	public enum SliderState {
 		IDLE,
 		MANUAL,
+		WAITING,
 		AUTOMATIC_POSITIONING,
 		VISION_POSITIONING,			// unused
 	}
@@ -62,9 +66,6 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	private static final Gains mPotentiometerGains = 
 			(Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikSliderPotentiometer : Gains.aegirSliderPotentiometer;
 	
-	//Miscellaneous constants
-	private static final int kPotentiometerTolerance = 0;
-	private static final int kEncoderTolerance = 0;
 	
 	private CANTalonOutput mOutput = new CANTalonOutput();
 	
@@ -124,6 +125,9 @@ public class Slider extends Subsystem implements SubsystemLoop {
 				mTarget = SliderTarget.NONE;
 				mOutput.setPercentVBus(0);
 				break;
+			case WAITING:
+				mTarget = SliderTarget.NONE;
+				mOutput.setPercentVBus(0);
 			case MANUAL:
 				mTarget = SliderTarget.NONE;
 				setManualOutput(commands);
@@ -167,11 +171,14 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	 * @return if the control loop is on target
 	 */
 	private boolean onTargetEncoderPositioning() {
-		if(mTarget == SliderTarget.NONE) {
+		if (mTarget == SliderTarget.NONE) {
 			return true;
 		}
-		return Math.abs(mRobotState.sliderEncoder - mEncoderTargetPositions.get(mTarget)) < kEncoderTolerance
-					&& (!isPotentiometerFunctional || onTargetPotentiometerPositioning());
+		if (!mRobotState.sliderClosedLoopError.isPresent()) {
+//			System.err.println("Closed loop error not found");
+			return false;
+		}
+		return Math.abs(mRobotState.sliderClosedLoopError.get()) < kEncoderTolerance && mRobotState.sliderVelocity == 0;
 	}
 	
 	/**
@@ -179,6 +186,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	 */
 	private void setSetpointsEncoder() {
 		if (onTargetEncoderPositioning()) {
+			mState = SliderState.IDLE;
 			mTarget = SliderTarget.NONE;
 		} else {
 			mOutput.setPosition(mEncoderTargetPositions.get(mTarget), mEncoderGains);
@@ -187,6 +195,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	
 	private void setSetpointsPotentiometer() {
 		if (onTargetPotentiometerPositioning()) {
+			mState = SliderState.IDLE;
 			mTarget = SliderTarget.NONE;
 			previousPotentiometer = Optional.empty();
 			integralPotentiometer = Optional.empty();
@@ -245,10 +254,11 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	
 	public void printStatus() {
 		System.out.println("Slider Status:");
-//		System.out.println("State is " + mState.toString());
-		System.out.println("Target is " + mTarget.toString());
+		System.out.println("State is " + mState.toString());
+//		System.out.println(((this.onTarget()) ? "On target":"Not on target"));
+//		System.out.println("Target is " + mTarget.toString());
 //		System.out.println("Output is " + mOutput.getSetpoint() + " with CANTalon in " + mOutput.getControlMode());
-		System.out.println("Encoder value is " + mRobotState.sliderEncoder);
+//		System.out.println("Encoder value is " + mRobotState.sliderEncoder);
 //		System.out.println("Potentiometer value is " + mRobotState.sliderPotentiometer);
 		System.out.println();
 	}

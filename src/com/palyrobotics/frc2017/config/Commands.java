@@ -29,7 +29,7 @@ public class Commands {
 	public Drive.DriveState wantedDriveState = Drive.DriveState.NEUTRAL;
 	public Flippers.FlipperSignal wantedFlipperSignal = new Flippers.FlipperSignal(
 			DoubleSolenoid.Value.kForward, DoubleSolenoid.Value.kForward);
-	public Slider.SliderState wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
+	public Slider.SliderState wantedSliderState = Slider.SliderState.IDLE;
 	public Spatula.SpatulaState wantedSpatulaState = Spatula.SpatulaState.UP;
 	public Intake.IntakeState wantedIntakeState = Intake.IntakeState.IDLE;
 	public Climber.ClimberState wantedClimberState = Climber.ClimberState.IDLE;

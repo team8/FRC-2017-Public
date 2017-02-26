@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Timer;
  * Wait Timer
  * @author Ailyn Tong
  * Checks if a certain amount of time has elapsed.
+ * Uses FPGA Timer
  * Everything is handled by timeout() for ease of use.
  */
 public class WaitTimer {
@@ -15,7 +16,7 @@ public class WaitTimer {
 	
 	/**
 	 * Constructor
-	 * @param waitTime Desired amount of time elapsed
+	 * @param waitTime Desired amount of time elapsed in seconds
 	 */
 	public WaitTimer(double waitTime) {
 		kWaitTime = waitTime;

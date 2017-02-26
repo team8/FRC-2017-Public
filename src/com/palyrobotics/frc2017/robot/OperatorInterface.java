@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 
 import com.palyrobotics.frc2017.behavior.Routine;
+import com.palyrobotics.frc2017.behavior.RoutineManager;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Commands.*;
 import com.palyrobotics.frc2017.config.Commands.JoystickInput.XboxInput;
@@ -88,17 +89,15 @@ public class OperatorInterface {
 			newCommands.wantedSliderState = Slider.SliderState.IDLE;
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.NONE;
 		} else if (mSliderStick.getRawButton(4)) {	// opposite of preferred thumb position
-			newCommands.wantedSliderState = Slider.SliderState.MANUAL;
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.NONE;
 			newCommands.addWantedRoutine(new ManualSliderControlRoutine());
 		} else if (mSliderStick.getRawButton(5)) {	// preferred thumb position
-			newCommands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.CENTER;
 			newCommands.addWantedRoutine(new SliderDistancePositioningRoutine());
 		} else if (mSliderStick.getRawButton(8)) {
-			newCommands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.LEFT;
 			if (sliderLeft.twice()) {
+				System.out.println("left double click");
 				newCommands.addWantedRoutine(new SliderDistancePositioningAutocorrectRoutine());
 			} else {
 				newCommands.addWantedRoutine(new SliderDistancePositioningRoutine());
@@ -107,10 +106,13 @@ public class OperatorInterface {
 			newCommands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.RIGHT;
 			if (sliderRight.twice()) {
+				System.out.println("right double click");
 				newCommands.addWantedRoutine(new SliderDistancePositioningAutocorrectRoutine());
 			} else {
 				newCommands.addWantedRoutine(new SliderDistancePositioningRoutine());
 			}
+		} else if (Slider.getInstance().getSliderState() == Slider.SliderState.IDLE) {
+			newCommands.addWantedRoutine(new ManualSliderControlRoutine());
 		}
 		newCommands.sliderStickInput.x = mSliderStick.getX();
 		

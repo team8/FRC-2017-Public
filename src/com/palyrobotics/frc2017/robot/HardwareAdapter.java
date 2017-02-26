@@ -105,20 +105,20 @@ public class HardwareAdapter {
 		protected static SliderHardware getInstance() {
 			return instance;
 		}
-		public final CANTalon sliderMotor;
+		public final CANTalon sliderTalon;
 		public final AnalogInput sliderPotentiometer;
 		
 		private SliderHardware() {
 			if(Constants.kRobotName == Constants.RobotName.STEIK) {
-				sliderMotor = new CANTalon(Constants.kSteikSliderMotorDeviceID);
+				sliderTalon = new CANTalon(Constants.kSteikSliderMotorDeviceID);
 				sliderPotentiometer = new AnalogInput(Constants.kSteikSliderPotentiometer);
 			}
 			else if (Constants.kRobotName == Constants.RobotName.AEGIR){
-				sliderMotor = new CANTalon(Constants.kAegirSliderMotorDeviceID);
+				sliderTalon = new CANTalon(Constants.kAegirSliderMotorDeviceID);
 				sliderPotentiometer = new AnalogInput(Constants.kAegirSliderPotentiometerPort);
 			}
 			else {
-				sliderMotor = null;
+				sliderTalon = null;
 				sliderPotentiometer = null;
 			}
 		}
@@ -180,15 +180,15 @@ public class HardwareAdapter {
 		protected static ClimberHardware getInstance(){
 			return instance;
 		}
-		public final CANTalon climberMotor;
+		public final CANTalon climberTalon;
 		
 		private ClimberHardware() {
 			if (Constants.kRobotName == Constants.RobotName.AEGIR) {
-				climberMotor = new CANTalon(Constants.kAegirClimberMotorDeviceID);
+				climberTalon = new CANTalon(Constants.kAegirClimberMotorDeviceID);
 			} else if (Constants.kRobotName == Constants.RobotName.STEIK) {
-				climberMotor = new CANTalon(Constants.kSteikClimberMotorDeviceID);
+				climberTalon = new CANTalon(Constants.kSteikClimberMotorDeviceID);
 			} else {
-				climberMotor = null;
+				climberTalon = null;
 			}
 		}
 	}

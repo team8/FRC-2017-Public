@@ -69,7 +69,7 @@ public class RoutineManager implements Tappable {
 		// Update all running routines
 		for(Routine routine : runningRoutines) {
 			if(routine.finished()) {
-				System.out.println("Routine cancel called");
+//				System.out.println("Routine cancel called");
 				output = routine.cancel(output);
 				routinesToRemove.add(routine);
 			} else {
@@ -79,7 +79,7 @@ public class RoutineManager implements Tappable {
 		
 		// Remove routines that finished
 		for(Routine routine : routinesToRemove) {
-			System.out.println("Completed routine: " + routine.getName());
+//			System.out.println("Completed routine: " + routine.getName());
 			runningRoutines.remove(routine);
 		}
 
@@ -89,7 +89,7 @@ public class RoutineManager implements Tappable {
 			ArrayList<Routine> conflicts = conflictingRoutines(runningRoutines, newRoutine);
 			for(Routine routine : conflicts) {
 				output = routine.cancel(output);
-				System.out.println("Canceling routine " + routine.getName());
+//				System.out.println("Canceling routine " + routine.getName());
 				runningRoutines.remove(routine);
 			}
 			newRoutine.start();

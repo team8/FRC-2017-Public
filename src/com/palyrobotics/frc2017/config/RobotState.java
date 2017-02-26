@@ -1,5 +1,7 @@
 package com.palyrobotics.frc2017.config;
 
+import java.util.Optional;
+
 import com.ctre.CANTalon.TalonControlMode;
 import com.palyrobotics.frc2017.robot.team254.lib.util.LegacyPose;
 import com.palyrobotics.frc2017.util.Pose;
@@ -31,6 +33,8 @@ public class RobotState {
 
 	public double sliderPotentiometer;
 	public double sliderEncoder;
+	public double sliderVelocity;
+	public Optional<Integer> sliderClosedLoopError;
 
 	// Climber
 	public double climberCurrentDraw;
