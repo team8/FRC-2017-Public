@@ -6,7 +6,7 @@ public class Constants extends ConstantsBase {
 	public enum RobotName {
 		STEIK, AEGIR, DERICA
 	}
-	public static final RobotName kRobotName = RobotName.DERICA;
+	public static final RobotName kRobotName = RobotName.AEGIR;
 
 	// Cheesy Drive tuning
 	public static double kDriveSensitivity = .85;
@@ -27,8 +27,10 @@ public class Constants extends ConstantsBase {
 	/*
 	 * Measured 100 in = 2910 ticks
 	 */
-public static double kDriveInchesToTicks = 29.1;
-public static double kDriveDegreesToTicks = 1000;
+	public static double kDriveInchesToTicks = 29.1;
+	// TODO: tune degrees to ticks
+	public static double kDriveDegreesToTicks = 1000;
+	
 	public static final double kPotentiometerRightPos = 2172;
 	public static final double kPotentiometerLeftPos = 3452;
 	public static final double kPotentiometerCenterPos = (kPotentiometerRightPos + kPotentiometerLeftPos) / 2;

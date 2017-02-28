@@ -37,9 +37,9 @@ public class EncoderTurnAngleController implements DriveController {
 		}
 
 		leftOutput = new CANTalonOutput();
-		leftOutput.setMotionMagic(leftTarget, maxAccel, maxVel, mGains);
+		leftOutput.setMotionMagic(leftTarget, mGains, maxVel, maxAccel);
 		rightOutput = new CANTalonOutput();
-		rightOutput.setMotionMagic(rightTarget, maxAccel, maxVel, mGains);
+		rightOutput.setMotionMagic(rightTarget, mGains, maxVel, maxAccel);
 	}
 
 	@Override

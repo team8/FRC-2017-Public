@@ -28,9 +28,9 @@ public class HardwareAdapter {
 		public final CANTalon leftSlave1Talon;
 		public final CANTalon leftMasterTalon;
 		public final CANTalon leftSlave2Talon;
-		public final CANTalon rightSlaveTalon;
+		public final CANTalon rightSlave1Talon;
 		public final CANTalon rightMasterTalon;
-		public final CANTalon secondRightSlaveTalon;
+		public final CANTalon rightSlave2Talon;
 
 		// If encoders are wired directly to RIO use the following objects
 //		public final Encoder leftEncoder;
@@ -43,24 +43,24 @@ public class HardwareAdapter {
 				leftSlave1Talon = new CANTalon(Constants2016.kDericaLeftDriveSlaveDeviceID);
 				leftSlave2Talon = null;
 				rightMasterTalon = new CANTalon(Constants2016.kDericaRightDriveMasterDeviceID);
-				rightSlaveTalon = new CANTalon(Constants2016.kDericaRightDriveSlaveDeviceID);
-				secondRightSlaveTalon = null;
+				rightSlave1Talon = new CANTalon(Constants2016.kDericaRightDriveSlaveDeviceID);
+				rightSlave2Talon = null;
 				gyro = new ADXRS453_Gyro();
 			} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
 				leftMasterTalon = new CANTalon(Constants.kAegirLeftDriveMasterDeviceID);
 				leftSlave1Talon = new CANTalon(Constants.kAegirLeftDriveSlaveDeviceID);
 				leftSlave2Talon = new CANTalon(Constants.kAegirLeftDriveOtherSlaveDeviceID);
 				rightMasterTalon = new CANTalon(Constants.kAegirRightDriveMasterDeviceID);
-				rightSlaveTalon = new CANTalon(Constants.kAegirRightDriveSlaveDeviceID);
-				secondRightSlaveTalon = new CANTalon(Constants.kAegirRightDriveOtherSlaveDeviceID);
-				gyro = null;
+				rightSlave1Talon = new CANTalon(Constants.kAegirRightDriveSlaveDeviceID);
+				rightSlave2Talon = new CANTalon(Constants.kAegirRightDriveOtherSlaveDeviceID);
+				gyro = new ADXRS453_Gyro();
 			} else {
 				leftMasterTalon = new CANTalon(Constants.kSteikLeftDriveMasterDeviceID);
 				leftSlave1Talon = new CANTalon(Constants.kSteikLeftDriveSlaveDeviceID);
 				leftSlave2Talon = new CANTalon(Constants.kSteikLeftDriveOtherSlaveDeviceID);
 				rightMasterTalon = new CANTalon(Constants.kSteikRightDriveMasterDeviceID);
-				rightSlaveTalon = new CANTalon(Constants.kSteikRightDriveSlaveDeviceID);
-				secondRightSlaveTalon = new CANTalon(Constants.kSteikRightDriveOtherSlaveDeviceID);
+				rightSlave1Talon = new CANTalon(Constants.kSteikRightDriveSlaveDeviceID);
+				rightSlave2Talon = new CANTalon(Constants.kSteikRightDriveOtherSlaveDeviceID);
 				gyro = null;
 			}
 		}

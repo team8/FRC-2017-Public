@@ -7,9 +7,8 @@ import com.palyrobotics.frc2017.behavior.RoutineManager;
  */
 public class AutoModeExecuter {
 	private AutoModeBase mAutoMode;
-	private Thread mThread = null;
-
 	private RoutineManager mRoutineManager;
+	private boolean mRunning = false;
 
 	public AutoModeExecuter(RoutineManager routineManager) {
 		this.mRoutineManager = routineManager;
@@ -20,23 +19,24 @@ public class AutoModeExecuter {
 	}
 
 	public void start() {
-		if (mThread == null) {
-			mThread = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					if (mAutoMode != null) {
-						mAutoMode.run(mRoutineManager);
-					}
-				}
-			});
-			mThread.start();
+		mAutoMode.prestart();
+	}
+	
+	public void run() {
+		if (!mRunning) {
+			try {
+				mAutoMode.execute();
+			} catch (AutoModeEndedException e) {
+				this.stop();
+			}
+		} else {
+			
 		}
 	}
-
+	
 	public void stop() {
 		if (mAutoMode != null) {
 			mAutoMode.stop();
 		}
-		mThread = null;
 	}
 }

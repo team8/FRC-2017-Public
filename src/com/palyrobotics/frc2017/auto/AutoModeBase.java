@@ -44,7 +44,9 @@ public abstract class AutoModeBase {
     }
 
     public void runRoutine(Routine routine) {
-    	mRoutineManager.addNewRoutine(routine);
+    	if (active) {
+    		mRoutineManager.addNewRoutine(routine);
+    	}
     }
     
 }

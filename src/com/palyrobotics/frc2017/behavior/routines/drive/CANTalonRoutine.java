@@ -2,8 +2,6 @@ package com.palyrobotics.frc2017.behavior.routines.drive;
 
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
-import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.subsystems.controllers.CANTalonDriveController;
@@ -26,6 +24,7 @@ public class CANTalonRoutine extends Routine {
 	@Override
 	public void start() {
 		drive.setCANTalonController(mSignal);
+		System.out.println("Sent drivetrain signal");
 	}
 
 	@Override
@@ -43,13 +42,29 @@ public class CANTalonRoutine extends Routine {
 
 	@Override
 	public boolean finished() {
-		if(mSignal.leftMotor.getSetpoint() != Robot.getRobotState().leftSetpoint || mSignal.rightMotor.getSetpoint() != Robot.getRobotState().rightSetpoint 
-				|| mSignal.leftMotor.getControlMode() != Robot.getRobotState().leftControlMode || mSignal.rightMotor.getControlMode() != Robot.getRobotState().rightControlMode) {
+		// Wait for controller to be added before finishing routine
+		if (mSignal.leftMotor.getSetpoint() != Robot.getRobotState().leftSetpoint) {
 			System.out.println("Mismatched desired talon and actual talon states!");
+			System.out.println(mSignal.leftMotor.getSetpoint()+", "+Robot.getRobotState().leftSetpoint);
 			return false;
 		}
-		// Wait for controller to be added before finshing routine
-		return !drive.hasController() || drive.getController().getClass() == CANTalonDriveController.class && drive.controllerOnTarget();
+		else if (mSignal.rightMotor.getSetpoint() != Robot.getRobotState().rightSetpoint) {
+			System.out.println("Mismatched desired talon and actual talon states!");
+			System.out.println(mSignal.rightMotor.getSetpoint()+", "+Robot.getRobotState().rightSetpoint);
+			return false;
+		}
+		else if (mSignal.leftMotor.getControlMode() != Robot.getRobotState().leftControlMode) {
+			System.out.println("Mismatched desired talon and actual talon states!");
+			System.out.println(mSignal.leftMotor.getControlMode() + ", "+Robot.getRobotState().leftControlMode);
+			return false;
+			
+		}
+		else if (mSignal.rightMotor.getControlMode() != Robot.getRobotState().rightControlMode) {
+			System.out.println("Mismatched desired talon and actual talon states!");
+			System.out.println(mSignal.rightMotor.getControlMode()+","+Robot.getRobotState().rightControlMode);
+			return false;
+		}
+		return !drive.hasController() || (drive.getController().getClass() == CANTalonDriveController.class && drive.controllerOnTarget());
 	}
 
 	@Override

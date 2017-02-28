@@ -49,6 +49,7 @@ public class CANTalonOutput {
 		this.gains = talon.gains;
 		
 		this.accel = talon.accel;
+		this.cruiseVel = talon.cruiseVel;
 		this.profile = talon.profile;
 	}
 	

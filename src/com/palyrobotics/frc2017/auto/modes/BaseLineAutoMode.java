@@ -27,23 +27,16 @@ public class BaseLineAutoMode extends AutoMode {
 		// Drive straight until baseline
 		DriveSignal driveForward = DriveSignal.getNeutralSignal();
 		double setpoint = Constants.kBaseLineDistanceInches * 
-				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants.kDriveInchesToTicks 
-						: Constants2016.kDericaInchesToTicks);
+				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+						: Constants.kDriveInchesToTicks );
 		driveForward.leftMotor.setMotionMagic(setpoint+Robot.getRobotState().drivePose.leftEnc, mGains, 
 			Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
 		driveForward.rightMotor.setMotionMagic(setpoint+Robot.getRobotState().drivePose.rightEnc, mGains, 
 				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-//		driveForward.leftMotor.setPosition(Constants.kBaseLineDistanceInches, mGains);
-//		driveForward.rightMotor.setPosition(Constants.kBaseLineDistanceInches, mGains);
+//		driveForward.leftMotor.setPosition(setpoint, mGains);
+//		driveForward.rightMotor.setPosition(setpoint, mGains);
 		mRoutine = new CANTalonRoutine(driveForward);
 		runRoutine(mRoutine);
-		double i = 0;
-		while (!(drive.hasController() && drive.controllerOnTarget()) && super.active()) {
-			i++;
-			if (i%1000==0) {
-				System.out.println("Struggle "+i);
-			}
-		}
 	}
 
 	@Override

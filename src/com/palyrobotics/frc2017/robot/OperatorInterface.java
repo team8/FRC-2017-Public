@@ -11,8 +11,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Commands.*;
-import com.palyrobotics.frc2017.subsystems.Intake;
-import com.palyrobotics.frc2017.subsystems.Spatula;
 
 /**
  * Used to produce Commands {@link Commands} from human input
@@ -61,7 +59,8 @@ public class OperatorInterface {
 	 */
 	public Commands updateCommands(Commands prevCommands) {
 		Commands newCommands = prevCommands.copy();
-		if(prevCommands.wantedDriveState != Drive.DriveState.OFF_BOARD_CONTROLLER) {
+		if(prevCommands.wantedDriveState != Drive.DriveState.OFF_BOARD_CONTROLLER
+				&& prevCommands.wantedDriveState != Drive.DriveState.ON_BOARD_CONTROLLER) {
 			newCommands.wantedDriveState = Drive.DriveState.CHEZY;
 		}
 

@@ -1,6 +1,7 @@
 package com.palyrobotics.frc2017.robot;
 
 import com.ctre.CANTalon;
+import com.ctre.CANTalon.TalonControlMode;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.RobotState;
@@ -63,38 +64,54 @@ class HardwareUpdater {
 
 		CANTalon leftMasterTalon = HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon;
 		CANTalon leftSlave1Talon = HardwareAdapter.getInstance().getDrivetrain().leftSlave1Talon;
-		CANTalon otherLeftSlaveTalon = HardwareAdapter.getInstance().getDrivetrain().leftSlave2Talon;
+		CANTalon leftSlave2Talon = HardwareAdapter.getInstance().getDrivetrain().leftSlave2Talon;
 		CANTalon rightMasterTalon = HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon;
-		CANTalon rightSlaveTalon = HardwareAdapter.getInstance().getDrivetrain().rightSlaveTalon;
-		CANTalon otherRightSlaveTalon = HardwareAdapter.getInstance().getDrivetrain().secondRightSlaveTalon;
+		CANTalon rightSlave1Talon = HardwareAdapter.getInstance().getDrivetrain().rightSlave1Talon;
+		CANTalon rightSlave2Talon = HardwareAdapter.getInstance().getDrivetrain().rightSlave2Talon;
 		
 		// Enable all talons' brake mode and disables forward and reverse soft
 		// limits
 		leftMasterTalon.enableBrakeMode(true);
 		leftSlave1Talon.enableBrakeMode(true);
-//		otherLeftSlaveTalon.enableBrakeMode(true);
-		rightSlaveTalon.enableBrakeMode(true);
+		if (leftSlave2Talon != null) rightSlave2Talon.enableBrakeMode(true);
 		rightMasterTalon.enableBrakeMode(true);
-//		otherRightSlaveTalon.enableBrakeMode(true);
+		rightSlave1Talon.enableBrakeMode(true);
+		if (rightSlave2Talon != null) leftSlave2Talon.enableBrakeMode(true);
+
 		leftMasterTalon.enableForwardSoftLimit(false);
 		leftMasterTalon.enableReverseSoftLimit(false);
-//		otherLeftSlaveTalon.enableForwardSoftLimit(false);
+		leftSlave1Talon.enableForwardSoftLimit(false);
+		leftSlave1Talon.enableReverseSoftLimit(false);
+		if (leftSlave2Talon != null) {leftSlave2Talon.enableForwardSoftLimit(false); leftSlave2Talon.enableReverseSoftLimit(false);}
 		rightMasterTalon.enableForwardSoftLimit(false);
 		rightMasterTalon.enableReverseSoftLimit(false);
-//		otherRightSlaveTalon.enableForwardSoftLimit(false);
+		rightSlave1Talon.enableForwardSoftLimit(false);
+		rightSlave1Talon.enableReverseSoftLimit(false);
+		if (rightSlave2Talon != null) {rightSlave2Talon.enableForwardSoftLimit(false); rightSlave2Talon.enableReverseSoftLimit(false);}
 		
 		// Enable all the talons
 		leftMasterTalon.enable();
 		leftSlave1Talon.enable();
-//		otherLeftSlaveTalon.enable();
+		if (leftSlave2Talon != null) leftSlave2Talon.enable();
 		rightMasterTalon.enable();
-		rightSlaveTalon.enable();
-//		otherRightSlaveTalon.enable();
+		rightSlave1Talon.enable();
+		if (rightSlave2Talon != null) rightSlave2Talon.enable();
 		
+		// Allow max voltage for closed loop control
 		leftMasterTalon.configPeakOutputVoltage(12, -12);
-		rightMasterTalon.configPeakOutputVoltage(12, -12);
 		leftSlave1Talon.configPeakOutputVoltage(12, -12);
-		rightSlaveTalon.configPeakOutputVoltage(12, -12);
+		if (leftSlave2Talon != null) leftSlave2Talon.configPeakOutputVoltage(12, -12);
+		rightMasterTalon.configPeakOutputVoltage(12, -12);
+		rightSlave1Talon.configPeakOutputVoltage(12, -12);
+		if (rightSlave2Talon != null) rightSlave2Talon.configPeakOutputVoltage(12, -12);
+		
+		// Allow max voltage for open loop control
+		leftMasterTalon.configMaxOutputVoltage(12);
+		leftSlave1Talon.configMaxOutputVoltage(12);
+		if (leftSlave2Talon != null) leftSlave2Talon.configMaxOutputVoltage(12);
+		rightMasterTalon.configMaxOutputVoltage(12);
+		rightSlave1Talon.configMaxOutputVoltage(12);
+		if (rightSlave2Talon != null) rightSlave2Talon.configMaxOutputVoltage(12);
 		
 		// Configure master talon feedback devices
 		leftMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
@@ -114,8 +131,8 @@ class HardwareUpdater {
 		leftSlave1Talon.set(leftMasterTalon.getDeviceID());
 //		otherLeftSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
 //		otherLeftSlaveTalon.set(leftMasterTalon.getDeviceID());
-		rightSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
-		rightSlaveTalon.set(rightMasterTalon.getDeviceID());
+		rightSlave1Talon.changeControlMode(CANTalon.TalonControlMode.Follower);
+		rightSlave1Talon.set(rightMasterTalon.getDeviceID());
 //		otherRightSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
 //		otherRightSlaveTalon.set(rightMasterTalon.getDeviceID());
 	
@@ -202,14 +219,16 @@ class HardwareUpdater {
 //		} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
 //			robotState.climberCurrentDraw = HardwareAdapter.getInstance().kPDP.getCurrent(Constants.kAegirClimberMotorPDP);
 //		}
-		robotState.climberEncoder = HardwareAdapter.ClimberHardware.getInstance().climberTalon.getPosition();
+		if (HardwareAdapter.getInstance().getClimber().climberTalon != null) {
+			robotState.climberEncoder = HardwareAdapter.ClimberHardware.getInstance().climberTalon.getPosition();
+		}
 	}
 
 	/**
 	 * Sets the output from all subsystems for the respective hardware
 	 */
 	void updateSubsystems() {
-		// On Derica or Tyr only update the drivetrain
+		// On Derica only update the drivetrain
 		if (Constants.kRobotName == Constants.RobotName.STEIK || Constants.kRobotName == Constants.RobotName.AEGIR) {
 			updateSteikSubsystems();
 		}

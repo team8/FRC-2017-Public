@@ -89,8 +89,6 @@ public class Robot extends IterativeRobot {
 		
 		AutoMode mode = AutoModeSelector.getInstance().getAutoMode();
 		mAutoModeExecuter.setAutoMode(mode);
-		// Prestart auto mode
-		mode.prestart();
 		mAutoModeExecuter.start();
 		
 		System.out.println("End autonomousInit()");
@@ -98,6 +96,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousPeriodic() {
+		mAutoModeExecuter.run();
 		commands = mRoutineManager.update(commands);
 		mHardwareUpdater.updateSensors(robotState);
 		mHardwareUpdater.updateSubsystems();
@@ -143,7 +142,8 @@ public class Robot extends IterativeRobot {
 
 		// Manually run garbage collector
 		System.gc();
-
+		
+		System.out.println("Encoders: "+robotState.drivePose.leftEnc);
 		System.out.println("End disabledInit()");
 	}
 

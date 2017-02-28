@@ -1,5 +1,6 @@
 package com.palyrobotics.frc2017.subsystems.controllers;
 
+import com.ctre.CANTalon;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.RobotState;
@@ -74,8 +75,15 @@ public class CANTalonDriveController implements Drive.DriveController {
 //			System.err.println("Talon closed loop error not found!");
 			return false;
 		}
-		
-		return (Math.abs(mCachedState.drivePose.leftError.get()) < positionTolerance) && (Math.abs(mCachedState.drivePose.rightError.get()) < positionTolerance
-				&& Math.abs(mCachedState.drivePose.leftEncVelocity) < velocityTolerance && Math.abs(mCachedState.drivePose.rightEncVelocity) < velocityTolerance);
+		if (mSignal.leftMotor.getControlMode() == CANTalon.TalonControlMode.MotionMagic) {
+			return (Math.abs(mCachedState.drivePose.leftEnc - mSignal.leftMotor.getSetpoint()) < positionTolerance) &&
+					(Math.abs(mCachedState.drivePose.leftSpeed) < velocityTolerance) &&
+					(Math.abs(mCachedState.drivePose.rightEnc - mSignal.rightMotor.getSetpoint()) < positionTolerance) &&
+					(Math.abs(mCachedState.drivePose.rightSpeed) < velocityTolerance);
+		}
+		return (Math.abs(mCachedState.drivePose.leftError.get()) < positionTolerance) &&
+				(Math.abs(mCachedState.drivePose.rightError.get()) < positionTolerance && 
+				Math.abs(mCachedState.drivePose.leftSpeed) < velocityTolerance &&
+				Math.abs(mCachedState.drivePose.rightSpeed) < velocityTolerance);
 	}
 }
