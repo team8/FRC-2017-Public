@@ -123,7 +123,7 @@ class HardwareUpdater {
 			//Climber setup
 			CANTalon climber = HardwareAdapter.ClimberHardware.getInstance().climberTalon;
 			climber.reset();
-			climber.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Absolute);
+			climber.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
 			climber.setPosition(0);	
 			climber.configMaxOutputVoltage(Constants.kClimberMaxVoltage);
 			climber.configPeakOutputVoltage(Constants.kClimberMaxVoltage, 0); // Should never be used
@@ -221,44 +221,29 @@ class HardwareUpdater {
 //		HardwareAdapter.getInstance().getFlippers().leftSolenoid.set(mFlippers.getFlipperSignal().leftFlipper);
 //		HardwareAdapter.getInstance().getFlippers().rightSolenoid.set(mFlippers.getFlipperSignal().rightFlipper);
 //		// SLIDER
-		updateCANTalonSRX(HardwareAdapter.getInstance().getSlider().sliderTalon, mSlider.getOutput(), 1);
+		updateCANTalonSRX(HardwareAdapter.getInstance().getSlider().sliderTalon, mSlider.getOutput());
 		// SPATULA
 		HardwareAdapter.getInstance().getSpatula().spatulaSolenoid.set(mSpatula.getOutput());
 //		// INTAKE
 		HardwareAdapter.getInstance().getIntake().leftIntakeMotor.set(mIntake.getOutput());
 		HardwareAdapter.getInstance().getIntake().rightIntakeMotor.set(-mIntake.getOutput());
 		// CLIMBER
-		updateCANTalonSRX(HardwareAdapter.getInstance().getClimber().climberTalon, mClimber.getOutput(), 1);
+		updateCANTalonSRX(HardwareAdapter.getInstance().getClimber().climberTalon, mClimber.getOutput());
 	}
 
 	/**
-	 * Updates the drivetrain on Derica, Steik, Aegir Uses CANTalonOutput and
-	 * can run off-board control loops through SRX
+	 * Updates the drivetrain on Derica, Steik, Aegir 
+	 * Uses CANTalonOutput and can run off-board control loops through SRX
 	 */
-	private void updateDrivetrain() {
-		double leftScalar = 1;
-		double rightScalar = 1;
-		
-		//NOTE: If these are changed, change corresponding scalar in CANTalonRoutine. Otherwise it will not stop.
-		if (mDrive.getDriveSignal().leftMotor.getControlMode() == CANTalon.TalonControlMode.Position) {
-			leftScalar = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-					: Constants.kDriveInchesToTicks;
-		}
-		if (mDrive.getDriveSignal().rightMotor.getControlMode() == CANTalon.TalonControlMode.Position) {
-			rightScalar = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-					: Constants.kDriveInchesToTicks;
-		}		
-		updateCANTalonSRX(HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon, mDrive.getDriveSignal().leftMotor, leftScalar);
-		updateCANTalonSRX(HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon, mDrive.getDriveSignal().rightMotor, rightScalar);
+	private void updateDrivetrain() {		
+		updateCANTalonSRX(HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon, mDrive.getDriveSignal().leftMotor);
+		updateCANTalonSRX(HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon, mDrive.getDriveSignal().rightMotor);
 	}
 
 	/**
 	 * Helper method for processing a CANTalonOutput for an SRX
-	 * 
-	 * @param scalar
-	 *            For converting to native units if needed
 	 */
-	private void updateCANTalonSRX(CANTalon talon, CANTalonOutput output, double scalar) {
+	private void updateCANTalonSRX(CANTalon talon, CANTalonOutput output) {
 		if (talon.getControlMode() != output.getControlMode()) {
 			talon.changeControlMode(output.getControlMode());
 			if(output.getControlMode().isPID()) {
@@ -269,6 +254,6 @@ class HardwareUpdater {
 				talon.setMotionMagicCruiseVelocity(output.cruiseVel);
 			}
 		}
-		talon.set(output.getSetpoint() * scalar);
+		talon.set(output.getSetpoint());
 	}
 }

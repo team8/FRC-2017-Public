@@ -82,7 +82,7 @@ public class CANTalonOutput {
 
 	/**
 	 * Sets Talon to TalonControlMode.Position
-	 * @param setpoint, target distance
+	 * @param setpoint, target distance in native units
 	 */
 	public void setPosition(double setpoint, Gains gains) {
 		controlMode = CANTalon.TalonControlMode.Position;
@@ -124,9 +124,10 @@ public class CANTalonOutput {
 	 * @param accel max acceleration and deceleration
 	 * @param cruiseVelocity cruise velocity to max out at
 	 */
-	public void setMotionMagic(double setpoint, double accel, double cruiseVelocity) {
+	public void setMotionMagic(double setpoint, Gains gains, double cruiseVelocity, double accel) {
 		controlMode = CANTalon.TalonControlMode.MotionMagic;
 		this.setpoint = setpoint;
+		this.gains = gains;
 		this.accel = accel;
 		this.cruiseVel = cruiseVelocity;
 	}

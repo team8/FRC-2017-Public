@@ -4,7 +4,9 @@ import com.palyrobotics.frc2017.auto.AutoMode;
 import com.palyrobotics.frc2017.auto.AutoModeEndedException;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.config.Constants;
+import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.Gains;
+import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
 public class BaseLineAutoMode extends AutoMode {
@@ -22,17 +24,31 @@ public class BaseLineAutoMode extends AutoMode {
 
 	@Override
 	protected void execute() throws AutoModeEndedException {
+		// Drive straight until baseline
+		DriveSignal driveForward = DriveSignal.getNeutralSignal();
+		double setpoint = Constants.kBaseLineDistanceInches * 
+				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants.kDriveInchesToTicks 
+						: Constants2016.kDericaInchesToTicks);
+		driveForward.leftMotor.setMotionMagic(setpoint+Robot.getRobotState().drivePose.leftEnc, mGains, 
+			Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
+		driveForward.rightMotor.setMotionMagic(setpoint+Robot.getRobotState().drivePose.rightEnc, mGains, 
+				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
+//		driveForward.leftMotor.setPosition(Constants.kBaseLineDistanceInches, mGains);
+//		driveForward.rightMotor.setPosition(Constants.kBaseLineDistanceInches, mGains);
+		mRoutine = new CANTalonRoutine(driveForward);
 		runRoutine(mRoutine);
+		double i = 0;
+		while (!(drive.hasController() && drive.controllerOnTarget()) && super.active()) {
+			i++;
+			if (i%1000==0) {
+				System.out.println("Struggle "+i);
+			}
+		}
 	}
 
 	@Override
 	public void prestart() {
 		System.out.println("Starting Base Line Auto Mode");
-		// Drive straight until baseline
-		DriveSignal driveForward = DriveSignal.getNeutralSignal();
-		driveForward.leftMotor.setPosition(Constants.kBaseLineDistanceInches, mGains);
-		driveForward.rightMotor.setPosition(Constants.kBaseLineDistanceInches, mGains);
-		mRoutine = new CANTalonRoutine(driveForward);
 	}
 
 	@Override

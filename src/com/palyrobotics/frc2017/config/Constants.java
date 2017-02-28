@@ -22,7 +22,10 @@ public class Constants extends ConstantsBase {
 	public static double kTurnInPlaceSpeed = 0.5;
 	// Unit Conversions for CANTalons
 	// TODO: Calculate the unit conversions for native units and inches, rpm, etc as needed
-	public static double kDriveInchesToTicks = 0;
+	public static double kDriveInchesToTicks = 29.1;
+	/*
+	 * Measured 100 in = 2910 ticks
+	 */
 	public static final double kPotentiometerRightPos = 2172;
 	public static final double kPotentiometerLeftPos = 3452;
 	public static final double kPotentiometerCenterPos = (kPotentiometerRightPos + kPotentiometerLeftPos) / 2;
@@ -31,7 +34,7 @@ public class Constants extends ConstantsBase {
 	// Tolerances
 	public static double kAcceptableDrivePositionError = 100;
 	public static double kAcceptableDriveVelocityError = 40;
-	public static double kAcceptableTurnAngleError = 1;
+	public static double kAcceptableTurnAngleError = 0.5;
 	public static double kAcceptableSliderPositionError;
 
 	public static double kSliderMaxVoltage = 6.0; // open loop limit

@@ -59,13 +59,13 @@ public class Drive extends Subsystem implements SubsystemLoop {
 		} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
 			kWheelbaseWidth = 0;
 			kTurnSlipFactor = 0;
-			kInchesPerTick = 0.0;
-			kInchesToTicks = 0;
+			kInchesPerTick = 1/Constants.kDriveInchesToTicks;
+			kInchesToTicks = Constants.kDriveInchesToTicks;
 		} else {
 			kWheelbaseWidth = 0;
 			kTurnSlipFactor = 0;
-			kInchesPerTick = 0.0;
-			kInchesToTicks = 0;
+			kInchesPerTick = 1/Constants.kDriveInchesToTicks;
+			kInchesToTicks = Constants.kDriveInchesToTicks;
 		}
 	}
 
@@ -90,28 +90,18 @@ public class Drive extends Subsystem implements SubsystemLoop {
 		mCachedRobotState = state;
 		boolean mIsNewState = !(mState == commands.wantedDriveState);
 		mState = commands.wantedDriveState;
-		Commands.Setpoints setpoints = commands.robotSetpoints;
 		
 		switch(mState) {
 			case CHEZY:
 				setDriveOutputs(mCDH.cheesyDrive(commands, mCachedRobotState));
 				break;
 			case OFF_BOARD_CONTROLLER:
-				if (newController) {
-					// If no controller set yet, shift to neutral and wait for next cycle to try again
-					if (mController == null) {
-						setDriveOutputs(DriveSignal.getNeutralSignal());
-						System.err.println("No offboard controller to use!");
-						newController = false;
-						mState = DriveState.NEUTRAL;
-						return;
-					}
-					setDriveOutputs(mController.update(mCachedRobotState));
-					newController = false;
+				if (mController == null) {
+					setDriveOutputs(DriveSignal.getNeutralSignal());
+					System.err.println("No offboard controller to use!");
+					break;
 				}
-				if(mController == null) {
-					commands.wantedDriveState = DriveState.NEUTRAL;
-				}
+				setDriveOutputs(mController.update(mCachedRobotState));				
 				break;
 			case ON_BOARD_CONTROLLER:
 				if (mController == null) {
