@@ -125,7 +125,9 @@ class HardwareUpdater {
 			climber.reset();
 			climber.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Absolute);
 			climber.setPosition(0);	
-			climber.ConfigRevLimitSwitchNormallyOpen(false); // Prevent the motor from driving backwards
+			climber.configMaxOutputVoltage(Constants.kClimberMaxVoltage);
+			climber.configPeakOutputVoltage(Constants.kClimberMaxVoltage, 0); // Should never be used
+			climber.ConfigRevLimitSwitchNormallyOpen(false); // Prevent the motor from spinning backwards
 			climber.ConfigFwdLimitSwitchNormallyOpen(true);
 			climber.enable();
 			
@@ -139,7 +141,7 @@ class HardwareUpdater {
 			slider.configPeakOutputVoltage(Constants.kSliderPeakOutputVoltage, -Constants.kSliderPeakOutputVoltage);
 
 			// Set up the Talon to read from a relative CTRE mag encoder sensor
-			slider.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Absolute);
+			slider.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
 			// Calibrate the encoder
 			double current_pot_pos = HardwareAdapter.SliderHardware.getInstance().sliderPotentiometer.getValue();
 			double distance_to_center = current_pot_pos - Constants.kPotentiometerCenterPos;

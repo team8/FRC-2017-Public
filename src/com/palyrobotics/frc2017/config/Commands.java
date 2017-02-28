@@ -41,7 +41,6 @@ public class Commands {
 				return;
 			}
 		}
-		System.out.println("Adding a wanted routine");
 		wantedRoutines.add(wantedRoutine);
 	}
 	

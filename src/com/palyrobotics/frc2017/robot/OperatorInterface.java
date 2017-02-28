@@ -65,10 +65,8 @@ public class OperatorInterface {
 			newCommands.wantedDriveState = Drive.DriveState.CHEZY;
 		}
 
-		// TODO: Change how routines are commanded
 		// Flippers
 		//TODO figure out flipper controls
-		//TODO wait a certain amount of time before being able to toggle again
 		// Left Flipper
 		if (mSliderStick.getRawButton(1)) {
 			newCommands.wantedFlipperSignal.leftFlipper = DoubleSolenoid.Value.kForward;
@@ -83,41 +81,34 @@ public class OperatorInterface {
 		}
 		
 		// Slider
-		if (mSliderStick.getRawButton(1)) {
-			newCommands.wantedSliderState = Slider.SliderState.IDLE;
-			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.NONE;
-		} else if (mSliderStick.getRawButton(4)) {	// opposite of preferred thumb position
+		if (mSliderStick.getRawButton(2)) {	// opposite of preferred thumb position
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.NONE;
 			newCommands.addWantedRoutine(new ManualSliderControlRoutine());
-		} else if (mSliderStick.getRawButton(5)) {	// preferred thumb position
+		} else if (mSliderStick.getRawButton(3)) {	// preferred thumb position
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.CENTER;
 			newCommands.addWantedRoutine(new SliderDistancePositioningRoutine());
-		} else if (mSliderStick.getRawButton(8)) {
+		} else if (mSliderStick.getRawButton(4)) {
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.LEFT;
 			if (sliderLeft.twice()) {
-				System.out.println("left double click");
-				newCommands.addWantedRoutine(new SliderDistancePositioningAutocorrectRoutine());
-			} else {
 				newCommands.addWantedRoutine(new SliderDistancePositioningRoutine());
+			} else {
+				newCommands.addWantedRoutine(new SliderDistancePositioningAutocorrectRoutine(Slider.SliderTarget.LEFT));
 			}
-		} else if (mSliderStick.getRawButton(9)) {
-			newCommands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
+		} else if (mSliderStick.getRawButton(5)) {
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.RIGHT;
 			if (sliderRight.twice()) {
-				System.out.println("right double click");
-				newCommands.addWantedRoutine(new SliderDistancePositioningAutocorrectRoutine());
-			} else {
 				newCommands.addWantedRoutine(new SliderDistancePositioningRoutine());
+			} else {
+				newCommands.addWantedRoutine(new SliderDistancePositioningAutocorrectRoutine(Slider.SliderTarget.RIGHT));
 			}
 		} else if (Slider.getInstance().getSliderState() == Slider.SliderState.IDLE) {
 			newCommands.addWantedRoutine(new ManualSliderControlRoutine());
 		}
-		newCommands.sliderStickInput.x = mSliderStick.getX();
 		
 		// Spatula
-		if (mSliderStick.getRawButton(3)) {
+		if (mSliderStick.getRawButton(8)) {
 			newCommands.wantedSpatulaState = Spatula.SpatulaState.UP;
-		} else if (mSliderStick.getRawButton(2)) {
+		} else if (mSliderStick.getRawButton(9)) {
 			newCommands.wantedSpatulaState = Spatula.SpatulaState.DOWN;
 		}
 

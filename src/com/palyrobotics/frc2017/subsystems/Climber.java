@@ -34,7 +34,7 @@ public class Climber extends Subsystem implements SubsystemLoop {
 	public static final float kStallingTriggerCurrent = 130;
 	public static final double kRopeGrabSpeed = 0.5;	// Turn slowly while waiting to catch rope
 	public static final double kClimbSpeed = 0.7;
-	public static final double kClimbScaleFactor = 0.5;
+	public static final double kClimbScaleFactor = 1;
 
 	private double mTarget = -1; // Encoder endpoint
 	private DashboardValue mDv;

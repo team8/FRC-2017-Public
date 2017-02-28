@@ -20,12 +20,18 @@ public class SliderDistancePositioningAutocorrectRoutine extends Routine {
 	}
 	private DistancePositioningState mState = DistancePositioningState.RAISING;
 	
+	private Slider.SliderTarget mTarget;
+	
 	private double startTime;
 	private static final double raiseTime = 1000;
 	
+	public SliderDistancePositioningAutocorrectRoutine(Slider.SliderTarget target) {
+		mTarget = target;
+	}
+	
 	@Override
 	public void start() {
-		if (spatula.getState() == SpatulaState.DOWN) {
+		if (spatula.getState() == SpatulaState.DOWN || slider.getSliderState() == Slider.SliderState.WAITING) {
 			System.out.println("Autocorrecting spatula!");
 			mState = DistancePositioningState.RAISING;
 		}
@@ -37,24 +43,26 @@ public class SliderDistancePositioningAutocorrectRoutine extends Routine {
 
 	@Override
 	public Commands update(Commands commands) {
+		commands.robotSetpoints.sliderSetpoint = mTarget;
+		
 		switch(mState) {
 		case MOVING:
 			commands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
-			try {
-				slider.run(commands, this);
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
 			break;
 		case RAISING:
-			if(System.currentTimeMillis() - startTime > raiseTime) {
+			if(System.currentTimeMillis() > (raiseTime+startTime)) {
 				mState = DistancePositioningState.MOVING;
+				break;
 			}
 			commands.wantedSpatulaState = Spatula.SpatulaState.UP;
 			commands.wantedSliderState = Slider.SliderState.WAITING;
 			break;
-		default:
-			break;
+		}
+		
+		try {
+			slider.run(commands, this);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
 		}
 		return commands;
 	}
@@ -72,7 +80,7 @@ public class SliderDistancePositioningAutocorrectRoutine extends Routine {
 
 	@Override
 	public boolean finished() {
-		return slider.onTarget();
+		return mState==DistancePositioningState.MOVING && slider.onTarget();
 	}
 
 	@Override

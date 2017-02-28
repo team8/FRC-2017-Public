@@ -13,15 +13,15 @@ import edu.wpi.first.wpilibj.Timer;
  * Everything is handled by twice() for ease of use
  */
 public class DoubleClickTimer {
-	//Default Values in milliseconds
-	public static final double DEFAULT_MIN_TOLERANCE = 0.2;
+	//Default Values in seconds
+	public static final double DEFAULT_MIN_TOLERANCE = 0.1;
 	public static final double DEFAULT_MAX_TOLERANCE = 0.5;
 	public static final double DEFAULT_WAIT_TIME = 0.5;
 	
-	//Milliseconds
+	//Seconds
 	private double kMinTolerance, kMaxTolerance, kWaitTime;
 	
-	private double t_0, now;
+	private double start, now;
 	private boolean twice = false;
 	
 	private WaitTimer wait;
@@ -71,7 +71,7 @@ public class DoubleClickTimer {
 	 * Resets time variables
 	 */
 	private void reset() {
-		t_0 = -1;
+		start = -1;
 		now = -1;
 	}
 	
@@ -80,7 +80,7 @@ public class DoubleClickTimer {
 	 * Otherwise record the current time
 	 */
 	private void register() {
-		if (t_0 == -1) t_0 = Timer.getFPGATimestamp();
+		if (start == -1) start = Timer.getFPGATimestamp();
 		else now = Timer.getFPGATimestamp();
 	}
 	
@@ -95,24 +95,20 @@ public class DoubleClickTimer {
 		if (twice) {
 			if (wait.timeout()) {
 				twice = false;
-				return true;
+				return false;
 			}
-			else return false;
+			else return true;
 		}
 		
 		register();
 		
-		//Pass if nothing has been registered
-		if (t_0 == -1 || now == -1) return false;
-		
 		//Reset timer if tolerance was passed
-		if (now - t_0 > kMaxTolerance) {
+		if (now - start > kMaxTolerance) {
 			reset();
 			twice = false;
 		}
 		//Register as double click if within tolerance
-		else if (now - t_0 >= kMinTolerance && now - t_0 <= kMaxTolerance) {
-			System.out.println("double click");
+		else if (now - start >= kMinTolerance && now - start <= kMaxTolerance) {
 			reset();
 			twice = true;
 		}

@@ -42,7 +42,7 @@ public class Gains {
 	 * AEGIR
 	 */
 	// Drive Position offboard control loop
-	public static final double kAegirDriveDistancekP = 0;
+	public static final double kAegirDriveDistancekP = 0.1;
 	public static final double kAegirDriveDistancekI = 0;
 	public static final double kAegirDriveDistancekD = 0;
 	public static final double kAegirDriveDistancekF = 0;

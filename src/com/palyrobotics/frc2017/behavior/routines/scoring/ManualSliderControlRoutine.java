@@ -9,7 +9,7 @@ import com.palyrobotics.frc2017.util.Subsystem;
 public class ManualSliderControlRoutine extends Routine {	
 	@Override
 	public void start() {	
-		System.out.println("Manually controlling slider");
+//		System.out.println("Manually controlling slider");
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class ManualSliderControlRoutine extends Routine {
 	@Override
 	public Commands cancel(Commands commands) {
 		commands.wantedSliderState = SliderState.IDLE;
-		System.out.println("Canceling manual slider control");
+//		System.out.println("Canceling manual slider control");
 		try {
 			slider.run(commands, this);
 		} catch (IllegalAccessException e) {

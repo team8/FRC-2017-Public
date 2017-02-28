@@ -24,7 +24,7 @@ public class Spatula extends Subsystem implements SubsystemLoop {
 	
 	public enum SpatulaState { UP, DOWN }
 	
-	private DoubleSolenoid.Value mOutput;
+	private DoubleSolenoid.Value mOutput = DoubleSolenoid.Value.kOff;
 
 	private DashboardValue mDv;
 	

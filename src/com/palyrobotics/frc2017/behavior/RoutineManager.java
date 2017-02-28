@@ -109,7 +109,7 @@ public class RoutineManager implements Tappable {
 			}
 		}
 		//clears the wanted routines every update cycle
-		output.wantedRoutines.clear();
+		output.wantedRoutines = new ArrayList<Routine>();
 		return output;
 	}
 
