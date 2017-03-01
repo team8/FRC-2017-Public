@@ -1,7 +1,6 @@
 package com.palyrobotics.frc2017.robot;
 
-import com.palyrobotics.frc2017.auto.AutoMode;
-import com.palyrobotics.frc2017.auto.AutoModeExecuter;
+import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.auto.AutoModeSelector;
 import com.palyrobotics.frc2017.behavior.RoutineManager;
 import com.palyrobotics.frc2017.config.Commands;
@@ -30,7 +29,6 @@ public class Robot extends IterativeRobot {
 	// Instantiate separate thread controls
 	private SubsystemLooper mSubsystemLooper = new SubsystemLooper();
 	private RoutineManager mRoutineManager = new RoutineManager();
-	private AutoModeExecuter mAutoModeExecuter = new AutoModeExecuter(mRoutineManager);
 	private DashboardManager mDashboardManager = DashboardManager.getInstance();
 
 	// Subsystem controllers
@@ -85,18 +83,16 @@ public class Robot extends IterativeRobot {
 		// Start control loops
 		mSubsystemLooper.start();
 
-		mDrive.resetController();
-		
-		AutoMode mode = AutoModeSelector.getInstance().getAutoMode();
-		mAutoModeExecuter.setAutoMode(mode);
-		mAutoModeExecuter.start();
-		
+		// Get the selected auto mode
+		AutoModeBase mode = AutoModeSelector.getInstance().getAutoMode();
+		// Prestart and run the auto mode
+		mode.prestart();
+		mRoutineManager.addNewRoutine(mode.getRoutine());
 		System.out.println("End autonomousInit()");
 	}
 
 	@Override
 	public void autonomousPeriodic() {
-		mAutoModeExecuter.run();
 		commands = mRoutineManager.update(commands);
 		mHardwareUpdater.updateSensors(robotState);
 		mHardwareUpdater.updateSubsystems();
@@ -128,10 +124,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("Start disabledInit()");
 		System.out.println("Current Auto Mode: " + AutoModeSelector.getInstance().getAutoMode().toString());
 		robotState.gamePeriod = RobotState.GamePeriod.DISABLED;
-		// Stop auto mode
-		mAutoModeExecuter.stop();
-
-		// Stop routine_request
+		// Stops updating routines
 		mRoutineManager.reset(commands);
 		
 		// Stop control loops
@@ -143,7 +136,7 @@ public class Robot extends IterativeRobot {
 		// Manually run garbage collector
 		System.gc();
 		
-		System.out.println("Encoders: "+robotState.drivePose.leftEnc);
+		System.out.println("Encoder: "+robotState.drivePose.leftEnc);
 		System.out.println("End disabledInit()");
 	}
 

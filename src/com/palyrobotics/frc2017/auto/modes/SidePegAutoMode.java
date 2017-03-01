@@ -1,11 +1,9 @@
 package com.palyrobotics.frc2017.auto.modes;
 
-import com.palyrobotics.frc2017.auto.AutoMode;
-import com.palyrobotics.frc2017.auto.AutoModeEndedException;
+import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
-import com.palyrobotics.frc2017.behavior.routines.drive.BBTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
 import com.palyrobotics.frc2017.config.Constants;
@@ -18,7 +16,7 @@ import java.util.ArrayList;
  * Created by Nihar on 2/11/17.
  * BBTurnAngle might be replaced with EncoderTurnAngle if no gyro
  */
-public class SidePegAutoMode extends AutoMode {
+public class SidePegAutoMode extends AutoModeBase {
 	// Might pivot differently when turning left vs right
 	public final double kSidePegTurnAngleDegrees = 60;
 
@@ -59,8 +57,8 @@ public class SidePegAutoMode extends AutoMode {
 	}
 
 	@Override
-	protected void execute() throws AutoModeEndedException {
-		runRoutine(mSequentialRoutine);
+	public Routine getRoutine() {
+		return mSequentialRoutine;
 	}
 
 	@Override

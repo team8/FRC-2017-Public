@@ -1,12 +1,14 @@
 package com.palyrobotics.frc2017.auto.modes;
 
-import com.palyrobotics.frc2017.auto.AutoMode;
-import com.palyrobotics.frc2017.auto.AutoModeEndedException;
+import com.palyrobotics.frc2017.auto.AutoModeBase;
+import com.palyrobotics.frc2017.behavior.Routine;
+import com.palyrobotics.frc2017.config.Commands;
+import com.palyrobotics.frc2017.util.Subsystem;
 
-public class DoNothingAutoMode extends AutoMode {
+public class DoNothingAutoMode extends AutoModeBase {
 	@Override
-	protected void execute() throws AutoModeEndedException {
-
+	public Routine getRoutine() {
+		return new DoNothingRoutine();
 	}
 
 	@Override
@@ -17,5 +19,37 @@ public class DoNothingAutoMode extends AutoMode {
 	@Override
 	public String toString() {
 		return "DoNothing";
+	}
+
+	public class DoNothingRoutine extends Routine {
+		@Override
+		public void start() {
+
+		}
+
+		@Override
+		public Commands update(Commands commands) {
+			return commands;
+		}
+
+		@Override
+		public Commands cancel(Commands commands) {
+			return commands;
+		}
+
+		@Override
+		public boolean finished() {
+			return false;
+		}
+
+		@Override
+		public Subsystem[] getRequiredSubsystems() {
+			return new Subsystem[0];
+		}
+
+		@Override
+		public String getName() {
+			return "DoNothingRoutine";
+		}
 	}
 }

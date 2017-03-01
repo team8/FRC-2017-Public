@@ -75,7 +75,7 @@ public class AutoModeSelectorTest {
 		AutoModeSelector auto = AutoModeSelector.getInstance();
 		int initSize = auto.getAutoModeList().size();
 		ArrayList<String> autoNames = auto.getAutoModeList();
-		AutoMode newAuto = new DoNothingAutoMode();
+		AutoModeBase newAuto = new DoNothingAutoMode();
 		autoNames.add(newAuto.toString());
 		auto.registerAutonomous(newAuto);
 

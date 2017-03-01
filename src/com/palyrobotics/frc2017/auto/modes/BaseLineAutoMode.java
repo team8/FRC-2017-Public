@@ -1,7 +1,7 @@
 package com.palyrobotics.frc2017.auto.modes;
 
-import com.palyrobotics.frc2017.auto.AutoMode;
-import com.palyrobotics.frc2017.auto.AutoModeEndedException;
+import com.palyrobotics.frc2017.auto.AutoModeBase;
+import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
@@ -9,7 +9,7 @@ import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
-public class BaseLineAutoMode extends AutoMode {
+public class BaseLineAutoMode extends AutoModeBase {
 	private CANTalonRoutine mRoutine;
 	
 	private Gains mGains;
@@ -23,7 +23,7 @@ public class BaseLineAutoMode extends AutoMode {
 	}
 
 	@Override
-	protected void execute() throws AutoModeEndedException {
+	public Routine getRoutine() {
 		// Drive straight until baseline
 		DriveSignal driveForward = DriveSignal.getNeutralSignal();
 		double setpoint = Constants.kBaseLineDistanceInches * 
@@ -36,7 +36,7 @@ public class BaseLineAutoMode extends AutoMode {
 //		driveForward.leftMotor.setPosition(setpoint, mGains);
 //		driveForward.rightMotor.setPosition(setpoint, mGains);
 		mRoutine = new CANTalonRoutine(driveForward);
-		runRoutine(mRoutine);
+		return mRoutine;
 	}
 
 	@Override

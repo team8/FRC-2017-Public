@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class AutoModeSelector {
 	private static AutoModeSelector instance = null;
-	private ArrayList<AutoMode> mAutoModes = new ArrayList<AutoMode>();
+	private ArrayList<AutoModeBase> mAutoModes = new ArrayList<>();
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
@@ -31,7 +31,7 @@ public class AutoModeSelector {
 	 * Add an AutoMode to list to choose from
 	 * @param auto AutoMode to add
 	 */
-	public void registerAutonomous(AutoMode auto) {
+	public void registerAutonomous(AutoModeBase auto) {
 		mAutoModes.add(auto);
 	}
 
@@ -58,7 +58,7 @@ public class AutoModeSelector {
 	 * Get the currently selected AutoMode
 	 * @return AutoMode currently selected
 	 */
-	public AutoMode getAutoMode() {
+	public AutoModeBase getAutoMode() {
 		return mAutoModes.get(selectedIndex);
 	}
 
@@ -67,7 +67,7 @@ public class AutoModeSelector {
 	 * @param index index of desired AutoMode
 	 * @return AutoMode at specified index
 	 */
-	public AutoMode getAutoMode(int index) {
+	public AutoModeBase getAutoMode(int index) {
 		// Assumes future selections will be the same auto mode
 		selectedIndex = index;
 		return mAutoModes.get(index);
@@ -76,11 +76,11 @@ public class AutoModeSelector {
 	/**
 	 * Gets the names of all registered AutoModes
 	 * @return ArrayList of AutoModes string name
-	 * @see AutoMode#toString()
+	 * @see AutoModeBase#toString()
 	 */
 	public ArrayList<String> getAutoModeList() {
 		ArrayList<String> list = new ArrayList<String>();
-		for (AutoMode autoMode : mAutoModes) {
+		for (AutoModeBase autoMode : mAutoModes) {
 			list.add(autoMode.toString());
 		}
 		return list;
@@ -95,7 +95,7 @@ public class AutoModeSelector {
 	/**
 	 * Attempt to set
 	 * @return false if unable to find appropriate AutoMode
-	 * @see AutoMode#toString()
+	 * @see AutoModeBase#toString()
 	 */
 	public boolean setAutoModeByName(String name) {
 		int numOccurrences = 0;

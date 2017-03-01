@@ -25,7 +25,7 @@ public class Constants extends ConstantsBase {
 	// Unit Conversions for CANTalons
 	// TODO: Calculate the unit conversions for native units and inches, rpm, etc as needed
 	/*
-	 * Measured 100 in = 2910 ticks
+	 * Measured 100 in. = 2910 ticks
 	 */
 	public static double kDriveInchesToTicks = 29.1;
 	// TODO: tune degrees to ticks
