@@ -42,6 +42,7 @@ public class DriveTimeRoutine extends Routine {
 	@Override
 	public Commands cancel(Commands commands) {
 		System.out.println("Cancelling");
+		commands.wantedDriveState = Drive.DriveState.NEUTRAL;
 		drive.resetController();
 		drive.setNeutral();
 		return commands;

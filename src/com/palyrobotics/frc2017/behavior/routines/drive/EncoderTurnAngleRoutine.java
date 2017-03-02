@@ -53,6 +53,7 @@ public class EncoderTurnAngleRoutine extends Routine {
 	@Override
 	public Commands cancel(Commands commands) {
 		mState = State.DONE;
+		commands.wantedDriveState = Drive.DriveState.NEUTRAL;
 		drive.setNeutral();
 		return commands;
 	}

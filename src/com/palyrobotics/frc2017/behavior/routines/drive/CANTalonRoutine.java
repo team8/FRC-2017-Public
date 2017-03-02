@@ -37,6 +37,7 @@ public class CANTalonRoutine extends Routine {
 	@Override
 	public Commands cancel(Commands commands) {
 		drive.setNeutral();
+		commands.wantedDriveState = Drive.DriveState.NEUTRAL;
 		return output;
 	}
 

@@ -59,6 +59,7 @@ public class BBTurnAngleRoutine extends Routine {
 	@Override
 	public Commands cancel(Commands commands) {
 		mState = States.DONE;
+		commands.wantedDriveState = Drive.DriveState.NEUTRAL;
 		drive.setNeutral();
 		return commands;
 	}

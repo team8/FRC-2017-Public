@@ -145,6 +145,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	 */
 	public void setNeutral() {
 		mController = null;
+		mState = DriveState.NEUTRAL;
 		setDriveOutputs(DriveSignal.getNeutralSignal());
 	}
 
