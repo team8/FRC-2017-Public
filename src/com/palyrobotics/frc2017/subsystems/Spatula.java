@@ -31,7 +31,7 @@ public class Spatula extends Subsystem implements SubsystemLoop {
 	private Spatula() {
 		super("Spatula");
 		
-		mDv = new DashboardValue("spatula");
+		mDv = new DashboardValue("spatulastatus");
 	}
 
 	@Override

@@ -44,7 +44,7 @@ public class Flippers extends Subsystem implements SubsystemLoop {
 	private Flippers() {
 		super("Flippers");
 		
-		mDv = new DashboardValue("flippers");
+		mDv = new DashboardValue("flipperstatus");
 	}
 
 	@Override

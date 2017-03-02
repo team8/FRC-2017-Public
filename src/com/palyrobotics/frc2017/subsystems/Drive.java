@@ -2,9 +2,13 @@ package com.palyrobotics.frc2017.subsystems;
 
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
+import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
 import com.palyrobotics.frc2017.subsystems.controllers.CANTalonDriveController;
 import com.palyrobotics.frc2017.subsystems.controllers.EncoderTurnAngleController;
 import com.palyrobotics.frc2017.util.*;
+import com.palyrobotics.frc2017.robot.HardwareAdapter;
+import com.palyrobotics.frc2017.robot.team254.lib.util.LegacyPose;
 import com.palyrobotics.frc2017.subsystems.controllers.BangBangTurnAngleController;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.util.archive.CheesyDriveHelper;
@@ -50,6 +54,11 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	// Stores output
 	private DriveSignal mSignal = DriveSignal.getNeutralSignal();
 
+	private DashboardValue motors;
+	
+	private DashboardValue leftEncoder;
+	private DashboardValue rightEncoder;
+	
 	private Drive() {
 		super("Drive");
 		if (Constants.kRobotName == Constants.RobotName.DERICA) {
@@ -68,6 +77,11 @@ public class Drive extends Subsystem implements SubsystemLoop {
 			kInchesPerTick = 1/Constants.kDriveInchesToTicks;
 			kInchesToTicks = Constants.kDriveInchesToTicks;
 		}
+		
+		motors = new DashboardValue("driveSpeedUpdate");
+		
+		leftEncoder = new DashboardValue("leftdriveencoder");
+		rightEncoder = new DashboardValue("rightdriveencoder");
 	}
 
 	/**
@@ -134,6 +148,12 @@ public class Drive extends Subsystem implements SubsystemLoop {
 		
 		mIsNewState = false;
 		mState = commands.wantedDriveState;
+		
+		leftEncoder.updateValue(state.drivePose.leftEnc);
+		rightEncoder.updateValue(state.drivePose.rightEnc);
+		
+		DashboardManager.getInstance().publishKVPair(leftEncoder);
+		DashboardManager.getInstance().publishKVPair(rightEncoder);
 	}
 
 	@Override
@@ -141,6 +161,8 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	}
 
 	private void setDriveOutputs(DriveSignal signal) {
+		motors.updateValue(signal.leftMotor.getSetpoint() + ", " + signal.rightMotor.getSetpoint());
+		DashboardManager.getInstance().publishKVPair(motors);
 		mSignal = signal;
 	}
 

@@ -5,6 +5,7 @@ import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
+import com.palyrobotics.frc2017.robot.HardwareAdapter;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Subsystem;
 import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
@@ -37,8 +38,11 @@ public class Climber extends Subsystem implements SubsystemLoop {
 	public static final double kClimbScaleFactor = 1;
 
 	private double mTarget = -1; // Encoder endpoint
-	private DashboardValue mDv;
-
+	
+	private DashboardValue current;
+	private DashboardValue state;
+	private DashboardValue encoder;
+	
 	public enum ClimberState {
 		IDLE,
 		MANUAL,
@@ -51,7 +55,9 @@ public class Climber extends Subsystem implements SubsystemLoop {
 	private Climber() {
 		super("Climber");
 		
-		mDv = new DashboardValue("climber");
+		current = new DashboardValue("climbercurrent");
+		encoder = new DashboardValue("climberencoder");
+		state = new DashboardValue("climberstate");
 	}
 
 	@Override
@@ -134,12 +140,10 @@ public class Climber extends Subsystem implements SubsystemLoop {
 			break;
 		}
 		
-		if (mOutput.getSetpoint() == 0) {
-			mDv.updateValue("NOT MOVING");
-		} else {
-			mDv.updateValue("MOVING");
-		}
-		DashboardManager.getInstance().publishKVPair(mDv);
+//		current.updateValue(mOutput);
+		state.updateValue(this.mState.name());
+//		encoder.updateValue(HardwareAdapter.getInstance());
+		DashboardManager.getInstance().publishKVPair(state);
 	}
 
 	public CANTalonOutput getOutput() {

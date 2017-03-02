@@ -14,8 +14,8 @@ public class DashboardValue {
 		value = "NO_ELEMENT";
 	}
 	
-	public void updateValue(String val) {
-		this.value = val;
+	public void updateValue(Object val) {
+		this.value = val.toString();
 	}
 	
 	/**
