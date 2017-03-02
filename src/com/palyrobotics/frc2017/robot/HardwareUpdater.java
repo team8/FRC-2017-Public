@@ -129,12 +129,16 @@ class HardwareUpdater {
 		// Set slave talons to follower mode
 		leftSlave1Talon.changeControlMode(CANTalon.TalonControlMode.Follower);
 		leftSlave1Talon.set(leftMasterTalon.getDeviceID());
-//		otherLeftSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
-//		otherLeftSlaveTalon.set(leftMasterTalon.getDeviceID());
+		if (leftSlave2Talon != null) {
+			leftSlave2Talon.changeControlMode(CANTalon.TalonControlMode.Follower);
+			leftSlave2Talon.set(leftMasterTalon.getDeviceID());
+		}
 		rightSlave1Talon.changeControlMode(CANTalon.TalonControlMode.Follower);
 		rightSlave1Talon.set(rightMasterTalon.getDeviceID());
-//		otherRightSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Follower);
-//		otherRightSlaveTalon.set(rightMasterTalon.getDeviceID());
+		if (rightSlave2Talon != null) {
+			rightSlave2Talon.changeControlMode(CANTalon.TalonControlMode.Follower);
+			rightSlave2Talon.set(rightMasterTalon.getDeviceID());
+		}
 	
 		if (Constants.kRobotName == RobotName.AEGIR || Constants.kRobotName == RobotName.STEIK) {
 			//Climber setup

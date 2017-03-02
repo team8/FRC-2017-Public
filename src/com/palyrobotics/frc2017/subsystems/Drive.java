@@ -79,7 +79,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 
 	@Override
 	public void start() {
-		
+		setNeutral();
 	}
 
 	/**

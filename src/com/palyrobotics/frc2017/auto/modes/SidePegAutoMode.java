@@ -7,7 +7,9 @@ import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
 import com.palyrobotics.frc2017.config.Constants;
+import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.Gains;
+import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
 import java.util.ArrayList;
@@ -65,14 +67,24 @@ public class SidePegAutoMode extends AutoModeBase {
 	public void prestart() {
 		System.out.println("Starting "+this.toString()+" Auto Mode");
 		
-		driveForward.leftMotor.setPosition(Constants.kSidePegDistanceForwardInches, mGains);
-		driveForward.rightMotor.setPosition(Constants.kSidePegDistanceForwardInches, mGains);
+		double driveForwardSetpoint = Constants.kSidePegDistanceForwardInches * 
+				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+						: Constants.kDriveInchesToTicks );
+		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint+Robot.getRobotState().drivePose.leftEnc, mGains, 
+			Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
+		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint+Robot.getRobotState().drivePose.rightEnc, mGains, 
+				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
 
-		driveToAirship.leftMotor.setPosition(Constants.kSidePegDistanceToAirshipInches, mGains);
-		driveToAirship.rightMotor.setPosition(Constants.kSidePegDistanceToAirshipInches, mGains);
+		double driveToAirshipSetpoint = Constants.kSidePegDistanceToAirshipInches * 
+				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+						: Constants.kDriveInchesToTicks );
+		driveToAirship.leftMotor.setMotionMagic(driveToAirshipSetpoint+Robot.getRobotState().drivePose.leftEnc, mGains, 
+			Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
+		driveToAirship.rightMotor.setMotionMagic(driveToAirshipSetpoint+Robot.getRobotState().drivePose.rightEnc, mGains, 
+				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
 		
 		ArrayList<Routine> score = new ArrayList<Routine>();
-		score.add(new CANTalonRoutine(driveToAirship));
+//		score.add(new CANTalonRoutine(driveToAirship));
 //		score.add(slider score auto)
 
 		ArrayList<Routine> sequence = new ArrayList<Routine>();
@@ -85,66 +97,66 @@ public class SidePegAutoMode extends AutoModeBase {
 		sequence.add(new CANTalonRoutine(driveToAirship));
 		sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
 		
-		//TODO: adjust distances
-		// Add the variants
-		backUp.leftMotor.setPosition(-3, mGains);
-		backUp.rightMotor.setPosition(-3, mGains);
-		
-		// distance to the line that is perpendicular to and intersects the hopper
-		driveToPerpendicular.leftMotor.setPosition(4, mGains);
-		driveToPerpendicular.rightMotor.setPosition(4, mGains);
-		
-		backUpIntoHopper.leftMotor.setPosition(-8, mGains);
-		backUpIntoHopper.rightMotor.setPosition(-8, mGains);
-		
-		driveTowardsNeutralZone.leftMotor.setPosition(15, mGains);
-		driveTowardsNeutralZone.rightMotor.setPosition(15, mGains);
-		
-		/**
-		 * VARIANTS WORK AS FOLLOWS:
-		 * 
-		 * NONE:
-		 * - Do nothing
-		 * 
-		 * HIT_CLOSE_HOPPER:
-		 * - Drive to side peg like normal
-		 * - Back up, rotate, drive to the perpendicular to the hopper, turn 90 degrees, back up into the hopper
-		 * 
-		 * MOVE_TO_LOADING_STATION:
-		 * - Drive to side peg like normal
-		 * - Back up, rotate, drive up a little bit.  Rotate again towards the loading station (only if on the left side), drive 
-		 */
-		switch (this.mPost) {
-			case NONE:
-				break;
-			case HIT_CLOSE_HOPPER:
-				sequence.add(new CANTalonRoutine(backUp));
-				if (mVariant == SideAutoVariant.LEFT) {
-					sequence.add(new EncoderTurnAngleRoutine(kSidePegTurnAngleDegrees));
-				} else {
-					sequence.add(new EncoderTurnAngleRoutine(-kSidePegTurnAngleDegrees));
-				}
-				sequence.add(new CANTalonRoutine(driveToPerpendicular));
-				if (mVariant == SideAutoVariant.LEFT) {
-					sequence.add(new EncoderTurnAngleRoutine(90));
-				} else {
-					sequence.add(new EncoderTurnAngleRoutine(-90));
-				}
-				sequence.add(new CANTalonRoutine(backUpIntoHopper));
-				break;
-				
-			case MOVE_TO_LOADING_STATION:
-				sequence.add(new CANTalonRoutine(backUp));
-				if (mVariant == SideAutoVariant.LEFT) {
-					sequence.add(new EncoderTurnAngleRoutine(kSidePegTurnAngleDegrees));
-				} else {
-					sequence.add(new EncoderTurnAngleRoutine(-kSidePegTurnAngleDegrees));
-				}
-				sequence.add(new CANTalonRoutine(driveToPerpendicular));
-				if (mVariant == SideAutoVariant.LEFT) sequence.add(new EncoderTurnAngleRoutine(25));
-				sequence.add(new CANTalonRoutine(driveTowardsNeutralZone));
-				break;				
-		}
+//		//TODO: adjust distances
+//		// Add the variants
+//		backUp.leftMotor.setPosition(-3, mGains);
+//		backUp.rightMotor.setPosition(-3, mGains);
+//		
+//		// distance to the line that is perpendicular to and intersects the hopper
+//		driveToPerpendicular.leftMotor.setPosition(4, mGains);
+//		driveToPerpendicular.rightMotor.setPosition(4, mGains);
+//		
+//		backUpIntoHopper.leftMotor.setPosition(-8, mGains);
+//		backUpIntoHopper.rightMotor.setPosition(-8, mGains);
+//		
+//		driveTowardsNeutralZone.leftMotor.setPosition(15, mGains);
+//		driveTowardsNeutralZone.rightMotor.setPosition(15, mGains);
+//		
+//		/**
+//		 * VARIANTS WORK AS FOLLOWS:
+//		 * 
+//		 * NONE:
+//		 * - Do nothing
+//		 * 
+//		 * HIT_CLOSE_HOPPER:
+//		 * - Drive to side peg like normal
+//		 * - Back up, rotate, drive to the perpendicular to the hopper, turn 90 degrees, back up into the hopper
+//		 * 
+//		 * MOVE_TO_LOADING_STATION:
+//		 * - Drive to side peg like normal
+//		 * - Back up, rotate, drive up a little bit.  Rotate again towards the loading station (only if on the left side), drive 
+//		 */
+//		switch (this.mPost) {
+//			case NONE:
+//				break;
+//			case HIT_CLOSE_HOPPER:
+//				sequence.add(new CANTalonRoutine(backUp));
+//				if (mVariant == SideAutoVariant.LEFT) {
+//					sequence.add(new EncoderTurnAngleRoutine(kSidePegTurnAngleDegrees));
+//				} else {
+//					sequence.add(new EncoderTurnAngleRoutine(-kSidePegTurnAngleDegrees));
+//				}
+//				sequence.add(new CANTalonRoutine(driveToPerpendicular));
+//				if (mVariant == SideAutoVariant.LEFT) {
+//					sequence.add(new EncoderTurnAngleRoutine(90));
+//				} else {
+//					sequence.add(new EncoderTurnAngleRoutine(-90));
+//				}
+//				sequence.add(new CANTalonRoutine(backUpIntoHopper));
+//				break;
+//				
+//			case MOVE_TO_LOADING_STATION:
+//				sequence.add(new CANTalonRoutine(backUp));
+//				if (mVariant == SideAutoVariant.LEFT) {
+//					sequence.add(new EncoderTurnAngleRoutine(kSidePegTurnAngleDegrees));
+//				} else {
+//					sequence.add(new EncoderTurnAngleRoutine(-kSidePegTurnAngleDegrees));
+//				}
+//				sequence.add(new CANTalonRoutine(driveToPerpendicular));
+//				if (mVariant == SideAutoVariant.LEFT) sequence.add(new EncoderTurnAngleRoutine(25));
+//				sequence.add(new CANTalonRoutine(driveTowardsNeutralZone));
+//				break;				
+//		}
 		
 		mSequentialRoutine = new SequentialRoutine(sequence);
 	}

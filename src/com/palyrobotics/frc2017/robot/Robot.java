@@ -103,6 +103,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("Start teleopInit()");
 		robotState.gamePeriod = RobotState.GamePeriod.TELEOP;
 		mRoutineManager.reset(commands);
+		commands.wantedDriveState = Drive.DriveState.CHEZY;	//switch to chezy after auto ends
 		commands = operatorInterface.updateCommands(commands);
 		mSubsystemLooper.start();
 		System.out.println("End teleopInit()");
@@ -126,6 +127,8 @@ public class Robot extends IterativeRobot {
 		robotState.gamePeriod = RobotState.GamePeriod.DISABLED;
 		// Stops updating routines
 		mRoutineManager.reset(commands);
+		
+		commands = new Commands();
 		
 		// Stop control loops
 		mSubsystemLooper.stop();

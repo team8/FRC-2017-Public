@@ -44,10 +44,10 @@ public class Gains {
 	// Drive Motion Magic offboard control loop
 	public static final double kAegirDriveMotionMagicCruiseVelocity = 800;
 	public static final double kAegirDriveMotionMagicMaxAcceleration = 80;
-	public static final double kAegirDriveDistancekP = 1;
+	public static final double kAegirDriveDistancekP = 1.1;
 	public static final double kAegirDriveDistancekI = 0;
-	public static final double kAegirDriveDistancekD = 8;
-	public static final double kAegirDriveDistancekF = 0.5;
+	public static final double kAegirDriveDistancekD = 6;
+	public static final double kAegirDriveDistancekF = 1;
 	public static final int kAegirDriveDistancekIzone = 1000;
 	public static final double kAegirDriveDistancekRampRate = 0.0;
 

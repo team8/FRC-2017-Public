@@ -152,7 +152,7 @@ public class Constants extends ConstantsBase {
 
 	// !!! Physical constants
 	public static double kBaseLineDistanceInches = 93.3;
-	public static double kCenterPegDistanceInches = 110;
+	public static double kCenterPegDistanceInches = 80;
 	// For side peg auto, robot starts 4 gear widths (44") from center of alliance wall
 	public static double kSidePegDistanceForwardInches = 122.5688;
 	public static double kSidePegDistanceToAirshipInches = 17.5688;
