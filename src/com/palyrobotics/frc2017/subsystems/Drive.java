@@ -111,8 +111,12 @@ public class Drive extends Subsystem implements SubsystemLoop {
 				} else {
 					setDriveOutputs(mController.update(mCachedRobotState));
 				}
+				break;
 			case OPEN_LOOP:
-				setDriveOutputs(commands.robotSetpoints.drivePowerSetpoint.get());
+				if (commands.robotSetpoints.drivePowerSetpoint.isPresent()) {
+					setDriveOutputs(commands.robotSetpoints.drivePowerSetpoint.get());
+				}
+				break;
 			case NEUTRAL:
 				if(!newController && mIsNewState) {
 					resetController();
@@ -202,6 +206,9 @@ public class Drive extends Subsystem implements SubsystemLoop {
 
 	@Override
 	public void printStatus() {
-		// TODO Auto-generated method stub
+//		System.out.println("Enc: "+mCachedRobotState.drivePose.leftEnc);
+//		System.out.println("Setpt: "+mCachedRobotState.leftSetpoint);
+//		System.out.println("Gyro: "+mCachedRobotState.drivePose.heading);
+//		System.out.println();
 	}
 }

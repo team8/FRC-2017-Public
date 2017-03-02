@@ -23,7 +23,7 @@ public class BangBangTurnAngleController implements Drive.DriveController {
 	 * @param heading Degrees relative to current state to turn
 	 */
 	public BangBangTurnAngleController(Pose currentPose, double heading) {
-		this.mPower = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kTurnAngleSpeed : Constants.kTurnInPlaceSpeed;
+		this.mPower = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kTurnAngleSpeed : Constants.kTurnInPlacePower;
 		this.mCachedPose = currentPose;
 		this.mTargetHeading = this.mCachedPose.heading + heading;
 		System.out.println("Starting Heading" + this.mCachedPose.heading);
@@ -35,7 +35,7 @@ public class BangBangTurnAngleController implements Drive.DriveController {
 			return DriveSignal.getNeutralSignal();
 		}
 		mCachedPose = state.drivePose;
-		System.out.println("Current Pose: " + mCachedPose.heading);
+//		System.out.println("Current Pose: " + mCachedPose.heading);
 		DriveSignal output = DriveSignal.getNeutralSignal();
 		if (mCachedPose.heading < mTargetHeading) {
 			output.leftMotor.setPercentVBus(this.mPower);

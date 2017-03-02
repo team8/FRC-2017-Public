@@ -183,6 +183,11 @@ class HardwareUpdater {
 		if (gyro != null) {
 			robotState.drivePose.heading = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getAngle();
 			robotState.drivePose.headingVelocity = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getRate();
+			// Invert Steik gyros
+			if (Constants.kRobotName != RobotName.DERICA) {
+				robotState.drivePose.heading*=-1;
+				robotState.drivePose.headingVelocity*=-1;
+			}
 		} else {
 			robotState.drivePose.heading = 0;
 			robotState.drivePose.headingVelocity = 0;

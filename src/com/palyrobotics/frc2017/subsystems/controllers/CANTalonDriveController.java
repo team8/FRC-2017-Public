@@ -71,15 +71,16 @@ public class CANTalonDriveController implements Drive.DriveController {
 		}
 		double positionTolerance = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kAcceptableDrivePositionError : Constants.kAcceptableDrivePositionError;
 		double velocityTolerance = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kAcceptableDriveVelocityError : Constants.kAcceptableDriveVelocityError;
-		if (!mCachedState.drivePose.leftError.isPresent() || !mCachedState.drivePose.rightError.isPresent()) {
-//			System.err.println("Talon closed loop error not found!");
-			return false;
-		}
+		// Motion magic is not PID so ignore whether talon closed loop error is around
 		if (mSignal.leftMotor.getControlMode() == CANTalon.TalonControlMode.MotionMagic) {
 			return (Math.abs(mCachedState.drivePose.leftEnc - mSignal.leftMotor.getSetpoint()) < positionTolerance) &&
 					(Math.abs(mCachedState.drivePose.leftSpeed) < velocityTolerance) &&
 					(Math.abs(mCachedState.drivePose.rightEnc - mSignal.rightMotor.getSetpoint()) < positionTolerance) &&
 					(Math.abs(mCachedState.drivePose.rightSpeed) < velocityTolerance);
+		}
+		if (!mCachedState.drivePose.leftError.isPresent() || !mCachedState.drivePose.rightError.isPresent()) {
+//			System.err.println("Talon closed loop error not found!");
+			return false;
 		}
 		return (Math.abs(mCachedState.drivePose.leftError.get()) < positionTolerance) &&
 				(Math.abs(mCachedState.drivePose.rightError.get()) < positionTolerance && 

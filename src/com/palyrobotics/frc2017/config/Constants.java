@@ -19,7 +19,7 @@ public class Constants extends ConstantsBase {
 	/*
 	 * Control loop constants for both robots
 	 */
-	public static double kTurnInPlaceSpeed = 0.5;
+	public static double kTurnInPlacePower = 0.2;
 	public static double kTurnEncoderMaxAccel = 10;
 	public static double kTurnEncoderMaxVel = 10;
 	// Unit Conversions for CANTalons

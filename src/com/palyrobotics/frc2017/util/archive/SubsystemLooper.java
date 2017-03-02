@@ -18,6 +18,8 @@ import java.util.List;
  * Based on Team 254 {@link Looper}
  */
 public class SubsystemLooper {
+	// Whether to print or not
+	private boolean mAllowPrinting = true;
 	private final List<SubsystemLoop> mLoops;
 
 	// Used for the main loop
@@ -30,8 +32,6 @@ public class SubsystemLooper {
 
 	// Used for secondary printer loop
 	private boolean mPrinting = false;
-	// Whether to print or not
-	private boolean mAllowPrinting = false;
 	private final double kPrintRate = Constants.kSubsystemPrintLooperDt;
 	private final Notifier mPrintNotifier;
 	private final Object mPrintingLock = new Object();

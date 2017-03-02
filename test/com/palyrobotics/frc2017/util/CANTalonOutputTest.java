@@ -13,6 +13,14 @@ import static org.hamcrest.CoreMatchers.equalTo;
  */
 public class CANTalonOutputTest {
 	/**
+	 * Test isPID
+	 */
+	@Test
+	public void testPID() {
+		System.out.println("motion magic is "+CANTalon.TalonControlMode.MotionMagic.isPID());
+	}
+	
+	/**
 	 * Test that CANTalon outputs are being configured correctly
 	 * TODO: Not all accounted for
 	 */

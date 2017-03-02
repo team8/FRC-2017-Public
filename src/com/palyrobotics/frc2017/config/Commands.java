@@ -37,7 +37,7 @@ public class Commands {
 	public void addWantedRoutine(Routine wantedRoutine) {
 		for(Routine routine : wantedRoutines) {
 			if(routine.getClass().equals(wantedRoutine.getClass())) {
-				System.out.println("tried to add duplicate routine!");
+				System.out.println("tried to add duplicate routine!" + routine.getName());
 				return;
 			}
 		}

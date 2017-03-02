@@ -36,7 +36,7 @@ public class SliderDistancePositioningAutocorrectRoutine extends Routine {
 			mState = DistancePositioningState.RAISING;
 		}
 		else {
-			mState = DistancePositioningState.MOVING;
+			mState = DistancePositioningState.RAISING;
 		}
 		startTime = System.currentTimeMillis();
 	}
@@ -51,6 +51,7 @@ public class SliderDistancePositioningAutocorrectRoutine extends Routine {
 			break;
 		case RAISING:
 			if(System.currentTimeMillis() > (raiseTime+startTime)) {
+				System.out.println("Time up");
 				mState = DistancePositioningState.MOVING;
 				break;
 			}

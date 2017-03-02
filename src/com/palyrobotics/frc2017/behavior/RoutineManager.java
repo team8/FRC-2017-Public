@@ -50,11 +50,14 @@ public class RoutineManager implements Tappable {
 		// Cancel all running routines
 		if(runningRoutines.size() != 0) {
 			for(Routine routine : runningRoutines) {
+				System.out.println("Canceling "+routine.getName());
 				output = routine.cancel(output);
 			}
 		}
-		// Empty the running routines
+		// Empty the routine buffers
 		runningRoutines.clear();
+		routinesToAdd.clear();
+		routinesToRemove.clear();
 		return output;
 	}
 
