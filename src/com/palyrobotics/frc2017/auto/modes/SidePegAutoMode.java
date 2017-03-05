@@ -7,6 +7,7 @@ import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.BBTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
+import com.palyrobotics.frc2017.behavior.routines.drive.SafetyTurnAngleRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.Gains;
@@ -92,9 +93,9 @@ public class SidePegAutoMode extends AutoModeBase {
 		ArrayList<Routine> sequence = new ArrayList<>();
 		sequence.add(new CANTalonRoutine(driveForward, true));
 		if (mVariant == SideAutoVariant.LEFT) {
-			sequence.add(new BBTurnAngleRoutine(kSidePegTurnAngleDegrees));
+			sequence.add(new SafetyTurnAngleRoutine(kSidePegTurnAngleDegrees));
 		} else {
-			sequence.add(new BBTurnAngleRoutine(-kSidePegTurnAngleDegrees));
+			sequence.add(new SafetyTurnAngleRoutine(-kSidePegTurnAngleDegrees));
 		}
 		sequence.add(new CANTalonRoutine(driveToAirship, true));
 		sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
