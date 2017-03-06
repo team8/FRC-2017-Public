@@ -79,6 +79,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		System.out.println("Start autonomousInit()");
 		robotState.gamePeriod = RobotState.GamePeriod.AUTO;
+		mHardwareUpdater.configureTalons(false);
 		
 		// Start control loops
 		mSubsystemLooper.start();
@@ -102,6 +103,7 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		System.out.println("Start teleopInit()");
 		robotState.gamePeriod = RobotState.GamePeriod.TELEOP;
+		mHardwareUpdater.configureTalons(false);
 		mRoutineManager.reset(commands);
 		commands.wantedDriveState = Drive.DriveState.CHEZY;	//switch to chezy after auto ends
 		commands = operatorInterface.updateCommands(commands);
@@ -135,6 +137,8 @@ public class Robot extends IterativeRobot {
 
 		// Stop controllers
 		mDrive.setNeutral();
+		
+		mHardwareUpdater.disableTalons();
 
 		// Manually run garbage collector
 		System.gc();

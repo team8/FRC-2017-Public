@@ -54,6 +54,7 @@ class HardwareUpdater {
 		this.mDrive = drive;
 	}
 
+	
 	/**
 	 * Initialize all hardware
 	 */
@@ -61,7 +62,59 @@ class HardwareUpdater {
 		if (HardwareAdapter.getInstance().getDrivetrain().gyro != null) {
 //			HardwareAdapter.getInstance().getDrivetrain().gyro.calibrate();
 		}
+		
+		configureTalons(true);
+	}
+	
+	void disableTalons() {
+		HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon.disable();
+		HardwareAdapter.getInstance().getDrivetrain().leftSlave1Talon.disable();
+		HardwareAdapter.getInstance().getDrivetrain().leftSlave2Talon.disable();
+		HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon.disable();
+		HardwareAdapter.getInstance().getDrivetrain().rightSlave1Talon.disable();
+		HardwareAdapter.getInstance().getDrivetrain().rightSlave2Talon.disable();
+		if(Constants.kRobotName == RobotName.AEGIR || Constants.kRobotName == RobotName.STEIK) {
+			HardwareAdapter.getInstance().getClimber().climberTalon.disable();
+			HardwareAdapter.getInstance().getSlider().sliderTalon.disable();
+		}
+	}
+	
+	void configureTalons(boolean calibrateSliderEncoder) {
+		configureDriveTalons();
+		if (Constants.kRobotName == RobotName.AEGIR || Constants.kRobotName == RobotName.STEIK) {
+			//Climber setup
+			CANTalon climber = HardwareAdapter.ClimberHardware.getInstance().climberTalon;
+			climber.reset();
+			climber.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
+			climber.setPosition(0);	
+			climber.configMaxOutputVoltage(Constants.kClimberMaxVoltage);
+			climber.configPeakOutputVoltage(Constants.kClimberMaxVoltage, 0); // Should never be used
+			climber.ConfigRevLimitSwitchNormallyOpen(false); // Prevent the motor from spinning backwards
+			climber.ConfigFwdLimitSwitchNormallyOpen(true);
+			climber.enable();
+			
+			CANTalon slider = HardwareAdapter.SliderHardware.getInstance().sliderTalon;
+			// Reset and turn on the Talon 
+			slider.reset();
+			slider.clearStickyFaults();
+			slider.enable();
+			slider.enableControl();
+			slider.configMaxOutputVoltage(Constants.kSliderMaxVoltage);
+			slider.configPeakOutputVoltage(Constants.kSliderPeakOutputVoltage, -Constants.kSliderPeakOutputVoltage);
+			if (calibrateSliderEncoder) {
+				// Set up the Talon to read from a relative CTRE mag encoder sensor
+				slider.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
+				// Calibrate the encoder
+				double current_pot_pos = HardwareAdapter.SliderHardware.getInstance().sliderPotentiometer.getValue();
+				double distance_to_center = current_pot_pos - Constants.kPotentiometerCenterPos;
+				double position_in_rev = (distance_to_center / 4096.0) * 10.0;
+				slider.setPosition(-position_in_rev);
 
+			}
+		}
+	}
+	
+	void configureDriveTalons() {
 		CANTalon leftMasterTalon = HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon;
 		CANTalon leftSlave1Talon = HardwareAdapter.getInstance().getDrivetrain().leftSlave1Talon;
 		CANTalon leftSlave2Talon = HardwareAdapter.getInstance().getDrivetrain().leftSlave2Talon;
@@ -138,36 +191,6 @@ class HardwareUpdater {
 		if (rightSlave2Talon != null) {
 			rightSlave2Talon.changeControlMode(CANTalon.TalonControlMode.Follower);
 			rightSlave2Talon.set(rightMasterTalon.getDeviceID());
-		}
-	
-		if (Constants.kRobotName == RobotName.AEGIR || Constants.kRobotName == RobotName.STEIK) {
-			//Climber setup
-			CANTalon climber = HardwareAdapter.ClimberHardware.getInstance().climberTalon;
-			climber.reset();
-			climber.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
-			climber.setPosition(0);	
-			climber.configMaxOutputVoltage(Constants.kClimberMaxVoltage);
-			climber.configPeakOutputVoltage(Constants.kClimberMaxVoltage, 0); // Should never be used
-			climber.ConfigRevLimitSwitchNormallyOpen(false); // Prevent the motor from spinning backwards
-			climber.ConfigFwdLimitSwitchNormallyOpen(true);
-			climber.enable();
-			
-			CANTalon slider = HardwareAdapter.SliderHardware.getInstance().sliderTalon;
-			// Reset and turn on the Talon 
-			slider.reset();
-			slider.clearStickyFaults();
-			slider.enable();
-			slider.enableControl();
-			slider.configMaxOutputVoltage(Constants.kSliderMaxVoltage);
-			slider.configPeakOutputVoltage(Constants.kSliderPeakOutputVoltage, -Constants.kSliderPeakOutputVoltage);
-
-			// Set up the Talon to read from a relative CTRE mag encoder sensor
-			slider.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
-			// Calibrate the encoder
-			double current_pot_pos = HardwareAdapter.SliderHardware.getInstance().sliderPotentiometer.getValue();
-			double distance_to_center = current_pot_pos - Constants.kPotentiometerCenterPos;
-			double position_in_rev = (distance_to_center / 4096.0) * 10.0;
-			slider.setPosition(-position_in_rev);
 		}
 	}
 
