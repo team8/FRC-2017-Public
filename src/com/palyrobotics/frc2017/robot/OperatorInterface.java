@@ -106,9 +106,9 @@ public class OperatorInterface {
 		
 		// Spatula
 		if (mSliderStick.getRawButton(8)) {
-			newCommands.wantedSpatulaState = Spatula.SpatulaState.UP;
-		} else if (mSliderStick.getRawButton(9)) {
 			newCommands.wantedSpatulaState = Spatula.SpatulaState.DOWN;
+		} else if (mSliderStick.getRawButton(9)) {
+			newCommands.wantedSpatulaState = Spatula.SpatulaState.UP;
 		}
 
 		// Intake

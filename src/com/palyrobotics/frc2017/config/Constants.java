@@ -19,25 +19,20 @@ public class Constants extends ConstantsBase {
 	/*
 	 * Control loop constants for both robots
 	 */
-	public static double kTurnInPlacePower = 0.2;
-	public static double kTurnEncoderMaxAccel = 10;
-	public static double kTurnEncoderMaxVel = 10;
+	public static double kTurnInPlacePower = 0.2; // for bang bang
+	public static double kDriveMaxClosedLoopOutput = 8.0;
 	// Unit Conversions for CANTalons
-	// TODO: Calculate the unit conversions for native units and inches, rpm, etc as needed
-	/*
-	 * Measured 100 in. = 2910 ticks
-	 */
-	public static double kDriveInchesToTicks = 29.1;
-	// TODO: tune degrees to ticks
-	public static double kDriveDegreesToTicks = 1000;
+	public static double kDriveTicksPerInch = 360 / (3.95 * Math.PI);
+	public static double kDriveInchesPerDegree = 21.5/90;
+	public static double kDriveSpeedUnitConversion = 360 / (3.95 * Math.PI * 10);
 	
 	public static final double kPotentiometerRightPos = 2172;
 	public static final double kPotentiometerLeftPos = 3452;
 	public static final double kPotentiometerCenterPos = (kPotentiometerRightPos + kPotentiometerLeftPos) / 2;
 	
 	// Tolerances
-	public static double kAcceptableDrivePositionError = 100;
-	public static double kAcceptableDriveVelocityError = 40;
+	public static double kAcceptableDrivePositionError = 20;
+	public static double kAcceptableDriveVelocityError = 5;
 	public static double kAcceptableTurnAngleError = 0.5;
 	public static double kAcceptableSliderPositionError;
 
@@ -154,8 +149,8 @@ public class Constants extends ConstantsBase {
 	public static double kBaseLineDistanceInches = 93.3;
 	public static double kCenterPegDistanceInches = 80;
 	// For side peg auto, robot starts 4 gear widths (44") from center of alliance wall
-	public static double kSidePegDistanceForwardInches = 122.5688;
-	public static double kSidePegDistanceToAirshipInches = 17.5688;
+	public static double kSidePegDistanceForwardInches = 104.5688;
+	public static double kSidePegDistanceToAirshipInches = 24.5688;
 
 	// !!! Loop rate of normal Looper
 	public static double kControlLoopsDt = 0.005;

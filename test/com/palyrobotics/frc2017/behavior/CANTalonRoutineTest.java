@@ -22,8 +22,8 @@ public class CANTalonRoutineTest {
 	public void basicTest() throws Exception {
 		// Construct arbitrary offboard position loop drive signal
 		DriveSignal mSignal = DriveSignal.getNeutralSignal();
-		mSignal.leftMotor.setPosition(10, Gains.aegirPosition);
-		mSignal.rightMotor.setPosition(10, Gains.aegirPosition);
+		mSignal.leftMotor.setPosition(10, Gains.aegirDriveMotionMagicGains);
+		mSignal.rightMotor.setPosition(10, Gains.aegirDriveMotionMagicGains);
 		CANTalonRoutine mRoutine = new CANTalonRoutine(mSignal);
 
 		RoutineManager routineManager = new RoutineManager();

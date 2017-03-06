@@ -18,7 +18,7 @@ public class BaseLineAutoMode extends AutoModeBase {
 		if(Constants.kRobotName == Constants.RobotName.DERICA) {
 			mGains = Gains.dericaPosition;
 		} else {
-			mGains = (Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikPosition : Gains.aegirPosition;
+			mGains = (Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikPosition : Gains.aegirDriveMotionMagicGains;
 		}
 	}
 
@@ -28,14 +28,12 @@ public class BaseLineAutoMode extends AutoModeBase {
 		DriveSignal driveForward = DriveSignal.getNeutralSignal();
 		double setpoint = Constants.kBaseLineDistanceInches * 
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-						: Constants.kDriveInchesToTicks );
-		driveForward.leftMotor.setMotionMagic(setpoint+Robot.getRobotState().drivePose.leftEnc, mGains, 
+						: Constants.kDriveTicksPerInch);
+		driveForward.leftMotor.setMotionMagic(setpoint, mGains,
 			Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-		driveForward.rightMotor.setMotionMagic(setpoint+Robot.getRobotState().drivePose.rightEnc, mGains, 
+		driveForward.rightMotor.setMotionMagic(setpoint, mGains,
 				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-//		driveForward.leftMotor.setPosition(setpoint, mGains);
-//		driveForward.rightMotor.setPosition(setpoint, mGains);
-		mRoutine = new CANTalonRoutine(driveForward);
+		mRoutine = new CANTalonRoutine(driveForward, true);
 		return mRoutine;
 	}
 

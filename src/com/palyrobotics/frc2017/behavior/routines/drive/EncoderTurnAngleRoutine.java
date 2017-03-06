@@ -33,7 +33,6 @@ public class EncoderTurnAngleRoutine extends Routine {
 			drive.setTurnAngleEncoderSetpoint(angle);
 			output.wantedDriveState = Drive.DriveState.OFF_BOARD_CONTROLLER;
 			mState = State.TURNING;
-
 			break;
 		case TURNING:
 			output.wantedDriveState = Drive.DriveState.OFF_BOARD_CONTROLLER;

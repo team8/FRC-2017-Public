@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class SubsystemLooper {
 	// Whether to print or not
-	private boolean mAllowPrinting = true;
+	private boolean mAllowPrinting = false;
 	private final List<SubsystemLoop> mLoops;
 
 	// Used for the main loop

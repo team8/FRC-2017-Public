@@ -4,16 +4,13 @@ import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
-import com.palyrobotics.frc2017.behavior.routines.drive.BBTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.SafetyTurnAngleRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.Gains;
-import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
-import com.palyrobotics.frc2017.util.archive.GyroTurnAngleController;
 
 import java.util.ArrayList;
 
@@ -23,7 +20,7 @@ import java.util.ArrayList;
  */
 public class SidePegAutoMode extends AutoModeBase {
 	// Might pivot differently when turning left vs right
-	public final double kSidePegTurnAngleDegrees = 70;
+	public final double kSidePegTurnAngleDegrees = 60;
 
 	// Represents the peg we are going for
 	public enum SideAutoVariant {
@@ -57,7 +54,7 @@ public class SidePegAutoMode extends AutoModeBase {
 		if(Constants.kRobotName == Constants.RobotName.DERICA) {
 			mGains = Gains.dericaPosition;
 		} else {
-			mGains = (Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikPosition : Gains.aegirPosition;
+			mGains = (Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikPosition : Gains.aegirDriveMotionMagicGains;
 		}
 	}
 
@@ -72,7 +69,7 @@ public class SidePegAutoMode extends AutoModeBase {
 		
 		double driveForwardSetpoint = Constants.kSidePegDistanceForwardInches * 
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-						: Constants.kDriveInchesToTicks );
+						: Constants.kDriveTicksPerInch);
 		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mGains,
 			Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
 		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, mGains,
@@ -80,7 +77,7 @@ public class SidePegAutoMode extends AutoModeBase {
 
 		double driveToAirshipSetpoint = Constants.kSidePegDistanceToAirshipInches * 
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-						: Constants.kDriveInchesToTicks );
+						: Constants.kDriveTicksPerInch);
 		driveToAirship.leftMotor.setMotionMagic(driveToAirshipSetpoint, mGains,
 			Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
 		driveToAirship.rightMotor.setMotionMagic(driveToAirshipSetpoint, mGains,
@@ -93,14 +90,14 @@ public class SidePegAutoMode extends AutoModeBase {
 		ArrayList<Routine> sequence = new ArrayList<>();
 		sequence.add(new CANTalonRoutine(driveForward, true));
 		if (mVariant == SideAutoVariant.LEFT) {
-			sequence.add(new SafetyTurnAngleRoutine(kSidePegTurnAngleDegrees));
+			sequence.add(new EncoderTurnAngleRoutine(kSidePegTurnAngleDegrees));
 		} else {
-			sequence.add(new SafetyTurnAngleRoutine(-kSidePegTurnAngleDegrees));
+			sequence.add(new EncoderTurnAngleRoutine(-kSidePegTurnAngleDegrees));
 		}
 		sequence.add(new CANTalonRoutine(driveToAirship, true));
 		sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
 		
-//		//TODO: adjust distances
+//		//TODO: adjust distances and add relative setpoints
 //		// Add the variants
 //		backUp.leftMotor.setPosition(-3, mGains);
 //		backUp.rightMotor.setPosition(-3, mGains);

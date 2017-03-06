@@ -5,7 +5,6 @@ import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
-import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.SafetyTurnAngleRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
@@ -34,7 +33,7 @@ public class CenterPegAutoMode extends AutoModeBase {
 		if(Constants.kRobotName == Constants.RobotName.DERICA) {
 			mGains = Gains.dericaPosition;
 		} else {
-			mGains = (Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikPosition : Gains.aegirPosition;
+			mGains = (Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikPosition : Gains.aegirDriveMotionMagicGains;
 		}
 	}
 
@@ -52,7 +51,7 @@ public class CenterPegAutoMode extends AutoModeBase {
 		DriveSignal driveForward = DriveSignal.getNeutralSignal();
 		double driveForwardSetpoint = Constants.kCenterPegDistanceInches * 
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-						: Constants.kDriveInchesToTicks );
+						: Constants.kDriveTicksPerInch);
 		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint+Robot.getRobotState().drivePose.leftEnc, mGains, 
 			Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
 		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint+Robot.getRobotState().drivePose.rightEnc, mGains, 
@@ -65,48 +64,48 @@ public class CenterPegAutoMode extends AutoModeBase {
 		DriveSignal driveBack = DriveSignal.getNeutralSignal();
 		double driveBackSetpoint = -25 * 
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-				: Constants.kDriveInchesToTicks);
-		driveBack.leftMotor.setMotionMagic(driveBackSetpoint+Robot.getRobotState().drivePose.leftEnc, mGains,
+				: Constants.kDriveTicksPerInch);
+		driveBack.leftMotor.setMotionMagic(driveBackSetpoint, mGains,
 				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-		driveBack.rightMotor.setMotionMagic(driveBackSetpoint+Robot.getRobotState().drivePose.rightEnc, mGains,
+		driveBack.rightMotor.setMotionMagic(driveBackSetpoint, mGains,
 				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
 
 		// If variant includes a cross, drive past the airship after turn angle
 		DriveSignal passAirship = DriveSignal.getNeutralSignal();
 		double passAirshipSetpoint = 50 * 
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-				: Constants.kDriveInchesToTicks);
-		passAirship.leftMotor.setMotionMagic(passAirshipSetpoint+Robot.getRobotState().drivePose.leftEnc, mGains,
+				: Constants.kDriveTicksPerInch);
+		passAirship.leftMotor.setMotionMagic(passAirshipSetpoint, mGains,
 				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-		passAirship.rightMotor.setMotionMagic(passAirshipSetpoint+Robot.getRobotState().drivePose.rightEnc, mGains,
+		passAirship.rightMotor.setMotionMagic(passAirshipSetpoint, mGains,
 				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
 
 		DriveSignal crossOver = DriveSignal.getNeutralSignal();
 		double crossOverSetpoint = 20 * 
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-				: Constants.kDriveInchesToTicks);
-		crossOver.leftMotor.setMotionMagic(crossOverSetpoint+Robot.getRobotState().drivePose.leftEnc, mGains,
+				: Constants.kDriveTicksPerInch);
+		crossOver.leftMotor.setMotionMagic(crossOverSetpoint, mGains,
 				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-		crossOver.rightMotor.setMotionMagic(crossOverSetpoint+Robot.getRobotState().drivePose.rightEnc, mGains,
+		crossOver.rightMotor.setMotionMagic(crossOverSetpoint, mGains,
 				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
 
 		switch (mVariant) {
 			case NOTHING:
 				break;
 			case CROSS_LEFT:
-				sequence.add(new CANTalonRoutine(driveBack));
+				sequence.add(new CANTalonRoutine(driveBack, true));
 				sequence.add(new SafetyTurnAngleRoutine(-90));
-				sequence.add(new CANTalonRoutine(passAirship));
+				sequence.add(new CANTalonRoutine(passAirship, true));
 				sequence.add(new SafetyTurnAngleRoutine(90));
-				sequence.add(new CANTalonRoutine(crossOver));
+				sequence.add(new CANTalonRoutine(crossOver, true));
 				log += " and crossing left";
 				break;
 			case CROSS_RIGHT:
-				sequence.add(new CANTalonRoutine(driveBack));
+				sequence.add(new CANTalonRoutine(driveBack, true));
 				sequence.add(new SafetyTurnAngleRoutine(90));
-				sequence.add(new CANTalonRoutine(passAirship));
+				sequence.add(new CANTalonRoutine(passAirship, true));
 				sequence.add(new SafetyTurnAngleRoutine(-90));
-				sequence.add(new CANTalonRoutine(crossOver));
+				sequence.add(new CANTalonRoutine(crossOver, true));
 				log += " and crossing right";
 				break;
 		}
@@ -129,5 +128,4 @@ public class CenterPegAutoMode extends AutoModeBase {
 		}
 		return name;
 	}
-
 }

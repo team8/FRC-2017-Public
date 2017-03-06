@@ -59,7 +59,7 @@ class HardwareUpdater {
 	 */
 	void initHardware() {
 		if (HardwareAdapter.getInstance().getDrivetrain().gyro != null) {
-			HardwareAdapter.getInstance().getDrivetrain().gyro.calibrate();
+//			HardwareAdapter.getInstance().getDrivetrain().gyro.calibrate();
 		}
 
 		CANTalon leftMasterTalon = HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon;
@@ -98,12 +98,12 @@ class HardwareUpdater {
 		if (rightSlave2Talon != null) rightSlave2Talon.enable();
 		
 		// Allow max voltage for closed loop control
-		leftMasterTalon.configPeakOutputVoltage(12, -12);
-		leftSlave1Talon.configPeakOutputVoltage(12, -12);
-		if (leftSlave2Talon != null) leftSlave2Talon.configPeakOutputVoltage(12, -12);
-		rightMasterTalon.configPeakOutputVoltage(12, -12);
-		rightSlave1Talon.configPeakOutputVoltage(12, -12);
-		if (rightSlave2Talon != null) rightSlave2Talon.configPeakOutputVoltage(12, -12);
+		leftMasterTalon.configPeakOutputVoltage(Constants.kDriveMaxClosedLoopOutput, -Constants.kDriveMaxClosedLoopOutput);
+		leftSlave1Talon.configPeakOutputVoltage(Constants.kDriveMaxClosedLoopOutput, -Constants.kDriveMaxClosedLoopOutput);
+		if (leftSlave2Talon != null) leftSlave2Talon.configPeakOutputVoltage(Constants.kDriveMaxClosedLoopOutput, -Constants.kDriveMaxClosedLoopOutput);
+		rightMasterTalon.configPeakOutputVoltage(Constants.kDriveMaxClosedLoopOutput, -Constants.kDriveMaxClosedLoopOutput);
+		rightSlave1Talon.configPeakOutputVoltage(Constants.kDriveMaxClosedLoopOutput, -Constants.kDriveMaxClosedLoopOutput);
+		if (rightSlave2Talon != null) rightSlave2Talon.configPeakOutputVoltage(Constants.kDriveMaxClosedLoopOutput, -Constants.kDriveMaxClosedLoopOutput);
 		
 		// Allow max voltage for open loop control
 		leftMasterTalon.configMaxOutputVoltage(12);
@@ -189,8 +189,8 @@ class HardwareUpdater {
 				robotState.drivePose.headingVelocity*=-1;
 			}
 		} else {
-			robotState.drivePose.heading = 0;
-			robotState.drivePose.headingVelocity = 0;
+			robotState.drivePose.heading = -0;
+			robotState.drivePose.headingVelocity = -0;
 		}
 		CANTalon leftMasterTalon = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon;
 		CANTalon rightMasterTalon = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon;

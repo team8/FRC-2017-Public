@@ -7,10 +7,9 @@ import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
 import com.palyrobotics.frc2017.subsystems.controllers.CANTalonDriveController;
 import com.palyrobotics.frc2017.subsystems.controllers.EncoderTurnAngleController;
 import com.palyrobotics.frc2017.util.*;
-import com.palyrobotics.frc2017.robot.HardwareAdapter;
-import com.palyrobotics.frc2017.robot.team254.lib.util.LegacyPose;
 import com.palyrobotics.frc2017.subsystems.controllers.BangBangTurnAngleController;
 import com.palyrobotics.frc2017.config.Constants;
+import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.archive.CheesyDriveHelper;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
@@ -69,13 +68,13 @@ public class Drive extends Subsystem implements SubsystemLoop {
 		} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
 			kWheelbaseWidth = 0;
 			kTurnSlipFactor = 0;
-			kInchesPerTick = 1/Constants.kDriveInchesToTicks;
-			kInchesToTicks = Constants.kDriveInchesToTicks;
+			kInchesPerTick = 1/Constants.kDriveTicksPerInch;
+			kInchesToTicks = Constants.kDriveTicksPerInch;
 		} else {
 			kWheelbaseWidth = 0;
 			kTurnSlipFactor = 0;
-			kInchesPerTick = 1/Constants.kDriveInchesToTicks;
-			kInchesToTicks = Constants.kDriveInchesToTicks;
+			kInchesPerTick = 1/Constants.kDriveTicksPerInch;
+			kInchesToTicks = Constants.kDriveTicksPerInch;
 		}
 		
 		motors = new DashboardValue("driveSpeedUpdate");
@@ -103,6 +102,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	@Override
 	public void update(Commands commands, RobotState state) {
 		mCachedRobotState = state;
+		mCachedPose = state.drivePose.copy();
 		boolean mIsNewState = !(mState == commands.wantedDriveState);
 		mState = commands.wantedDriveState;
 		
@@ -186,7 +186,8 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	}
 	
 	public void setTurnAngleEncoderSetpoint(double angle) {
-		mController = new EncoderTurnAngleController(mCachedPose, angle, Constants.kTurnEncoderMaxVel, Constants.kTurnEncoderMaxAccel);
+		System.out.println("Encoder angle "+angle);
+		mController = new EncoderTurnAngleController(mCachedPose, angle);
 		newController = true;
 	}
 

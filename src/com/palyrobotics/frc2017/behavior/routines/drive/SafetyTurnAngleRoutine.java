@@ -7,70 +7,57 @@ import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.util.Subsystem;
 
 /**
- * Created by EricLiu on 3/5/17.
+ * @author Nihar
  */
 public class SafetyTurnAngleRoutine extends Routine {
-    private EncoderTurnAngleRoutine encoderTurnAngle;
-    private BBTurnAngleRoutine gyroTurnAngle;
+	private double targetAngle;
+	private Routine mRoutine;
 
-    public SafetyTurnAngleRoutine(double angle) {
-        if(Robot.getRobotState().drivePose.heading != -0.0) {
-            gyroTurnAngle = new BBTurnAngleRoutine(angle);
+	public SafetyTurnAngleRoutine(double angle) {
+		this.targetAngle = angle;
+	}
+
+	@Override
+	public void start() {
+		if(Robot.getRobotState().drivePose.heading == -0.0) {
+			System.out.println("Gyro broken");
+			mRoutine = new EncoderTurnAngleRoutine(targetAngle);
         } else {
-            encoderTurnAngle = new EncoderTurnAngleRoutine(angle);
+        	System.out.println("Gyro working!");
+            mRoutine = new BBTurnAngleRoutine(targetAngle);
         }
-    }
+		mRoutine.start();
+	}
 
-    @Override
-    public void start() {
-        if(gyroTurnAngle != null) {
-            gyroTurnAngle.start();
-        } else {
-            encoderTurnAngle.start();
-        }
+	@Override
+	public Commands update(Commands commands) {
+		System.out.println("angle: "+Robot.getRobotState().drivePose.heading);
+		return mRoutine.update(commands);
+	}
 
-    }
+	@Override
+	public Commands cancel(Commands commands) {
+		return mRoutine.cancel(commands);
+	}
 
-    @Override
-    public Commands update(Commands commands) {
-        if(gyroTurnAngle != null) {
-            return gyroTurnAngle.update(commands);
-        } else {
-            return encoderTurnAngle.update(commands);
-        }
-    }
+	@Override
+	public boolean finished() {
+		return mRoutine.finished();
+	}
 
-    @Override
-    public Commands cancel(Commands commands) {
-        if(gyroTurnAngle != null) {
-            return gyroTurnAngle.cancel(commands);
-        } else {
-            return encoderTurnAngle.cancel(commands);
-        }
-    }
+	@Override
+	public Subsystem[] getRequiredSubsystems() {
+		return new Subsystem[]{drive};
+	}
 
-    @Override
-    public boolean finished() {
-        if(gyroTurnAngle != null) {
-            return gyroTurnAngle.finished();
-        } else {
-            return encoderTurnAngle.finished();
-        }
-    }
-
-    @Override
-    public Subsystem[] getRequiredSubsystems() {
-        return new Subsystem[]{drive};
-    }
-
-    @Override
-    public String getName() {
-        String name = "Safety Turn Angle with ";
-        if(gyroTurnAngle != null) {
-            name += "Gyro Turn Angle";
-        } else {
-            name += "Encoder Turn Angle";
-        }
-        return name;
-    }
+	@Override
+	public String getName() {
+		String name = "Safety Turn Angle with ";
+		if (mRoutine instanceof BBTurnAngleRoutine) {
+			name += "Gyro Turn Angle";
+		} else {
+			name += "Encoder Turn Angle";
+		}
+		return name;
+	}
 }

@@ -41,24 +41,41 @@ public class Gains {
 	/*
 	 * AEGIR
 	 */
-	// Drive Motion Magic offboard control loop
-	public static final double kAegirDriveMotionMagicCruiseVelocity = 800;
-	public static final double kAegirDriveMotionMagicMaxAcceleration = 80;
-	public static final double kAegirDriveDistancekP = 0.7;
-	public static final double kAegirDriveDistancekI = 0;
-	public static final double kAegirDriveDistancekD = 6;
-	public static final double kAegirDriveDistancekF = 1;
-	public static final int kAegirDriveDistancekIzone = 1000;
+	// Drive Distance PID control loop
+	public static final double kAegirDriveDistancekP = 0.5;
+	public static final double kAegirDriveDistancekI = 0.0025;
+	public static final double kAegirDriveDistancekD = 12.0;
+	public static final double kAegirDriveDistancekIzone = 125;
 	public static final double kAegirDriveDistancekRampRate = 0.0;
 
 	// Drive Velocity offboard control loop
-	public static final double kAegirDriveVelocitykP = 0.0;
-	public static final double kAegirDriveVelocitykI = 0;
-	public static final double kAegirDriveVelocitykD = 0.0;
-	public static final double kAegirDriveVelocitykF = 0;
-	public static final int kAegirDriveVelocitykIzone = 0;
+	public static final double kAegirDriveVelocitykP = 6.0;
+	public static final double kAegirDriveVelocitykI = 0.002;
+	public static final double kAegirDriveVelocitykD = 85;
+	public static final double kAegirDriveVelocitykF = 2.624;
+	public static final int kAegirDriveVelocitykIzone = 800;
 	public static final double kAegirDriveVelocitykRampRate = 0.0;
-	
+
+	// Drive Motion Magic offboard control loop
+	// Max speed 36 in/s Max accel 36 in/s^2
+	public static final double kAegirDriveMotionMagicCruiseVelocity = 36 * Constants.kDriveSpeedUnitConversion;
+	public static final double kAegirDriveMotionMagicMaxAcceleration = 36 * Constants.kDriveSpeedUnitConversion;
+	public static final double kAegirDriveMotionMagickP = 4.5;
+	public static final double kAegirDriveMotionMagickI = 0.01;
+	public static final double kAegirDriveMotionMagickD = 150;
+	public static final double kAegirDriveMotionMagickF = 2.5;
+	public static final int kAegirDriveMotionMagickIzone = 25;
+	public static final double kAegirDriveMotionMagickRampRate = 0.0;
+
+	// Drive Motion Magic turn angle gains
+	public static final double kAegirTurnMotionMagicCruiseVelocity = 144 * Constants.kDriveSpeedUnitConversion;
+	public static final double kAegirTurnMotionMagicMaxAcceleration = 72 * Constants.kDriveSpeedUnitConversion;
+	public static final double kAegirTurnMotionMagickP = 4.5;
+	public static final double kAegirTurnMotionMagickI = 0.01;
+	public static final double kAegirTurnMotionMagickD = 150;
+	public static final double kAegirTurnMotionMagickF = 2.5;
+	public static final double kAegirTurnMotionMagickIzone = 25;
+
 	// Slider motion magic offboard control loop
 
 	// Slider position offboard control loop
@@ -95,6 +112,9 @@ public class Gains {
 	public static final double kDericaVelocitykF = 2.122;
 	public static final int kDericaVelocitykIzone = 0;
 	public static final double kDericaVelocitykRampRate = 0.0;
+	
+	public static final double kDericaTurnMotionMagicCruiseVelocity = 1;
+	public static final double kDericaTurnMotionMagicCruiseAccel = 1;
 
 	public final double P,I,D, F, rampRate;
 	public final int izone;
@@ -108,8 +128,11 @@ public class Gains {
 	public static final Gains steikSliderPotentiometer = new Gains(kSteikSliderPotentiometerkP, kSteikSliderPotentiometerkI, kSteikSliderPotentiometerkD,
 			kSteikSliderPotentiometerkF, kSteikSliderPotentiometerkIzone, kSteikSliderPotentiometerkRampRate);
 	
-	public static final Gains aegirPosition = new Gains(kAegirDriveDistancekP, kAegirDriveDistancekI, kAegirDriveDistancekD,
-			kAegirDriveDistancekF, kAegirDriveDistancekIzone, kAegirDriveDistancekRampRate);
+	// Drive Motion magic gains
+	public static final Gains aegirDriveMotionMagicGains = new Gains(kAegirDriveMotionMagickP, kAegirDriveMotionMagickI, kAegirDriveMotionMagickD,
+			kAegirDriveMotionMagickF, kAegirDriveMotionMagickIzone, kAegirDriveMotionMagickRampRate);
+	
+	
 	public static final Gains aegirVelocity = new Gains(kAegirDriveVelocitykP, kAegirDriveVelocitykI, kAegirDriveVelocitykD,
 			kAegirDriveVelocitykF, kAegirDriveVelocitykIzone, kAegirDriveVelocitykRampRate);
 	public static final Gains aegirSliderEncoder = new Gains(kAegirSliderEncoderkP, kAegirSliderEncoderkI, kAegirSliderEncoderkD,

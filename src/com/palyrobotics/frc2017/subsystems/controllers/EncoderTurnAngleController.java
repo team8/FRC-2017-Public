@@ -20,15 +20,17 @@ public class EncoderTurnAngleController implements DriveController {
 	private CANTalonOutput leftOutput;
 	private CANTalonOutput rightOutput;
 	
-	public EncoderTurnAngleController(Pose priorSetpoint, double angle, double maxVel, double maxAccel) {
-		leftTarget = priorSetpoint.leftEnc + angle * Constants.kDriveDegreesToTicks;
-		rightTarget = priorSetpoint.rightEnc - angle * Constants.kDriveDegreesToTicks;
+	public EncoderTurnAngleController(Pose priorSetpoint, double angle) {
+		leftTarget = priorSetpoint.leftEnc - (angle * Constants.kDriveInchesPerDegree * Constants.kDriveTicksPerInch);
+		System.out.println("Left target: "+leftTarget);
+		rightTarget = priorSetpoint.rightEnc + (angle * Constants.kDriveInchesPerDegree * Constants.kDriveTicksPerInch);
+		System.out.println("Right target: "+rightTarget);
 		cachedPose = priorSetpoint;
-		this.maxAccel = maxAccel;
-		this.maxVel = maxVel;
+		this.maxAccel = (Constants.kRobotName == Constants.RobotName.DERICA) ? Gains.kDericaTurnMotionMagicCruiseVelocity : Gains.kAegirTurnMotionMagicCruiseVelocity;
+		this.maxVel = (Constants.kRobotName == Constants.RobotName.DERICA) ?  Gains.kDericaTurnMotionMagicCruiseAccel : Gains.kAegirTurnMotionMagicMaxAcceleration;
 
 		if(Constants.kRobotName.equals(Constants.RobotName.AEGIR)) {
-			mGains = Gains.aegirPosition;
+			mGains = Gains.aegirDriveMotionMagicGains;
 
 		} else if(Constants.kRobotName.equals(Constants.RobotName.STEIK)) {
 			mGains = Gains.steikPosition;
@@ -57,18 +59,6 @@ public class EncoderTurnAngleController implements DriveController {
 			System.out.println("Cached pose is null");
 			return false;
 		}
-
-		if (!cachedPose.leftError.isPresent() || !cachedPose.rightError.isPresent()) {
-			System.err.println("Talon closed loop error not found!");
-			return false;
-		}
-
-//		if(Math.abs(cachedPose.leftError.get()) < positionTolerance && Math.abs(cachedPose.rightError.get()) < positionTolerance &&
-//				Math.abs(cachedPose.leftEncVelocity) < velocityTolerance && Math.abs(cachedPose.rightEncVelocity) < velocityTolerance) {
-//			return true;
-//		} 
-		System.out.println("left error: " + Math.abs(leftTarget - cachedPose.leftEnc));
-		System.out.println("right error: " + Math.abs(rightTarget - cachedPose.rightEnc));
 		
 		if(Math.abs(cachedPose.leftSpeed) < velocityTolerance && Math.abs(cachedPose.rightSpeed) < velocityTolerance &&
 				Math.abs(leftTarget - cachedPose.leftEnc) < positionTolerance && Math.abs(rightTarget - cachedPose.rightEnc) < positionTolerance) {
