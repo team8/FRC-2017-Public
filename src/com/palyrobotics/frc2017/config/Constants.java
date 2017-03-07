@@ -147,10 +147,10 @@ public class Constants extends ConstantsBase {
 
 	// !!! Physical constants
 	public static double kBaseLineDistanceInches = 93.3;
-	public static double kCenterPegDistanceInches = 80;
+	public static double kCenterPegDistanceInches = 86;//80;
 	// For side peg auto, robot starts 4 gear widths (44") from center of alliance wall
-	public static double kSidePegDistanceForwardInches = 104.5688;
-	public static double kSidePegDistanceToAirshipInches = 24.5688;
+	public static double kSidePegDistanceForwardInches = 100;//104.5688;
+	public static double kSidePegDistanceToAirshipInches = 26;//24.5688;
 
 	// !!! Loop rate of normal Looper
 	public static double kControlLoopsDt = 0.005;
