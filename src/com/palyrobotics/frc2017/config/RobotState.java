@@ -36,6 +36,7 @@ public class RobotState {
 	public double sliderEncoder;
 	public double sliderVelocity;
 	public Optional<Integer> sliderClosedLoopError;
+	public double sliderPosition;
 
 	// Climber
 	public double climberCurrentDraw;

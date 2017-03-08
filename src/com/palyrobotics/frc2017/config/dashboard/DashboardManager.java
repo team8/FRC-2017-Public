@@ -6,7 +6,7 @@ public class DashboardManager {
 
 	private static DashboardManager instance = new DashboardManager();
 	
-	private final String TABLE_NAME = "DataTable";
+	public static final String TABLE_NAME = "RobotTable";
 	
 	private NetworkTable robotTable;
 	
@@ -15,8 +15,12 @@ public class DashboardManager {
 	}
 	
 	private DashboardManager() {
+		
+	}
+	
+	public static void robotInit() {
 		try{
-			this.robotTable = NetworkTable.getTable(TABLE_NAME);
+			DashboardManager.getInstance().robotTable = NetworkTable.getTable(TABLE_NAME);
 		}
 		catch (UnsatisfiedLinkError e) {
 			// Catch the error that occurs during unit tests.

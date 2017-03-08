@@ -55,7 +55,7 @@ public class Spatula extends Subsystem implements SubsystemLoop {
 			break;
 		}
 	
-		mDv.updateValue(mOutput.toString());
+		mDv.updateValue(mOutput.toString() == "kReverse" ? "UP" : "DOWN");
 		DashboardManager.getInstance().publishKVPair(mDv);
 	}
 	

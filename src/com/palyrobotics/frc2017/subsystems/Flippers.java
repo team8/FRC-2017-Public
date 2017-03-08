@@ -59,7 +59,7 @@ public class Flippers extends Subsystem implements SubsystemLoop {
 	public void update(Commands commands, RobotState robotState) {
 		mFlipperSignal = commands.wantedFlipperSignal;
 		
-		mDv.updateValue(mFlipperSignal.toString());
+		mDv.updateValue("NO FLIPPERS");
 		DashboardManager.getInstance().publishKVPair(mDv);
 	}
 

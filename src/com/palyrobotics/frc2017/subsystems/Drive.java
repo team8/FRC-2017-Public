@@ -154,6 +154,9 @@ public class Drive extends Subsystem implements SubsystemLoop {
 		
 		DashboardManager.getInstance().publishKVPair(leftEncoder);
 		DashboardManager.getInstance().publishKVPair(rightEncoder);
+
+		motors.updateValue(state.drivePose.leftSpeed + ", " + state.drivePose.rightSpeed);
+		DashboardManager.getInstance().publishKVPair(motors);
 	}
 
 	@Override
@@ -161,8 +164,6 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	}
 
 	private void setDriveOutputs(DriveSignal signal) {
-		motors.updateValue(signal.leftMotor.getSetpoint() + ", " + signal.rightMotor.getSetpoint());
-		DashboardManager.getInstance().publishKVPair(motors);
 		mSignal = signal;
 	}
 

@@ -8,6 +8,8 @@ import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
+import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Subsystem;
 import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
@@ -69,6 +71,9 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	
 	private CANTalonOutput mOutput = new CANTalonOutput();
 	
+	private DashboardValue sliderPotentiometer;
+	private DashboardValue sliderDist;
+	
 	private Slider() {
 		super("Slider");
 				
@@ -78,7 +83,11 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		mPotentiometerTargetPositions.put(SliderTarget.LEFT, 0.0);
 		mPotentiometerTargetPositions.put(SliderTarget.CENTER, 0.0);
 		mPotentiometerTargetPositions.put(SliderTarget.RIGHT, 0.0);
+		
+		sliderPotentiometer = new DashboardValue("slider-pot");
+		sliderDist = new DashboardValue("sliderDistance");
 	}
+	
 	
 	@Override
 	public void start() {
@@ -103,6 +112,11 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	public void update(Commands commands, RobotState robotState) {
 		mRobotState = robotState;
 		mState = commands.wantedSliderState;
+
+		sliderPotentiometer.updateValue(robotState.sliderPotentiometer);
+		sliderDist.updateValue(robotState.sliderPosition);
+		DashboardManager.getInstance().publishKVPair(sliderPotentiometer);
+		DashboardManager.getInstance().publishKVPair(sliderDist);
 	}
 	
 	/**
@@ -146,6 +160,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 				setSetpointsVision();
 				break;
 		}
+		
 	}
 	
 	/**

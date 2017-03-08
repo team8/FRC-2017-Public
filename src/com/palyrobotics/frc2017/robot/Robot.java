@@ -29,7 +29,6 @@ public class Robot extends IterativeRobot {
 	// Instantiate separate thread controls
 	private SubsystemLooper mSubsystemLooper = new SubsystemLooper();
 	private RoutineManager mRoutineManager = new RoutineManager();
-	private DashboardManager mDashboardManager = DashboardManager.getInstance();
 
 	// Subsystem controllers
 	private Drive mDrive = Drive.getInstance();
@@ -49,7 +48,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		System.out.println("Start robotInit() for "+Constants.kRobotName.toString());
-
+		DashboardManager.robotInit();
 		if (Constants.kRobotName == Constants.RobotName.STEIK || Constants.kRobotName == Constants.RobotName.AEGIR) {
 			try {
 				mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSlider, mSpatula, mIntake, mClimber);
