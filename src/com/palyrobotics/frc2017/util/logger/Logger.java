@@ -7,22 +7,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import edu.wpi.first.wpilibj.Timer;
+
 public class Logger {
 	private static Logger instance = new Logger();
 	public synchronized static Logger getInstance() {
 		return instance;
 	}
 	
-	private Log log;
 	private FileWriter fileWriter;
 	private BufferedWriter bufferedWriter;
 	
-//	private ArrayList<Log> logs = new ArrayList<Log>();
-//	private ArrayList<FileWriter> fileWriters = new ArrayList<FileWriter>();
-//	private ArrayList<BufferedWriter> bufferedWriters = new ArrayList<BufferedWriter>();
-	
+	private ArrayList<String> data;
 	public Logger() {
-		
+		data = new ArrayList<String>();
 	}
 	
 	public synchronized void newLog() {
@@ -41,78 +39,20 @@ public class Logger {
 			e.printStackTrace();
 		}
 		
-		log = new Log(filePath);
 		System.out.println("Created new log at " + filePath.toString());
 	}
 	
 	public synchronized void log(Object value) {
 //		log("", value, false, false);
-		log.queueMessage(new LogMessage(value.toString()));
+		data.add(Timer.getFPGATimestamp() + ": " + value.toString());
 	}
 	public synchronized void log(String key, Object value) {
-//		log(key, value, false, false);
-		log.queueMessage(new LogMessage(key, value.toString()));
+		data.add(Timer.getFPGATimestamp() + ": " + key + ": " + value.toString());
 	}
-//	public synchronized void log(String key, Object value, boolean logAll) {
-//		log(key, value, logAll, false);
-//	}
-//	private synchronized void log(String key, Object value, boolean logAll, boolean print) {
-//		boolean createLoggable = true;
-//		for (Log l: loggables) {
-//			if (l.name == name) {
-//				l.queueMessage(value.toString());
-//				createLoggable = false;
-//				break;
-//			}
-//		}
-//		if (createLoggable) {
-//			loggables.add(new Log(name, print, logAll));
-//			loggables.get(loggables.size()-1).queueMessage(value.toString());
-//		}
-//	}
+
 	
-	public synchronized void update() {		
-//		//Write to console
-//		for (Log l: loggables) {
-//			if (l.print) {
-//				if (l.logAll) {
-//					messages.addAll(messages.size()-1, l.messages);
-//				}
-//				else {
-//					messages.add(l.messages.get(l.messages.size()-1));
-//				}
-//			}
-//		}
-//		messages.sort(null);
-//		for (LogMessage m: messages) {
-//			System.out.println(m.output());
-//		}
-//		messages.clear();
-//		
-//		//Write to log file
-//		for (Log l: loggables) {
-//			if (l.logAll) {
-//				messages.addAll(messages.size()-1, l.messages);
-//			}
-//			else {
-//				messages.add(l.messages.get(l.messages.size()-1));
-//			}
-//		}
-//		messages.sort(null);
-//		try {
-//			for (LogMessage m: messages) {
-//				bufferedWriter.write(m.outputWithTimestamp());
-//				bufferedWriter.newLine();
-//			}
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-		
-		ArrayList<LogMessage> messages = log.getMessages();
-		messages.sort(null);
-		
-		for (LogMessage m : messages) {
-			System.out.println(m.toString());
+	public synchronized void end() {	
+		for (String m : this.data) {
 			try {
 				bufferedWriter.write(m.toString());
 				bufferedWriter.newLine();
@@ -127,8 +67,6 @@ public class Logger {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		log.clear();
 	}
 	
 	public synchronized void cleanup() {
@@ -138,10 +76,6 @@ public class Logger {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		log.clear();
 	}
 	
-	public Log getLog() {
-		return log;
-	}
 }
