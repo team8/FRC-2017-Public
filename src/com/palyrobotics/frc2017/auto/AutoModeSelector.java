@@ -46,12 +46,12 @@ public class AutoModeSelector {
 		registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.CenterAutoVariant.CROSS_LEFT));
 		registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.CenterAutoVariant.CROSS_RIGHT));
 
-		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.LEFT, SidePegAutoMode.PostSideAutoVariant.NONE));
 		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RIGHT, SidePegAutoMode.PostSideAutoVariant.NONE));
-		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.LEFT, SidePegAutoMode.PostSideAutoVariant.HIT_CLOSE_HOPPER));
+		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.LEFT, SidePegAutoMode.PostSideAutoVariant.NONE));
 		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RIGHT, SidePegAutoMode.PostSideAutoVariant.HIT_CLOSE_HOPPER));
-		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.LEFT, SidePegAutoMode.PostSideAutoVariant.MOVE_TO_LOADING_STATION));
+		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.LEFT, SidePegAutoMode.PostSideAutoVariant.HIT_CLOSE_HOPPER));
 		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RIGHT, SidePegAutoMode.PostSideAutoVariant.MOVE_TO_LOADING_STATION));
+		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.LEFT, SidePegAutoMode.PostSideAutoVariant.MOVE_TO_LOADING_STATION));
 	}
 
 	/**

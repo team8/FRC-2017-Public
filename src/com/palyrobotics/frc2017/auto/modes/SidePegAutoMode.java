@@ -7,9 +7,12 @@ import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.SafetyTurnAngleRoutine;
+import com.palyrobotics.frc2017.behavior.routines.scoring.SliderDistancePositioningAutocorrectRoutine;
+import com.palyrobotics.frc2017.behavior.routines.scoring.SliderDistancePositioningRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.Gains;
+import com.palyrobotics.frc2017.subsystems.Slider.SliderTarget;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
 import java.util.ArrayList;
@@ -24,7 +27,7 @@ public class SidePegAutoMode extends AutoModeBase {
 
 	// Represents the peg we are going for
 	public enum SideAutoVariant {
-		LEFT, RIGHT
+		RIGHT, LEFT
 	}
 	
 	public enum PostSideAutoVariant {
@@ -88,8 +91,9 @@ public class SidePegAutoMode extends AutoModeBase {
 //		score.add(slider score auto)
 
 		ArrayList<Routine> sequence = new ArrayList<>();
+		sequence.add(new SliderDistancePositioningAutocorrectRoutine(SliderTarget.CENTER));
 		sequence.add(new CANTalonRoutine(driveForward, true));
-		if (mVariant == SideAutoVariant.LEFT) {
+		if (mVariant == SideAutoVariant.RIGHT) {
 			sequence.add(new EncoderTurnAngleRoutine(kSidePegTurnAngleDegrees));
 		} else {
 			sequence.add(new EncoderTurnAngleRoutine(-kSidePegTurnAngleDegrees));
@@ -163,6 +167,6 @@ public class SidePegAutoMode extends AutoModeBase {
 	
 	@Override
 	public String toString() {
-		return (mVariant == SideAutoVariant.LEFT) ? "LeftPeg" : "RightPeg";
+		return (mVariant == SideAutoVariant.RIGHT) ? "LeftPeg" : "RightPeg";
 	}
 }

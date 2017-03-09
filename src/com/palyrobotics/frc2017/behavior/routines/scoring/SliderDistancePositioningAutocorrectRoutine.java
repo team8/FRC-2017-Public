@@ -36,7 +36,7 @@ public class SliderDistancePositioningAutocorrectRoutine extends Routine {
 			mState = DistancePositioningState.RAISING;
 		}
 		else {
-			mState = DistancePositioningState.RAISING;
+			mState = DistancePositioningState.MOVING;
 		}
 		startTime = System.currentTimeMillis();
 	}

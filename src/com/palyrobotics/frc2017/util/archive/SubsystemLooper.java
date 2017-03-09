@@ -39,7 +39,7 @@ public class SubsystemLooper {
 	private double mPrintDt = 0;
 
 	// Main method that is run at the update rate
-	private final CrashTrackingRunnable mRunnable = new CrashTrackingRunnable() {
+	private final SubsystemRunnable mRunnable = new SubsystemRunnable() {
 		@Override
 		public void runCrashTracked() {
 			synchronized (mTaskRunningLock) {
