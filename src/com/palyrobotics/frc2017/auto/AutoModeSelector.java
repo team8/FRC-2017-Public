@@ -36,22 +36,33 @@ public class AutoModeSelector {
 	}
 
 	private AutoModeSelector() {
-		registerAutonomous(new TestAutoMode());
+//		registerAutonomous(new TestAutoMode());
 
-		registerAutonomous(new DoNothingAutoMode());
+  /*0*/ registerAutonomous(new DoNothingAutoMode());
 		
-		registerAutonomous(new BaseLineAutoMode());
+  /*1*/ registerAutonomous(new BaseLineAutoMode());
 
-		registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.CenterAutoVariant.NOTHING));
-		registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.CenterAutoVariant.CROSS_LEFT));
-		registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.CenterAutoVariant.CROSS_RIGHT));
+  /*2*/ registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.CenterAutoVariant.NOTHING));
 
-		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RIGHT, SidePegAutoMode.PostSideAutoVariant.NONE));
-		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.LEFT, SidePegAutoMode.PostSideAutoVariant.NONE));
-		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RIGHT, SidePegAutoMode.PostSideAutoVariant.HIT_CLOSE_HOPPER));
-		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.LEFT, SidePegAutoMode.PostSideAutoVariant.HIT_CLOSE_HOPPER));
-		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RIGHT, SidePegAutoMode.PostSideAutoVariant.MOVE_TO_LOADING_STATION));
-		registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.LEFT, SidePegAutoMode.PostSideAutoVariant.MOVE_TO_LOADING_STATION));
+		// ENCODER TURN VARIANTS, check slider centering
+  /*3*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RIGHT,
+				false, false, SidePegAutoMode.PostSideAutoVariant.NONE));
+  /*4*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RIGHT,
+				true, false, SidePegAutoMode.PostSideAutoVariant.NONE));
+  /*5*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.LEFT,
+				false, false, SidePegAutoMode.PostSideAutoVariant.NONE));
+  /*6*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.LEFT,
+				true, false, SidePegAutoMode.PostSideAutoVariant.NONE));
+
+  		// GYRO TURN VARIANTS, check slider centering or not
+  /*7*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RIGHT,
+				false, true, SidePegAutoMode.PostSideAutoVariant.NONE));
+  /*8*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RIGHT,
+				true, true, SidePegAutoMode.PostSideAutoVariant.NONE));
+  /*9*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.LEFT,
+				false, true, SidePegAutoMode.PostSideAutoVariant.NONE));
+  /*10*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.LEFT,
+				true, true, SidePegAutoMode.PostSideAutoVariant.NONE));
 	}
 
 	/**

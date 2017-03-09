@@ -1,14 +1,14 @@
 package com.palyrobotics.frc2017.auto.modes;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
+import com.palyrobotics.frc2017.behavior.ParallelRoutine;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
+import com.palyrobotics.frc2017.behavior.routines.drive.BBTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
-import com.palyrobotics.frc2017.behavior.routines.drive.SafetyTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.scoring.SliderDistancePositioningAutocorrectRoutine;
-import com.palyrobotics.frc2017.behavior.routines.scoring.SliderDistancePositioningRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.Gains;
@@ -19,12 +19,11 @@ import java.util.ArrayList;
 
 /**
  * Created by Nihar on 2/11/17.
- * BBTurnAngle might be replaced with EncoderTurnAngle if no gyro
+ * Goes for side peg autonomous
+ * Configured for left vs right
+ * Can use a gyro bang bang or an encoder turn angle loop
  */
 public class SidePegAutoMode extends AutoModeBase {
-	// Might pivot differently when turning left vs right
-	public final double kSidePegTurnAngleDegrees = 60;
-
 	// Represents the peg we are going for
 	public enum SideAutoVariant {
 		RIGHT, LEFT
@@ -38,6 +37,8 @@ public class SidePegAutoMode extends AutoModeBase {
 	
 	private final SideAutoVariant mVariant;
 	private final PostSideAutoVariant mPost;
+	private final boolean mShouldCenterSlider;
+	private final boolean mShouldUseGyro;
 	private SequentialRoutine mSequentialRoutine;
 
 	private Gains mGains;
@@ -51,9 +52,13 @@ public class SidePegAutoMode extends AutoModeBase {
 	
 	private DriveSignal driveTowardsNeutralZone = DriveSignal.getNeutralSignal();
 	
-	public SidePegAutoMode(SideAutoVariant direction, PostSideAutoVariant postDrive) {
+	public SidePegAutoMode(SideAutoVariant direction, boolean shouldCenterSlider,
+						   boolean shouldUseGyro,
+						   PostSideAutoVariant postDrive) {
 		mVariant = direction;
 		mPost = postDrive;
+		mShouldCenterSlider = shouldCenterSlider;
+		mShouldUseGyro = shouldUseGyro;
 		if(Constants.kRobotName == Constants.RobotName.DERICA) {
 			mGains = Gains.dericaPosition;
 		} else {
@@ -63,6 +68,12 @@ public class SidePegAutoMode extends AutoModeBase {
 
 	@Override
 	public Routine getRoutine() {
+		if (mShouldCenterSlider) {
+			ArrayList<Routine> parallel = new ArrayList<>();
+			parallel.add(new SliderDistancePositioningAutocorrectRoutine(SliderTarget.CENTER));
+			parallel.add(mSequentialRoutine);
+			return new ParallelRoutine(parallel);
+		}
 		return mSequentialRoutine;
 	}
 
@@ -85,50 +96,64 @@ public class SidePegAutoMode extends AutoModeBase {
 			Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
 		driveToAirship.rightMotor.setMotionMagic(driveToAirshipSetpoint, mGains,
 				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-		
-		ArrayList<Routine> score = new ArrayList<>();
-//		score.add(new CANTalonRoutine(driveToAirship));
-//		score.add(slider score auto)
 
 		ArrayList<Routine> sequence = new ArrayList<>();
-		sequence.add(new SliderDistancePositioningAutocorrectRoutine(SliderTarget.CENTER));
 		sequence.add(new CANTalonRoutine(driveForward, true));
 		if (mVariant == SideAutoVariant.RIGHT) {
-			sequence.add(new EncoderTurnAngleRoutine(kSidePegTurnAngleDegrees));
+			if (mShouldUseGyro) {
+				sequence.add(new BBTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
+			} else {
+				sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
+			}
 		} else {
-			sequence.add(new EncoderTurnAngleRoutine(-kSidePegTurnAngleDegrees));
+			if (mShouldUseGyro) {
+				sequence.add(new BBTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
+			} else {
+				sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
+			}
 		}
 		sequence.add(new CANTalonRoutine(driveToAirship, true));
 		sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
 		
+		mSequentialRoutine = new SequentialRoutine(sequence);
+	}
+	
+	@Override
+	public String toString() {
+		return (mVariant == SideAutoVariant.RIGHT) ? "LeftPeg" : "RightPeg";
+	}
+}
+
+
+
 //		//TODO: adjust distances and add relative setpoints
 //		// Add the variants
 //		backUp.leftMotor.setPosition(-3, mGains);
 //		backUp.rightMotor.setPosition(-3, mGains);
-//		
+//
 //		// distance to the line that is perpendicular to and intersects the hopper
 //		driveToPerpendicular.leftMotor.setPosition(4, mGains);
 //		driveToPerpendicular.rightMotor.setPosition(4, mGains);
-//		
+//
 //		backUpIntoHopper.leftMotor.setPosition(-8, mGains);
 //		backUpIntoHopper.rightMotor.setPosition(-8, mGains);
-//		
+//
 //		driveTowardsNeutralZone.leftMotor.setPosition(15, mGains);
 //		driveTowardsNeutralZone.rightMotor.setPosition(15, mGains);
-//		
+//
 //		/**
 //		 * VARIANTS WORK AS FOLLOWS:
-//		 * 
+//		 *
 //		 * NONE:
 //		 * - Do nothing
-//		 * 
+//		 *
 //		 * HIT_CLOSE_HOPPER:
 //		 * - Drive to side peg like normal
 //		 * - Back up, rotate, drive to the perpendicular to the hopper, turn 90 degrees, back up into the hopper
-//		 * 
+//		 *
 //		 * MOVE_TO_LOADING_STATION:
 //		 * - Drive to side peg like normal
-//		 * - Back up, rotate, drive up a little bit.  Rotate again towards the loading station (only if on the left side), drive 
+//		 * - Back up, rotate, drive up a little bit.  Rotate again towards the loading station (only if on the left side), drive
 //		 */
 //		switch (this.mPost) {
 //			case NONE:
@@ -148,7 +173,7 @@ public class SidePegAutoMode extends AutoModeBase {
 //				}
 //				sequence.add(new CANTalonRoutine(backUpIntoHopper));
 //				break;
-//				
+//
 //			case MOVE_TO_LOADING_STATION:
 //				sequence.add(new CANTalonRoutine(backUp));
 //				if (mVariant == SideAutoVariant.LEFT) {
@@ -159,14 +184,5 @@ public class SidePegAutoMode extends AutoModeBase {
 //				sequence.add(new CANTalonRoutine(driveToPerpendicular));
 //				if (mVariant == SideAutoVariant.LEFT) sequence.add(new EncoderTurnAngleRoutine(25));
 //				sequence.add(new CANTalonRoutine(driveTowardsNeutralZone));
-//				break;				
+//				break;
 //		}
-		
-		mSequentialRoutine = new SequentialRoutine(sequence);
-	}
-	
-	@Override
-	public String toString() {
-		return (mVariant == SideAutoVariant.RIGHT) ? "LeftPeg" : "RightPeg";
-	}
-}

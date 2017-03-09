@@ -57,11 +57,7 @@ public class SliderDistancePositioningRoutine extends Routine {
 
 	@Override
 	public boolean finished() {
-		if (Robot.getRobotState().gamePeriod == RobotState.GamePeriod.AUTO) {
-			return false;
-		} else {
-			return !mAllowed || slider.onTarget();
-		}
+		return !mAllowed || slider.onTarget();
 	}
 
 	@Override

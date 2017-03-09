@@ -21,9 +21,9 @@ public class EncoderTurnAngleController implements DriveController {
 	private CANTalonOutput rightOutput;
 	
 	public EncoderTurnAngleController(Pose priorSetpoint, double angle) {
-		leftTarget = priorSetpoint.leftEnc - (angle * Constants.kDriveInchesPerDegree * Constants.kDriveTicksPerInch);
+		leftTarget = priorSetpoint.leftEnc + (angle * Constants.kDriveInchesPerDegree * Constants.kDriveTicksPerInch);
 		System.out.println("Left target: "+leftTarget);
-		rightTarget = priorSetpoint.rightEnc + (angle * Constants.kDriveInchesPerDegree * Constants.kDriveTicksPerInch);
+		rightTarget = priorSetpoint.rightEnc - (angle * Constants.kDriveInchesPerDegree * Constants.kDriveTicksPerInch);
 		System.out.println("Right target: "+rightTarget);
 		cachedPose = priorSetpoint;
 		this.maxAccel = (Constants.kRobotName == Constants.RobotName.DERICA) ? Gains.kDericaTurnMotionMagicCruiseVelocity : Gains.kAegirTurnMotionMagicCruiseVelocity;

@@ -59,7 +59,6 @@ class HardwareUpdater {
 	 * Initialize all hardware
 	 */
 	void initHardware() {
-//		HardwareAdapter.getInstance().getDrivetrain(); // Force gyro initialization
 		configureTalons(true);
 	}
 	
@@ -105,8 +104,11 @@ class HardwareUpdater {
 				double current_pot_pos = HardwareAdapter.SliderHardware.getInstance().sliderPotentiometer.getValue();
 				double distance_to_center = current_pot_pos - Constants.kPotentiometerCenterPos;
 				double position_in_rev = (distance_to_center / 4096.0) * 10.0;
-				slider.setPosition(-position_in_rev);
-
+				if (Constants.kCalibrateSliderWithPotentiometer) {
+					slider.setPosition(-position_in_rev);
+				} else {
+					slider.setPosition(0);
+				}
 			}
 		}
 	}

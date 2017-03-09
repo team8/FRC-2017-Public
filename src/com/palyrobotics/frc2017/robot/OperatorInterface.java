@@ -63,6 +63,10 @@ public class OperatorInterface {
 				&& prevCommands.wantedDriveState != Drive.DriveState.ON_BOARD_CONTROLLER) {
 			newCommands.wantedDriveState = Drive.DriveState.CHEZY;
 		}
+		newCommands.leftStickInput = new JoystickInput(mDriveStick.getX(), mDriveStick.getY(), mDriveStick.getTrigger());
+		newCommands.rightStickInput = new JoystickInput(mTurnStick.getX(), mTurnStick.getY(), mTurnStick.getTrigger());
+		newCommands.sliderStickInput = new JoystickInput(mSliderStick.getX(), mSliderStick.getY(), mSliderStick.getTrigger());
+		newCommands.climberStickInput = new JoystickInput(mClimberStick.getX(), mClimberStick.getY(), mClimberStick.getTrigger());
 
 		// Flippers
 		//TODO figure out flipper controls
@@ -78,7 +82,7 @@ public class OperatorInterface {
 		} else if (mSliderStick.getRawButton(1)) {
 			newCommands.wantedFlipperSignal.rightFlipper = DoubleSolenoid.Value.kReverse;
 		}
-		
+
 		// Slider
 		if (mSliderStick.getRawButton(2)) {	// opposite of preferred thumb position
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.NONE;
@@ -103,7 +107,7 @@ public class OperatorInterface {
 		} else if (Slider.getInstance().getSliderState() == Slider.SliderState.IDLE) {
 			newCommands.addWantedRoutine(new ManualSliderControlRoutine());
 		}
-		
+
 		// Spatula
 		if (mSliderStick.getRawButton(8)) {
 			newCommands.wantedSpatulaState = Spatula.SpatulaState.DOWN;
@@ -119,9 +123,20 @@ public class OperatorInterface {
 		} else {
 			newCommands.wantedIntakeState = Intake.IntakeState.IDLE;
 		}
-		
-		// Climber
-		if (mClimberStick.getY() != 0) {
+
+		// Climber buttons overrides joystick
+		if (mSliderStick.getRawButton(10)) {
+			newCommands.climberStickInput.y = 0.15;
+		} else if (mSliderStick.getRawButton(11)) {
+			newCommands.climberStickInput.y = 0.8;
+		} else if (mDriveStick.getRawButton(7)) {
+			newCommands.climberStickInput.y = 0.15;
+		} else if (mDriveStick.getRawButton(10)) {
+			newCommands.climberStickInput.y = 0.8;
+		}
+
+		// Climber joystick may be set in a virtual sense
+		if (newCommands.climberStickInput.y != 0) {
 			newCommands.wantedClimberState = Climber.ClimberState.MANUAL;
 		} else {
 			newCommands.wantedClimberState = Climber.ClimberState.IDLE;
@@ -129,10 +144,6 @@ public class OperatorInterface {
 		// Left Stick trigger cancels current routine
 		newCommands.cancelCurrentRoutines = mDriveStick.getTrigger();
 
-		newCommands.leftStickInput = new JoystickInput(mDriveStick.getX(), mDriveStick.getY(), mDriveStick.getTrigger());
-		newCommands.rightStickInput = new JoystickInput(mTurnStick.getX(), mTurnStick.getY(), mTurnStick.getTrigger());
-		newCommands.sliderStickInput = new JoystickInput(mSliderStick.getX(), mSliderStick.getY(), mSliderStick.getTrigger());
-		newCommands.climberStickInput = new JoystickInput(mClimberStick.getX(), mClimberStick.getY(), mClimberStick.getTrigger());
 
 		return newCommands;
 	}

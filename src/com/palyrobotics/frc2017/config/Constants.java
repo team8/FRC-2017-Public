@@ -6,7 +6,10 @@ public class Constants extends ConstantsBase {
 	public enum RobotName {
 		STEIK, AEGIR, DERICA
 	}
+
+	// Initialization constants
 	public static final RobotName kRobotName = RobotName.AEGIR;
+	public static final boolean kCalibrateSliderWithPotentiometer = true;
 
 	// Cheesy Drive tuning
 
@@ -167,6 +170,7 @@ public class Constants extends ConstantsBase {
 	// For side peg auto, robot starts 4 gear widths (44") from center of alliance wall
 	public static double kSidePegDistanceForwardInches = 71;//104.5688;
 	public static double kSidePegDistanceToAirshipInches = 83;//24.5688;
+	public static double kSidePegTurnAngleDegrees = 60;
 
 	// !!! Loop rate of normal Looper
 	public static double kControlLoopsDt = 0.005;
