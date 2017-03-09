@@ -59,10 +59,7 @@ class HardwareUpdater {
 	 * Initialize all hardware
 	 */
 	void initHardware() {
-		if (HardwareAdapter.getInstance().getDrivetrain().gyro != null) {
-//			HardwareAdapter.getInstance().getDrivetrain().gyro.calibrate();
-		}
-		
+//		HardwareAdapter.getInstance().getDrivetrain(); // Force gyro initialization
 		configureTalons(true);
 	}
 	
@@ -299,7 +296,7 @@ class HardwareUpdater {
 	private void updateCANTalonSRX(CANTalon talon, CANTalonOutput output) {
 		if (talon.getControlMode() != output.getControlMode()) {
 			talon.changeControlMode(output.getControlMode());
-			if(output.getControlMode().isPID()) {
+			if(output.getControlMode().isPID() || output.getControlMode() == TalonControlMode.MotionMagic) {
 				talon.setPID(output.gains.P, output.gains.I, output.gains.D, output.gains.F, output.gains.izone, output.gains.rampRate, output.profile);
 			}
 			if (output.getControlMode() == CANTalon.TalonControlMode.MotionMagic) {

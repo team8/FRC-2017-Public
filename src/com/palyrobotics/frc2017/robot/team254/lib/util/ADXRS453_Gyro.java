@@ -162,6 +162,14 @@ public class ADXRS453_Gyro extends GyroBase implements Gyro, PIDSource, LiveWind
     }
 
     /**
+     * Can use to detect if gyro was found on SPI Port
+     * @return true if no gyro found
+     */
+    public boolean isSPINull() {
+        return (m_spi == null);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
