@@ -9,8 +9,24 @@ public class Constants extends ConstantsBase {
 	public static final RobotName kRobotName = RobotName.AEGIR;
 
 	// Cheesy Drive tuning
-	public static double kDriveSensitivity = .85;
+
+	//Sensitivities for how fast turning is
+	public static double kLowGearDriveSensitivity = .70;
+	public static double kHighGearDriveSensitivity = 0.85;
+	public static double kLowGearQuickTurnSensitivity = 0.8;
+	public static double kHighGearQuickTurnSensitivity = 0.8;
+
+	//The rate at which the QuickStopAccumulator will decrease
+	public static double kQuickStopAccumulatorDecreaseRate = 0.8;
+
+	//The value at which the QuickStopAccumulator will begin to decrease
+	public static double kQuickStopAccumulatorDecreaseThreshold = 1.2;
 	public static double kNegativeInertiaScalar = 5.0;
+	
+	//How much the QuickStopAccumulator is affected by the wheel
+	//(1-alpha) is how much the QuickStopAccumulator is affected by the previous QuickStopAccumulator
+	//Range: (0, 1)
+	public static double kAlpha = 0.45;
 
 	// Manual control speed tuning
 	public static double kManualIntakeSpeed = 1.0;

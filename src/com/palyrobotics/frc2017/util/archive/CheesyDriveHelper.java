@@ -18,12 +18,13 @@ public class CheesyDriveHelper {
 		double throttle = -commands.leftStickInput.y;
 		double wheel = commands.rightStickInput.x;
 		boolean isQuickTurn = commands.rightStickInput.triggerPressed;
-		boolean isHighGear = true;
+		boolean isHighGear = false;
 
 		double wheelNonLinearity;
 
 		wheel = handleDeadband(wheel, kWheelStickDeadband);
 		throttle = handleDeadband(throttle, kThrottleStickDeadband);
+		System.out.println("forward power: " + throttle);
 
 		double negInertia = wheel - mOldWheel;
 		mOldWheel = wheel;
@@ -57,7 +58,7 @@ public class CheesyDriveHelper {
 		double negInertiaScalar;
 		if (isHighGear) {
 			negInertiaScalar = 4.0;
-			sensitivity = Constants.kDriveSensitivity;
+			sensitivity = Constants.kHighGearDriveSensitivity;
 		} else {
 			if (wheel * negInertia > 0) {
 				negInertiaScalar = 2.5;
@@ -68,7 +69,7 @@ public class CheesyDriveHelper {
 					negInertiaScalar = 3.0;
 				}
 			}
-			sensitivity = .85; // Constants.sensitivityLow.getDouble();
+			sensitivity = Constants.kLowGearDriveSensitivity;
 		}
 		double negInertiaPower = negInertia * negInertiaScalar;
 		negInertiaAccumulator += negInertiaPower;
@@ -85,27 +86,29 @@ public class CheesyDriveHelper {
 
 		// Quickturn!
 		if (isQuickTurn) {
-			if (Math.abs(linearPower) < 0.2) {
-				// Can be tuned
-				double alpha = 0.3;
-				mQuickStopAccumulator = (1 - alpha) * mQuickStopAccumulator
-						+ alpha * Util.limit(wheel, 1.0) * 5;
-			}
+			// Can be tuned
+			double alpha = Constants.kAlpha;
+			mQuickStopAccumulator = (1 - alpha) * mQuickStopAccumulator
+					+ alpha * Util.limit(wheel, 1.0) * 5;
+			
 			overPower = 1.0;
+			
+			//Different sensitivity on quick turning
 			if (isHighGear) {
-				sensitivity = 1.0;
+				sensitivity = Constants.kHighGearQuickTurnSensitivity;
 			} else {
-				sensitivity = 1.0;
+				sensitivity = Constants.kLowGearQuickTurnSensitivity;
 			}
-			angularPower = wheel;
+
+			angularPower = wheel * sensitivity;
 		} else {
 			overPower = 0.0;
 			angularPower = Math.abs(throttle) * wheel * sensitivity
 					- mQuickStopAccumulator;
-			if (mQuickStopAccumulator > 1) {
-				mQuickStopAccumulator -= 1;
-			} else if (mQuickStopAccumulator < -1) {
-				mQuickStopAccumulator += 1;
+			if (mQuickStopAccumulator > Constants.kQuickStopAccumulatorDecreaseThreshold) {
+				mQuickStopAccumulator -= Constants.kQuickStopAccumulatorDecreaseRate;
+			} else if (mQuickStopAccumulator < -Constants.kQuickStopAccumulatorDecreaseThreshold) {
+				mQuickStopAccumulator += Constants.kQuickStopAccumulatorDecreaseRate;
 			} else {
 				mQuickStopAccumulator = 0.0;
 			}
