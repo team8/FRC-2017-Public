@@ -21,6 +21,8 @@ public class SliderDistancePositioningAutocorrectRoutine extends Routine {
 		MOVING
 	}
 	private DistancePositioningState mState = DistancePositioningState.RAISING;
+	// Use to make sure routine ran at least once before "finished"
+	private boolean updated = false;
 	
 	private Slider.SliderTarget mTarget;
 	
@@ -46,7 +48,7 @@ public class SliderDistancePositioningAutocorrectRoutine extends Routine {
 	@Override
 	public Commands update(Commands commands) {
 		commands.robotSetpoints.sliderSetpoint = mTarget;
-		
+		updated = true;
 		switch(mState) {
 		case MOVING:
 			commands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
@@ -83,7 +85,7 @@ public class SliderDistancePositioningAutocorrectRoutine extends Routine {
 
 	@Override
 	public boolean finished() {
-		return mState==DistancePositioningState.MOVING && slider.onTarget();
+		return updated && mState==DistancePositioningState.MOVING && slider.onTarget();
 	}
 
 	@Override

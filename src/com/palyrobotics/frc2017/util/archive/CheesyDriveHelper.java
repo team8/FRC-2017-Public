@@ -24,7 +24,6 @@ public class CheesyDriveHelper {
 
 		wheel = handleDeadband(wheel, kWheelStickDeadband);
 		throttle = handleDeadband(throttle, kThrottleStickDeadband);
-		System.out.println("forward power: " + throttle);
 
 		double negInertia = wheel - mOldWheel;
 		mOldWheel = wheel;

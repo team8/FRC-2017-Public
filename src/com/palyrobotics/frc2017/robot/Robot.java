@@ -143,6 +143,7 @@ public class Robot extends IterativeRobot {
 		System.gc();
 		
 		System.out.println("Encoder: "+robotState.drivePose.leftEnc);
+		System.out.println("Gyro: "+robotState.drivePose.heading);
 		System.out.println("End disabledInit()");
 	}
 

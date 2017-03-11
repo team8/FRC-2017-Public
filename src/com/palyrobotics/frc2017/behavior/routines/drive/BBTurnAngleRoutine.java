@@ -14,10 +14,10 @@ public class BBTurnAngleRoutine extends Routine {
 	
 	private double mAngle;
 	
-	private States mState = States.START;
-	
-	private enum States {
-		START, TURNING, DONE
+	private GyroBBState mState = GyroBBState.START;
+	private double startTime;
+	private enum GyroBBState {
+		START, TURNING, TIMED_OUT, DONE
 	}
 	
 	public BBTurnAngleRoutine(double angle) {
@@ -28,25 +28,31 @@ public class BBTurnAngleRoutine extends Routine {
 	public void start() {
 		System.out.println("start bb turn angle");
 		drive.setNeutral();
-		mState = States.START;
+		mState = GyroBBState.START;
+		startTime = System.currentTimeMillis();
 	}
 
 	@Override
 	public Commands update(Commands commands) {	
+		if (mState != GyroBBState.TIMED_OUT && (System.currentTimeMillis() - startTime > 3000)) {
+			System.err.println("Timed out!");
+			mState = GyroBBState.TIMED_OUT;
+		}
 		switch(mState) {
 		case START:
 			System.out.println("Set setpoint: " + mAngle);
 			drive.setTurnAngleSetpoint(mAngle);
 			commands.wantedDriveState = Drive.DriveState.ON_BOARD_CONTROLLER;
-			mState = States.TURNING;
+			mState = GyroBBState.TURNING;
 			break;
-			
 		case TURNING:
 			if(drive.controllerOnTarget()) {
-				mState = States.DONE;
+				mState = GyroBBState.DONE;
 			}
 			break;
-			
+		case TIMED_OUT:
+			drive.setNeutral();
+			break;
 		case DONE:
 			drive.resetController();
 			break;
@@ -58,7 +64,7 @@ public class BBTurnAngleRoutine extends Routine {
 
 	@Override
 	public Commands cancel(Commands commands) {
-		mState = States.DONE;
+		mState = GyroBBState.DONE;
 		commands.wantedDriveState = Drive.DriveState.NEUTRAL;
 		drive.setNeutral();
 		return commands;
@@ -66,7 +72,7 @@ public class BBTurnAngleRoutine extends Routine {
 
 	@Override
 	public boolean finished() {
-		return mState == States.DONE;
+		return mState == GyroBBState.DONE;
 	}
 
 	@Override

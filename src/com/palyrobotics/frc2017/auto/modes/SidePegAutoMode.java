@@ -8,6 +8,7 @@ import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.BBTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
+import com.palyrobotics.frc2017.behavior.routines.drive.SafetyTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.scoring.SliderDistancePositioningAutocorrectRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
@@ -16,6 +17,8 @@ import com.palyrobotics.frc2017.subsystems.Slider.SliderTarget;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
 import java.util.ArrayList;
+
+import javax.sound.midi.SysexMessage;
 
 /**
  * Created by Nihar on 2/11/17.
@@ -26,7 +29,8 @@ import java.util.ArrayList;
 public class SidePegAutoMode extends AutoModeBase {
 	// Represents the peg we are going for
 	public enum SideAutoVariant {
-		RIGHT, LEFT
+		RED_RIGHT, BLUE_RIGHT,
+		RED_LEFT, BLUE_LEFT
 	}
 	
 	public enum PostSideAutoVariant {
@@ -81,14 +85,6 @@ public class SidePegAutoMode extends AutoModeBase {
 	public void prestart() {
 		System.out.println("Starting "+this.toString()+" Auto Mode");
 		
-		double driveForwardSetpoint = Constants.kSidePegDistanceForwardInches * 
-				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-						: Constants.kDriveTicksPerInch);
-		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mGains,
-			Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, mGains,
-				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-
 		double driveToAirshipSetpoint = Constants.kSidePegDistanceToAirshipInches * 
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 						: Constants.kDriveTicksPerInch);
@@ -98,19 +94,55 @@ public class SidePegAutoMode extends AutoModeBase {
 				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
 
 		ArrayList<Routine> sequence = new ArrayList<>();
+		
+		// NOTE: Intentional switch case falling
+		// For Red Left = Blue Right, Red Right = Blue Left
+		double driveForwardSetpoint;
+		switch (mVariant) {
+			// loading station side
+			case RED_LEFT:
+			case BLUE_RIGHT:
+				driveForwardSetpoint = Constants.kSidePegDistanceLoadingStationInches * 
+					((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+							: Constants.kDriveTicksPerInch);
+				break;
+			// boiler side
+			case RED_RIGHT:
+			case BLUE_LEFT:
+				driveForwardSetpoint = Constants.kSidePegDistanceBoilerInches * 
+					((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+							: Constants.kDriveTicksPerInch);
+				break;
+			default:
+				System.err.println("What in tarnation no side peg distance");
+				driveForwardSetpoint = 0;
+				break;
+		}
+		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mGains,
+				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
+		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, mGains,
+				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
 		sequence.add(new CANTalonRoutine(driveForward, true));
-		if (mVariant == SideAutoVariant.RIGHT) {
-			if (mShouldUseGyro) {
-				sequence.add(new BBTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
-			} else {
-				sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
-			}
-		} else {
-			if (mShouldUseGyro) {
-				sequence.add(new BBTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
-			} else {
-				sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
-			}
+		// Added drive dist sequence
+		
+		// NOTE: switch case falling, split by lefts vs rights
+		switch (mVariant) {
+			case RED_LEFT:
+			case BLUE_LEFT:
+				if (mShouldUseGyro) {
+					sequence.add(new SafetyTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
+				} else {
+					sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
+				}
+				break;
+			case RED_RIGHT:
+			case BLUE_RIGHT:
+				if (mShouldUseGyro) {
+					sequence.add(new SafetyTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
+				} else {
+					sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
+				}
+				break;
 		}
 		sequence.add(new CANTalonRoutine(driveToAirship, true));
 		sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
@@ -120,7 +152,35 @@ public class SidePegAutoMode extends AutoModeBase {
 	
 	@Override
 	public String toString() {
-		return (mVariant == SideAutoVariant.RIGHT) ? "LeftPeg" : "RightPeg";
+		String name;
+		switch (mVariant) {
+			case RED_LEFT:
+				name = "RedLeftSidePeg";
+				break;
+			case RED_RIGHT:
+				name = "RedRightSidePeg";
+				break;
+			case BLUE_LEFT:
+				name = "BlueLeftSidePeg";
+				break;
+			case BLUE_RIGHT:
+				name = "BlueRightSidePeg";
+				break;
+			default:
+				name = "SidePeg";
+				break;
+		}
+		if (mShouldCenterSlider) {
+			name += "SliderCenter";
+		} else {
+			name += "NotSliderCenter";
+		}
+		if (mShouldUseGyro) {
+			name += "Gyro";
+		} else {
+			name += "EncoderTurn";
+		}
+		return name;
 	}
 }
 

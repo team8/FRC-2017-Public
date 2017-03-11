@@ -111,33 +111,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	@Override
 	public void update(Commands commands, RobotState robotState) {
 		mRobotState = robotState;
-		switch(mState) {
-		case IDLE:
-			mTarget = SliderTarget.NONE;
-			mOutput.setPercentVBus(0);
-			break;
-		case WAITING:
-			mTarget = commands.robotSetpoints.sliderSetpoint;
-			mOutput.setPercentVBus(0);
-			break;
-		case MANUAL:
-			mTarget = SliderTarget.NONE;
-			setManualOutput(commands);
-			break;
-		case AUTOMATIC_POSITIONING:
-			mTarget = commands.robotSetpoints.sliderSetpoint;
-			if (isEncoderFunctional) {
-				setSetpointsEncoder();
-			} else if (isPotentiometerFunctional) {
-				setSetpointsPotentiometer();
-			} else {
-				System.err.println("Attempting automatic positioning without sensors!");
-			}
-			break;
-		case VISION_POSITIONING:	// unused
-			setSetpointsVision();
-			break;
-		}
+		// Updating the output based on slider target will cause desync and exceptions
 		sliderPotentiometer.updateValue(robotState.sliderPotentiometer);
 		sliderDist.updateValue(robotState.sliderPosition);
 		DashboardManager.getInstance().publishKVPair(sliderPotentiometer);

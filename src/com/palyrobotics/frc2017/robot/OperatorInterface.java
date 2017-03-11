@@ -126,17 +126,16 @@ public class OperatorInterface {
 
 		// Climber buttons overrides joystick
 		if (mSliderStick.getRawButton(10)) {
-			newCommands.climberStickInput.y = 0.15;
+			newCommands.climberStickInput.y = -0.15;
 		} else if (mSliderStick.getRawButton(11)) {
-			newCommands.climberStickInput.y = 0.8;
+			newCommands.climberStickInput.y = -0.8;
 		} else if (mDriveStick.getRawButton(7)) {
-			newCommands.climberStickInput.y = 0.15;
+			newCommands.climberStickInput.y = -0.15;
 		} else if (mDriveStick.getRawButton(10)) {
-			newCommands.climberStickInput.y = 0.8;
+			newCommands.climberStickInput.y = -0.8;
 		}
-
 		// Climber joystick may be set in a virtual sense
-		if (newCommands.climberStickInput.y != 0) {
+		if (newCommands.climberStickInput.y <= 0.02) {
 			newCommands.wantedClimberState = Climber.ClimberState.MANUAL;
 		} else {
 			newCommands.wantedClimberState = Climber.ClimberState.IDLE;

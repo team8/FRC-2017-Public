@@ -287,7 +287,7 @@ class HardwareUpdater {
 	 * Updates the drivetrain on Derica, Steik, Aegir 
 	 * Uses CANTalonOutput and can run off-board control loops through SRX
 	 */
-	private void updateDrivetrain() {		
+	private void updateDrivetrain() {
 		updateCANTalonSRX(HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon, mDrive.getDriveSignal().leftMotor);
 		updateCANTalonSRX(HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon, mDrive.getDriveSignal().rightMotor);
 	}
@@ -296,7 +296,6 @@ class HardwareUpdater {
 	 * Helper method for processing a CANTalonOutput for an SRX
 	 */
 	private void updateCANTalonSRX(CANTalon talon, CANTalonOutput output) {
-		if (talon.getControlMode() != output.getControlMode()) {
 			talon.changeControlMode(output.getControlMode());
 			if(output.getControlMode().isPID() || output.getControlMode() == TalonControlMode.MotionMagic) {
 				talon.setPID(output.gains.P, output.gains.I, output.gains.D, output.gains.F, output.gains.izone, output.gains.rampRate, output.profile);
@@ -305,7 +304,6 @@ class HardwareUpdater {
 				talon.setMotionMagicAcceleration(output.accel);
 				talon.setMotionMagicCruiseVelocity(output.cruiseVel);
 			}
-		}
 		talon.set(output.getSetpoint());
 	}
 }

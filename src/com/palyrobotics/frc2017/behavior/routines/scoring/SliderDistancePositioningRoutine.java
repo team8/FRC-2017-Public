@@ -25,7 +25,6 @@ public class SliderDistancePositioningRoutine extends Routine {
 		} else {
 			mAllowed = true;
 		}
-		System.out.println("Non autocorrect");
 	}
 
 	@Override

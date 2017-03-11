@@ -26,7 +26,8 @@ public class BangBangTurnAngleController implements Drive.DriveController {
 		this.mPower = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kTurnAngleSpeed : Constants.kTurnInPlacePower;
 		this.mCachedPose = currentPose;
 		this.mTargetHeading = this.mCachedPose.heading + heading;
-		System.out.println("Starting Heading" + this.mCachedPose.heading);
+		System.out.println("Starting Heading " + this.mCachedPose.heading);
+		System.out.println("Target heading: "+this.mTargetHeading);
 	}
 	
 	@Override

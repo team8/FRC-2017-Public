@@ -75,12 +75,12 @@ public class CANTalonRoutine extends Routine {
 	public boolean finished() {
 		// Wait for controller to be added before finishing routine
 		if (mSignal.leftMotor.getSetpoint() != Robot.getRobotState().leftSetpoint) {
-			System.out.println("Mismatched desired talon and actual talon states!");
+			System.out.println("Mismatched desired talon and actual talon states! desired, actual");
 			System.out.println(mSignal.leftMotor.getSetpoint()+", "+Robot.getRobotState().leftSetpoint);
 			return false;
 		}
 		else if (mSignal.rightMotor.getSetpoint() != Robot.getRobotState().rightSetpoint) {
-			System.out.println("Mismatched desired talon and actual talon states!");
+			System.out.println("Mismatched desired talon and actual talon states! desired, actual");
 			System.out.println(mSignal.rightMotor.getSetpoint()+", "+Robot.getRobotState().rightSetpoint);
 			return false;
 		}
@@ -88,7 +88,6 @@ public class CANTalonRoutine extends Routine {
 			System.out.println("Mismatched desired talon and actual talon states!");
 			System.out.println(mSignal.leftMotor.getControlMode() + ", "+Robot.getRobotState().leftControlMode);
 			return false;
-			
 		}
 		else if (mSignal.rightMotor.getControlMode() != Robot.getRobotState().rightControlMode) {
 			System.out.println("Mismatched desired talon and actual talon states!");

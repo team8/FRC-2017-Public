@@ -124,6 +124,7 @@ public class Constants extends ConstantsBase {
 	public static int kAegirPDPDeviceID = 11;
 	
 	// DRIVETRAIN
+	// PDP slots for drivetrain 0, 1, 2, 3, 12, 13
 	public static int kAegirLeftDriveMasterDeviceID  = 1;
 	public static int kAegirLeftDriveSlaveDeviceID = 2;
 	public static int kAegirLeftDriveOtherSlaveDeviceID = 3;
@@ -168,7 +169,8 @@ public class Constants extends ConstantsBase {
 	public static double kBaseLineDistanceInches = 93.3;
 	public static double kCenterPegDistanceInches = 86;//80;
 	// For side peg auto, robot starts 4 gear widths (44") from center of alliance wall
-	public static double kSidePegDistanceForwardInches = 71;//104.5688;
+	public static double kSidePegDistanceLoadingStationInches = 71;//104.5688;
+	public static double kSidePegDistanceBoilerInches = 71;
 	public static double kSidePegDistanceToAirshipInches = 83;//24.5688;
 	public static double kSidePegTurnAngleDegrees = 60;
 
