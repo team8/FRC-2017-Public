@@ -6,7 +6,7 @@ public class Constants extends ConstantsBase {
 	public enum RobotName {
 		STEIK, AEGIR, DERICA
 	}
-	public static final RobotName kRobotName = RobotName.AEGIR;
+	public static final RobotName kRobotName = RobotName.DERICA;
 
 	// Cheesy Drive tuning
 

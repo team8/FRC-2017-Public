@@ -45,7 +45,12 @@ public class HardwareAdapter {
 				rightMasterTalon = new CANTalon(Constants2016.kDericaRightDriveMasterDeviceID);
 				rightSlave1Talon = new CANTalon(Constants2016.kDericaRightDriveSlaveDeviceID);
 				rightSlave2Talon = null;
-				gyro = new ADXRS453_Gyro();
+				ADXRS453_Gyro tempGyro = new ADXRS453_Gyro();
+				if (tempGyro.isSPINull()) {
+					gyro = null;
+				} else {
+					gyro = tempGyro;
+				}
 			} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
 				leftMasterTalon = new CANTalon(Constants.kAegirLeftDriveMasterDeviceID);
 				leftSlave1Talon = new CANTalon(Constants.kAegirLeftDriveSlaveDeviceID);
