@@ -265,14 +265,10 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		return mOutput;
 	}
 	
-	public void printStatus() {
-//		System.out.println("Slider Status:");
-		System.out.println("State is " + mState.toString());
-//		System.out.println(((this.onTarget()) ? "On target":"Not on target"));
-//		System.out.println("Target is " + mTarget.toString());
-//		System.out.println("Output is " + mOutput.getSetpoint() + " with CANTalon in " + mOutput.getControlMode());
-//		System.out.println("Encoder value is " + mRobotState.sliderEncoder);
-//		System.out.println("Potentiometer value is " + mRobotState.sliderPotentiometer);
-//		System.out.println();
+	public String printStatus() {
+		return "Slider State: " + mState + "\n" + ((this.onTarget()) ? "On target":"Not on target") +
+				"\nTarget: " + mTarget + "\nOutput: " + mOutput.getSetpoint() + 
+				" with CANTalon in " + mOutput.getControlMode() + "\nEncoder value is " + mRobotState.sliderEncoder
+				+ "\nPotentiometer value is " + mRobotState.sliderPotentiometer;
 	}
 }

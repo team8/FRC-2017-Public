@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 
 public class Logger {
@@ -23,8 +24,9 @@ public class Logger {
 		data = new ArrayList<String>();
 	}
 	
-	public synchronized void newLog() {
+	public void newLog() {
 		Date date = new Date();
+		
 		String filePath = "C:\\logfiles\\" + new SimpleDateFormat("MM-dd-yyyy HH-mm-ss").format(date) + ".log";
 		
 		try {
@@ -42,16 +44,16 @@ public class Logger {
 		System.out.println("Created new log at " + filePath.toString());
 	}
 	
-	public synchronized void log(Object value) {
+	public void log(Object value) {
 //		log("", value, false, false);
-		data.add(Timer.getFPGATimestamp() + ": " + value.toString());
+		data.add(Timer.getFPGATimestamp() + ": " + value.toString() + "\n");
 	}
-	public synchronized void log(String key, Object value) {
-		data.add(Timer.getFPGATimestamp() + ": " + key + ": " + value.toString());
+	public void log(String key, Object value) {
+		data.add(Timer.getFPGATimestamp() + ": " + key + ": " + value.toString() + "\n");
 	}
 
 	
-	public synchronized void end() {	
+	public void end() {	
 		for (String m : this.data) {
 			try {
 				bufferedWriter.write(m.toString());
@@ -77,5 +79,4 @@ public class Logger {
 			e.printStackTrace();
 		}
 	}
-	
 }

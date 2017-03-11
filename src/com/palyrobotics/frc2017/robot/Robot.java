@@ -9,6 +9,7 @@ import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.archive.SubsystemLooper;
+import com.palyrobotics.frc2017.util.logger.Logger;
 import com.palyrobotics.frc2017.robot.team254.lib.util.RobotData;
 import com.palyrobotics.frc2017.robot.team254.lib.util.SystemManager;
 
@@ -37,6 +38,7 @@ public class Robot extends IterativeRobot {
 	private Spatula mSpatula = Spatula.getInstance();
 	private Intake mIntake = Intake.getInstance();
 	private Climber mClimber = Climber.getInstance();
+	private Logger mLogger = new Logger();
 
 	// Hardware Updater
 	private HardwareUpdater mHardwareUpdater;
@@ -61,6 +63,7 @@ public class Robot extends IterativeRobot {
 			mSubsystemLooper.register(mSpatula);
 			mSubsystemLooper.register(mIntake);
 			mSubsystemLooper.register(mClimber);
+			mSubsystemLooper.registerLogger(mLogger);
 		} else {
 			try {
 				mHardwareUpdater = new HardwareUpdater(mDrive);
@@ -77,6 +80,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		System.out.println("Start autonomousInit()");
+		mLogger.newLog();
 		robotState.gamePeriod = RobotState.GamePeriod.AUTO;
 		mHardwareUpdater.configureTalons(false);
 		DashboardManager.getInstance().enableCANTable(true);
@@ -101,6 +105,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopInit() {
 		System.out.println("Start teleopInit()");
+		mLogger.newLog();
 		robotState.gamePeriod = RobotState.GamePeriod.TELEOP;
 		mHardwareUpdater.configureTalons(false);
 		mRoutineManager.reset(commands);
@@ -117,6 +122,7 @@ public class Robot extends IterativeRobot {
 		mHardwareUpdater.updateSensors(robotState);
 		// Gets joystick commands
 		// Updates commands based on routines
+		commands.logCommands(mLogger);
 		commands = mRoutineManager.update(operatorInterface.updateCommands(commands));
 		//Update the hardware
 		mHardwareUpdater.updateSubsystems();
@@ -140,6 +146,9 @@ public class Robot extends IterativeRobot {
 		
 		mHardwareUpdater.disableTalons();
 		DashboardManager.getInstance().enableCANTable(false);
+		mLogger.end();
+		mLogger.cleanup();
+		
 		// Manually run garbage collector
 		System.gc();
 		

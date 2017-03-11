@@ -249,8 +249,7 @@ public class LegacyDrive extends Subsystem implements SubsystemLoop {
 	}
 
 	@Override
-	public void printStatus() {
-		// TODO Auto-generated method stub
-		
+	public String printStatus() {
+		return "";
 	}
 }

@@ -5,7 +5,9 @@ import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.robot.team254.lib.util.CrashTrackingRunnable;
-import com.palyrobotics.frc2017.robot.team254.lib.util.Looper;
+import com.palyrobotics.frc2017.util.Subsystem;
+import com.palyrobotics.frc2017.util.logger.Logger;
+
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,6 +31,7 @@ public class SubsystemLooper {
 	private final Object mTaskRunningLock = new Object();
 	private double mTimeStamp = 0;
 	private double mDt = 0;
+	private Logger mLogger = null;
 
 	// Used for secondary printer loop
 	private boolean mPrinting = false;
@@ -49,6 +52,9 @@ public class SubsystemLooper {
 					RobotState robotState = Robot.getRobotState();
 					for (SubsystemLoop loop : mLoops) {
 						loop.update(commands, robotState);
+						if(mLogger!=null) {
+							mLogger.log(loop.printStatus());
+						}
 					}
 					mDt = now - mTimeStamp;
 					mTimeStamp = now;
@@ -64,7 +70,7 @@ public class SubsystemLooper {
 				if (mPrinting && mAllowPrinting) {
 					double now = Timer.getFPGATimestamp();
 					for (SubsystemLoop loop : mLoops) {
-						loop.printStatus();
+						System.out.println(loop.printStatus());
 					}
 					mPrintDt = now - mPrintTimeStamp;
 					mPrintTimeStamp = now;
@@ -88,6 +94,10 @@ public class SubsystemLooper {
 			System.out.println("Added loop: "+loop.toString());
 			mLoops.add(loop);
 		}
+	}
+	
+	public synchronized void registerLogger(Logger logger) {
+		mLogger = logger;
 	}
 
 	public synchronized void start() {

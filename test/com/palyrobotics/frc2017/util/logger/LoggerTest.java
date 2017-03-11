@@ -8,14 +8,13 @@ public class LoggerTest {
 	@Test
 	public void testWriting() {
 		logger.newLog();
-		System.out.println(logger.getLog().getFilePath());
 		logger.log("Testing");
 		logger.log("asdf");
 		logger.log("number", 1);
 		
-		logger.update();
+		logger.end();
 		
 		// messages should be flushed
-		logger.update();
+		logger.end();
 	}
 }

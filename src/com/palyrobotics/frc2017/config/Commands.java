@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
+import com.palyrobotics.frc2017.util.logger.Logger;
 import com.palyrobotics.frc2017.subsystems.Climber;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.subsystems.Flippers;
@@ -123,5 +124,21 @@ public class Commands {
 		robotSetpoints.drivePowerSetpoint.ifPresent((DriveSignal signal) -> copy.robotSetpoints.drivePowerSetpoint = Optional.of(signal));
 		copy.robotSetpoints.sliderSetpoint = robotSetpoints.sliderSetpoint;
 		return copy;
+	}
+	
+	public void logCommands(Logger logger) {
+		logger.log("Wanted Drive State", wantedDriveState);
+		logger.log("Wanted Spatula State", wantedSpatulaState);
+		logger.log("Wanted Slider State", wantedSliderState);
+		logger.log("Wanted Climber State", wantedClimberState);
+		logger.log("Left Driver Stick", leftStickInput);
+		logger.log("Right Driver Stick", rightStickInput);
+		logger.log("Slider Stick", sliderStickInput);
+		logger.log("Climber Stick", sliderStickInput);
+		String wantedRoutineName = "";
+		for(Routine r : this.wantedRoutines) {
+			wantedRoutineName += r.getName() + " ";
+		}
+		logger.log("Wanted Routines", wantedRoutineName);
 	}
 }
