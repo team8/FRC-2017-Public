@@ -48,7 +48,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		System.out.println("Start robotInit() for "+Constants.kRobotName.toString());
-		DashboardManager.robotInit();
+		DashboardManager.getInstance().robotInit();
 		if (Constants.kRobotName == Constants.RobotName.STEIK || Constants.kRobotName == Constants.RobotName.AEGIR) {
 			try {
 				mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSlider, mSpatula, mIntake, mClimber);
@@ -79,7 +79,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("Start autonomousInit()");
 		robotState.gamePeriod = RobotState.GamePeriod.AUTO;
 		mHardwareUpdater.configureTalons(false);
-		
+		DashboardManager.getInstance().enableCANTable(true);
 		// Start control loops
 		mSubsystemLooper.start();
 
@@ -104,6 +104,7 @@ public class Robot extends IterativeRobot {
 		robotState.gamePeriod = RobotState.GamePeriod.TELEOP;
 		mHardwareUpdater.configureTalons(false);
 		mRoutineManager.reset(commands);
+		DashboardManager.getInstance().enableCANTable(true);
 		commands.wantedDriveState = Drive.DriveState.CHEZY;	//switch to chezy after auto ends
 		commands = operatorInterface.updateCommands(commands);
 		mSubsystemLooper.start();
@@ -138,7 +139,7 @@ public class Robot extends IterativeRobot {
 		mDrive.setNeutral();
 		
 		mHardwareUpdater.disableTalons();
-
+		DashboardManager.getInstance().enableCANTable(false);
 		// Manually run garbage collector
 		System.gc();
 		

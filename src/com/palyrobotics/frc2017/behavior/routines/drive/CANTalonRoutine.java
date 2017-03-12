@@ -54,7 +54,7 @@ public class CANTalonRoutine extends Routine {
 			}
 		}
 		drive.setCANTalonController(mSignal);
-		System.out.println("Sent drivetrain signal");
+		System.out.println("Sent drivetrain signal "+mSignal.toString());
 	}
 
 	@Override

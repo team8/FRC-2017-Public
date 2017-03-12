@@ -7,6 +7,7 @@ import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.robot.team254.lib.util.ADXRS453_Gyro;
 import com.palyrobotics.frc2017.config.Constants.RobotName;
+import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 
@@ -158,12 +159,12 @@ class HardwareUpdater {
 		if (rightSlave2Talon != null) rightSlave2Talon.configPeakOutputVoltage(Constants.kDriveMaxClosedLoopOutput, -Constants.kDriveMaxClosedLoopOutput);
 		
 		// Allow max voltage for open loop control
-		leftMasterTalon.configMaxOutputVoltage(12);
-		leftSlave1Talon.configMaxOutputVoltage(12);
-		if (leftSlave2Talon != null) leftSlave2Talon.configMaxOutputVoltage(12);
-		rightMasterTalon.configMaxOutputVoltage(12);
-		rightSlave1Talon.configMaxOutputVoltage(12);
-		if (rightSlave2Talon != null) rightSlave2Talon.configMaxOutputVoltage(12);
+		leftMasterTalon.configMaxOutputVoltage(13);
+		leftSlave1Talon.configMaxOutputVoltage(13);
+		if (leftSlave2Talon != null) leftSlave2Talon.configMaxOutputVoltage(13);
+		rightMasterTalon.configMaxOutputVoltage(13);
+		rightSlave1Talon.configMaxOutputVoltage(13);
+		if (rightSlave2Talon != null) rightSlave2Talon.configMaxOutputVoltage(13);
 		
 		// Configure master talon feedback devices
 		leftMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
@@ -237,6 +238,7 @@ class HardwareUpdater {
 		if (Constants.kRobotName == Constants.RobotName.AEGIR || Constants.kRobotName == Constants.RobotName.STEIK) {
 			CANTalon sliderTalon = HardwareAdapter.SliderHardware.getInstance().sliderTalon;
 			robotState.sliderEncoder = sliderTalon.getPosition();
+			DashboardManager.getInstance().updateCANTable(String.valueOf(sliderTalon.getPosition()));
 			robotState.sliderPotentiometer = HardwareAdapter.SliderHardware.getInstance().sliderPotentiometer.getValue();
 			robotState.sliderVelocity = sliderTalon.getSpeed();
 			if (sliderTalon.getControlMode().isPID()) {
