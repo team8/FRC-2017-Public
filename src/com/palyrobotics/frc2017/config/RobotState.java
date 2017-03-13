@@ -16,29 +16,29 @@ public class RobotState {
 		AUTO, TELEOP, DISABLED
 	}
 	// Updated by autoInit, teleopInit, disabledInit
-	public GamePeriod gamePeriod;
+	public GamePeriod gamePeriod = GamePeriod.DISABLED;
 
 	// Drivetrain
-	public TalonControlMode leftControlMode;
-	public TalonControlMode rightControlMode;
+	public TalonControlMode leftControlMode = TalonControlMode.Disabled;
+	public TalonControlMode rightControlMode = TalonControlMode.Disabled;
 	
-	public double leftSetpoint;
-	public double rightSetpoint;
+	public double leftSetpoint = 0;
+	public double rightSetpoint = 0;
 	
 	// Tracks total voltage from kPDP
-	public double totalVoltageDraw;
+	public double totalVoltageDraw = 0;
 
 	// Pose stores drivetrain sensor data
 	public Pose drivePose = new Pose(0,0,0,0,0, 0, 0,0,0,0);
 
 	// Slider
-	public double sliderPotentiometer;
-	public double sliderEncoder;
-	public double sliderVelocity;
-	public Optional<Integer> sliderClosedLoopError;
-	public double sliderPosition;
+	public double sliderPotentiometer = 0;
+	public double sliderEncoder = 0;
+	public double sliderVelocity = 0;
+	public Optional<Integer> sliderClosedLoopError = Optional.empty();
+	public double sliderPosition = 0;
 
 	// Climber
-	public double climberCurrentDraw;
-	public double climberEncoder;
+	public double climberCurrentDraw = 0;
+	public double climberEncoder = 0;
 }
