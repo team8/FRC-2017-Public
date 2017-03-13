@@ -1,5 +1,8 @@
 package com.palyrobotics.frc2017.util.logger;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -21,6 +24,7 @@ public class Logger {
 	 make sure thread flushes correctly
 	 make sure writes are not causing concurrent exception
 	 lots to do
+	 TODO: mkdir if dir not exist
 	 */
 	private static Logger instance = new Logger();
 	public static Logger getInstance() {
@@ -67,7 +71,8 @@ public class Logger {
 		String os = System.getProperty("os.name");
 		String filePath;
 		if (os.startsWith("Mac")) {
-			filePath = "../logs/"+ fileName;
+			filePath = "logs/"+ fileName;
+			System.out.println(filePath);
 		}
 		else if (os.startsWith("Windows")) {
 			filePath = "C:\\logs\\" + fileName;
@@ -76,7 +81,6 @@ public class Logger {
 			// TODO: Maybe find the exact OS name
 			filePath = "/home/lvuser/logs/"+ fileName;
 		}
-
 		File mainLog = new File(filePath+"/log.log");
 		int duplicatePrevent = 0;
 		while (mainLog.exists()) {
@@ -87,7 +91,7 @@ public class Logger {
 		// TODO: try w/ resources might be better suited for automatically closing
 		try {
 			// File header
-			bufferedWriter = new BufferedWriter(new FileWriter(mainLog));
+			bufferedWriter = Files.newWriter(mainLog, Charsets.UTF_8);
 			bufferedWriter.write(date.toString()+ "\n");
 			bufferedWriter.newLine();
 			bufferedWriter.flush();

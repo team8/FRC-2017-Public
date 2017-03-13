@@ -4,19 +4,26 @@ import org.junit.Test;
 
 public class LoggerTest {
 	Logger logger = Logger.getInstance();
-	
+
+	@Test
+	public void testFileCreation() {
+		logger.setFileName("test");
+		logger.init();
+	}
+
 	@Test
 	public void testWriting() {
 		logger.init();
-		logger.log("Testing");
-		logger.log("asdf");
-		logger.log("number", 1);
+		logger.logRobotThread("Testing");
+		logger.logRobotThread("asdf");
+		logger.logRobotThread("number", 1);
 		
 		logger.end();
 		
 		// messages should be flushed
 		logger.end();
 	}
+
 
 	@Test
 	public void testRandomFileStuff() {

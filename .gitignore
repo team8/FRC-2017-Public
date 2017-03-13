@@ -1,12 +1,12 @@
 bin/
 dist/
 build/
-
+logs/
 # Eclipse
 */.settings/
 .settings
 .metadata/*
-
+.classpath
 # Logging Files
 *.dat
 

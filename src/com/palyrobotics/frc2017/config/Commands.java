@@ -125,20 +125,24 @@ public class Commands {
 		copy.robotSetpoints.sliderSetpoint = robotSetpoints.sliderSetpoint;
 		return copy;
 	}
-	
-	public void logCommands(Logger logger) {
-		logger.log("Wanted Drive State", wantedDriveState);
-		logger.log("Wanted Spatula State", wantedSpatulaState);
-		logger.log("Wanted Slider State", wantedSliderState);
-		logger.log("Wanted Climber State", wantedClimberState);
-		logger.log("Left Driver Stick", leftStickInput);
-		logger.log("Right Driver Stick", rightStickInput);
-		logger.log("Slider Stick", sliderStickInput);
-		logger.log("Climber Stick", sliderStickInput);
+
+	@Override
+	public String toString() {
+		String log = "";
+		log+="Wanted Drive State: "+wantedDriveState.toString()+"\n";
+		log+="Wanted Spatula State: "+wantedSpatulaState.toString()+"\n";
+		log+="Wanted Slider State: "+wantedSliderState.toString()+"\n";
+		log+="Wanted Climber State: "+wantedClimberState.toString()+"\n";
+		log+="Left Driver Stick: "+leftStickInput;
+		log+="Right Driver Stick: "+rightStickInput+"\n";
+		log+="Slider Stick: "+ sliderStickInput+"\n";
+		log+="Climber Stick: "+sliderStickInput+"\n";
 		String wantedRoutineName = "";
 		for(Routine r : this.wantedRoutines) {
 			wantedRoutineName += r.getName() + " ";
 		}
-		logger.log("Wanted Routines", wantedRoutineName);
+		log+="Wanted Routines: "+wantedRoutineName+"\n";
+
+		return log;
 	}
 }

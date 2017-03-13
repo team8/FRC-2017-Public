@@ -53,7 +53,7 @@ public class SubsystemLooper {
 					for (SubsystemLoop loop : mLoops) {
 						loop.update(commands, robotState);
 						if (mLogger != null) {
-							mLogger.log(loop.printStatus());
+							mLogger.logSubsystemThread(loop.printStatus());
 						}
 					}
 					mDt = now - mTimeStamp;
