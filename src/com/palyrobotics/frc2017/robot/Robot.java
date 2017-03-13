@@ -38,7 +38,7 @@ public class Robot extends IterativeRobot {
 	private Spatula mSpatula = Spatula.getInstance();
 	private Intake mIntake = Intake.getInstance();
 	private Climber mClimber = Climber.getInstance();
-	private Logger mLogger = new Logger();
+	private Logger mLogger = Logger.getInstance();
 
 	// Hardware Updater
 	private HardwareUpdater mHardwareUpdater;
@@ -80,7 +80,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		System.out.println("Start autonomousInit()");
-		mLogger.newLog();
+		mLogger.init();
 		robotState.gamePeriod = RobotState.GamePeriod.AUTO;
 		mHardwareUpdater.configureTalons(false);
 		DashboardManager.getInstance().enableCANTable(true);
@@ -105,7 +105,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopInit() {
 		System.out.println("Start teleopInit()");
-		mLogger.newLog();
+		mLogger.init();
 		robotState.gamePeriod = RobotState.GamePeriod.TELEOP;
 		mHardwareUpdater.configureTalons(false);
 		mRoutineManager.reset(commands);

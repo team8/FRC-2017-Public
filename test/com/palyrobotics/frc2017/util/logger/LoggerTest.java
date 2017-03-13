@@ -7,7 +7,7 @@ public class LoggerTest {
 	
 	@Test
 	public void testWriting() {
-		logger.newLog();
+		logger.init();
 		logger.log("Testing");
 		logger.log("asdf");
 		logger.log("number", 1);
@@ -16,5 +16,15 @@ public class LoggerTest {
 		
 		// messages should be flushed
 		logger.end();
+	}
+
+	@Test
+	public void testRandomFileStuff() {
+		System.out.println(System.getProperty("os.name"));
+	}
+	@Test
+	public void testCrashTracker() {
+		// Crash tracker crashes on non roboRIO
+		//CrashTracker.logRobotInit();
 	}
 }

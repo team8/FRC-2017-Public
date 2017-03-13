@@ -22,11 +22,15 @@ public class CANTalonRoutineTest {
 	public void basicTest() throws Exception {
 		// Construct arbitrary offboard position loop drive signal
 		DriveSignal mSignal = DriveSignal.getNeutralSignal();
+		System.out.println(1);
 		mSignal.leftMotor.setPosition(10, Gains.aegirDriveMotionMagicGains);
+		System.out.println(1);
 		mSignal.rightMotor.setPosition(10, Gains.aegirDriveMotionMagicGains);
+		System.out.println(1);
 		CANTalonRoutine mRoutine = new CANTalonRoutine(mSignal);
-
+		System.out.println(1);
 		RoutineManager routineManager = new RoutineManager();
+		System.out.println(1);
 		Commands commands = new Commands();
 
 		routineManager.addNewRoutine(mRoutine);
@@ -41,8 +45,13 @@ public class CANTalonRoutineTest {
 		assertThat("CANTalonRoutine was not added", routineManager.getCurrentRoutines(), equalTo(expectedRoutineList));
 
 		Drive drive = Drive.getInstance();
+		System.out.println(1);
 		assertNotNull("Drive controller shouldn't be null", drive.getController());
+		System.out.println(1);
 		drive.update(commands, new RobotState());
+		System.out.println(3);
+		drive.update(commands, new RobotState());
+		System.out.println(2);
 		assertNotNull("Drive controller shouldn't be null", drive.getController());
 		assertThat("Drive controller not of expected type", drive.getController().getClass(),
 				equalTo(CANTalonDriveController.class));

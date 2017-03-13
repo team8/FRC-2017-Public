@@ -50,7 +50,7 @@ public class Constants extends ConstantsBase {
 	public static final double kPotentiometerCenterPos = (kPotentiometerRightPos + kPotentiometerLeftPos) / 2;
 	
 	// Tolerances
-	public static double kAcceptableDrivePositionError = 20;
+	public static double kAcceptableDrivePositionError = 5;
 	public static double kAcceptableDriveVelocityError = 5;
 	public static double kAcceptableTurnAngleError = 0.5;
 	public static double kAcceptableSliderPositionError;

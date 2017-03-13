@@ -52,7 +52,7 @@ public class SubsystemLooper {
 					RobotState robotState = Robot.getRobotState();
 					for (SubsystemLoop loop : mLoops) {
 						loop.update(commands, robotState);
-						if(mLogger!=null) {
+						if (mLogger != null) {
 							mLogger.log(loop.printStatus());
 						}
 					}
