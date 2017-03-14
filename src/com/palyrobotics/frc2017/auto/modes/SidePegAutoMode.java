@@ -15,6 +15,7 @@ import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.subsystems.Slider.SliderTarget;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
+import com.palyrobotics.frc2017.util.logger.Logger;
 
 import java.util.ArrayList;
 
@@ -84,6 +85,7 @@ public class SidePegAutoMode extends AutoModeBase {
 	@Override
 	public void prestart() {
 		System.out.println("Starting "+this.toString()+" Auto Mode");
+		Logger.getInstance().logRobotThread("Starting "+this.toString()+" Auto Mode");
 		double driveToAirshipSetpoint = 0;
 		if(mVariant == SidePegAutoMode.SideAutoVariant.RED_RIGHT || mVariant == SidePegAutoMode.SideAutoVariant.BLUE_LEFT) {
 			driveToAirshipSetpoint = Constants.kSidePegDistanceToAirshipBoilerInches * 
@@ -174,7 +176,9 @@ public class SidePegAutoMode extends AutoModeBase {
 		}
 		sequence.add(new CANTalonRoutine(driveToAirship, true));
 		sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
-		
+
+		Logger.getInstance().logRobotThread("Drive forward", driveForward);
+		Logger.getInstance().logRobotThread("Drive to airship", driveToAirship);
 		mSequentialRoutine = new SequentialRoutine(sequence);
 	}
 	

@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.stream.Collectors;
 
-public class Logger {
+public class CheesyLogger {
 
     public static final double WRITE_TIME = 0.5; // Write every .5 seconds
 
-    private static Logger inst = null;
+    private static CheesyLogger inst = null;
 
     protected File logFile = null;
     private BufferedWriter writer;
@@ -22,9 +22,9 @@ public class Logger {
             300);
     Thread consumer;
 
-    public static Logger getInstance() {
+    public static CheesyLogger getInstance() {
         if (inst == null) {
-            inst = new Logger();
+            inst = new CheesyLogger();
         }
         return inst;
     }
@@ -47,7 +47,7 @@ public class Logger {
         }
     };
 
-    private Logger() {
+    private CheesyLogger() {
         File baseDrive = determineMountPoint();
         if (baseDrive != null) {
             File logDir = new File(baseDrive, "logs");
@@ -70,7 +70,7 @@ public class Logger {
                 e.printStackTrace();
             }
             consumer = new Thread(consumerTask);
-            consumer.setName("Logger");
+            consumer.setName("CheesyLogger");
             consumer.setPriority(Thread.MIN_PRIORITY);
             consumer.start();
         }

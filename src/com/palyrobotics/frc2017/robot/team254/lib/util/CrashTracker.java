@@ -21,19 +21,19 @@ public class CrashTracker {
     }
 
     public static void logRobotInit() {
-        logMarker("robot init");
+        logMarker("robot start");
     }
 
     public static void logTeleopInit() {
-        logMarker("teleop init");
+        logMarker("teleop start");
     }
 
     public static void logAutoInit() {
-        logMarker("auto init");
+        logMarker("auto start");
     }
 
     public static void logDisabledInit() {
-        logMarker("disabled init");
+        logMarker("disabled start");
     }
 
     public static void logThrowableCrash(Throwable throwable) {

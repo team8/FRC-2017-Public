@@ -6,7 +6,6 @@ import com.google.common.io.Files;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,18 +14,12 @@ import java.util.Date;
 
 /**
  * Log is at /home/lvuser/logs/fileName directory
- * fileName defaults to
+ * Unit test safe, creates diff file directory for Mac/Windows/Linux
+ * fileName defaults to ex: "Mar13 13-29" using 24-hr-time
+ * Can set desired filename manually
+ * If log file exists on first start, automatically creates new file
  */
 public class Logger {
-	/*
-	 TODO: unit test
-	 check filepath
-	 create directory
-	 make sure thread flushes correctly
-	 make sure writes are not causing concurrent exception
-	 lots to do
-	 TODO: mkdir if dir not exist
-	 */
 	private static Logger instance = new Logger();
 	public static Logger getInstance() {
 		return instance;
@@ -57,10 +50,9 @@ public class Logger {
 			while (true) {
 				// If thread is killed, stop trying to write
 				if (Thread.currentThread().isInterrupted()) {
-					System.out.println("Logger writing thread interrupted");
 					try {
 						synchronized (writingLock) {
-							System.out.println("CLOSED BY THREAD INTERRUPT");
+							System.out.println("Logger interrupted, closing");
 							bufferedWriter.close();
 						}
 					} catch (IOException e) {
@@ -111,7 +103,7 @@ public class Logger {
 	/**
 	 * Creates the file at desired filepath, avoids file collision, will not recreate if logger already there
 	 */
-	public void init() {
+	public void start() {
 		// If initialized before, then recreate the buffered writer and re-enable
 		if (bufferedWriter != null && mWritingThread != null) {
 			isEnabled = true;
@@ -189,7 +181,7 @@ public class Logger {
 	/**
 	 * Called on subsystem thread
 	 * @param key
-	 * @param value
+	 * @param value will call .toString()
 	 */
 	public void logSubsystemThread(String key, Object value) {
 		try {
@@ -213,8 +205,8 @@ public class Logger {
 
 	/**
 	 * Called on robot thread
-	 * @param key
-	 * @param value
+	 * @param key will be paired with the object
+	 * @param value will call .toString()
 	 */
 	public void logRobotThread(String key, Object value) {
 		try {
@@ -244,6 +236,7 @@ public class Logger {
 					}
 				});
 				mData.clear();
+				bufferedWriter.write("Logger stopped");
 				bufferedWriter.flush();
 			}
 			bufferedWriter.close();

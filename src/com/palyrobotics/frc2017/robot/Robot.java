@@ -51,7 +51,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		System.out.println("Start robotInit() for "+Constants.kRobotName.toString());
 		DashboardManager.getInstance().robotInit();
-		Logger.getInstance().init();
+		Logger.getInstance().start();
 		mLogger.logRobotThread("robotInit() start");
 		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);
 		if (Constants.kRobotName == Constants.RobotName.STEIK || Constants.kRobotName == Constants.RobotName.AEGIR) {
@@ -82,9 +82,10 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		System.out.println("Start autonomousInit()");
-		mLogger.init();
+		mLogger.start();
 		robotState.gamePeriod = RobotState.GamePeriod.AUTO;
 		mHardwareUpdater.configureTalons(false);
+		mHardwareUpdater.updateSensors(robotState);
 		DashboardManager.getInstance().enableCANTable(true);
 		// Start control loops
 		mSubsystemLooper.start();
@@ -108,9 +109,10 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopInit() {
 		System.out.println("Start teleopInit()");
-		mLogger.init();
+		mLogger.start();
 		robotState.gamePeriod = RobotState.GamePeriod.TELEOP;
 		mHardwareUpdater.configureTalons(false);
+		mHardwareUpdater.updateSensors(robotState);
 		mRoutineManager.reset(commands);
 		DashboardManager.getInstance().enableCANTable(true);
 		commands.wantedDriveState = Drive.DriveState.CHEZY;	//switch to chezy after auto ends
