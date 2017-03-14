@@ -63,18 +63,18 @@ public class Gains {
 	public static final double kAegirDriveMotionMagickP = 4.5;
 	public static final double kAegirDriveMotionMagickI = 0.01;
 	public static final double kAegirDriveMotionMagickD = 150;
-	public static final double kAegirDriveMotionMagickF = 2.5;
-	public static final int kAegirDriveMotionMagickIzone = 25;
+	public static final double kAegirDriveMotionMagickF = 2.0;
+	public static final int kAegirDriveMotionMagickIzone = 50;
 	public static final double kAegirDriveMotionMagickRampRate = 0.0;
 
 	// Drive Motion Magic turn angle gains
-	public static final double kAegirTurnMotionMagicCruiseVelocity = 144 * Constants.kDriveSpeedUnitConversion;
-	public static final double kAegirTurnMotionMagicMaxAcceleration = 72 * Constants.kDriveSpeedUnitConversion;
-	public static final double kAegirTurnMotionMagickP = 4.5;
+	public static final double kAegirTurnMotionMagicCruiseVelocity = 72 * Constants.kDriveSpeedUnitConversion;
+	public static final double kAegirTurnMotionMagicMaxAcceleration = 36 * Constants.kDriveSpeedUnitConversion;
+	public static final double kAegirTurnMotionMagickP = 6.0;
 	public static final double kAegirTurnMotionMagickI = 0.01;
 	public static final double kAegirTurnMotionMagickD = 150;
-	public static final double kAegirTurnMotionMagickF = 2.5;
-	public static final double kAegirTurnMotionMagickIzone = 25;
+	public static final double kAegirTurnMotionMagickF = 2.0;
+	public static final double kAegirTurnMotionMagickIzone = 50;
 
 	// Slider motion magic offboard control loop
 

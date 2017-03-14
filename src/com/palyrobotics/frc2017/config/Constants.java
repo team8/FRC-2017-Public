@@ -169,9 +169,10 @@ public class Constants extends ConstantsBase {
 	public static double kBaseLineDistanceInches = 93.3;
 	public static double kCenterPegDistanceInches = 86;//80;
 	// For side peg auto, robot starts 4 gear widths (44") from center of alliance wall
-	public static double kSidePegDistanceLoadingStationInches = 71;//104.5688;
-	public static double kSidePegDistanceBoilerInches = 71;
-	public static double kSidePegDistanceToAirshipInches = 83;//24.5688;
+	public static double kSidePegDistanceLoadingStationInches = 74;//104.5688;
+	public static double kSidePegDistanceBoilerInches = 60;
+	public static double kSidePegDistanceToAirshipLoadingStationInches = 84;//24.5688;
+	public static double kSidePegDistanceToAirshipBoilerInches = 93;
 	public static double kSidePegTurnAngleDegrees = 60;
 
 	// !!! Loop rate of normal Looper

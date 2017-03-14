@@ -238,7 +238,7 @@ class HardwareUpdater {
 		if (Constants.kRobotName == Constants.RobotName.AEGIR || Constants.kRobotName == Constants.RobotName.STEIK) {
 			CANTalon sliderTalon = HardwareAdapter.SliderHardware.getInstance().sliderTalon;
 			robotState.sliderEncoder = sliderTalon.getPosition();
-			DashboardManager.getInstance().updateCANTable(String.valueOf(sliderTalon.getPosition()));
+			DashboardManager.getInstance().updateCANTable(HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getOutputVoltage() + "," + HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getOutputVoltage() + "," + HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getPosition() + "," + HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getPosition() + "," +  HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getClosedLoopError() + "," + HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getClosedLoopError());
 			robotState.sliderPotentiometer = HardwareAdapter.SliderHardware.getInstance().sliderPotentiometer.getValue();
 			robotState.sliderVelocity = sliderTalon.getSpeed();
 			if (sliderTalon.getControlMode().isPID()) {

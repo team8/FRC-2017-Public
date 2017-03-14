@@ -84,10 +84,18 @@ public class SidePegAutoMode extends AutoModeBase {
 	@Override
 	public void prestart() {
 		System.out.println("Starting "+this.toString()+" Auto Mode");
-		
-		double driveToAirshipSetpoint = Constants.kSidePegDistanceToAirshipInches * 
-				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-						: Constants.kDriveTicksPerInch);
+		double driveToAirshipSetpoint = 0;
+		if(mVariant == SidePegAutoMode.SideAutoVariant.RED_RIGHT || mVariant == SidePegAutoMode.SideAutoVariant.BLUE_LEFT) {
+			driveToAirshipSetpoint = Constants.kSidePegDistanceToAirshipBoilerInches * 
+					((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+							: Constants.kDriveTicksPerInch);
+		} else if(mVariant == SidePegAutoMode.SideAutoVariant.RED_LEFT || mVariant == SidePegAutoMode.SideAutoVariant.BLUE_RIGHT) {
+			driveToAirshipSetpoint = Constants.kSidePegDistanceToAirshipLoadingStationInches * 
+					((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+							: Constants.kDriveTicksPerInch);
+		} else {
+			System.out.println("No Side Auto Variant");
+		}
 		driveToAirship.leftMotor.setMotionMagic(driveToAirshipSetpoint, mGains,
 			Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
 		driveToAirship.rightMotor.setMotionMagic(driveToAirshipSetpoint, mGains,
@@ -101,6 +109,10 @@ public class SidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 			// loading station side
 			case RED_LEFT:
+				driveForwardSetpoint = Constants.kSidePegDistanceLoadingStationInches * 
+				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+						: Constants.kDriveTicksPerInch);
+				break;
 			case BLUE_RIGHT:
 				driveForwardSetpoint = Constants.kSidePegDistanceLoadingStationInches * 
 					((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
@@ -108,6 +120,10 @@ public class SidePegAutoMode extends AutoModeBase {
 				break;
 			// boiler side
 			case RED_RIGHT:
+				driveForwardSetpoint = Constants.kSidePegDistanceBoilerInches * 
+				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+						: Constants.kDriveTicksPerInch);
+				break;
 			case BLUE_LEFT:
 				driveForwardSetpoint = Constants.kSidePegDistanceBoilerInches * 
 					((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
@@ -128,6 +144,12 @@ public class SidePegAutoMode extends AutoModeBase {
 		// NOTE: switch case falling, split by lefts vs rights
 		switch (mVariant) {
 			case RED_LEFT:
+				if (mShouldUseGyro) {
+					sequence.add(new SafetyTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
+				} else {
+					sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
+				}
+				break;
 			case BLUE_LEFT:
 				if (mShouldUseGyro) {
 					sequence.add(new SafetyTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
@@ -136,6 +158,12 @@ public class SidePegAutoMode extends AutoModeBase {
 				}
 				break;
 			case RED_RIGHT:
+				if (mShouldUseGyro) {
+					sequence.add(new SafetyTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
+				} else {
+					sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
+				}
+				break;
 			case BLUE_RIGHT:
 				if (mShouldUseGyro) {
 					sequence.add(new SafetyTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
