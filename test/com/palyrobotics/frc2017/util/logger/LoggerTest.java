@@ -20,12 +20,9 @@ public class LoggerTest {
 		logger.init();
 		logger.logRobotThread("Testing");
 		logger.logRobotThread("asdf");
-		logger.logRobotThread("number", 1);
-		
-		logger.end();
-		
+		logger.logRobotThread("number", 1);		
 		// messages should be flushed
-		logger.end();
+		logger.cleanup();
 	}
 
 	@Test

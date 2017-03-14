@@ -51,6 +51,9 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		System.out.println("Start robotInit() for "+Constants.kRobotName.toString());
 		DashboardManager.getInstance().robotInit();
+		Logger.getInstance().init();
+		mLogger.logRobotThread("robotInit() start");
+		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);
 		if (Constants.kRobotName == Constants.RobotName.STEIK || Constants.kRobotName == Constants.RobotName.AEGIR) {
 			try {
 				mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSlider, mSpatula, mIntake, mClimber);
@@ -58,12 +61,11 @@ public class Robot extends IterativeRobot {
 				System.exit(1);
 			}
 			mSubsystemLooper.register(mDrive);
-			mSubsystemLooper.register(mFlippers);
+//			mSubsystemLooper.register(mFlippers);
 			mSubsystemLooper.register(mSlider);
 			mSubsystemLooper.register(mSpatula);
-			mSubsystemLooper.register(mIntake);
+//			mSubsystemLooper.register(mIntake);
 			mSubsystemLooper.register(mClimber);
-			mSubsystemLooper.registerLogger(mLogger);
 		} else {
 			try {
 				mHardwareUpdater = new HardwareUpdater(mDrive);
@@ -72,9 +74,9 @@ public class Robot extends IterativeRobot {
 			}
 			mSubsystemLooper.register(mDrive);
 		}
-		
 		mHardwareUpdater.initHardware();
 		System.out.println("End robotInit()");
+		mLogger.logRobotThread("End robotInit()");
 	}
 
 	@Override
@@ -92,6 +94,7 @@ public class Robot extends IterativeRobot {
 		// Prestart and run the auto mode
 		mode.prestart();
 		mRoutineManager.addNewRoutine(mode.getRoutine());
+		mLogger.logRobotThread("Auto mode", mode.toString());
 		System.out.println("End autonomousInit()");
 	}
 
@@ -146,7 +149,6 @@ public class Robot extends IterativeRobot {
 		
 		mHardwareUpdater.disableTalons();
 		DashboardManager.getInstance().enableCANTable(false);
-		mLogger.end();
 		mLogger.cleanup();
 		
 		// Manually run garbage collector

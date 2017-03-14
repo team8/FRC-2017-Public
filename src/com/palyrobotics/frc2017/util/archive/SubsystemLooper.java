@@ -31,7 +31,6 @@ public class SubsystemLooper {
 	private final Object mTaskRunningLock = new Object();
 	private double mTimeStamp = 0;
 	private double mDt = 0;
-	private Logger mLogger = null;
 
 	// Used for secondary printer loop
 	private boolean mPrinting = false;
@@ -52,9 +51,7 @@ public class SubsystemLooper {
 					RobotState robotState = Robot.getRobotState();
 					for (SubsystemLoop loop : mLoops) {
 						loop.update(commands, robotState);
-						if (mLogger != null) {
-							mLogger.logSubsystemThread(loop.printStatus());
-						}
+						Logger.getInstance().logSubsystemThread(loop.printStatus());
 					}
 					mDt = now - mTimeStamp;
 					mTimeStamp = now;
@@ -96,10 +93,6 @@ public class SubsystemLooper {
 		}
 	}
 	
-	public synchronized void registerLogger(Logger logger) {
-		mLogger = logger;
-	}
-
 	public synchronized void start() {
 		if (!mRunning) {
 			System.out.println("Starting loops");
