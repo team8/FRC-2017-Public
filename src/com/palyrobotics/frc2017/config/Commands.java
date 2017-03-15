@@ -86,6 +86,10 @@ public class Commands {
 		public JoystickInput(double x, double y, boolean triggerPressed) {
 			this.x = x; this.y = y; this.triggerPressed = triggerPressed;
 		}
+		@Override
+		public String toString() {
+			return "Joystick X: "+this.x+" Y: "+ this.y;
+		}
 	}
 	// Stores Joystick values
 	public JoystickInput leftStickInput = new JoystickInput(0,0, false);

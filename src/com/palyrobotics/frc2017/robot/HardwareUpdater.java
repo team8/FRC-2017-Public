@@ -10,6 +10,7 @@ import com.palyrobotics.frc2017.config.Constants.RobotName;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
+import com.palyrobotics.frc2017.util.logger.Logger;
 
 import java.util.Optional;
 
@@ -60,10 +61,12 @@ class HardwareUpdater {
 	 * Initialize all hardware
 	 */
 	void initHardware() {
+		Logger.getInstance().logRobotThread("Init hardware");
 		configureTalons(true);
 	}
 	
 	void disableTalons() {
+		Logger.getInstance().logRobotThread("Disabling talons");
 		HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon.disable();
 		HardwareAdapter.getInstance().getDrivetrain().leftSlave1Talon.disable();
 		HardwareAdapter.getInstance().getDrivetrain().leftSlave2Talon.disable();
@@ -173,6 +176,8 @@ class HardwareUpdater {
 		// Zero encoders
 		leftMasterTalon.setEncPosition(0);
 		rightMasterTalon.setEncPosition(0);
+		leftMasterTalon.setPosition(0);
+		rightMasterTalon.setPosition(0);
 
 		// Reverse right side
 		rightMasterTalon.reverseOutput(true);

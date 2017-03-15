@@ -13,6 +13,7 @@ import com.palyrobotics.frc2017.util.logger.Logger;
 import com.palyrobotics.frc2017.robot.team254.lib.util.RobotData;
 import com.palyrobotics.frc2017.robot.team254.lib.util.SystemManager;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
 public class Robot extends IterativeRobot {
@@ -51,9 +52,12 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		System.out.println("Start robotInit() for "+Constants.kRobotName.toString());
 		DashboardManager.getInstance().robotInit();
-		Logger.getInstance().start();
+//		mLogger.setFileName("Match 20");
+		mLogger.start();
 		mLogger.logRobotThread("robotInit() start");
 		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);
+		mLogger.logRobotThread("Alliance: " + DriverStation.getInstance().getAlliance());
+		mLogger.logRobotThread("FMS connected: "+DriverStation.getInstance().isFMSAttached());
 		if (Constants.kRobotName == Constants.RobotName.STEIK || Constants.kRobotName == Constants.RobotName.AEGIR) {
 			try {
 				mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSlider, mSpatula, mIntake, mClimber);
@@ -83,8 +87,16 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		System.out.println("Start autonomousInit()");
 		mLogger.start();
+		mLogger.logRobotThread("Start autonomousInit()");
 		robotState.gamePeriod = RobotState.GamePeriod.AUTO;
 		mHardwareUpdater.configureTalons(false);
+		// Wait for talons to update
+		try {
+			System.out.println("Sleeping thread for 200 ms");
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			
+		}
 		mHardwareUpdater.updateSensors(robotState);
 		DashboardManager.getInstance().enableCANTable(true);
 		// Start control loops
@@ -97,10 +109,13 @@ public class Robot extends IterativeRobot {
 		mRoutineManager.addNewRoutine(mode.getRoutine());
 		mLogger.logRobotThread("Auto mode", mode.toString());
 		System.out.println("End autonomousInit()");
+		mLogger.logRobotThread("End autonomousInit()");
 	}
 
 	@Override
 	public void autonomousPeriodic() {
+		mLogger.logRobotThread("Match time", DriverStation.getInstance().getMatchTime());
+		mLogger.logRobotThread("DS Connected", DriverStation.getInstance().isDSAttached());
 		commands = mRoutineManager.update(commands);
 		mHardwareUpdater.updateSensors(robotState);
 		mHardwareUpdater.updateSubsystems();
@@ -110,6 +125,7 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		System.out.println("Start teleopInit()");
 		mLogger.start();
+		mLogger.logRobotThread("Start teleopInit()");
 		robotState.gamePeriod = RobotState.GamePeriod.TELEOP;
 		mHardwareUpdater.configureTalons(false);
 		mHardwareUpdater.updateSensors(robotState);
@@ -118,6 +134,7 @@ public class Robot extends IterativeRobot {
 		commands.wantedDriveState = Drive.DriveState.CHEZY;	//switch to chezy after auto ends
 		commands = operatorInterface.updateCommands(commands);
 		mSubsystemLooper.start();
+		mLogger.logRobotThread("End teleopInit()");
 		System.out.println("End teleopInit()");
 	}
 
@@ -127,7 +144,9 @@ public class Robot extends IterativeRobot {
 		mHardwareUpdater.updateSensors(robotState);
 		// Gets joystick commands
 		// Updates commands based on routines
-		mLogger.logRobotThread(commands.toString());
+		mLogger.logRobotThread("Teleop Commands: ", commands);
+		mLogger.logRobotThread("Match time: "+DriverStation.getInstance().getMatchTime());
+		mLogger.logRobotThread("DS Connected", DriverStation.getInstance().isDSAttached());
 		commands = mRoutineManager.update(operatorInterface.updateCommands(commands));
 		//Update the hardware
 		mHardwareUpdater.updateSubsystems();
@@ -136,6 +155,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledInit() {
 		System.out.println("Start disabledInit()");
+		mLogger.logRobotThread("Start disabledInit()");
 		System.out.println("Current Auto Mode: " + AutoModeSelector.getInstance().getAutoMode().toString());
 		robotState.gamePeriod = RobotState.GamePeriod.DISABLED;
 		// Stops updating routines
@@ -148,9 +168,10 @@ public class Robot extends IterativeRobot {
 
 		// Stop controllers
 		mDrive.setNeutral();
-		
+//		mHardwareUpdater.configureDriveTalons();
 		mHardwareUpdater.disableTalons();
 		DashboardManager.getInstance().enableCANTable(false);
+		mLogger.logRobotThread("End disabledInit()");
 		mLogger.cleanup();
 		
 		// Manually run garbage collector

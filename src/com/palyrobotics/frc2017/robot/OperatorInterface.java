@@ -5,6 +5,7 @@ import com.palyrobotics.frc2017.behavior.routines.scoring.SliderDistancePosition
 import com.palyrobotics.frc2017.behavior.routines.scoring.SliderDistancePositioningRoutine;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.DoubleClickTimer;
+import com.palyrobotics.frc2017.util.logger.Logger;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -143,6 +144,10 @@ public class OperatorInterface {
 		// Left Stick trigger cancels current routine
 		newCommands.cancelCurrentRoutines = mDriveStick.getTrigger();
 
+		Logger.getInstance().logRobotThread("Drive stick", newCommands.leftStickInput);
+		Logger.getInstance().logRobotThread("Turn stick", newCommands.rightStickInput);
+		Logger.getInstance().logRobotThread("Slider stick", newCommands.sliderStickInput);
+		Logger.getInstance().logRobotThread("Climber stick", newCommands.climberStickInput);
 
 		return newCommands;
 	}

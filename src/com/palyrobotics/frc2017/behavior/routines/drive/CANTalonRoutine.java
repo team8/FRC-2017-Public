@@ -35,6 +35,7 @@ public class CANTalonRoutine extends Routine {
 	@Override
 	public void start() {
 		if (relativeSetpoint) {
+			System.out.println("CANTalon relative start point:" +Robot.getRobotState().drivePose.leftEnc);
 			if (mSignal.leftMotor.getControlMode() == CANTalon.TalonControlMode.MotionMagic) {
 				mSignal.leftMotor.setMotionMagic(mSignal.leftMotor.getSetpoint()+
 								Robot.getRobotState().drivePose.leftEnc,

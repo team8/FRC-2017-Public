@@ -217,6 +217,7 @@ public class Logger {
 	}
 	
 	public synchronized void cleanup() {
+		System.out.println("Log file: "+mainLog.getAbsolutePath());
 		if (!isEnabled) {
 			System.err.println("Already cleaned up");
 			return;
@@ -232,11 +233,17 @@ public class Logger {
 					try {
 						bufferedWriter.write(c.getTimestampedString());
 					} catch (IOException e) {
+						System.out.println("Unable to write last strings");
 						e.printStackTrace();
 					}
 				});
 				mData.clear();
-				bufferedWriter.write("Logger stopped");
+				try {
+					bufferedWriter.write("Logger stopped");
+				} catch (IOException e) {
+					System.out.println("Unable to write logger stopped");
+					e.printStackTrace();
+				}
 				bufferedWriter.flush();
 			}
 			bufferedWriter.close();
