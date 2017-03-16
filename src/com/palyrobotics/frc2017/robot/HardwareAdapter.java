@@ -195,7 +195,6 @@ public class HardwareAdapter {
 			}
 		}
 	}
-	public final PowerDistributionPanel kPDP = new PowerDistributionPanel();
 
 	// Joysticks for operator interface
 	protected static class Joysticks {
@@ -236,6 +235,8 @@ public class HardwareAdapter {
 	public Joysticks getJoysticks() {
 		return Joysticks.getInstance();
 	}
+	
+	public final PowerDistributionPanel kPDP = new PowerDistributionPanel();
 
 	// Singleton set up
 	private static final HardwareAdapter instance = new HardwareAdapter();

@@ -52,7 +52,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		System.out.println("Start robotInit() for "+Constants.kRobotName.toString());
 		DashboardManager.getInstance().robotInit();
-		mLogger.setFileName("Field Calibration");
+//		mLogger.setFileName("Field Calibration");
 		mLogger.start();
 		mLogger.logRobotThread("robotInit() start");
 		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);
@@ -114,8 +114,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousPeriodic() {
-		mLogger.logRobotThread("Match time", DriverStation.getInstance().getMatchTime());
-		mLogger.logRobotThread("DS Connected", DriverStation.getInstance().isDSAttached());
+		logPeriodic();
 		commands = mRoutineManager.update(commands);
 		mHardwareUpdater.updateSensors(robotState);
 		mHardwareUpdater.updateSubsystems();
@@ -145,8 +144,7 @@ public class Robot extends IterativeRobot {
 		// Gets joystick commands
 		// Updates commands based on routines
 		mLogger.logRobotThread("Teleop Commands: ", commands);
-		mLogger.logRobotThread("Match time: "+DriverStation.getInstance().getMatchTime());
-		mLogger.logRobotThread("DS Connected", DriverStation.getInstance().isDSAttached());
+		logPeriodic();
 		commands = mRoutineManager.update(operatorInterface.updateCommands(commands));
 		//Update the hardware
 		mHardwareUpdater.updateSubsystems();
@@ -185,8 +183,28 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledPeriodic() {
 		mHardwareUpdater.updateSensors(robotState);
-		System.out.println("Left enc: " + robotState.drivePose.leftEnc +"\n"
-				+"Right enc: "+robotState.drivePose.rightEnc);
+//		System.out.println("Left enc: " + robotState.drivePose.leftEnc +"\n"
+//				+"Right enc: "+robotState.drivePose.rightEnc);
 		
+	}
+	// Call during tele and auto periodic
+	private void logPeriodic() {
+		mLogger.logRobotThread("Match time", DriverStation.getInstance().getMatchTime());
+		mLogger.logRobotThread("DS Connected", DriverStation.getInstance().isDSAttached());
+		mLogger.logRobotThread("DS Voltage", DriverStation.getInstance().getBatteryVoltage());
+		mLogger.logRobotThread("Battery current", HardwareAdapter.getInstance().kPDP.getTotalCurrent());
+		mLogger.logRobotThread("Battery watts drawn", HardwareAdapter.getInstance().kPDP.getTotalPower());
+		mLogger.logRobotThread("Outputs disabled", DriverStation.getInstance().isSysActive());
+		if (DriverStation.getInstance().isAutonomous()) {
+			mLogger.logRobotThread("Game period: Auto");
+		} else if (DriverStation.getInstance().isDisabled()) {
+			mLogger.logRobotThread("Game period: Disabled");
+		} else if (DriverStation.getInstance().isOperatorControl()) {
+			mLogger.logRobotThread("Game period: Teleop");
+		} else if (DriverStation.getInstance().isTest()) {
+			mLogger.logRobotThread("Game period: Test");
+		}
+		if (DriverStation.getInstance().isBrownedOut()) mLogger.logRobotThread("Browned out");
+		if (!DriverStation.getInstance().isNewControlData()) mLogger.logRobotThread("Didn't receive new control packet!");
 	}
 }

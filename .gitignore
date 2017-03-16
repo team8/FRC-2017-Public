@@ -44,6 +44,9 @@ hs_err_pid*
 .idea/uiDesigner.xml
 .idea/gradle.xml
 .idea_modules/
+.idea/compiler.xml
+.idea/misc.xml
+.idea/copyright
 /out/
 
 sysProps.xml

@@ -44,9 +44,11 @@ public class Constants extends ConstantsBase {
 	public static double kDriveTicksPerInch = 360 / (3.95 * Math.PI); // = 29.0105;
 	public static double kDriveInchesPerDegree = 21.5/90; // = 0.2388;
 	public static double kDriveSpeedUnitConversion = 360 / (3.95 * Math.PI * 10);
-	 
-	public static final double kPotentiometerRightPos = 2172;
-	public static final double kPotentiometerLeftPos = 3452;
+
+
+	// Aegir right 2172; left 3452;
+	public static final double kPotentiometerRightPos = 2036;
+	public static final double kPotentiometerLeftPos = 3314;
 	public static final double kPotentiometerCenterPos = (kPotentiometerRightPos + kPotentiometerLeftPos) / 2;
 	
 	// Tolerances
@@ -169,31 +171,35 @@ public class Constants extends ConstantsBase {
 
 	// Base line
 	public static double k254BaseLineDistanceInches = 93.3;
-	public static double kRedBaseLineDistanceInches = 113.75;
-	public static double kBlueBaseLineDistanceInches = 108.5;
+	public static double kRedBaseLineDistanceInches = 93.3;
+	public static double kBlueBaseLineDistanceInches = 93.3;
 
 	// Center peg
 	public static double k254CenterPegDistanceInches = 86;
-	public static double kRedCenterPegDistanceInches = 0;
-	public static double kBlueCenterPegDistanceInches = 0;
+	public static double kRedCenterPegDistanceInches = 113.75 - 31; // first number is to airship
+	public static double kBlueCenterPegDistanceInches = 108.5 - 31; // first num is to airship
 
 	// Side peg
 	public static double k254SidePegDistanceLoadingStationInches = 74;
-	public static double k254SidePegDistanceBoilerInches = 60;
 	public static double k254SidePegDistanceToAirshipLoadingStationInches = 84;//24.5688;
+	public static double k254SidePegDistanceBoilerInches = 60;
 	public static double k254SidePegDistanceToAirshipBoilerInches = 93;
 	public static double kSidePegTurnAngleDegrees = 60;
 
-	public static double kBlueLoadingStationForwardDistanceInches = 73;
+	// Blue right loading station
+	public static double kBlueLoadingStationForwardDistanceInches = 71; // original 73
 	public static double kBlueLoadingStationAirshipDistanceInches = 105;
-
+	
+	// Red left loading station
 	public static double kRedLoadingStationForwardDistanceInches = 87.75;
 	public static double kRedLoadingStationAirshipDistanceInches = 108;
 
+	// Blue left boiler
 	public static double kBlueBoilerForwardDistanceInches = 69;
 	public static double kBlueBoilerAirshipDistanceInches = 107;
 
-	public static double kRedBoilerForwardDistanceInches = 75;
+	// Red right boiler
+	public static double kRedBoilerForwardDistanceInches = 72; // original measurement 75
 	public static double kRedBoilerAirshipDistanceInches = 106;
 
 

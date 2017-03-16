@@ -28,7 +28,8 @@ public class AutoModeSelectorTest {
 		AutoModeSelector auto = AutoModeSelector.getInstance();
 
 		// Using automodes registered in constructor
-		assertThat("Incorrect auto mode retrieved", auto.getAutoMode().getClass(), equalTo(new BaseLineAutoMode().getClass()));
+		assertThat("Incorrect auto mode retrieved", auto.getAutoMode().getClass(), equalTo(new BaseLineAutoMode(
+				CenterPegAutoMode.Alliance.BLUE).getClass()));
 		
 		// Check index out of bounds
 	}
