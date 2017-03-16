@@ -11,10 +11,11 @@ import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
 public class BaseLineAutoMode extends AutoModeBase {
 	private CANTalonRoutine mRoutine;
-	
+	private final CenterPegAutoMode.Alliance mAlliance;
 	private Gains mGains;
 
-	public BaseLineAutoMode() {
+	public BaseLineAutoMode(CenterPegAutoMode.Alliance alliance) {
+		mAlliance = alliance;
 		if(Constants.kRobotName == Constants.RobotName.DERICA) {
 			mGains = Gains.dericaPosition;
 		} else {
@@ -26,7 +27,9 @@ public class BaseLineAutoMode extends AutoModeBase {
 	public Routine getRoutine() {
 		// Drive straight until baseline
 		DriveSignal driveForward = DriveSignal.getNeutralSignal();
-		double setpoint = Constants.kBaseLineDistanceInches * 
+		double setpoint =
+				((mAlliance == CenterPegAutoMode.Alliance.BLUE) ? Constants.kBlueBaseLineDistanceInches : Constants.kRedBaseLineDistanceInches)
+						*
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 						: Constants.kDriveTicksPerInch);
 		driveForward.leftMotor.setMotionMagic(setpoint, mGains,
@@ -44,6 +47,6 @@ public class BaseLineAutoMode extends AutoModeBase {
 
 	@Override
 	public String toString() {
-		return "BaseLine";
+		return (mAlliance == CenterPegAutoMode.Alliance.BLUE) ? "BlueBaseLine" : "RedBaseLine";
 	}
 }

@@ -20,16 +20,21 @@ import java.util.ArrayList;
  */
 public class CenterPegAutoMode extends AutoModeBase {
 	// Represents the variation of center peg auto based on what to do after scoring
-	public enum CenterAutoVariant {
+	public enum PostCenterAutoVariant {
 		NOTHING, CROSS_LEFT, CROSS_RIGHT
 	}
-	private final CenterAutoVariant mVariant;
+	public enum Alliance {
+		BLUE, RED
+	}
+	private final PostCenterAutoVariant mVariant;
+	private final Alliance mAlliance;
 	private SequentialRoutine mSequentialRoutine;
 
 	private Gains mGains;
 
-	public CenterPegAutoMode(CenterAutoVariant direction) {
+	public CenterPegAutoMode(Alliance alliance, PostCenterAutoVariant direction) {
 		mVariant = direction;
+		mAlliance = alliance;
 		if(Constants.kRobotName == Constants.RobotName.DERICA) {
 			mGains = Gains.dericaPosition;
 		} else {
@@ -46,18 +51,20 @@ public class CenterPegAutoMode extends AutoModeBase {
 	public void prestart() {
 		String log = "Starting Center Peg Auto Mode";
 		// Construct sequence of routines to run
-		ArrayList<Routine> sequence = new ArrayList<Routine>();
+		ArrayList<Routine> sequence = new ArrayList<>();
 		// Straight drive distance to the center peg
 		DriveSignal driveForward = DriveSignal.getNeutralSignal();
-		double driveForwardSetpoint = Constants.kCenterPegDistanceInches * 
+		double driveForwardSetpoint =
+				((mAlliance == Alliance.BLUE) ? Constants.kBlueCenterPegDistanceInches : Constants.kRedCenterPegDistanceInches)
+						*
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 						: Constants.kDriveTicksPerInch);
-		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint+Robot.getRobotState().drivePose.leftEnc, mGains, 
+		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mGains,
 			Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint+Robot.getRobotState().drivePose.rightEnc, mGains, 
+		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, mGains,
 				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
 		
-		sequence.add(new CANTalonRoutine(driveForward));
+		sequence.add(new CANTalonRoutine(driveForward, true));
 		sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
 
 		// Back off from the peg after 2.5 seconds
@@ -115,7 +122,7 @@ public class CenterPegAutoMode extends AutoModeBase {
 	}
 	@Override
 	public String toString() {
-		String name = "CenterPeg";
+		String name = (mAlliance == Alliance.BLUE) ? "BlueCenterPeg" : "RedCenterPeg";
 		switch (mVariant) {
 			case NOTHING:
 				break;

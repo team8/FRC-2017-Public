@@ -86,22 +86,6 @@ public class SidePegAutoMode extends AutoModeBase {
 	public void prestart() {
 		System.out.println("Starting "+this.toString()+" Auto Mode");
 		Logger.getInstance().logRobotThread("Starting "+this.toString()+" Auto Mode");
-		double driveToAirshipSetpoint = 0;
-		if(mVariant == SidePegAutoMode.SideAutoVariant.RED_RIGHT || mVariant == SidePegAutoMode.SideAutoVariant.BLUE_LEFT) {
-			driveToAirshipSetpoint = Constants.kSidePegDistanceToAirshipBoilerInches * 
-					((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-							: Constants.kDriveTicksPerInch);
-		} else if(mVariant == SidePegAutoMode.SideAutoVariant.RED_LEFT || mVariant == SidePegAutoMode.SideAutoVariant.BLUE_RIGHT) {
-			driveToAirshipSetpoint = Constants.kSidePegDistanceToAirshipLoadingStationInches * 
-					((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-							: Constants.kDriveTicksPerInch);
-		} else {
-			System.out.println("No Side Auto Variant");
-		}
-		driveToAirship.leftMotor.setMotionMagic(driveToAirshipSetpoint, mGains,
-			Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-		driveToAirship.rightMotor.setMotionMagic(driveToAirshipSetpoint, mGains,
-				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
 
 		ArrayList<Routine> sequence = new ArrayList<>();
 		
@@ -111,23 +95,23 @@ public class SidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 			// loading station side
 			case RED_LEFT:
-				driveForwardSetpoint = Constants.kSidePegDistanceLoadingStationInches * 
+				driveForwardSetpoint = Constants.kRedLoadingStationForwardDistanceInches *
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 						: Constants.kDriveTicksPerInch);
 				break;
 			case BLUE_RIGHT:
-				driveForwardSetpoint = Constants.kSidePegDistanceLoadingStationInches * 
+				driveForwardSetpoint = Constants.kBlueLoadingStationForwardDistanceInches *
 					((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 							: Constants.kDriveTicksPerInch);
 				break;
 			// boiler side
 			case RED_RIGHT:
-				driveForwardSetpoint = Constants.kSidePegDistanceBoilerInches * 
+				driveForwardSetpoint = Constants.kRedBoilerForwardDistanceInches *
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 						: Constants.kDriveTicksPerInch);
 				break;
 			case BLUE_LEFT:
-				driveForwardSetpoint = Constants.kSidePegDistanceBoilerInches * 
+				driveForwardSetpoint = Constants.kBlueBoilerForwardDistanceInches *
 					((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 							: Constants.kDriveTicksPerInch);
 				break;
@@ -146,12 +130,6 @@ public class SidePegAutoMode extends AutoModeBase {
 		// NOTE: switch case falling, split by lefts vs rights
 		switch (mVariant) {
 			case RED_LEFT:
-				if (mShouldUseGyro) {
-					sequence.add(new SafetyTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
-				} else {
-					sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
-				}
-				break;
 			case BLUE_LEFT:
 				if (mShouldUseGyro) {
 					sequence.add(new SafetyTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
@@ -160,12 +138,6 @@ public class SidePegAutoMode extends AutoModeBase {
 				}
 				break;
 			case RED_RIGHT:
-				if (mShouldUseGyro) {
-					sequence.add(new SafetyTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
-				} else {
-					sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
-				}
-				break;
 			case BLUE_RIGHT:
 				if (mShouldUseGyro) {
 					sequence.add(new SafetyTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
@@ -174,6 +146,40 @@ public class SidePegAutoMode extends AutoModeBase {
 				}
 				break;
 		}
+
+		double driveToAirshipSetpoint = 0;
+		switch (mVariant) {
+			// loading station side
+			case RED_LEFT:
+				driveToAirshipSetpoint = Constants.kRedLoadingStationAirshipDistanceInches *
+						((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+								: Constants.kDriveTicksPerInch);
+				break;
+			case BLUE_RIGHT:
+				driveToAirshipSetpoint = Constants.kBlueLoadingStationAirshipDistanceInches *
+						((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+								: Constants.kDriveTicksPerInch);
+				break;
+			// boiler side
+			case RED_RIGHT:
+				driveToAirshipSetpoint = Constants.kRedBoilerAirshipDistanceInches *
+						((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+								: Constants.kDriveTicksPerInch);
+				break;
+			case BLUE_LEFT:
+				driveToAirshipSetpoint = Constants.kBlueBoilerAirshipDistanceInches *
+						((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+								: Constants.kDriveTicksPerInch);
+				break;
+			default:
+				System.err.println("What in tarnation no side peg airship distance");
+				driveToAirshipSetpoint = 0;
+				break;
+		}
+		driveToAirship.leftMotor.setMotionMagic(driveToAirshipSetpoint, mGains,
+				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
+		driveToAirship.rightMotor.setMotionMagic(driveToAirshipSetpoint, mGains,
+				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
 		sequence.add(new CANTalonRoutine(driveToAirship, true));
 		sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
 

@@ -52,7 +52,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		System.out.println("Start robotInit() for "+Constants.kRobotName.toString());
 		DashboardManager.getInstance().robotInit();
-//		mLogger.setFileName("Match 20");
+		mLogger.setFileName("Field Calibration");
 		mLogger.start();
 		mLogger.logRobotThread("robotInit() start");
 		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);
@@ -185,5 +185,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledPeriodic() {
 		mHardwareUpdater.updateSensors(robotState);
+		System.out.println("Left enc: " + robotState.drivePose.leftEnc +"\n"
+				+"Right enc: "+robotState.drivePose.rightEnc);
+		
 	}
 }

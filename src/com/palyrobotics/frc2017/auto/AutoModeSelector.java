@@ -6,7 +6,6 @@ import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode;
 import org.json.simple.JSONArray;
 
 import com.palyrobotics.frc2017.auto.modes.DoNothingAutoMode;
-import com.palyrobotics.frc2017.auto.modes.TestAutoMode;
 
 import java.util.ArrayList;
 
@@ -19,7 +18,7 @@ public class AutoModeSelector {
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
-	int selectedIndex = 4;
+	int selectedIndex = 2;
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
 			instance = new AutoModeSelector();
@@ -40,46 +39,48 @@ public class AutoModeSelector {
 
   /*0*/ registerAutonomous(new DoNothingAutoMode());
 		
-  /*1*/ registerAutonomous(new BaseLineAutoMode());
+  /*1*/ registerAutonomous(new BaseLineAutoMode(CenterPegAutoMode.Alliance.BLUE));
+  /*2*/ registerAutonomous(new BaseLineAutoMode(CenterPegAutoMode.Alliance.RED));
 
-  /*2*/ registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.CenterAutoVariant.NOTHING));
+  /*3*/ registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.Alliance.BLUE, CenterPegAutoMode.PostCenterAutoVariant.NOTHING));
+  /*4*/ registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.Alliance.RED, CenterPegAutoMode.PostCenterAutoVariant.NOTHING));
 
-  // side peg parameters - variant, slider, gyro
+		// side peg parameters - variant, slider, gyro
 		// ENCODER TURN VARIANTS, check slider centering
-  /*3*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_RIGHT,
+  /*5*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_RIGHT,
 				false, false, SidePegAutoMode.PostSideAutoVariant.NONE));
-  /*4*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_RIGHT,
+  /*6*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_RIGHT,
 				true, false, SidePegAutoMode.PostSideAutoVariant.NONE));
-  /*5*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_LEFT,
+  /*7*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_LEFT,
 				false, false, SidePegAutoMode.PostSideAutoVariant.NONE));
-  /*6*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_LEFT,
+  /*8*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_LEFT,
 				true, false, SidePegAutoMode.PostSideAutoVariant.NONE));
   
-  /*7*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_RIGHT,
+  /*9*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_RIGHT,
 			false, false, SidePegAutoMode.PostSideAutoVariant.NONE));
-  /*8*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_RIGHT,
+ /*10*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_RIGHT,
 			true, false, SidePegAutoMode.PostSideAutoVariant.NONE));
-  /*9*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_LEFT,
+ /*11*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_LEFT,
 			false, false, SidePegAutoMode.PostSideAutoVariant.NONE));
- /*10*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_LEFT,
+ /*12*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_LEFT,
 			true, false, SidePegAutoMode.PostSideAutoVariant.NONE));
 
   		// GYRO TURN VARIANTS, check slider centering or not
- /*11*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_RIGHT,
+ /*13*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_RIGHT,
 				false, true, SidePegAutoMode.PostSideAutoVariant.NONE));
- /*12*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_RIGHT,
+ /*14*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_RIGHT,
 				true, true, SidePegAutoMode.PostSideAutoVariant.NONE));
- /*13*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_LEFT,
+ /*15*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_LEFT,
 				false, true, SidePegAutoMode.PostSideAutoVariant.NONE));
- /*14*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_LEFT,
+ /*16*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_LEFT,
 				true, true, SidePegAutoMode.PostSideAutoVariant.NONE));
- /*15*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_RIGHT,
+ /*17*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_RIGHT,
 			false, true, SidePegAutoMode.PostSideAutoVariant.NONE));
- /*16*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_RIGHT,
+ /*18*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_RIGHT,
 			true, true, SidePegAutoMode.PostSideAutoVariant.NONE));
- /*17*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_LEFT,
+ /*19*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_LEFT,
 			false, true, SidePegAutoMode.PostSideAutoVariant.NONE));
- /*18*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_LEFT,
+ /*20*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_LEFT,
 			true, true, SidePegAutoMode.PostSideAutoVariant.NONE));
 
 	}
