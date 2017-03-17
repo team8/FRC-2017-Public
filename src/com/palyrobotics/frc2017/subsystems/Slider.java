@@ -10,9 +10,11 @@ import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
+import com.palyrobotics.frc2017.robot.team254.lib.util.CrashTracker;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Subsystem;
 import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
+import com.palyrobotics.frc2017.util.logger.Logger;
 
 /**
  * Created by Nihar on 1/28/17.
@@ -177,7 +179,13 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		if(mTarget == SliderTarget.NONE) {
 			return true;
 		}
-		return Math.abs(mRobotState.sliderPotentiometer - mPotentiometerTargetPositions.get(mTarget)) < kPotentiometerTolerance;
+		boolean output = true;
+		try {
+			output = Math.abs(mRobotState.sliderPotentiometer - mPotentiometerTargetPositions.get(mTarget)) < kPotentiometerTolerance;
+		} catch (NullPointerException e) {
+
+		}
+		return output;
 	}
 	
 	/**

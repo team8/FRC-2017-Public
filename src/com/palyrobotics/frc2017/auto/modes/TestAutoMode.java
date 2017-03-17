@@ -22,7 +22,7 @@ public class TestAutoMode extends AutoModeBase {
 
 	@Override
 	public Routine getRoutine() {
-		return new SafetyTurnAngleRoutine(20);
+		return new EncoderTurnAngleRoutine(90);
 	}
 
 	@Override

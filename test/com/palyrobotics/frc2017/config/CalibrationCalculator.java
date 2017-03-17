@@ -3,9 +3,16 @@ package com.palyrobotics.frc2017.config;
 import org.junit.Test;
 
 public class CalibrationCalculator {	
-	public boolean blue = false;
+	public boolean blue = true;
 	@Test
 	public void calculateLoadingSide() {
+		// Devin values lol
+		/*
+		 * 55 in forward
+		 * final values
+		 * 3333 left
+		 * 4098 right
+		 */
 		double kSidePegDistanceLoadingStationInches = (blue) ? 
 				Constants.kBlueLoadingStationForwardDistanceInches : Constants.kRedLoadingStationForwardDistanceInches;
 		double kSidePegDistanceToAirshipLoadingStationInches = (blue) ?
@@ -26,6 +33,8 @@ public class CalibrationCalculator {
 	
 	@Test
 	public void calculateBoilerSide() {
+		
+		// Final values - 4192, 3438.
 		double kSidePegDistanceBoilerInches = (blue) ?
 				Constants.kBlueBoilerForwardDistanceInches : Constants.kRedBoilerForwardDistanceInches;
 		double kSidePegDistanceToAirshipBoilerInches = (blue) ?
@@ -53,6 +62,10 @@ public class CalibrationCalculator {
 	
 	@Test
 	public void calculateCenterPeg() {
+		/*
+		 * 114.375 red
+		 * 108.5 blue
+		 */
 		double kCenterPegDistanceInches = (blue) ? Constants.kBlueCenterPegDistanceInches : Constants.kRedCenterPegDistanceInches;
 		System.out.println("Center peg");
 		System.out.println(kCenterPegDistanceInches * Constants.kDriveTicksPerInch);

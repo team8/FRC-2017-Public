@@ -3,6 +3,8 @@ package com.palyrobotics.frc2017.auto;
 import com.palyrobotics.frc2017.auto.modes.BaseLineAutoMode;
 import com.palyrobotics.frc2017.auto.modes.CenterPegAutoMode;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode;
+import com.palyrobotics.frc2017.auto.modes.TestAutoMode;
+
 import org.json.simple.JSONArray;
 
 import com.palyrobotics.frc2017.auto.modes.DoNothingAutoMode;
@@ -18,7 +20,7 @@ public class AutoModeSelector {
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
-	int selectedIndex = 3;
+	int selectedIndex = 5;
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
 			instance = new AutoModeSelector();

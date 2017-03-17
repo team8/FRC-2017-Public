@@ -188,19 +188,19 @@ public class Constants extends ConstantsBase {
 
 	// Blue right loading station
 	public static double kBlueLoadingStationForwardDistanceInches = 71; // original 73
-	public static double kBlueLoadingStationAirshipDistanceInches = 105;
+	public static double kBlueLoadingStationAirshipDistanceInches = 105; // original
 	
 	// Red left loading station
-	public static double kRedLoadingStationForwardDistanceInches = 87.75;
-	public static double kRedLoadingStationAirshipDistanceInches = 108;
+	public static double kRedLoadingStationForwardDistanceInches = 87.75; // original 87.75
+	public static double kRedLoadingStationAirshipDistanceInches = 108; // original 108
 
 	// Blue left boiler
-	public static double kBlueBoilerForwardDistanceInches = 69;
-	public static double kBlueBoilerAirshipDistanceInches = 107;
+	public static double kBlueBoilerForwardDistanceInches = 62.75; // original
+	public static double kBlueBoilerAirshipDistanceInches = 66; // original 
 
 	// Red right boiler
 	public static double kRedBoilerForwardDistanceInches = 72; // original measurement 75
-	public static double kRedBoilerAirshipDistanceInches = 106;
+	public static double kRedBoilerAirshipDistanceInches = 106; // original measurement 106
 
 
 	// !!! Loop rate of normal Looper

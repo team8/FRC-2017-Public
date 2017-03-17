@@ -183,8 +183,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledPeriodic() {
 		mHardwareUpdater.updateSensors(robotState);
-//		System.out.println("Left enc: " + robotState.drivePose.leftEnc +"\n"
-//				+"Right enc: "+robotState.drivePose.rightEnc);
+		System.out.println("Left enc: " + robotState.drivePose.leftEnc +"\n"
+				+"Right enc: "+robotState.drivePose.rightEnc);
 		
 	}
 	// Call during tele and auto periodic
