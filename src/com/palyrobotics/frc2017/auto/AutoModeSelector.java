@@ -20,7 +20,7 @@ public class AutoModeSelector {
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
-	int selectedIndex = 5;
+	int selectedIndex = 4;
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
 			instance = new AutoModeSelector();
@@ -48,6 +48,7 @@ public class AutoModeSelector {
   /*4*/ registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.Alliance.RED, CenterPegAutoMode.PostCenterAutoVariant.NOTHING));
 
 		// side peg parameters - variant, slider, gyro
+  		// blue right/red left is loading station
 		// ENCODER TURN VARIANTS, check slider centering
   /*5*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_RIGHT,
 				false, false, SidePegAutoMode.PostSideAutoVariant.NONE));

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
+import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.SafetyTurnAngleRoutine;
@@ -22,7 +23,25 @@ public class TestAutoMode extends AutoModeBase {
 
 	@Override
 	public Routine getRoutine() {
-		return new EncoderTurnAngleRoutine(90);
+		double driveForwardSetpoint = 75*Constants.kDriveTicksPerInch; //inches
+		DriveSignal driveForward = DriveSignal.getNeutralSignal();
+		
+		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, Gains.aegirDriveMotionMagicGains,
+				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
+		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, Gains.aegirDriveMotionMagicGains,
+				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
+		
+		CANTalonRoutine routine = new CANTalonRoutine(driveForward, true);
+		return routine;
+//		EncoderTurnAngleRoutine routine = new EncoderTurnAngleRoutine(90);
+//		EncoderTurnAngleRoutine routine2 = new EncoderTurnAngleRoutine(60);
+//		ArrayList<Routine> sequence = new ArrayList<Routine>();
+//		sequence.add(routine);
+//		sequence.add(new TimeoutRoutine(2));
+//		sequence.add(routine2);
+//		sequence.add(new TimeoutRoutine(2));
+//		sequence.add(new EncoderTurnAngleRoutine(-60));
+//		return new SequentialRoutine(sequence);
 	}
 
 	@Override

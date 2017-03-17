@@ -59,7 +59,7 @@ public class CenterPegAutoMode extends AutoModeBase {
 						*
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 						: Constants.kDriveTicksPerInch);
-		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mGains,
+		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint+100, mGains,
 			Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
 		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, mGains,
 				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);

@@ -41,8 +41,8 @@ public class Constants extends ConstantsBase {
 	public static double kTurnInPlacePower = 0.2; // for bang bang
 	public static double kDriveMaxClosedLoopOutput = 8.0;
 	// Unit Conversions for CANTalons
-	public static double kDriveTicksPerInch = 360 / (3.95 * Math.PI); // = 29.0105;
-	public static double kDriveInchesPerDegree = 21.5/90; // = 0.2388;
+	public static double kDriveTicksPerInch = 360 / (3.95 * Math.PI);
+	public static double kDriveInchesPerDegree = 0.97*21.5/90;
 	public static double kDriveSpeedUnitConversion = 360 / (3.95 * Math.PI * 10);
 
 
@@ -180,28 +180,37 @@ public class Constants extends ConstantsBase {
 	public static double kBlueCenterPegDistanceInches = 108.5 - 31; // first num is to airship
 
 	// Side peg
-	public static double k254SidePegDistanceLoadingStationInches = 74;
-	public static double k254SidePegDistanceToAirshipLoadingStationInches = 84;//24.5688;
-	public static double k254SidePegDistanceBoilerInches = 60;
-	public static double k254SidePegDistanceToAirshipBoilerInches = 93;
+	public static double k254LoadingStationForwardDistanceInches = 74;
+	public static double k254LoadingStationAirshipDistanceInches = 84;//24.5688;
+	public static double k254BoilerForwardDistanceInches = 60;
+	public static double k254BoilerAirshipDistanceInches = 93;
 	public static double kSidePegTurnAngleDegrees = 60;
-
+	
+	/*
+	 * CAD measurements -
+	 * loading airship distances look too short
+	 * blue right/loading - 67.87, 69.44
+	 * red left/loading - 73.85, 69.25
+	 * 
+	 * blue left/boiler - 65.92, 73.36
+	 * red right/boiler - 71.79, 73.36  
+	 */
+	
 	// Blue right loading station
-	public static double kBlueLoadingStationForwardDistanceInches = 71; // original 73
-	public static double kBlueLoadingStationAirshipDistanceInches = 105; // original
+	public static double kBlueLoadingStationForwardDistanceInches = 69; // 73, 69
+	public static double kBlueLoadingStationAirshipDistanceInches = 84; // 105, too far, 84
 	
 	// Red left loading station
-	public static double kRedLoadingStationForwardDistanceInches = 87.75; // original 87.75
-	public static double kRedLoadingStationAirshipDistanceInches = 108; // original 108
+	public static double kRedLoadingStationForwardDistanceInches = 71; // 87.75, 75, 
+	public static double kRedLoadingStationAirshipDistanceInches = 84; // 108, 95
 
 	// Blue left boiler
-	public static double kBlueBoilerForwardDistanceInches = 62.75; // original
-	public static double kBlueBoilerAirshipDistanceInches = 66; // original 
+	public static double kBlueBoilerForwardDistanceInches = 66; // 69, 67, 66
+	public static double kBlueBoilerAirshipDistanceInches = 70.5; // 107, 87.5, 70.5
 
 	// Red right boiler
-	public static double kRedBoilerForwardDistanceInches = 72; // original measurement 75
-	public static double kRedBoilerAirshipDistanceInches = 106; // original measurement 106
-
+	public static double kRedBoilerForwardDistanceInches = 65; // 75, 64, 60, 64
+	public static double kRedBoilerAirshipDistanceInches = 70; // 106, 70
 
 	// !!! Loop rate of normal Looper
 	public static double kControlLoopsDt = 0.005;
@@ -211,7 +220,24 @@ public class Constants extends ConstantsBase {
 	
 	public static double kSubsystemPrintLooperDt = 1.0;
 
-
+	@Override
+	public String toString() {
+	return "kLowGearDriveSensitivity "+kLowGearDriveSensitivity+
+	"kHighGearDriveSensitivity "+kHighGearDriveSensitivity+
+	"kLowGearQuickTurnSensitivity "+kLowGearQuickTurnSensitivity+
+	"kHighGearQuickTurnSensitivity "+kHighGearQuickTurnSensitivity+
+	"kQuickStopAccumulatorDecreaseRate "+kQuickStopAccumulatorDecreaseRate+
+	"kQuickStopAccumulatorDecreaseThreshold "+kQuickStopAccumulatorDecreaseThreshold+
+	"kNegativeInertiaScalar "+kNegativeInertiaScalar+
+	"kAlpha "+ kAlpha +
+	"kDriveTicksPerInch "+kDriveTicksPerInch +
+	"kDriveInchesPerDegree" + kDriveInchesPerDegree +
+	"kDriveSpeedUnitConversion "+kDriveSpeedUnitConversion +
+	"kPotentiometerRightPos "+kPotentiometerRightPos +
+	"kPotentiometerLeftPos "+kPotentiometerLeftPos
+	;
+	}
+	
 	@Override
 	public String getFileLocation() {
 		return "~/constants.txt";

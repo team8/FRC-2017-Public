@@ -72,7 +72,7 @@ public class Gains {
 	public static final double kAegirTurnMotionMagicMaxAcceleration = 36 * Constants.kDriveSpeedUnitConversion;
 	public static final double kAegirTurnMotionMagickP = 6.0;
 	public static final double kAegirTurnMotionMagickI = 0.01;
-	public static final double kAegirTurnMotionMagickD = 150;
+	public static final double kAegirTurnMotionMagickD = 210;
 	public static final double kAegirTurnMotionMagickF = 2.0;
 	public static final double kAegirTurnMotionMagickIzone = 50;
 

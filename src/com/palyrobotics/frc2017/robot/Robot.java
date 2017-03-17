@@ -52,12 +52,18 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		System.out.println("Start robotInit() for "+Constants.kRobotName.toString());
 		DashboardManager.getInstance().robotInit();
-//		mLogger.setFileName("Field Calibration");
+		mLogger.setFileName("Qual46");
 		mLogger.start();
 		mLogger.logRobotThread("robotInit() start");
 		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);
 		mLogger.logRobotThread("Alliance: " + DriverStation.getInstance().getAlliance());
 		mLogger.logRobotThread("FMS connected: "+DriverStation.getInstance().isFMSAttached());
+		mLogger.logRobotThread("Alliance station: "+DriverStation.getInstance().getLocation());
+		try {
+			mLogger.logRobotThread("Auto", AutoModeSelector.getInstance().getAutoMode().toString());
+		} catch (NullPointerException e) {
+			mLogger.logRobotThread("Auto: "+e.getMessage());
+		}
 		if (Constants.kRobotName == Constants.RobotName.STEIK || Constants.kRobotName == Constants.RobotName.AEGIR) {
 			try {
 				mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSlider, mSpatula, mIntake, mClimber);
@@ -79,6 +85,7 @@ public class Robot extends IterativeRobot {
 			mSubsystemLooper.register(mDrive);
 		}
 		mHardwareUpdater.initHardware();
+		System.out.println("Auto: "+AutoModeSelector.getInstance().getAutoMode().toString());
 		System.out.println("End robotInit()");
 		mLogger.logRobotThread("End robotInit()");
 	}
@@ -108,6 +115,7 @@ public class Robot extends IterativeRobot {
 		mode.prestart();
 		mRoutineManager.addNewRoutine(mode.getRoutine());
 		mLogger.logRobotThread("Auto mode", mode.toString());
+		mLogger.logRobotThread("Auto routine", mode.getRoutine().toString());
 		System.out.println("End autonomousInit()");
 		mLogger.logRobotThread("End autonomousInit()");
 	}
@@ -166,7 +174,7 @@ public class Robot extends IterativeRobot {
 
 		// Stop controllers
 		mDrive.setNeutral();
-//		mHardwareUpdater.configureDriveTalons();
+		mHardwareUpdater.configureDriveTalons();
 		mHardwareUpdater.disableTalons();
 		DashboardManager.getInstance().enableCANTable(false);
 		mLogger.logRobotThread("End disabledInit()");
@@ -183,18 +191,18 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledPeriodic() {
 		mHardwareUpdater.updateSensors(robotState);
-		System.out.println("Left enc: " + robotState.drivePose.leftEnc +"\n"
-				+"Right enc: "+robotState.drivePose.rightEnc);
-		
+//		System.out.println("Left enc: " + robotState.drivePose.leftEnc +"\n"
+//				+"Right enc: "+robotState.drivePose.rightEnc);
 	}
 	// Call during tele and auto periodic
 	private void logPeriodic() {
 		mLogger.logRobotThread("Match time", DriverStation.getInstance().getMatchTime());
 		mLogger.logRobotThread("DS Connected", DriverStation.getInstance().isDSAttached());
 		mLogger.logRobotThread("DS Voltage", DriverStation.getInstance().getBatteryVoltage());
-		mLogger.logRobotThread("Battery current", HardwareAdapter.getInstance().kPDP.getTotalCurrent());
-		mLogger.logRobotThread("Battery watts drawn", HardwareAdapter.getInstance().kPDP.getTotalPower());
+//		mLogger.logRobotThread("Battery current", HardwareAdapter.getInstance().kPDP.getTotalCurrent());
+//		mLogger.logRobotThread("Battery watts drawn", HardwareAdapter.getInstance().kPDP.getTotalPower());
 		mLogger.logRobotThread("Outputs disabled", DriverStation.getInstance().isSysActive());
+		mLogger.logRobotThread("FMS connected: "+DriverStation.getInstance().isFMSAttached());
 		if (DriverStation.getInstance().isAutonomous()) {
 			mLogger.logRobotThread("Game period: Auto");
 		} else if (DriverStation.getInstance().isDisabled()) {

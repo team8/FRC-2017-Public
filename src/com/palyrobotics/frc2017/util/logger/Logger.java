@@ -11,6 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Date;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Log is at /home/lvuser/logs/fileName directory
@@ -35,6 +37,7 @@ public class Logger {
 	// Separates to prevent concurrent modification exception
 	private ArrayList<TimestampedString> mSubsystemThreadLogs = new ArrayList<>();
 	private ArrayList<TimestampedString> mRobotThreadLogs = new ArrayList<>();
+	private ConcurrentLinkedQueue<TimestampedString> mUnknownThreadLogs = new ConcurrentLinkedQueue<TimestampedString>();
 
 	// synchronized lock for writing out the latest data
 	private final Object writingLock = new Object();
@@ -42,54 +45,6 @@ public class Logger {
 	// Stores the runnable for the thread to be restarted
 	private Runnable mRunnable;
 	private File mainLog;
-
-
-	private Logger() {
-		mData = new ArrayList<>();
-		mRunnable = () -> {
-			while (true) {
-				// If thread is killed, stop trying to write
-				if (Thread.currentThread().isInterrupted()) {
-					try {
-						synchronized (writingLock) {
-							System.out.println("Logger interrupted, closing");
-							bufferedWriter.close();
-						}
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					return;
-				}
-				try {
-					synchronized (writingLock) {
-						if (isEnabled) {
-							mData = new ArrayList<>(mSubsystemThreadLogs);
-							mData.addAll(mRobotThreadLogs);
-							mSubsystemThreadLogs.clear();
-							mRobotThreadLogs.clear();
-							mData.sort(TimestampedString::compareTo);
-							mData.forEach((TimestampedString c) -> {
-								try {
-									bufferedWriter.write(c.getTimestampedString());
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
-							});
-							mData.clear();
-							bufferedWriter.flush();
-						}
-					}
-				Thread.sleep(500);
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e){
-					// No value in stack trace
-					//e.printStackTrace();
-					return;
-				}
-			}
-		};
-	}
 
 	public boolean setFileName(String fileName) {
 		if (bufferedWriter != null) {
@@ -251,5 +206,51 @@ public class Logger {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	private Logger() {
+		mData = new ArrayList<>();
+		mRunnable = () -> {
+			while (true) {
+				// If thread is killed, stop trying to write
+				if (Thread.currentThread().isInterrupted()) {
+					try {
+						synchronized (writingLock) {
+							System.out.println("Logger interrupted, closing");
+							bufferedWriter.close();
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					return;
+				}
+				try {
+					synchronized (writingLock) {
+						if (isEnabled) {
+							mData = new ArrayList<>(mSubsystemThreadLogs);
+							mData.addAll(mRobotThreadLogs);
+							mSubsystemThreadLogs.clear();
+							mRobotThreadLogs.clear();
+							mData.sort(TimestampedString::compareTo);
+							mData.forEach((TimestampedString c) -> {
+								try {
+									bufferedWriter.write(c.getTimestampedString());
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+							});
+							mData.clear();
+							bufferedWriter.flush();
+						}
+					}
+				Thread.sleep(500);
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e){
+					// No value in stack trace
+					//e.printStackTrace();
+					return;
+				}
+			}
+		};
 	}
 }
