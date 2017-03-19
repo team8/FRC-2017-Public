@@ -52,7 +52,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		System.out.println("Start robotInit() for "+Constants.kRobotName.toString());
 		DashboardManager.getInstance().robotInit();
-		mLogger.setFileName("Qual46");
+		mLogger.setFileName("Qual53");
 		mLogger.start();
 		mLogger.logRobotThread("robotInit() start");
 		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);
@@ -60,6 +60,7 @@ public class Robot extends IterativeRobot {
 		mLogger.logRobotThread("FMS connected: "+DriverStation.getInstance().isFMSAttached());
 		mLogger.logRobotThread("Alliance station: "+DriverStation.getInstance().getLocation());
 		try {
+			DriverStation.reportWarning("Auto is "+AutoModeSelector.getInstance().getAutoMode().toString(), false);
 			mLogger.logRobotThread("Auto", AutoModeSelector.getInstance().getAutoMode().toString());
 		} catch (NullPointerException e) {
 			mLogger.logRobotThread("Auto: "+e.getMessage());
