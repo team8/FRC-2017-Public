@@ -38,7 +38,7 @@ public class CenterPegAutoMode extends AutoModeBase {
 		if(Constants.kRobotName == Constants.RobotName.DERICA) {
 			mGains = Gains.dericaPosition;
 		} else {
-			mGains = (Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikPosition : Gains.aegirDriveMotionMagicGains;
+			mGains = Gains.steikLongDriveMotionMagicGains;
 		}
 	}
 
@@ -60,9 +60,9 @@ public class CenterPegAutoMode extends AutoModeBase {
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 						: Constants.kDriveTicksPerInch);
 		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint+100, mGains,
-			Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
+			Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, mGains,
-				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
+				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		
 		sequence.add(new CANTalonRoutine(driveForward, true));
 		sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
@@ -73,9 +73,9 @@ public class CenterPegAutoMode extends AutoModeBase {
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 				: Constants.kDriveTicksPerInch);
 		driveBack.leftMotor.setMotionMagic(driveBackSetpoint, mGains,
-				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
+				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		driveBack.rightMotor.setMotionMagic(driveBackSetpoint, mGains,
-				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
+				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 
 		// If variant includes a cross, drive past the airship after turn angle
 		DriveSignal passAirship = DriveSignal.getNeutralSignal();
@@ -83,18 +83,18 @@ public class CenterPegAutoMode extends AutoModeBase {
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 				: Constants.kDriveTicksPerInch);
 		passAirship.leftMotor.setMotionMagic(passAirshipSetpoint, mGains,
-				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
+				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		passAirship.rightMotor.setMotionMagic(passAirshipSetpoint, mGains,
-				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
+				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 
 		DriveSignal crossOver = DriveSignal.getNeutralSignal();
 		double crossOverSetpoint = 20 * 
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 				: Constants.kDriveTicksPerInch);
 		crossOver.leftMotor.setMotionMagic(crossOverSetpoint, mGains,
-				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
+				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		crossOver.rightMotor.setMotionMagic(crossOverSetpoint, mGains,
-				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
+				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 
 		switch (mVariant) {
 			case NOTHING:

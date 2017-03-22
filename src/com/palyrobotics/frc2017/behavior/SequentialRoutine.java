@@ -73,10 +73,10 @@ public class SequentialRoutine extends Routine {
 
 	@Override
 	public String getName() {
-		String name = "SequentialRoutine of ";
+		String name = "SequentialRoutine of (";
 		for(Routine routine : mRoutines) {
 			name += (routine.getName() + " ");
 		}
-		return name;
+		return name + ")";
 	}
 }

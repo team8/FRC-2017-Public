@@ -4,11 +4,11 @@ import com.palyrobotics.frc2017.robot.team254.lib.util.ConstantsBase;
 
 public class Constants extends ConstantsBase {
 	public enum RobotName {
-		STEIK, AEGIR, DERICA
+		STEIK, DERICA
 	}
 
 	// Initialization constants
-	public static final RobotName kRobotName = RobotName.AEGIR;
+	public static final RobotName kRobotName = RobotName.STEIK;
 	public static final boolean kCalibrateSliderWithPotentiometer = true;
 
 	// Cheesy Drive tuning
@@ -46,7 +46,7 @@ public class Constants extends ConstantsBase {
 	public static double kDriveSpeedUnitConversion = 360 / (3.95 * Math.PI * 10);
 
 
-	// Aegir right 2172; left 3452;
+	// Steik right 2172; left 3452;
 	public static final double kPotentiometerRightPos = 2036;
 	public static final double kPotentiometerLeftPos = 3314;
 	public static final double kPotentiometerCenterPos = (kPotentiometerRightPos + kPotentiometerLeftPos) / 2;
@@ -77,29 +77,30 @@ public class Constants extends ConstantsBase {
 	public static int kSteikPDPDeviceID = 11;
 	
 	// DRIVETRAIN
-	public static int kSteikLeftDriveMasterDeviceID  = 0;
-	public static int kSteikLeftDriveSlaveDeviceID = 0;
-	public static int kSteikLeftDriveOtherSlaveDeviceID = 0;
+	// PDP slots for drivetrain 0, 1, 2, 3, 12, 13
+	public static int kSteikLeftDriveMasterDeviceID  = 1;
+	public static int kSteikLeftDriveSlaveDeviceID = 2;
+	public static int kSteikLeftDriveOtherSlaveDeviceID = 3;
 	public static int kSteikLeftDriveFrontMotorPDP = 0;
 	public static int kSteikLeftDriveBackMotorPDP = 0;
 	public static int kSteikLeftDriveThirdMotorPDP = 0;
-	public static int kSteikRightDriveMasterDeviceID = 0;
-	public static int kSteikRightDriveSlaveDeviceID = 0;
-	public static int kSteikRightDriveOtherSlaveDeviceID = 0;
+	public static int kSteikRightDriveMasterDeviceID = 6;
+	public static int kSteikRightDriveSlaveDeviceID = 5;
+	public static int kSteikRightDriveOtherSlaveDeviceID = 4;
 	public static int kSteikRightDriveFrontMotorPDP = 0;
 	public static int kSteikRightDriveBackMotorPDP = 0;
 	public static int kSteikRightDriveThirdMotorPDP = 0;
-
+	
 	// FLIPPERS
 	public static int kSteikLeftFlipperPortExtend = 0;
-	public static int kSteikLeftFlipperPortRetract = 0;
-	public static int kSteikRightFlipperPortExtend = 0;
-	public static int kSteikRightFlipperPortRetract = 0;
+	public static int kSteikLeftFlipperPortRetract = 1;
+	public static int kSteikRightFlipperPortExtend = 2;
+	public static int kSteikRightFlipperPortRetract = 3;
 
 	// SLIDER
-	public static int kSteikSliderMotorDeviceID = 0;
+	public static int kSteikSliderMotorDeviceID = 10;
 	public static int kSteikSliderMotorSpeed = 0;
-	public static int kSteikSliderPotentiometer = 0;
+	public static int kSteikSliderPotentiometerPort = 3;
 	public static int kSteikSliderPotentiometerFullRange = 0;
 	public static int kSteikSliderPotentiometerOffset;
 
@@ -108,64 +109,14 @@ public class Constants extends ConstantsBase {
 	public static int kSteikSpatulaPortRetract = 0;
 
 	// INTAKE
-	public static int kSteikLeftIntakeMotorDeviceID = 0;
-	public static int kSteikLeftIntakeMotorPDP = 0;
-	public static int kSteikRightIntakeMotorDeviceID = 0;
-	public static int kSteikRightIntakeMotorPDP = 0;
+	public static int kSteikLeftIntakeMotorDeviceID = 14;
+	public static int kSteikLeftIntakeMotorPDP = 11;
+	public static int kSteikRightIntakeMotorDeviceID = 12;
+	public static int kSteikRightIntakeMotorPDP = 13;
 
 	// CLIMBER
 	public static int kSteikClimberMotorDeviceID = 9;
 	public static int kSteikClimberMotorPDP = 14;
-
-	/*
-	 * ************************************
-	 *  AEGIR ELECTRONIC CONSTANTS
-	 * ************************************
-	 */
-	// PDP
-	public static int kAegirPDPDeviceID = 11;
-	
-	// DRIVETRAIN
-	// PDP slots for drivetrain 0, 1, 2, 3, 12, 13
-	public static int kAegirLeftDriveMasterDeviceID  = 1;
-	public static int kAegirLeftDriveSlaveDeviceID = 2;
-	public static int kAegirLeftDriveOtherSlaveDeviceID = 3;
-	public static int kAegirLeftDriveFrontMotorPDP = 0;
-	public static int kAegirLeftDriveBackMotorPDP = 0;
-	public static int kAegirLeftDriveThirdMotorPDP = 0;
-	public static int kAegirRightDriveMasterDeviceID = 6;
-	public static int kAegirRightDriveSlaveDeviceID = 5;
-	public static int kAegirRightDriveOtherSlaveDeviceID = 4;
-	public static int kAegirRightDriveFrontMotorPDP = 0;
-	public static int kAegirRightDriveBackMotorPDP = 0;
-	public static int kAegirRightDriveThirdMotorPDP = 0;
-	
-	// FLIPPERS
-	public static int kAegirLeftFlipperPortExtend = 0;
-	public static int kAegirLeftFlipperPortRetract = 1;
-	public static int kAegirRightFlipperPortExtend = 2;
-	public static int kAegirRightFlipperPortRetract = 3;
-
-	// SLIDER
-	public static int kAegirSliderMotorDeviceID = 10;
-	public static int kAegirSliderMotorSpeed = 0;
-	public static int kAegirSliderPotentiometerPort = 3;
-	public static int kAegirSliderPotentiometerFullRange = 0;
-	public static int kAegirSliderPotentiometerOffset;
-
-	// SPATULA
-	public static int kAegirSpatulaPortExtend = 1;
-	public static int kAegirSpatulaPortRetract = 0;
-
-	// INTAKE
-	public static int kAegirLeftIntakeMotorDeviceID = 14;
-	public static int kAegirLeftIntakeMotorPDP = 11;
-	public static int kAegirRightIntakeMotorDeviceID = 12;
-	public static int kAegirRightIntakeMotorPDP = 13;
-
-	// CLIMBER
-	public static int kAegirClimberMotorDeviceID = 9;
-	public static int kAegirClimberMotorPDP = 14;
 
 	// !!! Physical constants
 

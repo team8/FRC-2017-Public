@@ -63,14 +63,12 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	private boolean isPotentiometerFunctional = false;
 	
 	//Positioning constants
-	private final HashMap<SliderTarget,Double> mEncoderTargetPositions = new HashMap<SliderTarget,Double>(); //TODO: find actual values
+	private final HashMap<SliderTarget,Double> mEncoderTargetPositions = new HashMap<SliderTarget,Double>();
 	private final HashMap<SliderTarget,Double> mPotentiometerTargetPositions = new HashMap<SliderTarget,Double>();
 	
 	//PID constants
-	private static final Gains mEncoderGains = 
-			(Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikSliderEncoder : Gains.aegirSliderEncoder;
-	private static final Gains mPotentiometerGains = 
-			(Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikSliderPotentiometer : Gains.aegirSliderPotentiometer;
+	private static final Gains mEncoderGains = Gains.steikSliderEncoder;
+	private static final Gains mPotentiometerGains = Gains.steikSliderPotentiometer;
 	
 	
 	private CANTalonOutput mOutput = new CANTalonOutput();

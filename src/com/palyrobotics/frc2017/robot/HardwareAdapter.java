@@ -46,19 +46,6 @@ public class HardwareAdapter {
 				rightSlave1Talon = new CANTalon(Constants2016.kDericaRightDriveSlaveDeviceID);
 				rightSlave2Talon = null;
 				gyro = new ADXRS453_Gyro();
-			} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
-				leftMasterTalon = new CANTalon(Constants.kAegirLeftDriveMasterDeviceID);
-				leftSlave1Talon = new CANTalon(Constants.kAegirLeftDriveSlaveDeviceID);
-				leftSlave2Talon = new CANTalon(Constants.kAegirLeftDriveOtherSlaveDeviceID);
-				rightMasterTalon = new CANTalon(Constants.kAegirRightDriveMasterDeviceID);
-				rightSlave1Talon = new CANTalon(Constants.kAegirRightDriveSlaveDeviceID);
-				rightSlave2Talon = new CANTalon(Constants.kAegirRightDriveOtherSlaveDeviceID);
-				ADXRS453_Gyro tempGyro = new ADXRS453_Gyro();
-				if (tempGyro.isSPINull()) {
-					gyro = null;
-				} else {
-					gyro = tempGyro;
-				}
 			} else {
 				leftMasterTalon = new CANTalon(Constants.kSteikLeftDriveMasterDeviceID);
 				leftSlave1Talon = new CANTalon(Constants.kSteikLeftDriveSlaveDeviceID);
@@ -66,7 +53,12 @@ public class HardwareAdapter {
 				rightMasterTalon = new CANTalon(Constants.kSteikRightDriveMasterDeviceID);
 				rightSlave1Talon = new CANTalon(Constants.kSteikRightDriveSlaveDeviceID);
 				rightSlave2Talon = new CANTalon(Constants.kSteikRightDriveOtherSlaveDeviceID);
-				gyro = null;
+				ADXRS453_Gyro tempGyro = new ADXRS453_Gyro();
+				if (tempGyro.isSPINull()) {
+					gyro = null;
+				} else {
+					gyro = tempGyro;
+				}
 			}
 		}
 	}
@@ -87,11 +79,6 @@ public class HardwareAdapter {
 						Constants.kSteikLeftFlipperPortExtend, Constants.kSteikLeftFlipperPortRetract);
 				rightSolenoid = new DoubleSolenoid(
 						Constants.kSteikRightFlipperPortExtend, Constants.kSteikRightFlipperPortRetract);
-			} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
-				leftSolenoid = new DoubleSolenoid(
-						Constants.kAegirLeftFlipperPortExtend, Constants.kAegirLeftFlipperPortRetract);
-				rightSolenoid = new DoubleSolenoid(
-						Constants.kAegirRightFlipperPortExtend, Constants.kAegirRightFlipperPortRetract);
 			} else {
 				leftSolenoid = null;
 				rightSolenoid = null;
@@ -112,13 +99,9 @@ public class HardwareAdapter {
 		public final AnalogInput sliderPotentiometer;
 		
 		private SliderHardware() {
-			if(Constants.kRobotName == Constants.RobotName.STEIK) {
+			if (Constants.kRobotName == Constants.RobotName.STEIK){
 				sliderTalon = new CANTalon(Constants.kSteikSliderMotorDeviceID);
-				sliderPotentiometer = new AnalogInput(Constants.kSteikSliderPotentiometer);
-			}
-			else if (Constants.kRobotName == Constants.RobotName.AEGIR){
-				sliderTalon = new CANTalon(Constants.kAegirSliderMotorDeviceID);
-				sliderPotentiometer = new AnalogInput(Constants.kAegirSliderPotentiometerPort);
+				sliderPotentiometer = new AnalogInput(Constants.kSteikSliderPotentiometerPort);
 			}
 			else {
 				sliderTalon = null;
@@ -140,8 +123,6 @@ public class HardwareAdapter {
 		private SpatulaHardware() {
 			if (Constants.kRobotName == Constants.RobotName.STEIK) {
 				spatulaSolenoid = new DoubleSolenoid(Constants.kSteikSpatulaPortExtend, Constants.kSteikSpatulaPortRetract);
-			} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
-				spatulaSolenoid = new DoubleSolenoid(Constants.kAegirSpatulaPortExtend, Constants.kAegirSpatulaPortRetract);
 			} else {
 				spatulaSolenoid = null;
 			}
@@ -161,10 +142,7 @@ public class HardwareAdapter {
 		public final VictorSP rightIntakeMotor;
 
 		private IntakeHardware() {
-			if (Constants.kRobotName == Constants.RobotName.AEGIR) {
-				leftIntakeMotor = new VictorSP(Constants.kAegirLeftIntakeMotorDeviceID);
-				rightIntakeMotor = new VictorSP(Constants.kAegirRightIntakeMotorDeviceID);
-			} else if (Constants.kRobotName == Constants.RobotName.STEIK) {
+			if (Constants.kRobotName == Constants.RobotName.STEIK) {
 				leftIntakeMotor = new VictorSP(Constants.kSteikLeftIntakeMotorDeviceID);
 				rightIntakeMotor = new VictorSP(Constants.kSteikRightIntakeMotorDeviceID);
 			} else {
@@ -186,9 +164,7 @@ public class HardwareAdapter {
 		public final CANTalon climberTalon;
 		
 		private ClimberHardware() {
-			if (Constants.kRobotName == Constants.RobotName.AEGIR) {
-				climberTalon = new CANTalon(Constants.kAegirClimberMotorDeviceID);
-			} else if (Constants.kRobotName == Constants.RobotName.STEIK) {
+			if (Constants.kRobotName == Constants.RobotName.STEIK) {
 				climberTalon = new CANTalon(Constants.kSteikClimberMotorDeviceID);
 			} else {
 				climberTalon = null;

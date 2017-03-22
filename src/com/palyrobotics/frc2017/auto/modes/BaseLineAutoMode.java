@@ -19,7 +19,7 @@ public class BaseLineAutoMode extends AutoModeBase {
 		if(Constants.kRobotName == Constants.RobotName.DERICA) {
 			mGains = Gains.dericaPosition;
 		} else {
-			mGains = (Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikPosition : Gains.aegirDriveMotionMagicGains;
+			mGains = Gains.steikLongDriveMotionMagicGains;
 		}
 	}
 
@@ -33,9 +33,9 @@ public class BaseLineAutoMode extends AutoModeBase {
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 						: Constants.kDriveTicksPerInch);
 		driveForward.leftMotor.setMotionMagic(setpoint, mGains,
-			Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
+			Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		driveForward.rightMotor.setMotionMagic(setpoint, mGains,
-				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
+				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		mRoutine = new CANTalonRoutine(driveForward, true);
 		return mRoutine;
 	}

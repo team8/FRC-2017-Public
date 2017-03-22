@@ -27,11 +27,11 @@ class HardwareUpdater {
 	private Climber mClimber;
 
 	/**
-	 * Hardware Updater for Steik/Aegir
+	 * Hardware Updater for Steik
 	 */
 	HardwareUpdater(Drive drive, Flippers flippers, Slider slider, Spatula spatula, Intake intake, Climber climber)
 			throws Exception {
-		if (Constants.kRobotName != Constants.RobotName.AEGIR && Constants.kRobotName != Constants.RobotName.STEIK) {
+		if (Constants.kRobotName != Constants.RobotName.STEIK) {
 			System.out.println("Incompatible robot name and hardware!");
 			throw new Exception();
 		}
@@ -73,7 +73,7 @@ class HardwareUpdater {
 		HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon.disable();
 		HardwareAdapter.getInstance().getDrivetrain().rightSlave1Talon.disable();
 		HardwareAdapter.getInstance().getDrivetrain().rightSlave2Talon.disable();
-		if(Constants.kRobotName == RobotName.AEGIR || Constants.kRobotName == RobotName.STEIK) {
+		if(Constants.kRobotName == RobotName.STEIK) {
 			HardwareAdapter.getInstance().getClimber().climberTalon.disable();
 			HardwareAdapter.getInstance().getSlider().sliderTalon.disable();
 		}
@@ -81,7 +81,7 @@ class HardwareUpdater {
 	
 	void configureTalons(boolean calibrateSliderEncoder) {
 		configureDriveTalons();
-		if (Constants.kRobotName == RobotName.AEGIR || Constants.kRobotName == RobotName.STEIK) {
+		if (Constants.kRobotName == RobotName.STEIK) {
 			//Climber setup
 			CANTalon climber = HardwareAdapter.ClimberHardware.getInstance().climberTalon;
 			climber.reset();
@@ -240,7 +240,7 @@ class HardwareUpdater {
 		} else {
 			robotState.drivePose.rightError = Optional.empty();
 		}
-		if (Constants.kRobotName == Constants.RobotName.AEGIR || Constants.kRobotName == Constants.RobotName.STEIK) {
+		if (Constants.kRobotName == Constants.RobotName.STEIK) {
 			CANTalon sliderTalon = HardwareAdapter.SliderHardware.getInstance().sliderTalon;
 			robotState.sliderEncoder = sliderTalon.getPosition();
 			DashboardManager.getInstance().updateCANTable(HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getOutputVoltage() + "," + HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getOutputVoltage() + "," + HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getPosition() + "," + HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getPosition() + "," +  HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getClosedLoopError() + "," + HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getClosedLoopError());
@@ -252,11 +252,6 @@ class HardwareUpdater {
 				robotState.sliderClosedLoopError = Optional.empty();
 			}
 		}
-//		if (Constants.kRobotName == Constants.RobotName.STEIK) {
-//			robotState.climberCurrentDraw = HardwareAdapter.getInstance().kPDP.getCurrent(Constants.kSteikClimberMotorPDP);
-//		} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
-//			robotState.climberCurrentDraw = HardwareAdapter.getInstance().kPDP.getCurrent(Constants.kAegirClimberMotorPDP);
-//		}
 		if (HardwareAdapter.getInstance().getClimber().climberTalon != null) {
 			robotState.climberEncoder = HardwareAdapter.ClimberHardware.getInstance().climberTalon.getPosition();
 		}
@@ -269,7 +264,7 @@ class HardwareUpdater {
 	 */
 	void updateSubsystems() {
 		// On Derica only update the drivetrain
-		if (Constants.kRobotName == Constants.RobotName.STEIK || Constants.kRobotName == Constants.RobotName.AEGIR) {
+		if (Constants.kRobotName == Constants.RobotName.STEIK) {
 			updateSteikSubsystems();
 		}
 		updateDrivetrain();
@@ -291,7 +286,7 @@ class HardwareUpdater {
 	}
 
 	/**
-	 * Updates the drivetrain on Derica, Steik, Aegir 
+	 * Updates the drivetrain on Derica, Steik 
 	 * Uses CANTalonOutput and can run off-board control loops through SRX
 	 */
 	private void updateDrivetrain() {

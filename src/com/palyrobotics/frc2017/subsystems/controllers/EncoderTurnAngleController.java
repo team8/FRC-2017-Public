@@ -26,14 +26,11 @@ public class EncoderTurnAngleController implements DriveController {
 		rightTarget = priorSetpoint.rightEnc - (angle * Constants.kDriveInchesPerDegree * Constants.kDriveTicksPerInch);
 		System.out.println("Right target: "+rightTarget);
 		cachedPose = priorSetpoint;
-		this.maxAccel = (Constants.kRobotName == Constants.RobotName.DERICA) ? Gains.kDericaTurnMotionMagicCruiseVelocity : Gains.kAegirTurnMotionMagicCruiseVelocity;
-		this.maxVel = (Constants.kRobotName == Constants.RobotName.DERICA) ?  Gains.kDericaTurnMotionMagicCruiseAccel : Gains.kAegirTurnMotionMagicMaxAcceleration;
+		this.maxAccel = (Constants.kRobotName == Constants.RobotName.DERICA) ? Gains.kDericaTurnMotionMagicCruiseVelocity : Gains.kSteikTurnMotionMagicCruiseVelocity;
+		this.maxVel = (Constants.kRobotName == Constants.RobotName.DERICA) ?  Gains.kDericaTurnMotionMagicCruiseAccel : Gains.kSteikTurnMotionMagicMaxAcceleration;
 
-		if(Constants.kRobotName.equals(Constants.RobotName.AEGIR)) {
-			mGains = Gains.aegirDriveMotionMagicGains;
-
-		} else if(Constants.kRobotName.equals(Constants.RobotName.STEIK)) {
-			mGains = Gains.steikPosition;
+		if(Constants.kRobotName.equals(Constants.RobotName.STEIK)) {
+			mGains = Gains.steikTurnMotionMagicGains;
 		} else {
 			mGains = Gains.dericaPosition;
 		}

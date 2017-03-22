@@ -65,7 +65,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 			kTurnSlipFactor = 1.2;
 			kInchesPerTick = 0.07033622;
 			kInchesToTicks = 1400 / (2 * 3.1415 * 3.5);
-		} else if (Constants.kRobotName == Constants.RobotName.AEGIR) {
+		} else if (Constants.kRobotName == Constants.RobotName.STEIK) {
 			kWheelbaseWidth = 0;
 			kTurnSlipFactor = 0;
 			kInchesPerTick = 1/Constants.kDriveTicksPerInch;

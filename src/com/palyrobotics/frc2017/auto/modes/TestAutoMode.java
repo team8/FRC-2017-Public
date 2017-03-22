@@ -26,10 +26,10 @@ public class TestAutoMode extends AutoModeBase {
 		double driveForwardSetpoint = 75*Constants.kDriveTicksPerInch; //inches
 		DriveSignal driveForward = DriveSignal.getNeutralSignal();
 		
-		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, Gains.aegirDriveMotionMagicGains,
-				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, Gains.aegirDriveMotionMagicGains,
-				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
+		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, Gains.steikShortDriveMotionMagicGains,
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, Gains.steikShortDriveMotionMagicGains,
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		
 		CANTalonRoutine routine = new CANTalonRoutine(driveForward, true);
 		return routine;

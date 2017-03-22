@@ -65,7 +65,7 @@ public class Robot extends IterativeRobot {
 		} catch (NullPointerException e) {
 			mLogger.logRobotThread("Auto: "+e.getMessage());
 		}
-		if (Constants.kRobotName == Constants.RobotName.STEIK || Constants.kRobotName == Constants.RobotName.AEGIR) {
+		if (Constants.kRobotName == Constants.RobotName.STEIK) {
 			try {
 				mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSlider, mSpatula, mIntake, mClimber);
 			} catch (Exception e) {

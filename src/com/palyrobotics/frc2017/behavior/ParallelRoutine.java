@@ -62,10 +62,10 @@ public class ParallelRoutine extends Routine {
 
 	@Override
 	public String getName() {
-		String name = "ParallelRoutine of ";
+		String name = "ParallelRoutine of (";
 		for(Routine routine: mRoutines) {
 			name += (routine.getName() + " ");
 		}
-		return name;
+		return name + ")";
 	}
 }

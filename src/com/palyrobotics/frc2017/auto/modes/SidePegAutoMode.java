@@ -25,7 +25,6 @@ import javax.sound.midi.SysexMessage;
  * Created by Nihar on 2/11/17.
  * Goes for side peg autonomous
  * Configured for left vs right
- * Can use a gyro bang bang or an encoder turn angle loop
  */
 public class SidePegAutoMode extends AutoModeBase {
 	// Represents the peg we are going for
@@ -33,37 +32,35 @@ public class SidePegAutoMode extends AutoModeBase {
 		RED_RIGHT, BLUE_RIGHT,
 		RED_LEFT, BLUE_LEFT
 	}
-	
+
+	// Store configuration on construction
 	private final SideAutoVariant mVariant;
-	private final boolean mShouldCenterSlider;
-	private final boolean mShouldUseGyro;
+	private final boolean mShouldMoveSlider;
 	private final boolean mBackup;
+	
 	private SequentialRoutine mSequentialRoutine;
 
-	private Gains mGains;
-	
-	private DriveSignal driveForward = DriveSignal.getNeutralSignal();
-	private DriveSignal driveToAirship = DriveSignal.getNeutralSignal();
-	private DriveSignal driveBackup = DriveSignal.getNeutralSignal();
-	private DriveSignal driveReturn = DriveSignal.getNeutralSignal();
-	
-	public SidePegAutoMode(SideAutoVariant direction, boolean shouldCenterSlider,
-						   boolean shouldUseGyro, boolean backup) {
+	// Long distance vs short distance
+	private Gains mLongGains, mShortGains;
+
+	public SidePegAutoMode(SideAutoVariant direction, boolean shouldMoveSlider,
+			boolean shouldUseGyro, boolean backup) {
 		mVariant = direction;
-		mShouldCenterSlider = shouldCenterSlider;
-		mShouldUseGyro = shouldUseGyro;
+		mShouldMoveSlider = shouldMoveSlider;
 		mBackup = backup;
 
 		if(Constants.kRobotName == Constants.RobotName.DERICA) {
-			mGains = Gains.dericaPosition;
+			mLongGains = Gains.dericaPosition;
+			mShortGains = Gains.dericaPosition;
 		} else {
-			mGains = (Constants.kRobotName == Constants.RobotName.STEIK) ? Gains.steikPosition : Gains.aegirDriveMotionMagicGains;
+			mLongGains = Gains.steikLongDriveMotionMagicGains;
+			mShortGains = Gains.steikShortDriveMotionMagicGains;
 		}
 	}
 
 	@Override
 	public Routine getRoutine() {
-		if (mShouldCenterSlider) {
+		if (mShouldMoveSlider) {
 			ArrayList<Routine> parallel = new ArrayList<>();
 			parallel.add(new SliderDistancePositioningAutocorrectRoutine(SliderTarget.CENTER));
 			parallel.add(mSequentialRoutine);
@@ -78,161 +75,173 @@ public class SidePegAutoMode extends AutoModeBase {
 		Logger.getInstance().logRobotThread("Starting "+this.toString()+" Auto Mode");
 
 		ArrayList<Routine> sequence = new ArrayList<>();
+
+		sequence.add(getDriveForward());
+
+		// NOTE: switch case falling, split by lefts vs rights
+		switch (mVariant) {
+		case RED_LEFT:
+		case BLUE_LEFT:
+			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
+			break;
+		case RED_RIGHT:
+		case BLUE_RIGHT:
+			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
+			break;
+		}
 		
-		// NOTE: Intentional switch case falling
+		sequence.add(getDriveToAirship());
+		sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
+
+		if (mBackup) {
+			sequence.add(getBackup(SliderTarget.AUTO_LEFT));
+			sequence.add(getBackup(SliderTarget.AUTO_RIGHT));
+		}
+
+		mSequentialRoutine = new SequentialRoutine(sequence);
+	}
+
+	private CANTalonRoutine getDriveForward() {
+		DriveSignal driveForward = DriveSignal.getNeutralSignal();
 		// For Red Left = Blue Right, Red Right = Blue Left
 		double driveForwardSetpoint;
 		switch (mVariant) {
-			// loading station side
-			case RED_LEFT:
-				driveForwardSetpoint = Constants.kRedLoadingStationForwardDistanceInches *
-				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-						: Constants.kDriveTicksPerInch);
-				break;
-			case BLUE_RIGHT:
-				driveForwardSetpoint = Constants.kBlueLoadingStationForwardDistanceInches *
-					((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-							: Constants.kDriveTicksPerInch);
-				break;
+		// loading station side
+		case RED_LEFT:
+			driveForwardSetpoint = Constants.kRedLoadingStationForwardDistanceInches *
+			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+					: Constants.kDriveTicksPerInch);
+			break;
+		case BLUE_RIGHT:
+			driveForwardSetpoint = Constants.kBlueLoadingStationForwardDistanceInches *
+			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+					: Constants.kDriveTicksPerInch);
+			break;
 			// boiler side
-			case RED_RIGHT:
-				driveForwardSetpoint = Constants.kRedBoilerForwardDistanceInches *
-				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-						: Constants.kDriveTicksPerInch);
-				break;
-			case BLUE_LEFT:
-				driveForwardSetpoint = Constants.kBlueBoilerForwardDistanceInches *
-					((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-							: Constants.kDriveTicksPerInch);
-				break;
-			default:
-				System.err.println("What in tarnation no side peg distance");
-				driveForwardSetpoint = 0;
-				break;
+		case RED_RIGHT:
+			driveForwardSetpoint = Constants.kRedBoilerForwardDistanceInches *
+			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+					: Constants.kDriveTicksPerInch);
+			break;
+		case BLUE_LEFT:
+			driveForwardSetpoint = Constants.kBlueBoilerForwardDistanceInches *
+			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+					: Constants.kDriveTicksPerInch);
+			break;
+		default:
+			System.err.println("What in tarnation no side peg distance");
+			driveForwardSetpoint = 0;
+			break;
 		}
-		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mGains,
-				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, mGains,
-				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-		sequence.add(new CANTalonRoutine(driveForward, true));
-		// Added drive dist sequence
+		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
+				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
+		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
+				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		
-		// NOTE: switch case falling, split by lefts vs rights
-		switch (mVariant) {
-			case RED_LEFT:
-			case BLUE_LEFT:
-				if (mShouldUseGyro) {
-					sequence.add(new SafetyTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
-				} else {
-					sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
-				}
-				break;
-			case RED_RIGHT:
-			case BLUE_RIGHT:
-				if (mShouldUseGyro) {
-					sequence.add(new SafetyTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
-				} else {
-					sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
-				}
-				break;
-		}
-
-		double driveToAirshipSetpoint = 0;
-		switch (mVariant) {
-			// loading station side
-			case RED_LEFT:
-				driveToAirshipSetpoint = Constants.kRedLoadingStationAirshipDistanceInches *
-						((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-								: Constants.kDriveTicksPerInch);
-				break;
-			case BLUE_RIGHT:
-				driveToAirshipSetpoint = Constants.kBlueLoadingStationAirshipDistanceInches *
-						((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-								: Constants.kDriveTicksPerInch);
-				break;
-			// boiler side
-			case RED_RIGHT:
-				driveToAirshipSetpoint = Constants.kRedBoilerAirshipDistanceInches *
-						((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-								: Constants.kDriveTicksPerInch);
-				break;
-			case BLUE_LEFT:
-				driveToAirshipSetpoint = Constants.kBlueBoilerAirshipDistanceInches *
-						((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-								: Constants.kDriveTicksPerInch);
-				break;
-			default:
-				System.err.println("What in tarnation no side peg airship distance");
-				driveToAirshipSetpoint = 0;
-				break;
-		}
-		driveToAirship.leftMotor.setMotionMagic(driveToAirshipSetpoint, mGains,
-				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-		driveToAirship.rightMotor.setMotionMagic(driveToAirshipSetpoint, mGains,
-				Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-		sequence.add(new CANTalonRoutine(driveToAirship, true));
-		sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
-		
-		if (mBackup) {
-			double driveBackupSetpoint = -24 * 
-						((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-								: Constants.kDriveTicksPerInch);
-			driveBackup.leftMotor.setMotionMagic(driveBackupSetpoint, mGains, 
-					Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-			driveBackup.rightMotor.setMotionMagic(driveBackupSetpoint, mGains, 
-					Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-			
-			// drive forward same distance as backup
-			driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint, mGains, 
-					Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-			driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint, mGains, 
-					Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
-			
-			sequence.add(new CANTalonRoutine(driveBackup, true));
-			sequence.add(new SliderDistancePositioningAutocorrectRoutine(SliderTarget.AUTO_LEFT)); //move slider slightly left of center
-			sequence.add(new CANTalonRoutine(driveReturn, true));
-			sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
-			sequence.add(new CANTalonRoutine(driveBackup, true));
-			sequence.add(new SliderDistancePositioningAutocorrectRoutine(SliderTarget.AUTO_RIGHT)); //move slider slightly right of center
-			sequence.add(new CANTalonRoutine(driveReturn, true));
-			sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
-		}
-
 		Logger.getInstance().logRobotThread("Drive forward", driveForward);
-		Logger.getInstance().logRobotThread("Drive to airship", driveToAirship);
-		mSequentialRoutine = new SequentialRoutine(sequence);
+		return new CANTalonRoutine(driveForward, true);
 	}
 	
+	private CANTalonRoutine getDriveToAirship() {
+		DriveSignal driveToAirship = DriveSignal.getNeutralSignal();
+		double driveToAirshipSetpoint = 0;
+		switch (mVariant) {
+		// loading station side
+		case RED_LEFT:
+			driveToAirshipSetpoint = Constants.kRedLoadingStationAirshipDistanceInches *
+			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+					: Constants.kDriveTicksPerInch);
+			break;
+		case BLUE_RIGHT:
+			driveToAirshipSetpoint = Constants.kBlueLoadingStationAirshipDistanceInches *
+			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+					: Constants.kDriveTicksPerInch);
+			break;
+			// boiler side
+		case RED_RIGHT:
+			driveToAirshipSetpoint = Constants.kRedBoilerAirshipDistanceInches *
+			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+					: Constants.kDriveTicksPerInch);
+			break;
+		case BLUE_LEFT:
+			driveToAirshipSetpoint = Constants.kBlueBoilerAirshipDistanceInches *
+			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+					: Constants.kDriveTicksPerInch);
+			break;
+		default:
+			System.err.println("What in tarnation no side peg airship distance");
+			driveToAirshipSetpoint = 0;
+			break;
+		}
+		driveToAirship.leftMotor.setMotionMagic(driveToAirshipSetpoint, mLongGains,
+				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
+		driveToAirship.rightMotor.setMotionMagic(driveToAirshipSetpoint, mLongGains,
+				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
+		
+		Logger.getInstance().logRobotThread("Drive to airship", driveToAirship);
+		return new CANTalonRoutine(driveToAirship, true);
+	}
+	
+	private SequentialRoutine getBackup(SliderTarget target) {
+		DriveSignal driveBackup = DriveSignal.getNeutralSignal();
+		DriveSignal driveReturn = DriveSignal.getNeutralSignal();
+
+		double driveBackupSetpoint = -24 * 
+				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
+						: Constants.kDriveTicksPerInch);
+		driveBackup.leftMotor.setMotionMagic(driveBackupSetpoint, mShortGains, 
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		driveBackup.rightMotor.setMotionMagic(driveBackupSetpoint, mShortGains, 
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+
+		// drive forward same distance as backup
+		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint, mShortGains, 
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint, mShortGains, 
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		
+		// Create a routine that drives back, then moves the slider while moving back forward
+		ArrayList<Routine> sequence = new ArrayList<>();
+		sequence.add(new CANTalonRoutine(driveBackup, true));
+		
+		ArrayList<Routine> parallel = new ArrayList<>();
+		parallel.add(new SliderDistancePositioningAutocorrectRoutine(target));
+		ArrayList<Routine> sequence2 = new ArrayList<>();
+		sequence2.add(new TimeoutRoutine(2.5));
+		sequence2.add(new CANTalonRoutine(driveReturn, true));
+		parallel.add(new SequentialRoutine(sequence2));
+		
+		sequence.add(new ParallelRoutine(parallel));
+		
+		return new SequentialRoutine(sequence);
+	}
+
 	@Override
 	public String toString() {
 		String name;
 		switch (mVariant) {
-			case RED_LEFT:
-				name = "RedLeftSidePeg";
-				break;
-			case RED_RIGHT:
-				name = "RedRightSidePeg";
-				break;
-			case BLUE_LEFT:
-				name = "BlueLeftSidePeg";
-				break;
-			case BLUE_RIGHT:
-				name = "BlueRightSidePeg";
-				break;
-			default:
-				name = "SidePeg";
-				break;
+		case RED_LEFT:
+			name = "RedLeftSidePeg";
+			break;
+		case RED_RIGHT:
+			name = "RedRightSidePeg";
+			break;
+		case BLUE_LEFT:
+			name = "BlueLeftSidePeg";
+			break;
+		case BLUE_RIGHT:
+			name = "BlueRightSidePeg";
+			break;
+		default:
+			name = "SidePeg";
+			break;
 		}
-		if (mShouldCenterSlider) {
+		if (mShouldMoveSlider) {
 			name += "SliderCenter";
 		} else {
 			name += "NotSliderCenter";
 		}
-		if (mShouldUseGyro) {
-			name += "Gyro";
-		} else {
-			name += "EncoderTurn";
-		}
+		name += "EncoderTurn";
 		if (mBackup) {
 			name += "Backup";
 		} else {

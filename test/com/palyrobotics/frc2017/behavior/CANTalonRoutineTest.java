@@ -23,9 +23,9 @@ public class CANTalonRoutineTest {
 		// Construct arbitrary offboard position loop drive signal
 		DriveSignal mSignal = DriveSignal.getNeutralSignal();
 		System.out.println(1);
-		mSignal.leftMotor.setPosition(10, Gains.aegirDriveMotionMagicGains);
+		mSignal.leftMotor.setPosition(10, Gains.steikShortDriveMotionMagicGains);
 		System.out.println(1);
-		mSignal.rightMotor.setPosition(10, Gains.aegirDriveMotionMagicGains);
+		mSignal.rightMotor.setPosition(10, Gains.steikShortDriveMotionMagicGains);
 		System.out.println(1);
 		CANTalonRoutine mRoutine = new CANTalonRoutine(mSignal);
 		System.out.println(1);
