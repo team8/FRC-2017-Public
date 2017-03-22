@@ -9,6 +9,7 @@ import com.palyrobotics.frc2017.behavior.routines.drive.BBTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.SafetyTurnAngleRoutine;
+import com.palyrobotics.frc2017.behavior.routines.scoring.SliderDistanceCustomPositioningRoutine;
 import com.palyrobotics.frc2017.behavior.routines.scoring.SliderDistancePositioningAutocorrectRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
@@ -94,8 +95,8 @@ public class SidePegAutoMode extends AutoModeBase {
 		sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
 
 		if (mBackup) {
-			sequence.add(getBackup(SliderTarget.AUTO_LEFT));
-			sequence.add(getBackup(SliderTarget.AUTO_RIGHT));
+			sequence.add(getBackup(-0.5));
+			sequence.add(getBackup(0.5));
 		}
 
 		mSequentialRoutine = new SequentialRoutine(sequence);
@@ -182,7 +183,7 @@ public class SidePegAutoMode extends AutoModeBase {
 		return new CANTalonRoutine(driveToAirship, true);
 	}
 	
-	private SequentialRoutine getBackup(SliderTarget target) {
+	private SequentialRoutine getBackup(double target) {
 		DriveSignal driveBackup = DriveSignal.getNeutralSignal();
 		DriveSignal driveReturn = DriveSignal.getNeutralSignal();
 
@@ -203,7 +204,7 @@ public class SidePegAutoMode extends AutoModeBase {
 		// Create a routine that drives back, then moves the slider while moving back forward
 		ArrayList<Routine> sequence = new ArrayList<>();
 		sequence.add(new CANTalonRoutine(driveBackup, true));		
-		sequence.add(new SliderDistancePositioningAutocorrectRoutine(target));
+		sequence.add(new SliderDistanceCustomPositioningRoutine(target));
 		sequence.add(new CANTalonRoutine(driveReturn, true));
 		sequence.add(new TimeoutRoutine(2.5));
 		

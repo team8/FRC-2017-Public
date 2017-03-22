@@ -38,15 +38,14 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		WAITING,
 		AUTOMATIC_POSITIONING,
 		VISION_POSITIONING,			// unused
+		CUSTOM_POSITIONING
 	}
 	
 	public enum SliderTarget {
 		NONE,
 		LEFT,
 		CENTER,
-		RIGHT,
-		AUTO_LEFT,
-		AUTO_RIGHT
+		RIGHT
 	}
 	
 	private SliderState mState;
@@ -82,13 +81,9 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		mEncoderTargetPositions.put(SliderTarget.LEFT, -1.0);
 		mEncoderTargetPositions.put(SliderTarget.CENTER, 0.0);
 		mEncoderTargetPositions.put(SliderTarget.RIGHT, 1.0);
-		mEncoderTargetPositions.put(SliderTarget.AUTO_LEFT, -0.5);
-		mEncoderTargetPositions.put(SliderTarget.AUTO_RIGHT, 0.5);
 		mPotentiometerTargetPositions.put(SliderTarget.LEFT, 0.0);
 		mPotentiometerTargetPositions.put(SliderTarget.CENTER, 0.0);
 		mPotentiometerTargetPositions.put(SliderTarget.RIGHT, 0.0);
-		mPotentiometerTargetPositions.put(SliderTarget.AUTO_LEFT, 0.0);
-		mPotentiometerTargetPositions.put(SliderTarget.AUTO_RIGHT, 0.0);
 		
 		sliderPotentiometer = new DashboardValue("slider-pot");
 		sliderDist = new DashboardValue("sliderDistance");
@@ -163,6 +158,22 @@ public class Slider extends Subsystem implements SubsystemLoop {
 				break;
 			case VISION_POSITIONING:	// unused
 				setSetpointsVision();
+				break;
+			case CUSTOM_POSITIONING:
+				if(!isEncoderFunctional) {
+					System.err.println("No custom positioning with potentiometer");
+					break;
+				}
+				if (!commands.robotSetpoints.sliderCustomSetpoint.isPresent()) {
+					System.err.println("No setpoint");
+					break;
+				}
+				if (onTargetEncoderPositioning()) {
+					mState = SliderState.IDLE;
+					mTarget = SliderTarget.NONE;
+				} else {
+					mOutput.setPosition(commands.robotSetpoints.sliderCustomSetpoint.get(), mEncoderGains);
+				}
 				break;
 		}
 		
