@@ -44,7 +44,9 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		NONE,
 		LEFT,
 		CENTER,
-		RIGHT
+		RIGHT,
+		AUTO_LEFT,
+		AUTO_RIGHT
 	}
 	
 	private SliderState mState;
@@ -82,9 +84,13 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		mEncoderTargetPositions.put(SliderTarget.LEFT, -1.0);
 		mEncoderTargetPositions.put(SliderTarget.CENTER, 0.0);
 		mEncoderTargetPositions.put(SliderTarget.RIGHT, 1.0);
+		mEncoderTargetPositions.put(SliderTarget.AUTO_RIGHT, -0.2);
+		mEncoderTargetPositions.put(SliderTarget.AUTO_RIGHT, 0.2);
 		mPotentiometerTargetPositions.put(SliderTarget.LEFT, 0.0);
 		mPotentiometerTargetPositions.put(SliderTarget.CENTER, 0.0);
 		mPotentiometerTargetPositions.put(SliderTarget.RIGHT, 0.0);
+		mPotentiometerTargetPositions.put(SliderTarget.AUTO_RIGHT, 0.0);
+		mPotentiometerTargetPositions.put(SliderTarget.AUTO_RIGHT, 0.0);
 		
 		sliderPotentiometer = new DashboardValue("slider-pot");
 		sliderDist = new DashboardValue("sliderDistance");

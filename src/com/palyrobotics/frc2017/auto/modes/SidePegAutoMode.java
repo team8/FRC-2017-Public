@@ -189,11 +189,11 @@ public class SidePegAutoMode extends AutoModeBase {
 					Gains.kAegirDriveMotionMagicCruiseVelocity, Gains.kAegirDriveMotionMagicMaxAcceleration);
 			
 			sequence.add(new CANTalonRoutine(driveBackup, true));
-			//TODO: move slider one way
+			sequence.add(new SliderDistancePositioningAutocorrectRoutine(SliderTarget.AUTO_LEFT)); //move slider slightly left of center
 			sequence.add(new CANTalonRoutine(driveReturn, true));
 			sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
 			sequence.add(new CANTalonRoutine(driveBackup, true));
-			//TODO: move slider other way
+			sequence.add(new SliderDistancePositioningAutocorrectRoutine(SliderTarget.AUTO_RIGHT)); //move slider slightly right of center
 			sequence.add(new CANTalonRoutine(driveReturn, true));
 			sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
 		}

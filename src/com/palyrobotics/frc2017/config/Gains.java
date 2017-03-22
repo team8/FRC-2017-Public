@@ -59,7 +59,7 @@ public class Gains {
 	// Drive Motion Magic offboard control loop
 	// Max speed 36 in/s Max accel 36 in/s^2
 	public static final double kAegirDriveMotionMagicCruiseVelocity = 144 * Constants.kDriveSpeedUnitConversion;
-	public static final double kAegirDriveMotionMagicMaxAcceleration = 288 * Constants.kDriveSpeedUnitConversion;
+	public static final double kAegirDriveMotionMagicMaxAcceleration = 216 * Constants.kDriveSpeedUnitConversion;
 	public static final double kAegirDriveMotionMagickP = 4.5;
 	public static final double kAegirDriveMotionMagickI = 0.01;
 	public static final double kAegirDriveMotionMagickD = 150;
