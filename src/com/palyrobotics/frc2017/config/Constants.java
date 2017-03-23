@@ -46,9 +46,10 @@ public class Constants extends ConstantsBase {
 	public static double kDriveSpeedUnitConversion = 360 / (3.95 * Math.PI * 10);
 
 
-	// Steik right 2172; left 3452;
-	public static final double kPotentiometerRightPos = 2036;
-	public static final double kPotentiometerLeftPos = 3314;
+	// Aegir: 2172 RIGHT  |  3452 LEFT
+	// Vali: 2036 RIGHT | 3314 LEFT
+	public static final double kPotentiometerRightPos = 2172;
+	public static final double kPotentiometerLeftPos = 3452;
 	public static final double kPotentiometerCenterPos = (kPotentiometerRightPos + kPotentiometerLeftPos) / 2;
 	
 	// Tolerances

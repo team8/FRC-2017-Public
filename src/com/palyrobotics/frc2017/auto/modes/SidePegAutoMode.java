@@ -202,16 +202,10 @@ public class SidePegAutoMode extends AutoModeBase {
 		
 		// Create a routine that drives back, then moves the slider while moving back forward
 		ArrayList<Routine> sequence = new ArrayList<>();
-		sequence.add(new CANTalonRoutine(driveBackup, true));
-		
-		ArrayList<Routine> parallel = new ArrayList<>();
-		parallel.add(new SliderDistancePositioningAutocorrectRoutine(target));
-		ArrayList<Routine> sequence2 = new ArrayList<>();
-		sequence2.add(new TimeoutRoutine(2.5));
-		sequence2.add(new CANTalonRoutine(driveReturn, true));
-		parallel.add(new SequentialRoutine(sequence2));
-		
-		sequence.add(new ParallelRoutine(parallel));
+		sequence.add(new CANTalonRoutine(driveBackup, true));		
+		sequence.add(new SliderDistancePositioningAutocorrectRoutine(target));
+		sequence.add(new CANTalonRoutine(driveReturn, true));
+		sequence.add(new TimeoutRoutine(2.5));
 		
 		return new SequentialRoutine(sequence);
 	}

@@ -38,7 +38,7 @@ public class CenterPegAutoMode extends AutoModeBase {
 		if(Constants.kRobotName == Constants.RobotName.DERICA) {
 			mGains = Gains.dericaPosition;
 		} else {
-			mGains = Gains.steikLongDriveMotionMagicGains;
+			mGains = Gains.steikShortDriveMotionMagicGains;
 		}
 	}
 
@@ -60,9 +60,9 @@ public class CenterPegAutoMode extends AutoModeBase {
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 						: Constants.kDriveTicksPerInch);
 		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint+100, mGains,
-			Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
+			Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, mGains,
-				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		
 		sequence.add(new CANTalonRoutine(driveForward, true));
 		sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
