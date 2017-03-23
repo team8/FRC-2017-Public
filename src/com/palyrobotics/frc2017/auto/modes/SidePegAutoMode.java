@@ -119,7 +119,7 @@ public class SidePegAutoMode extends AutoModeBase {
 			break;
 			// boiler side
 		case RED_RIGHT:
-			driveForwardSetpoint = Constants.kRedBoilerForwardDistanceInches *
+			driveForwardSetpoint = Constants.k254BoilerForwardDistanceInches *
 			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 					: Constants.kDriveTicksPerInch);
 			break;
@@ -159,7 +159,7 @@ public class SidePegAutoMode extends AutoModeBase {
 			break;
 			// boiler side
 		case RED_RIGHT:
-			driveToAirshipSetpoint = Constants.kRedBoilerAirshipDistanceInches *
+			driveToAirshipSetpoint = Constants.k254BoilerAirshipDistanceInches *
 			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 					: Constants.kDriveTicksPerInch);
 			break;

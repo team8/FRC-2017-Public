@@ -35,7 +35,7 @@ public class Gains {
 			kSteikShortDriveMotionMagickF, kSteikShortDriveMotionMagickIzone, kSteikShortDriveMotionMagickRampRate);
 	
 	// Long distance more aggressive, 144 in/s, 120 in/s^2 accel
-	public static final double kSteikLongDriveMotionMagicCruiseVelocity = 60 * Constants.kDriveSpeedUnitConversion;
+	public static final double kSteikLongDriveMotionMagicCruiseVelocity = 120 * Constants.kDriveSpeedUnitConversion;
 	public static final double kSteikLongDriveMotionMagicMaxAcceleration = 60 * Constants.kDriveSpeedUnitConversion;
 	public static final double kSteikLongDriveMotionMagickP = 4.5;
 	public static final double kSteikLongDriveMotionMagickI = 0.01;
