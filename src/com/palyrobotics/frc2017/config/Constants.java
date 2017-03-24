@@ -44,7 +44,9 @@ public class Constants extends ConstantsBase {
 	public static double kDriveTicksPerInch = 360 / (3.95 * Math.PI);
 	public static double kDriveInchesPerDegree = 0.97*21.5/90;
 	public static double kDriveSpeedUnitConversion = 360 / (3.95 * Math.PI * 10);
-
+	
+	public static double kSliderTicksPerInch = 900;
+	public static double kSliderRevolutionsPerInch = 0.218099;
 
 	// Aegir: 2172 RIGHT  |  3452 LEFT
 	// Vali: 2036 RIGHT | 3314 LEFT

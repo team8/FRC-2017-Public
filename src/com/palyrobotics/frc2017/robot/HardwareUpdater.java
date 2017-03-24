@@ -256,7 +256,7 @@ class HardwareUpdater {
 			robotState.climberEncoder = HardwareAdapter.ClimberHardware.getInstance().climberTalon.getPosition();
 		}
 		
-		robotState.sliderPosition = HardwareAdapter.SliderHardware.getInstance().sliderTalon.getPosition();
+		robotState.sliderPosition = HardwareAdapter.SliderHardware.getInstance().sliderTalon.getEncPosition();
 	}
 
 	/**

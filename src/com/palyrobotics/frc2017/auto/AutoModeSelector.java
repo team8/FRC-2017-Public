@@ -20,7 +20,7 @@ public class AutoModeSelector {
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
-	int selectedIndex = 13;
+	int selectedIndex = 0;
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
 			instance = new AutoModeSelector();
@@ -37,7 +37,7 @@ public class AutoModeSelector {
 	}
 
 	private AutoModeSelector() {
-//		registerAutonomous(new TestAutoMode());
+		registerAutonomous(new TestAutoMode());
 
   /*0*/ registerAutonomous(new DoNothingAutoMode());
 		

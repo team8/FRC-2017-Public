@@ -43,6 +43,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	
 	public enum SliderTarget {
 		NONE,
+		CUSTOM,
 		LEFT,
 		CENTER,
 		RIGHT
@@ -167,16 +168,20 @@ public class Slider extends Subsystem implements SubsystemLoop {
 				if (!commands.robotSetpoints.sliderCustomSetpoint.isPresent()) {
 					System.err.println("No setpoint");
 					break;
+				} else {
+					mTarget = SliderTarget.CUSTOM;
 				}
 				if (onTargetEncoderPositioning()) {
+					System.out.println("on target");
 					mState = SliderState.IDLE;
 					mTarget = SliderTarget.NONE;
 				} else {
+					mTarget = SliderTarget.CUSTOM;
+					System.out.println("Custom setpoint "+ commands.robotSetpoints.sliderCustomSetpoint.get());
 					mOutput.setPosition(commands.robotSetpoints.sliderCustomSetpoint.get(), mEncoderGains);
 				}
 				break;
 		}
-		
 	}
 	
 	/**
@@ -208,6 +213,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	 * @return if the control loop is on target
 	 */
 	private boolean onTargetEncoderPositioning() {
+		this.printStatus();
 		if (mTarget == SliderTarget.NONE) {
 			return true;
 		}

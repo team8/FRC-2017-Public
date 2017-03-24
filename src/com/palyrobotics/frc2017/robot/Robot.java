@@ -52,7 +52,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		System.out.println("Start robotInit() for "+Constants.kRobotName.toString());
 		DashboardManager.getInstance().robotInit();
-		mLogger.setFileName("Qual53");
+//		mLogger.setFileName("Qual53");
 		mLogger.start();
 		mLogger.logRobotThread("robotInit() start");
 		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);

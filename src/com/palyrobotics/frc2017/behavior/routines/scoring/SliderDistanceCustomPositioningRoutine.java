@@ -18,9 +18,11 @@ public class SliderDistanceCustomPositioningRoutine extends Routine {
 	// Whether this routine is allowed to run or not
 	private boolean mAllowed;
 	private double target;
+	private boolean updated;
 	
 	public SliderDistanceCustomPositioningRoutine(double target) {
 		this.target = target;
+		updated = false;
 	}
 	
 	@Override
@@ -30,20 +32,23 @@ public class SliderDistanceCustomPositioningRoutine extends Routine {
 		} else {
 			mAllowed = true;
 		}
-		System.out.println("Non autocorrect");
 	}
 
 	@Override
 	public Commands update(Commands commands) {
+		updated = true;
 		if (mAllowed) {
 			commands.wantedSliderState = Slider.SliderState.CUSTOM_POSITIONING;
+			commands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.CUSTOM;
 			commands.robotSetpoints.sliderCustomSetpoint = Optional.of(target);
 		} else {
 			commands.wantedSliderState = Slider.SliderState.IDLE;
+			commands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.NONE;
 			commands.robotSetpoints.sliderCustomSetpoint = Optional.empty();
 		}
 		try {
 			slider.run(commands, this);
+			slider.printStatus();
 		} catch (IllegalAccessException e) {
 			System.err.println("Slider position routine rejected!");
 			e.printStackTrace();
@@ -53,6 +58,7 @@ public class SliderDistanceCustomPositioningRoutine extends Routine {
 
 	@Override
 	public Commands cancel(Commands commands) {
+		System.out.println("custom routine cancel called");
 		commands.wantedSliderState = Slider.SliderState.IDLE;
 		commands.robotSetpoints.sliderCustomSetpoint = Optional.empty();
 		try {
@@ -65,7 +71,7 @@ public class SliderDistanceCustomPositioningRoutine extends Routine {
 
 	@Override
 	public boolean finished() {
-		return !mAllowed || slider.onTarget();
+		return updated && (!mAllowed || slider.onTarget());
 	}
 
 	@Override

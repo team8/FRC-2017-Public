@@ -9,6 +9,7 @@ import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.SafetyTurnAngleRoutine;
+import com.palyrobotics.frc2017.behavior.routines.scoring.SliderDistanceCustomPositioningRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.Gains;
@@ -23,16 +24,17 @@ public class TestAutoMode extends AutoModeBase {
 
 	@Override
 	public Routine getRoutine() {
-		double driveForwardSetpoint = 75*Constants.kDriveTicksPerInch; //inches
-		DriveSignal driveForward = DriveSignal.getNeutralSignal();
-		
-		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, Gains.steikShortDriveMotionMagicGains,
-				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, Gains.steikShortDriveMotionMagicGains,
-				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		
-		CANTalonRoutine routine = new CANTalonRoutine(driveForward, true);
-		return routine;
+//		double driveForwardSetpoint = 75*Constants.kDriveTicksPerInch; //inches
+//		DriveSignal driveForward = DriveSignal.getNeutralSignal();
+//		
+//		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, Gains.steikShortDriveMotionMagicGains,
+//				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+//		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, Gains.steikShortDriveMotionMagicGains,
+//				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+//		
+//		CANTalonRoutine routine = new CANTalonRoutine(driveForward, true);
+//		return routine;
+		return new SliderDistanceCustomPositioningRoutine(5 * Constants.kSliderRevolutionsPerInch);
 //		EncoderTurnAngleRoutine routine = new EncoderTurnAngleRoutine(90);
 //		EncoderTurnAngleRoutine routine2 = new EncoderTurnAngleRoutine(60);
 //		ArrayList<Routine> sequence = new ArrayList<Routine>();
