@@ -9,8 +9,8 @@ import com.palyrobotics.frc2017.behavior.routines.drive.BBTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.SafetyTurnAngleRoutine;
-import com.palyrobotics.frc2017.behavior.routines.scoring.SliderDistanceCustomPositioningRoutine;
-import com.palyrobotics.frc2017.behavior.routines.scoring.SliderDistancePositioningAutocorrectRoutine;
+import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
+import com.palyrobotics.frc2017.behavior.routines.scoring.AutocorrectPositioningSliderRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.Gains;
@@ -63,7 +63,7 @@ public class SidePegAutoMode extends AutoModeBase {
 	public Routine getRoutine() {
 		if (mShouldMoveSlider) {
 			ArrayList<Routine> parallel = new ArrayList<>();
-			parallel.add(new SliderDistancePositioningAutocorrectRoutine(SliderTarget.CENTER));
+			parallel.add(new AutocorrectPositioningSliderRoutine(SliderTarget.CENTER));
 			parallel.add(mSequentialRoutine);
 			return new ParallelRoutine(parallel);
 		}
@@ -204,7 +204,7 @@ public class SidePegAutoMode extends AutoModeBase {
 		// Create a routine that drives back, then moves the slider while moving back forward
 		ArrayList<Routine> sequence = new ArrayList<>();
 		sequence.add(new CANTalonRoutine(driveBackup, true));		
-		sequence.add(new SliderDistanceCustomPositioningRoutine(target));
+		sequence.add(new CustomPositioningSliderRoutine(target));
 		sequence.add(new CANTalonRoutine(driveReturn, true));
 		sequence.add(new TimeoutRoutine(2.5));
 		

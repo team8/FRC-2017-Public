@@ -15,6 +15,7 @@ import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Subsystem;
 import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
 import com.palyrobotics.frc2017.util.logger.Logger;
+import com.palyrobotics.frc2017.vision.AndroidConnectionHelper;
 
 /**
  * Created by Nihar on 1/28/17.
@@ -44,6 +45,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	public enum SliderTarget {
 		NONE,
 		CUSTOM,
+		VISION,
 		LEFT,
 		CENTER,
 		RIGHT
@@ -158,7 +160,12 @@ public class Slider extends Subsystem implements SubsystemLoop {
 				}
 				break;
 			case VISION_POSITIONING:	// unused
-				setSetpointsVision();
+				mTarget = SliderTarget.VISION;
+				if (isEncoderFunctional) {
+					setSetpointsVision();
+				} else {
+					System.err.println("Attempting vision positioning without encoder!");
+				}
 				break;
 			case CUSTOM_POSITIONING:
 				if(!isEncoderFunctional) {
@@ -177,8 +184,10 @@ public class Slider extends Subsystem implements SubsystemLoop {
 					mTarget = SliderTarget.NONE;
 				} else {
 					mTarget = SliderTarget.CUSTOM;
-					System.out.println("Custom setpoint "+ commands.robotSetpoints.sliderCustomSetpoint.get());
-					mOutput.setPosition(commands.robotSetpoints.sliderCustomSetpoint.get(), mEncoderGains);
+					double setpoint = commands.robotSetpoints.sliderCustomSetpoint.get() * Constants.kSliderRevolutionsPerInch;
+					System.out.println("Custom setpoint in inches"+ commands.robotSetpoints.sliderCustomSetpoint.get());
+					System.out.println("Custom setpoint in revolutions " + setpoint);
+					mOutput.setPosition(setpoint, mEncoderGains);
 				}
 				break;
 		}
@@ -272,7 +281,14 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	 * Updates the control loop using vision targeting
 	 */
 	private void setSetpointsVision() {
-		//TODO: actually write this
+		if (onTargetEncoderPositioning()) {
+			mState = SliderState.IDLE;
+			mTarget = SliderTarget.NONE;
+		}
+		else {
+			double setpoint = AndroidConnectionHelper.getInstance().x_dist * Constants.kSliderRevolutionsPerInch;
+			mOutput.setPosition(setpoint, mEncoderGains);
+		}
 	}
 	
 	public boolean onTarget() {

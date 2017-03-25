@@ -15,7 +15,7 @@ import com.palyrobotics.frc2017.util.Subsystem;
  * @author Prashanti, Nihar, Ailyn
  *
  */
-public class SliderDistancePositioningAutocorrectRoutine extends Routine {	
+public class AutocorrectPositioningSliderRoutine extends Routine {	
 	private enum DistancePositioningState {
 		RAISING,
 		MOVING
@@ -29,7 +29,7 @@ public class SliderDistancePositioningAutocorrectRoutine extends Routine {
 	private double startTime;
 	private static final double raiseTime = 1000;
 	
-	public SliderDistancePositioningAutocorrectRoutine(Slider.SliderTarget target) {
+	public AutocorrectPositioningSliderRoutine(Slider.SliderTarget target) {
 		mTarget = target;
 	}
 	

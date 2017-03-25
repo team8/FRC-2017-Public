@@ -1,8 +1,8 @@
 package com.palyrobotics.frc2017.robot;
 
-import com.palyrobotics.frc2017.behavior.routines.scoring.ManualSliderControlRoutine;
-import com.palyrobotics.frc2017.behavior.routines.scoring.SliderDistancePositioningAutocorrectRoutine;
-import com.palyrobotics.frc2017.behavior.routines.scoring.SliderDistancePositioningRoutine;
+import com.palyrobotics.frc2017.behavior.routines.scoring.ManualControlSliderRoutine;
+import com.palyrobotics.frc2017.behavior.routines.scoring.AutocorrectPositioningSliderRoutine;
+import com.palyrobotics.frc2017.behavior.routines.scoring.PositioningSliderRoutine;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.DoubleClickTimer;
 import com.palyrobotics.frc2017.util.logger.Logger;
@@ -87,26 +87,26 @@ public class OperatorInterface {
 		// Slider
 		if (mSliderStick.getRawButton(2)) {	// opposite of preferred thumb position
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.NONE;
-			newCommands.addWantedRoutine(new ManualSliderControlRoutine());
+			newCommands.addWantedRoutine(new ManualControlSliderRoutine());
 		} else if (mSliderStick.getRawButton(3)) {	// preferred thumb position
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.CENTER;
-			newCommands.addWantedRoutine(new SliderDistancePositioningRoutine());
+			newCommands.addWantedRoutine(new PositioningSliderRoutine());
 		} else if (mSliderStick.getRawButton(4)) {
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.LEFT;
 			if (sliderLeft.twice()) {
-				newCommands.addWantedRoutine(new SliderDistancePositioningRoutine());
+				newCommands.addWantedRoutine(new PositioningSliderRoutine());
 			} else {
-				newCommands.addWantedRoutine(new SliderDistancePositioningAutocorrectRoutine(Slider.SliderTarget.LEFT));
+				newCommands.addWantedRoutine(new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.LEFT));
 			}
 		} else if (mSliderStick.getRawButton(5)) {
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.RIGHT;
 			if (sliderRight.twice()) {
-				newCommands.addWantedRoutine(new SliderDistancePositioningRoutine());
+				newCommands.addWantedRoutine(new PositioningSliderRoutine());
 			} else {
-				newCommands.addWantedRoutine(new SliderDistancePositioningAutocorrectRoutine(Slider.SliderTarget.RIGHT));
+				newCommands.addWantedRoutine(new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.RIGHT));
 			}
 		} else if (Slider.getInstance().getSliderState() == Slider.SliderState.IDLE) {
-			newCommands.addWantedRoutine(new ManualSliderControlRoutine());
+			newCommands.addWantedRoutine(new ManualControlSliderRoutine());
 		}
 
 		// Spatula

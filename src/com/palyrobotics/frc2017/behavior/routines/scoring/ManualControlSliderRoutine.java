@@ -6,7 +6,7 @@ import com.palyrobotics.frc2017.subsystems.Slider;
 import com.palyrobotics.frc2017.subsystems.Slider.SliderState;
 import com.palyrobotics.frc2017.util.Subsystem;
 
-public class ManualSliderControlRoutine extends Routine {	
+public class ManualControlSliderRoutine extends Routine {	
 	@Override
 	public void start() {	
 //		System.out.println("Manually controlling slider");
