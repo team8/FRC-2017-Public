@@ -35,12 +35,14 @@ public class CenterPegAutoMode extends AutoModeBase {
 	private final double backupDistance = 10;	// distance in inches
 	private final double pilotWaitTime = 2.5;	// time in seconds
 
-	public CenterPegAutoMode(Alliance alliance, PostCenterAutoVariant direction) {
+	public CenterPegAutoMode(Alliance alliance, PostCenterAutoVariant direction, boolean backup) {
 		mVariant = direction;
 		mAlliance = alliance;
 		initialSliderPosition = (alliance == Alliance.BLUE) ? 0 : 0;
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
 		mLongGains = Gains.steikLongDriveMotionMagicGains;
+
+		mBackup = backup;
 	}
 
 	@Override
@@ -75,6 +77,7 @@ public class CenterPegAutoMode extends AutoModeBase {
 		if (mBackup) {
 			sequence.add(getBackup(2));		// Move slider slightly to the right
 			sequence.add(new TimeoutRoutine(pilotWaitTime));
+			sequence.add(getBackup(-1.5));
 		}
 
 		mSequentialRoutine = new SequentialRoutine(sequence);

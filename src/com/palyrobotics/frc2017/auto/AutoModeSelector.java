@@ -20,7 +20,7 @@ public class AutoModeSelector {
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
-	int selectedIndex = 18;
+	int selectedIndex = 2;
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
 			instance = new AutoModeSelector();
@@ -42,51 +42,14 @@ public class AutoModeSelector {
   /*0*/ registerAutonomous(new DoNothingAutoMode());
 		
   /*1*/ registerAutonomous(new BaseLineAutoMode(CenterPegAutoMode.Alliance.BLUE));
-  /*2*/ registerAutonomous(new BaseLineAutoMode(CenterPegAutoMode.Alliance.RED));
 
-  /*3*/ registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.Alliance.BLUE, CenterPegAutoMode.PostCenterAutoVariant.NOTHING));
-  /*4*/ registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.Alliance.RED, CenterPegAutoMode.PostCenterAutoVariant.NOTHING));
-
-		// side peg parameters - variant, slider, backup
-  		// blue right/red left is loading station
-  
-		// NOT BACKUP
-  /*5*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_RIGHT,
-			false,  false));
-  /*6*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_RIGHT,
-			true, false));
-  /*7*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_LEFT,
-			false, false));
-  /*8*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_LEFT,
-			true, false));
-  
-  /*9*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_RIGHT,
-			false, false));
- /*10*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_RIGHT,
-			true, false));
- /*11*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_LEFT,
-			false, false));
- /*12*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_LEFT,
-			true, false));
-
- 		//BACKUP VARIANTS, check slider centering
- /*13*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_RIGHT,
-			false, true));
- /*14*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_RIGHT,
-			true, true));
- /*15*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_LEFT,
-			false, true));
- /*16*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_LEFT,
-			true, true));
-
- /*17*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_RIGHT,
-			false, true));
- /*18*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_RIGHT,
-			true, true));
- /*19*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_LEFT,
-			false, true));
- /*20*/ registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_LEFT,
-			true, true));
+  /*2*/ registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.Alliance.BLUE, // Alliance Color
+		  										 CenterPegAutoMode.PostCenterAutoVariant.NOTHING,  // Should be NOTHING.
+		  										 false)); // Backup boolean
+		
+  /*3*/	registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_RIGHT, // Alliance color and side
+											   false,  // Should move slider?
+											   true)); // SHould backup?
 	}
 
 	/**

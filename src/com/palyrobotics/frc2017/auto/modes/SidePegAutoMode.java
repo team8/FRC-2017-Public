@@ -87,8 +87,8 @@ public class SidePegAutoMode extends AutoModeBase {
 		sequence.add(new TimeoutRoutine(pilotWaitTime));	// Wait 2.5s so pilot can pull gear out
 
 		if (mBackup) {
-			sequence.add(getBackup(1.5));	// Move slider slightly to the right
-			sequence.add(getBackup(-1.5));	// Move slider slightly to the left
+			sequence.add(getBackup(1.5));
+			sequence.add(getBackup(-1.5)); // -1.5 to compensate for the previous backup and an additional 1.5
 		}
 
 		mSequentialRoutine = new SequentialRoutine(sequence);

@@ -27,7 +27,7 @@ public class CANTalonRoutineTest {
 		System.out.println(1);
 		mSignal.rightMotor.setPosition(10, Gains.steikShortDriveMotionMagicGains);
 		System.out.println(1);
-		CANTalonRoutine mRoutine = new CANTalonRoutine(mSignal);
+		CANTalonRoutine mRoutine = new CANTalonRoutine(mSignal, false);
 		System.out.println(1);
 		RoutineManager routineManager = new RoutineManager();
 		System.out.println(1);
