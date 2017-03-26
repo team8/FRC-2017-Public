@@ -222,13 +222,13 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	 * @return if the control loop is on target
 	 */
 	private boolean onTargetEncoderPositioning() {
-		this.printStatus();
 		if (mTarget == SliderTarget.NONE) {
 			return true;
 		}
 		if (!mRobotState.sliderClosedLoopError.isPresent()) {
 			return false;
 		}
+		System.out.println(mRobotState.sliderClosedLoopError.get());
 		return Math.abs(mRobotState.sliderClosedLoopError.get()) < kEncoderTolerance && mRobotState.sliderVelocity == 0;
 	}
 	
@@ -240,6 +240,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 			mState = SliderState.IDLE;
 			mTarget = SliderTarget.NONE;
 		} else {
+			System.out.println("Target "+mEncoderTargetPositions.get(mTarget));
 			mOutput.setPosition(mEncoderTargetPositions.get(mTarget), mEncoderGains);
 		}
 	}

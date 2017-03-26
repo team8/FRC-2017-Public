@@ -10,11 +10,17 @@
 	<lib name="guava-18.0.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/guava-18.0.jar!/"/>
 	</lib>
+	<lib name="networktables" scope="COMPILE">
+		<srcroot url="jar://$networktables.sources$!/"/>
+	</lib>
 	<lib name="opencv" scope="COMPILE">
-		<srcroot url="file://$opencv.sources$"/>
+		<srcroot url="jar://$opencv.sources$!/"/>
 	</lib>
 	<lib name="cscore" scope="COMPILE">
-		<srcroot url="file://$cscore.sources$"/>
+		<srcroot url="jar://$cscore.sources$!/"/>
+	</lib>
+	<lib name="wpilib" scope="COMPILE">
+		<srcroot url="jar://$wpilib.sources$!/"/>
 	</lib>
 	<lib name="mindsensors.jar" scope="COMPILE">
 		<srcroot url="jar://$MODULE_DIR$/lib/mindsensors-javadoc.jar!/"/>
@@ -33,12 +39,6 @@
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/res/junit-4.12.jar!/"/>
 	</lib>
 	<lib name="RIOdroid.jar" scope="COMPILE">
-		<srcroot url="jar://$MODULE_DIR$/lib/RIOdroid.jar!/src"/>
-		<relative-module-src project-related="jar://$PROJECT_DIR$/lib/RIOdroid.jar!/src"/>
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/RIOdroid.jar!/"/>
 	</lib>
-	<levels>
-		<level name="networktables" value="project"/>
-		<level name="wpilib" value="project"/>
-	</levels>
 </component>

@@ -5,10 +5,7 @@ import com.palyrobotics.frc2017.behavior.ParallelRoutine;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
-import com.palyrobotics.frc2017.behavior.routines.drive.BBTurnAngleRoutine;
-import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
-import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
-import com.palyrobotics.frc2017.behavior.routines.drive.SafetyTurnAngleRoutine;
+import com.palyrobotics.frc2017.behavior.routines.drive.*;
 import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
 import com.palyrobotics.frc2017.behavior.routines.scoring.AutocorrectPositioningSliderRoutine;
 import com.palyrobotics.frc2017.config.Constants;
@@ -44,8 +41,11 @@ public class SidePegAutoMode extends AutoModeBase {
 	// Long distance vs short distance
 	private Gains mLongGains, mShortGains;
 
-	public SidePegAutoMode(SideAutoVariant direction, boolean shouldMoveSlider,
-			boolean shouldUseGyro, boolean backup) {
+	private final double pilotWaitTime = 2.5; // time in seconds
+	private final double backupDistance = 15;
+	private final double backupTime = 0.4; // time to drive back for, then forwards for
+
+	public SidePegAutoMode(SideAutoVariant direction, boolean shouldMoveSlider, boolean backup) {
 		mVariant = direction;
 		mShouldMoveSlider = shouldMoveSlider;
 		mBackup = backup;
@@ -92,11 +92,11 @@ public class SidePegAutoMode extends AutoModeBase {
 		}
 		
 		sequence.add(getDriveToAirship());
-		sequence.add(new TimeoutRoutine(2.5));	// Wait 2.5s so pilot can pull gear out
+		sequence.add(new TimeoutRoutine(pilotWaitTime));	// Wait 2.5s so pilot can pull gear out
 
 		if (mBackup) {
-			sequence.add(getBackup(-0.5));
-			sequence.add(getBackup(0.5));
+			sequence.add(getBackup(1.5));
+			sequence.add(getBackup(-1.5));
 		}
 
 		mSequentialRoutine = new SequentialRoutine(sequence);
@@ -109,12 +109,12 @@ public class SidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 		// loading station side
 		case RED_LEFT:
-			driveForwardSetpoint = Constants.kRedLoadingStationForwardDistanceInches *
+			driveForwardSetpoint = Constants.k254LoadingStationForwardDistanceInches *
 			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 					: Constants.kDriveTicksPerInch);
 			break;
 		case BLUE_RIGHT:
-			driveForwardSetpoint = Constants.kBlueLoadingStationForwardDistanceInches *
+			driveForwardSetpoint = Constants.k254LoadingStationForwardDistanceInches *
 			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 					: Constants.kDriveTicksPerInch);
 			break;
@@ -125,7 +125,7 @@ public class SidePegAutoMode extends AutoModeBase {
 					: Constants.kDriveTicksPerInch);
 			break;
 		case BLUE_LEFT:
-			driveForwardSetpoint = Constants.kBlueBoilerForwardDistanceInches *
+			driveForwardSetpoint = Constants.k254BoilerForwardDistanceInches *
 			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 					: Constants.kDriveTicksPerInch);
 			break;
@@ -149,12 +149,12 @@ public class SidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 		// loading station side
 		case RED_LEFT:
-			driveToAirshipSetpoint = Constants.kRedLoadingStationAirshipDistanceInches *
+			driveToAirshipSetpoint = Constants.k254LoadingStationAirshipDistanceInches *
 			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 					: Constants.kDriveTicksPerInch);
 			break;
 		case BLUE_RIGHT:
-			driveToAirshipSetpoint = Constants.kBlueLoadingStationAirshipDistanceInches *
+			driveToAirshipSetpoint = Constants.k254LoadingStationAirshipDistanceInches *
 			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 					: Constants.kDriveTicksPerInch);
 			break;
@@ -183,11 +183,11 @@ public class SidePegAutoMode extends AutoModeBase {
 		return new CANTalonRoutine(driveToAirship, true);
 	}
 	
-	private SequentialRoutine getBackup(double target) {
+	private SequentialRoutine getBackup(double sliderPosition) {
 		DriveSignal driveBackup = DriveSignal.getNeutralSignal();
 		DriveSignal driveReturn = DriveSignal.getNeutralSignal();
 
-		double driveBackupSetpoint = -24 * 
+		double driveBackupSetpoint = -backupDistance *
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 						: Constants.kDriveTicksPerInch);
 		driveBackup.leftMotor.setMotionMagic(driveBackupSetpoint, mShortGains, 
@@ -203,11 +203,34 @@ public class SidePegAutoMode extends AutoModeBase {
 		
 		// Create a routine that drives back, then moves the slider while moving back forward
 		ArrayList<Routine> sequence = new ArrayList<>();
-		sequence.add(new CANTalonRoutine(driveBackup, true));		
-		sequence.add(new CustomPositioningSliderRoutine(target));
+		ArrayList<Routine> parallelSliding = new ArrayList<>();
+		parallelSliding.add(new CANTalonRoutine(driveBackup, true));
+		parallelSliding.add(new CustomPositioningSliderRoutine(sliderPosition));
+//		sequence.add(new CANTalonRoutine(driveBackup, true));
+//		sequence.add(new CustomPositioningSliderRoutine(sliderPosition));
+		sequence.add(new ParallelRoutine(parallelSliding));
 		sequence.add(new CANTalonRoutine(driveReturn, true));
-		sequence.add(new TimeoutRoutine(2.5));
+		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
+		return new SequentialRoutine(sequence);
+	}
+
+	private SequentialRoutine getTimedBackup(double sliderPosition) {
+		DriveSignal driveBack = DriveSignal.getNeutralSignal();
+		DriveSignal driveReturn = DriveSignal.getNeutralSignal();
+		driveBack.leftMotor.setPercentVBus(0.25);
+		driveBack.rightMotor.setPercentVBus(-0.3);
+		driveReturn.leftMotor.setPercentVBus(-0.3);
+		driveReturn.rightMotor.setPercentVBus(0.3);
+
+		ArrayList<Routine> sequence = new ArrayList<>();
+		ArrayList<Routine> parallelSliding = new ArrayList<>();
+		parallelSliding.add(new DriveTimeRoutine(backupTime, driveBack));
+		parallelSliding.add(new CustomPositioningSliderRoutine(sliderPosition));
+		sequence.add(new ParallelRoutine(parallelSliding));
+		sequence.add(new DriveTimeRoutine(backupTime, driveReturn));
+
+
 		return new SequentialRoutine(sequence);
 	}
 

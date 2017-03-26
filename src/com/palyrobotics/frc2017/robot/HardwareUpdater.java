@@ -242,12 +242,13 @@ class HardwareUpdater {
 		}
 		if (Constants.kRobotName == Constants.RobotName.STEIK) {
 			CANTalon sliderTalon = HardwareAdapter.SliderHardware.getInstance().sliderTalon;
-			robotState.sliderEncoder = sliderTalon.getPosition();
+			robotState.sliderEncoder = sliderTalon.getEncPosition();
 			DashboardManager.getInstance().updateCANTable(HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getOutputVoltage() + "," + HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getOutputVoltage() + "," + HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getPosition() + "," + HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getPosition() + "," +  HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getClosedLoopError() + "," + HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getClosedLoopError());
 			robotState.sliderPotentiometer = HardwareAdapter.SliderHardware.getInstance().sliderPotentiometer.getValue();
 			robotState.sliderVelocity = sliderTalon.getSpeed();
 			if (sliderTalon.getControlMode().isPID()) {
 				robotState.sliderClosedLoopError = Optional.of(sliderTalon.getClosedLoopError());
+//				System.out.println("Error "+robotState.sliderClosedLoopError.get());
 			} else {
 				robotState.sliderClosedLoopError = Optional.empty();
 			}
@@ -256,7 +257,7 @@ class HardwareUpdater {
 			robotState.climberEncoder = HardwareAdapter.ClimberHardware.getInstance().climberTalon.getPosition();
 		}
 		
-		robotState.sliderPosition = HardwareAdapter.SliderHardware.getInstance().sliderTalon.getEncPosition();
+		robotState.sliderPosition = HardwareAdapter.SliderHardware.getInstance().sliderTalon.getPosition();
 	}
 
 	/**

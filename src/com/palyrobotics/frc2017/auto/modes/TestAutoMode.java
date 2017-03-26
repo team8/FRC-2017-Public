@@ -7,6 +7,7 @@ import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
+import com.palyrobotics.frc2017.behavior.routines.drive.DriveTimeRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.SafetyTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
@@ -34,16 +35,20 @@ public class TestAutoMode extends AutoModeBase {
 //		
 //		CANTalonRoutine routine = new CANTalonRoutine(driveForward, true);
 //		return routine;
-		return new CustomPositioningSliderRoutine(5 * Constants.kSliderRevolutionsPerInch);
-//		EncoderTurnAngleRoutine routine = new EncoderTurnAngleRoutine(90);
-//		EncoderTurnAngleRoutine routine2 = new EncoderTurnAngleRoutine(60);
-//		ArrayList<Routine> sequence = new ArrayList<Routine>();
-//		sequence.add(routine);
-//		sequence.add(new TimeoutRoutine(2));
-//		sequence.add(routine2);
-//		sequence.add(new TimeoutRoutine(2));
-//		sequence.add(new EncoderTurnAngleRoutine(-60));
-//		return new SequentialRoutine(sequence);
+//		DriveSignal power = DriveSignal.getNeutralSignal();
+//		power.leftMotor.setPercentVBus(0.3);
+//		power.rightMotor.setPercentVBus(0.3);
+//		return new DriveTimeRoutine(1, power);
+//		return new CustomPositioningSliderRoutine(5);
+		EncoderTurnAngleRoutine routine = new EncoderTurnAngleRoutine(90);
+		EncoderTurnAngleRoutine routine2 = new EncoderTurnAngleRoutine(60);
+		ArrayList<Routine> sequence = new ArrayList<Routine>();
+		sequence.add(routine);
+		sequence.add(new TimeoutRoutine(2));
+		sequence.add(routine2);
+		sequence.add(new TimeoutRoutine(2));
+		sequence.add(new EncoderTurnAngleRoutine(-60));
+		return new SequentialRoutine(sequence);
 	}
 
 	@Override

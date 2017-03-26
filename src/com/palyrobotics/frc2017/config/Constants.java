@@ -53,7 +53,7 @@ public class Constants extends ConstantsBase {
 	public static double kDriveMaxClosedLoopOutput = 8.0;
 	// Unit Conversions for CANTalons
 	public static double kDriveTicksPerInch = 360 / (3.95 * Math.PI);
-	public static double kDriveInchesPerDegree = 0.97*21.5/90;
+	public static double kDriveInchesPerDegree = 0.99*21.5/90;
 	public static double kDriveSpeedUnitConversion = 360 / (3.95 * Math.PI * 10);
 	
 	public static double kSliderTicksPerInch = 900;
@@ -66,7 +66,7 @@ public class Constants extends ConstantsBase {
 	public static final double kPotentiometerCenterPos = (kPotentiometerRightPos + kPotentiometerLeftPos) / 2;
 	
 	// Tolerances
-	public static double kAcceptableDrivePositionError = 5;
+	public static double kAcceptableDrivePositionError = 15;
 	public static double kAcceptableDriveVelocityError = 5;
 	public static double kAcceptableTurnAngleError = 0.5;
 	public static double kAcceptableSliderPositionError;
@@ -140,13 +140,13 @@ public class Constants extends ConstantsBase {
 	public static double kBlueBaseLineDistanceInches = 93.3;
 
 	// Center peg
-	public static double k254CenterPegDistanceInches = 86;
+	public static double k254CenterPegDistanceInches = 81;
 	public static double kRedCenterPegDistanceInches = 113.75 - 31; // first number is to airship
 	public static double kBlueCenterPegDistanceInches = 108.5 - 31; // first num is to airship
 
 	// Side peg
 	public static double k254LoadingStationForwardDistanceInches = 74;
-	public static double k254LoadingStationAirshipDistanceInches = 84;//24.5688;
+	public static double k254LoadingStationAirshipDistanceInches = 60;//24.5688;
 	public static double k254BoilerForwardDistanceInches = 60;
 	public static double k254BoilerAirshipDistanceInches = 93;
 	public static double kSidePegTurnAngleDegrees = 60;

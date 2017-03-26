@@ -67,7 +67,7 @@ public class Robot extends IterativeRobot {
 			mLogger.logRobotThread("Auto: "+e.getMessage());
 		}
 		AndroidConnectionHelper.getInstance().start(AndroidConnectionHelper.StreamState.JSON);
-
+		System.out.println("Finished starting");
 		if (Constants.kRobotName == Constants.RobotName.STEIK) {
 			try {
 				mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSlider, mSpatula, mIntake, mClimber);

@@ -1,6 +1,5 @@
 package com.palyrobotics.frc2017.vision;
 
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import org.json.simple.parser.ParseException;
 import org.spectrum3847.RIOdroid.RIOdroid;
 import com.palyrobotics.frc2017.config.Constants;
@@ -103,7 +102,6 @@ public class AndroidConnectionHelper implements Runnable{
 	private boolean m_visionRunning = false;
 	private boolean m_running = false;
 	private boolean mTesting = false;
-	private NetworkTable m_visionTable;
 
 	public double x_dist = 0;
 
@@ -200,6 +198,7 @@ public class AndroidConnectionHelper implements Runnable{
 				// Initializes RIOdroid usb and RIOadb adb daemon
 				if(!this.mTesting) {
 					RIOdroid.init();
+//					RuntimeExecutor.getInstance().init();
 
 					if(m_streamState.equals(StreamState.BROADCAST)){
 						// Forward the port and start the server socket for data
@@ -238,8 +237,8 @@ public class AndroidConnectionHelper implements Runnable{
 
 				connected = true;
 			} catch (Exception e) {
-				System.out.println("Error: in AndroidConnectionHelper.InitializeServer(), "
-						+ "could not connect.\n" + e.getStackTrace());
+//				System.out.println("Error: in AndroidConnectionHelper.InitializeServer(), "
+//						+ "could not connect.\n" + e.getStackTrace());
 			}
 
 			// Let it retry connection for 10 seconds, then give in
@@ -266,12 +265,20 @@ public class AndroidConnectionHelper implements Runnable{
 					+ "vision app already running (or function has been called before)");
 		}else{
 			if(m_connectionState.equals(ConnectionState.STARTING_SERVER)){
+				int count = 60;
+				int i = 0;
 				while(!m_connectionState.equals(ConnectionState.IDLE)){
 					try {
 						Thread.sleep(50);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+					}
+					i++;
+					
+					if (i >= count){
+						//give up
+						break;
 					}
 				}
 
@@ -436,9 +443,9 @@ public class AndroidConnectionHelper implements Runnable{
 					this.x_dist = data_x;
 					break;
 
-				case "PAUSED":
-					System.out.println("Vision Paused");
-					break;
+//				case "PAUSED":
+//					System.out.println("Vision Paused");
+//					break;
 
 				case "TERMINATED":
 					System.out.println("Vision Terminated");
@@ -449,7 +456,7 @@ public class AndroidConnectionHelper implements Runnable{
 					break;
 
 				default:
-					System.out.println("WHAT");
+//					System.out.println("WHAT");
 					break;
 				}
 			}

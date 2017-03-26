@@ -85,6 +85,7 @@ public class RuntimeExecutor {
 	 * Initializes this computer as an adb server
 	 */
 	public void init(){
-		System.out.println(this.exec("adb start-server"));;
+		String outp = this.exec("adb start-server");
+//		System.out.println(outp);
 	}
 }

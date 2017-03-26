@@ -24,11 +24,11 @@ public class Gains {
 	// Drive Motion Magic offboard control loop
 	// Short distance max speed 36 in/s Max accel 36 in/s^2
 	public static final double kSteikShortDriveMotionMagicCruiseVelocity = 36 * Constants.kDriveSpeedUnitConversion;
-	public static final double kSteikShortDriveMotionMagicMaxAcceleration = 36 * Constants.kDriveSpeedUnitConversion;
-	public static final double kSteikShortDriveMotionMagickP = 4.5;
+	public static final double kSteikShortDriveMotionMagicMaxAcceleration = 70 * Constants.kDriveSpeedUnitConversion;
+	public static final double kSteikShortDriveMotionMagickP = 2.5;
 	public static final double kSteikShortDriveMotionMagickI = 0.01;
-	public static final double kSteikShortDriveMotionMagickD = 150;
-	public static final double kSteikShortDriveMotionMagickF = 2.0;
+	public static final double kSteikShortDriveMotionMagickD = 170;
+	public static final double kSteikShortDriveMotionMagickF = 2;
 	public static final int kSteikShortDriveMotionMagickIzone = 50;
 	public static final double kSteikShortDriveMotionMagickRampRate = 0.0;
 	public static final Gains steikShortDriveMotionMagicGains = new Gains(kSteikShortDriveMotionMagickP, kSteikShortDriveMotionMagickI, kSteikShortDriveMotionMagickD,
@@ -39,7 +39,7 @@ public class Gains {
 	public static final double kSteikLongDriveMotionMagicMaxAcceleration = 60 * Constants.kDriveSpeedUnitConversion;
 	public static final double kSteikLongDriveMotionMagickP = 4.5;
 	public static final double kSteikLongDriveMotionMagickI = 0.01;
-	public static final double kSteikLongDriveMotionMagickD = 150;
+	public static final double kSteikLongDriveMotionMagickD = 170;
 	public static final double kSteikLongDriveMotionMagickF = 2.0;
 	public static final int kSteikLongDriveMotionMagickIzone = 50;
 	public static final double kSteikLongDriveMotionMagickRampRate = 0.0;

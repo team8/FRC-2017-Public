@@ -20,6 +20,7 @@ public class CustomPositioningSliderRoutine extends Routine {
 	private double target;
 	private boolean updated;
 	
+	// Target should be absolute position in inches
 	public CustomPositioningSliderRoutine(double target) {
 		this.target = target;
 		updated = false;
@@ -36,7 +37,6 @@ public class CustomPositioningSliderRoutine extends Routine {
 
 	@Override
 	public Commands update(Commands commands) {
-		updated = true;
 		if (mAllowed) {
 			commands.wantedSliderState = Slider.SliderState.CUSTOM_POSITIONING;
 			commands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.CUSTOM;
@@ -48,11 +48,12 @@ public class CustomPositioningSliderRoutine extends Routine {
 		}
 		try {
 			slider.run(commands, this);
-			slider.printStatus();
+			System.out.println(slider.printStatus());
 		} catch (IllegalAccessException e) {
 			System.err.println("Slider position routine rejected!");
 			e.printStackTrace();
 		}
+		updated = true;
 		return commands;
 	}
 
