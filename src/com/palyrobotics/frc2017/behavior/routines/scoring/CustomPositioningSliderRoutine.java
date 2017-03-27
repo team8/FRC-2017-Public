@@ -5,6 +5,8 @@ import java.util.Optional;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Constants;
+import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.subsystems.Slider;
 import com.palyrobotics.frc2017.subsystems.Spatula;
 import com.palyrobotics.frc2017.subsystems.Spatula.SpatulaState;
@@ -89,8 +91,10 @@ public class CustomPositioningSliderRoutine extends Routine {
 
 	@Override
 	public boolean finished() {
-		//return updated && mState==DistancePositioningState.MOVING && slider.onTarget();	
-		return false;
+//		return (int)(sliderTalon.getSetpoint() - sliderTalon.getPosition())
+		RobotState robotState = Robot.getRobotState();
+		return updated && mState==DistancePositioningState.MOVING && 
+				(System.currentTimeMillis() - startTime > 200) && (robotState.sliderVelocity == 0);
 	}
 
 	@Override

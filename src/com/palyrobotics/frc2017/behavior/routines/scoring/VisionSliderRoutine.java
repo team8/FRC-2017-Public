@@ -29,6 +29,7 @@ public class VisionSliderRoutine extends Routine {
 	
 	@Override
 	public void start() {
+		startTime = System.currentTimeMillis();
 	}
 
 	@Override
@@ -70,9 +71,8 @@ public class VisionSliderRoutine extends Routine {
 	@Override
 	public boolean finished() {
 		return mState==VisionPositioningState.SENT && 
-				Math.abs(Robot.getRobotState().sliderClosedLoopError.get()) < 40 &&
+				(System.currentTimeMillis() - startTime > 200) &&
 				Robot.getRobotState().sliderVelocity == 0;
-		//return false;
 	}
 
 	@Override

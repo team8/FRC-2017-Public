@@ -53,6 +53,8 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		System.out.println("Start robotInit() for "+Constants.kRobotName.toString());
 		DashboardManager.getInstance().robotInit();
+		AndroidConnectionHelper.getInstance().start(AndroidConnectionHelper.StreamState.JSON);
+		System.out.println("Finished starting");
 //		mLogger.setFileName("Qual53");
 		mLogger.start();
 		mLogger.logRobotThread("robotInit() start");
@@ -66,8 +68,6 @@ public class Robot extends IterativeRobot {
 		} catch (NullPointerException e) {
 			mLogger.logRobotThread("Auto: "+e.getMessage());
 		}
-		AndroidConnectionHelper.getInstance().start(AndroidConnectionHelper.StreamState.JSON);
-		System.out.println("Finished starting");
 		if (Constants.kRobotName == Constants.RobotName.STEIK) {
 			try {
 				mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSlider, mSpatula, mIntake, mClimber);

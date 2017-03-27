@@ -34,18 +34,22 @@ public class CenterPegAutoMode extends AutoModeBase {
 	private SequentialRoutine mSequentialRoutine;
 	private boolean mBackup = true;
 	
-	private Gains mShortGains;
+	private Gains mShortGains, mLongGains;
+	private double initialSliderPosition;
 	private final double backupTime = 0.5;
-	private final double backupDistance = 14;
+	private final double backupDistance = 10;
 	private final double pilotWaitTime = 2.5;
 
 	public CenterPegAutoMode(Alliance alliance, PostCenterAutoVariant direction) {
 		mVariant = direction;
 		mAlliance = alliance;
+		initialSliderPosition = (alliance == Alliance.BLUE) ? 0 : 0;
 		if(Constants.kRobotName == Constants.RobotName.DERICA) {
 			mShortGains = Gains.dericaPosition;
+			mLongGains = Gains.dericaPosition;
 		} else {
 			mShortGains = Gains.steikShortDriveMotionMagicGains;
+			mLongGains = Gains.steikLongDriveMotionMagicGains;
 		}
 	}
 
@@ -68,18 +72,20 @@ public class CenterPegAutoMode extends AutoModeBase {
 						: Constants.kDriveTicksPerInch);
 		// Aegir: right +30
 		// Vali: left +100
-		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mShortGains,
-			Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint+30, mShortGains,
-				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
+			Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
+		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint+30, mLongGains,
+				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		
-		sequence.add(new CANTalonRoutine(driveForward, true));
+		ArrayList<Routine> initialSlide = new ArrayList<>();
+		initialSlide.add(new CANTalonRoutine(driveForward, true));
+		initialSlide.add(new CustomPositioningSliderRoutine(initialSliderPosition));
+		sequence.add(new ParallelRoutine(initialSlide));
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
 		if (mBackup) {
-			sequence.add(getTimedBackup(1.5));
+			sequence.add(getBackup(2));
 			sequence.add(new TimeoutRoutine(pilotWaitTime));
-			sequence.add(getTimedBackup(-1.5));
 		}
 
 		mSequentialRoutine = new SequentialRoutine(sequence);
@@ -114,18 +120,19 @@ public class CenterPegAutoMode extends AutoModeBase {
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 
 		// drive forward same distance as backup
-		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint, mShortGains, 
+		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint-3, mShortGains, 
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint, mShortGains, 
+		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint-3, mShortGains, 
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		
 		// Create a routine that drives back, then moves the slider while moving back forward
 		ArrayList<Routine> sequence = new ArrayList<>();
 		ArrayList<Routine> parallelSliding = new ArrayList<>();
 		parallelSliding.add(new CANTalonRoutine(driveBackup, true));
-		parallelSliding.add(new CustomPositioningSliderRoutine(sliderPosition));
-//		sequence.add(new CANTalonRoutine(driveBackup, true));
-//		sequence.add(new CustomPositioningSliderRoutine(sliderPosition));
+		ArrayList<Routine> slideSequence = new ArrayList<>();
+		slideSequence.add(new TimeoutRoutine(0.5));
+		slideSequence.add(new CustomPositioningSliderRoutine(sliderPosition));
+		parallelSliding.add(new SequentialRoutine(slideSequence));
 		sequence.add(new ParallelRoutine(parallelSliding));
 		sequence.add(new CANTalonRoutine(driveReturn, true));
 		sequence.add(new TimeoutRoutine(pilotWaitTime));

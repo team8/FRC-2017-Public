@@ -265,7 +265,7 @@ public class AndroidConnectionHelper implements Runnable{
 					+ "vision app already running (or function has been called before)");
 		}else{
 			if(m_connectionState.equals(ConnectionState.STARTING_SERVER)){
-				int count = 60;
+				int count = 40;
 				int i = 0;
 				while(!m_connectionState.equals(ConnectionState.IDLE)){
 					try {
