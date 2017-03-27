@@ -10,15 +10,13 @@ import com.palyrobotics.frc2017.subsystems.Slider;
 import com.palyrobotics.frc2017.subsystems.Spatula;
 import com.palyrobotics.frc2017.subsystems.Slider.SliderState;
 import com.palyrobotics.frc2017.subsystems.Slider.SliderTarget;
-import com.palyrobotics.frc2017.subsystems.Spatula.SpatulaState;
 import com.palyrobotics.frc2017.util.Subsystem;
 import com.palyrobotics.frc2017.vision.AndroidConnectionHelper;
 
 public class VisionSliderRoutine extends Routine {
-	// Use to make sure routine ran at least once before "finished"
-	private boolean updated = false;
 	private double startTime = 0;
 	
+	// Used to make sure vision setpoint is only sent once
 	private enum VisionPositioningState {
 		START, SENT
 	}

@@ -91,7 +91,6 @@ public class CustomPositioningSliderRoutine extends Routine {
 
 	@Override
 	public boolean finished() {
-//		return (int)(sliderTalon.getSetpoint() - sliderTalon.getPosition())
 		RobotState robotState = Robot.getRobotState();
 		return updated && mState==DistancePositioningState.MOVING && 
 				(System.currentTimeMillis() - startTime > 200) && (robotState.sliderVelocity == 0);

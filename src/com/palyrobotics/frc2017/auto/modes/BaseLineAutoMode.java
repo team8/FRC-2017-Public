@@ -6,7 +6,6 @@ import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.Gains;
-import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
 public class BaseLineAutoMode extends AutoModeBase {

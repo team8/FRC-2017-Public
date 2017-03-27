@@ -9,15 +9,12 @@ import com.palyrobotics.frc2017.behavior.routines.drive.*;
 import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
 import com.palyrobotics.frc2017.behavior.routines.scoring.AutocorrectPositioningSliderRoutine;
 import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.subsystems.Slider.SliderTarget;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.palyrobotics.frc2017.util.logger.Logger;
 
 import java.util.ArrayList;
-
-import javax.sound.midi.SysexMessage;
 
 /**
  * Created by Nihar on 2/11/17.
@@ -27,8 +24,10 @@ import javax.sound.midi.SysexMessage;
 public class SidePegAutoMode extends AutoModeBase {
 	// Represents the peg we are going for
 	public enum SideAutoVariant {
-		RED_RIGHT, BLUE_RIGHT,
-		RED_LEFT, BLUE_LEFT
+		RED_RIGHT, 	// Boiler
+		BLUE_RIGHT,	// Loading station
+		RED_LEFT, 	// Loading station
+		BLUE_LEFT	// Boiler
 	}
 
 	// Store configuration on construction
@@ -42,21 +41,14 @@ public class SidePegAutoMode extends AutoModeBase {
 	private Gains mLongGains, mShortGains;
 
 	private final double pilotWaitTime = 2.5; // time in seconds
-	private final double backupDistance = 10;
-	private final double backupTime = 0.4; // time to drive back for, then forwards for
+	private final double backupDistance = 10;	// distance in inches
 
 	public SidePegAutoMode(SideAutoVariant direction, boolean shouldMoveSlider, boolean backup) {
 		mVariant = direction;
 		mShouldMoveSlider = shouldMoveSlider;
 		mBackup = backup;
-
-		if(Constants.kRobotName == Constants.RobotName.DERICA) {
-			mLongGains = Gains.dericaPosition;
-			mShortGains = Gains.dericaPosition;
-		} else {
-			mLongGains = Gains.steikLongDriveMotionMagicGains;
-			mShortGains = Gains.steikShortDriveMotionMagicGains;
-		}
+		mLongGains = Gains.steikLongDriveMotionMagicGains;
+		mShortGains = Gains.steikShortDriveMotionMagicGains;
 	}
 
 	@Override
@@ -95,8 +87,8 @@ public class SidePegAutoMode extends AutoModeBase {
 		sequence.add(new TimeoutRoutine(pilotWaitTime));	// Wait 2.5s so pilot can pull gear out
 
 		if (mBackup) {
-			sequence.add(getBackup(1.5));
-			sequence.add(getBackup(-1.5));
+			sequence.add(getBackup(1.5));	// Move slider slightly to the right
+			sequence.add(getBackup(-1.5));	// Move slider slightly to the left
 		}
 
 		mSequentialRoutine = new SequentialRoutine(sequence);
@@ -113,28 +105,20 @@ public class SidePegAutoMode extends AutoModeBase {
 		// loading station side
 		case RED_LEFT:
 			initialSliderPosition = 0;
-			driveForwardSetpoint = Constants.k254LoadingStationForwardDistanceInches *
-			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-					: Constants.kDriveTicksPerInch);
+			driveForwardSetpoint = Constants.k254LoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_RIGHT:
 			initialSliderPosition = 0;
-			driveForwardSetpoint = Constants.k254LoadingStationForwardDistanceInches *
-			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-					: Constants.kDriveTicksPerInch);
+			driveForwardSetpoint = Constants.k254LoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 			// boiler side
 		case RED_RIGHT:
 			initialSliderPosition = 0;
-			driveForwardSetpoint = Constants.k254BoilerForwardDistanceInches *
-			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-					: Constants.kDriveTicksPerInch);
+			driveForwardSetpoint = Constants.k254BoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_LEFT:
 			initialSliderPosition = 0;
-			driveForwardSetpoint = Constants.k254BoilerForwardDistanceInches *
-			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-					: Constants.kDriveTicksPerInch);
+			driveForwardSetpoint = Constants.k254BoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		default:
 			System.err.println("What in tarnation no side peg distance");
@@ -161,25 +145,17 @@ public class SidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 		// loading station side
 		case RED_LEFT:
-			driveToAirshipSetpoint = Constants.k254LoadingStationAirshipDistanceInches *
-			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-					: Constants.kDriveTicksPerInch);
+			driveToAirshipSetpoint = Constants.k254LoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_RIGHT:
-			driveToAirshipSetpoint = Constants.k254LoadingStationAirshipDistanceInches *
-			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-					: Constants.kDriveTicksPerInch);
+			driveToAirshipSetpoint = Constants.k254LoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 			// boiler side
 		case RED_RIGHT:
-			driveToAirshipSetpoint = Constants.k254BoilerAirshipDistanceInches *
-			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-					: Constants.kDriveTicksPerInch);
+			driveToAirshipSetpoint = Constants.k254BoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_LEFT:
-			driveToAirshipSetpoint = Constants.kBlueBoilerAirshipDistanceInches *
-			((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-					: Constants.kDriveTicksPerInch);
+			driveToAirshipSetpoint = Constants.kBlueBoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		default:
 			System.err.println("What in tarnation no side peg airship distance");
@@ -201,9 +177,7 @@ public class SidePegAutoMode extends AutoModeBase {
 		DriveSignal driveBackup = DriveSignal.getNeutralSignal();
 		DriveSignal driveReturn = DriveSignal.getNeutralSignal();
 
-		double driveBackupSetpoint = -backupDistance *
-				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-						: Constants.kDriveTicksPerInch);
+		double driveBackupSetpoint = -backupDistance * Constants.kDriveTicksPerInch;
 		driveBackup.leftMotor.setMotionMagic(driveBackupSetpoint, mShortGains, 
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		driveBackup.rightMotor.setMotionMagic(driveBackupSetpoint, mShortGains, 
@@ -227,25 +201,6 @@ public class SidePegAutoMode extends AutoModeBase {
 		sequence.add(new CANTalonRoutine(driveReturn, true));
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
-		return new SequentialRoutine(sequence);
-	}
-
-	private SequentialRoutine getTimedBackup(double sliderPosition) {
-		DriveSignal driveBack = DriveSignal.getNeutralSignal();
-		DriveSignal driveReturn = DriveSignal.getNeutralSignal();
-		driveBack.leftMotor.setPercentVBus(0.25);
-		driveBack.rightMotor.setPercentVBus(-0.3);
-		driveReturn.leftMotor.setPercentVBus(-0.3);
-		driveReturn.rightMotor.setPercentVBus(0.3);
-
-		ArrayList<Routine> sequence = new ArrayList<>();
-		ArrayList<Routine> parallelSliding = new ArrayList<>();
-		parallelSliding.add(new DriveTimeRoutine(backupTime, driveBack));
-		parallelSliding.add(new CustomPositioningSliderRoutine(sliderPosition));
-		sequence.add(new ParallelRoutine(parallelSliding));
-		sequence.add(new DriveTimeRoutine(backupTime, driveReturn));
-
-
 		return new SequentialRoutine(sequence);
 	}
 

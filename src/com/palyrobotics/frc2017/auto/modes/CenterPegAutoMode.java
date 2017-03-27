@@ -6,13 +6,9 @@ import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
-import com.palyrobotics.frc2017.behavior.routines.drive.DriveTimeRoutine;
-import com.palyrobotics.frc2017.behavior.routines.drive.SafetyTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
 import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.Gains;
-import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
 import java.util.ArrayList;
@@ -35,22 +31,16 @@ public class CenterPegAutoMode extends AutoModeBase {
 	private boolean mBackup = true;
 	
 	private Gains mShortGains, mLongGains;
-	private double initialSliderPosition;
-	private final double backupTime = 0.5;
-	private final double backupDistance = 10;
-	private final double pilotWaitTime = 2.5;
+	private double initialSliderPosition;	// distance from center in inches
+	private final double backupDistance = 10;	// distance in inches
+	private final double pilotWaitTime = 2.5;	// time in seconds
 
 	public CenterPegAutoMode(Alliance alliance, PostCenterAutoVariant direction) {
 		mVariant = direction;
 		mAlliance = alliance;
 		initialSliderPosition = (alliance == Alliance.BLUE) ? 0 : 0;
-		if(Constants.kRobotName == Constants.RobotName.DERICA) {
-			mShortGains = Gains.dericaPosition;
-			mLongGains = Gains.dericaPosition;
-		} else {
-			mShortGains = Gains.steikShortDriveMotionMagicGains;
-			mLongGains = Gains.steikLongDriveMotionMagicGains;
-		}
+		mShortGains = Gains.steikShortDriveMotionMagicGains;
+		mLongGains = Gains.steikLongDriveMotionMagicGains;
 	}
 
 	@Override
@@ -67,9 +57,7 @@ public class CenterPegAutoMode extends AutoModeBase {
 		DriveSignal driveForward = DriveSignal.getNeutralSignal();
 		double driveForwardSetpoint =
 				((mAlliance == Alliance.BLUE) ? Constants.k254CenterPegDistanceInches : Constants.k254CenterPegDistanceInches)
-						*
-				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-						: Constants.kDriveTicksPerInch);
+						* Constants.kDriveTicksPerInch;
 		// Aegir: right +30
 		// Vali: left +100
 		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
@@ -77,6 +65,7 @@ public class CenterPegAutoMode extends AutoModeBase {
 		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint+30, mLongGains,
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		
+		// Drive forward while moving slider to initial position
 		ArrayList<Routine> initialSlide = new ArrayList<>();
 		initialSlide.add(new CANTalonRoutine(driveForward, true));
 		initialSlide.add(new CustomPositioningSliderRoutine(initialSliderPosition));
@@ -84,7 +73,7 @@ public class CenterPegAutoMode extends AutoModeBase {
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
 		if (mBackup) {
-			sequence.add(getBackup(2));
+			sequence.add(getBackup(2));		// Move slider slightly to the right
 			sequence.add(new TimeoutRoutine(pilotWaitTime));
 		}
 
@@ -106,14 +95,14 @@ public class CenterPegAutoMode extends AutoModeBase {
 		}
 		return name;
 	}
-	
+	/*
+	 * GET BACKUP
+	 */
 	private SequentialRoutine getBackup(double sliderPosition) {
 		DriveSignal driveBackup = DriveSignal.getNeutralSignal();
 		DriveSignal driveReturn = DriveSignal.getNeutralSignal();
 
-		double driveBackupSetpoint = -backupDistance *
-				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
-						: Constants.kDriveTicksPerInch);
+		double driveBackupSetpoint = -backupDistance * Constants.kDriveTicksPerInch;
 		driveBackup.leftMotor.setMotionMagic(driveBackupSetpoint, mShortGains, 
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		driveBackup.rightMotor.setMotionMagic(driveBackupSetpoint, mShortGains, 
@@ -137,24 +126,6 @@ public class CenterPegAutoMode extends AutoModeBase {
 		sequence.add(new CANTalonRoutine(driveReturn, true));
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
-		return new SequentialRoutine(sequence);
-	}
-
-	private SequentialRoutine getTimedBackup(double sliderPosition) {
-		DriveSignal driveBack = DriveSignal.getNeutralSignal();
-		DriveSignal driveReturn = DriveSignal.getNeutralSignal();
-		driveBack.leftMotor.setPercentVBus(-0.3);
-		driveBack.rightMotor.setPercentVBus(-0.3);
-		driveReturn.leftMotor.setPercentVBus(0.3);
-		driveReturn.rightMotor.setPercentVBus(0.3);
-
-		ArrayList<Routine> sequence = new ArrayList<>();
-		ArrayList<Routine> parallelSliding = new ArrayList<>();
-		parallelSliding.add(new DriveTimeRoutine(backupTime, driveBack));
-		parallelSliding.add(new CustomPositioningSliderRoutine(sliderPosition));
-		sequence.add(new ParallelRoutine(parallelSliding));
-		sequence.add(new DriveTimeRoutine(backupTime, driveReturn));
-
 		return new SequentialRoutine(sequence);
 	}
 }
