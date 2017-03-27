@@ -20,7 +20,7 @@ public class AutoModeSelector {
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
-	int selectedIndex = 2;
+	int selectedIndex = 4;
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
 			instance = new AutoModeSelector();
@@ -43,13 +43,12 @@ public class AutoModeSelector {
 		
   /*1*/ registerAutonomous(new BaseLineAutoMode(CenterPegAutoMode.Alliance.BLUE));
 
-  /*2*/ registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.Alliance.BLUE, // Alliance Color
+  /*2*/ registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.Alliance.RED, // Alliance Color
 		  										 CenterPegAutoMode.PostCenterAutoVariant.NOTHING,  // Should be NOTHING.
-		  										 false)); // Backup boolean
+		  										 true)); // Backup boolean
 		
-  /*3*/	registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.BLUE_RIGHT, // Alliance color and side
-											   false,  // Should move slider?
-											   true)); // SHould backup?
+  /*3*/	registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_LEFT, // Alliance color and side
+											   true)); // Should backup?
 	}
 
 	/**

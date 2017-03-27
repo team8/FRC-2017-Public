@@ -77,7 +77,6 @@ public class CenterPegAutoMode extends AutoModeBase {
 		if (mBackup) {
 			sequence.add(getBackup(2));		// Move slider slightly to the right
 			sequence.add(new TimeoutRoutine(pilotWaitTime));
-			sequence.add(getBackup(-1.5));
 		}
 
 		mSequentialRoutine = new SequentialRoutine(sequence);

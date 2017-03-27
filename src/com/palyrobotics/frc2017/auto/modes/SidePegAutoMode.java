@@ -32,7 +32,6 @@ public class SidePegAutoMode extends AutoModeBase {
 
 	// Store configuration on construction
 	private final SideAutoVariant mVariant;
-	private final boolean mShouldMoveSlider;
 	private final boolean mBackup;
 	
 	private SequentialRoutine mSequentialRoutine;
@@ -43,9 +42,11 @@ public class SidePegAutoMode extends AutoModeBase {
 	private final double pilotWaitTime = 2.5; // time in seconds
 	private final double backupDistance = 10;	// distance in inches
 
-	public SidePegAutoMode(SideAutoVariant direction, boolean shouldMoveSlider, boolean backup) {
+	double initialSliderPosition = 0;
+	double backupPosition = 4;
+
+	public SidePegAutoMode(SideAutoVariant direction, boolean backup) {
 		mVariant = direction;
-		mShouldMoveSlider = shouldMoveSlider;
 		mBackup = backup;
 		mLongGains = Gains.steikLongDriveMotionMagicGains;
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
@@ -53,12 +54,6 @@ public class SidePegAutoMode extends AutoModeBase {
 
 	@Override
 	public Routine getRoutine() {
-		if (mShouldMoveSlider) {
-			ArrayList<Routine> parallel = new ArrayList<>();
-			parallel.add(new AutocorrectPositioningSliderRoutine(SliderTarget.CENTER));
-			parallel.add(mSequentialRoutine);
-			return new ParallelRoutine(parallel);
-		}
 		return mSequentialRoutine;
 	}
 
@@ -73,10 +68,13 @@ public class SidePegAutoMode extends AutoModeBase {
 
 		// NOTE: switch case falling, split by lefts vs rights
 		switch (mVariant) {
+		// loading station
 		case RED_LEFT:
 		case BLUE_LEFT:
+			backupPosition*=-1;
 			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
 			break;
+		// boiler side
 		case RED_RIGHT:
 		case BLUE_RIGHT:
 			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
@@ -87,8 +85,7 @@ public class SidePegAutoMode extends AutoModeBase {
 		sequence.add(new TimeoutRoutine(pilotWaitTime));	// Wait 2.5s so pilot can pull gear out
 
 		if (mBackup) {
-			sequence.add(getBackup(1.5));
-			sequence.add(getBackup(-1.5)); // -1.5 to compensate for the previous backup and an additional 1.5
+			sequence.add(getBackup(backupPosition));
 		}
 
 		mSequentialRoutine = new SequentialRoutine(sequence);
@@ -100,7 +97,6 @@ public class SidePegAutoMode extends AutoModeBase {
 		DriveSignal driveForward = DriveSignal.getNeutralSignal();
 		// For Red Left = Blue Right, Red Right = Blue Left
 		double driveForwardSetpoint;
-		double initialSliderPosition = 0;
 		switch (mVariant) {
 		// loading station side
 		case RED_LEFT:
@@ -155,7 +151,7 @@ public class SidePegAutoMode extends AutoModeBase {
 			driveToAirshipSetpoint = Constants.k254BoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_LEFT:
-			driveToAirshipSetpoint = Constants.kBlueBoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
+			driveToAirshipSetpoint = Constants.k254BoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		default:
 			System.err.println("What in tarnation no side peg airship distance");
@@ -184,9 +180,9 @@ public class SidePegAutoMode extends AutoModeBase {
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 
 		// drive forward same distance as backup
-		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint-3, mShortGains, 
+		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint+3*Constants.kDriveTicksPerInch, mShortGains, 
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint-3, mShortGains, 
+		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint+3*Constants.kDriveTicksPerInch, mShortGains, 
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		
 		// Create a routine that drives back, then moves the slider while moving back forward
@@ -224,11 +220,7 @@ public class SidePegAutoMode extends AutoModeBase {
 			name = "SidePeg";
 			break;
 		}
-		if (mShouldMoveSlider) {
-			name += "SliderCenter";
-		} else {
-			name += "NotSliderCenter";
-		}
+		name += "SliderInitialMove"+initialSliderPosition;
 		name += "EncoderTurn";
 		if (mBackup) {
 			name += "Backup";
