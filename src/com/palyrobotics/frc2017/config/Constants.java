@@ -24,11 +24,18 @@ public class Constants extends ConstantsBase {
 
 	// Cheesy Drive tuning
 
-	//Sensitivities for how fast turning is
+	//Sensitivities for how fast non-quickturn turning is
 	public static double kLowGearDriveSensitivity = .70;
 	public static double kHighGearDriveSensitivity = 0.85;
+	
+	//Sensitivities for quickturn
 	public static double kLowGearQuickTurnSensitivity = 0.8;
+	public static double kLowGearPreciseQuickTurnSensitivity = 0.3;
 	public static double kHighGearQuickTurnSensitivity = 0.8;
+	public static double kHighGearPreciseQuickTurnSensitivity = 0.3;
+	
+	//Threshold for quickturn sensitivity change
+	public static double kQuickTurnSensitivityThreshold = 0.6;
 
 	//The rate at which the QuickStopAccumulator will decrease
 	public static double kQuickStopAccumulatorDecreaseRate = 0.8;

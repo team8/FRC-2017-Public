@@ -70,10 +70,15 @@ public class CheesyDriveHelper {
 			}
 			sensitivity = Constants.kLowGearDriveSensitivity;
 		}
+		
+		//neginertia is difference in wheel
 		double negInertiaPower = negInertia * negInertiaScalar;
 		negInertiaAccumulator += negInertiaPower;
-
+		
+		//possible source of occasional overturn
 		wheel = wheel + negInertiaAccumulator;
+		
+		//limit between [-1, 1]
 		if (negInertiaAccumulator > 1) {
 			negInertiaAccumulator -= 1;
 		} else if (negInertiaAccumulator < -1) {
@@ -94,9 +99,17 @@ public class CheesyDriveHelper {
 			
 			//Different sensitivity on quick turning
 			if (isHighGear) {
-				sensitivity = Constants.kHighGearQuickTurnSensitivity;
+				if(Math.abs(commands.rightStickInput.x) < Constants.kQuickTurnSensitivityThreshold) {
+					sensitivity = Constants.kHighGearPreciseQuickTurnSensitivity;
+				} else {
+					sensitivity = Constants.kHighGearQuickTurnSensitivity;
+				}
 			} else {
-				sensitivity = Constants.kLowGearQuickTurnSensitivity;
+				if(Math.abs(commands.rightStickInput.x) < Constants.kQuickTurnSensitivityThreshold) {
+					sensitivity = Constants.kLowGearPreciseQuickTurnSensitivity;
+				} else {
+					sensitivity = Constants.kLowGearQuickTurnSensitivity;
+				}
 			}
 
 			angularPower = wheel * sensitivity;
