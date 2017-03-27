@@ -42,7 +42,7 @@ public class SidePegAutoMode extends AutoModeBase {
 	private Gains mLongGains, mShortGains;
 
 	private final double pilotWaitTime = 2.5; // time in seconds
-	private final double backupDistance = 15;
+	private final double backupDistance = 5;
 	private final double backupTime = 0.4; // time to drive back for, then forwards for
 
 	public SidePegAutoMode(SideAutoVariant direction, boolean shouldMoveSlider, boolean backup) {

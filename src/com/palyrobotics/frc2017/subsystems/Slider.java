@@ -38,14 +38,12 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		MANUAL,
 		WAITING,
 		AUTOMATIC_POSITIONING,
-		VISION_POSITIONING,			// unused
 		CUSTOM_POSITIONING
 	}
 	
 	public enum SliderTarget {
 		NONE,
 		CUSTOM,
-		VISION,
 		LEFT,
 		CENTER,
 		RIGHT
@@ -159,14 +157,6 @@ public class Slider extends Subsystem implements SubsystemLoop {
 					System.err.println("Attempting automatic positioning without sensors!");
 				}
 				break;
-			case VISION_POSITIONING:	// unused
-				mTarget = SliderTarget.VISION;
-				if (isEncoderFunctional) {
-					setSetpointsVision();
-				} else {
-					System.err.println("Attempting vision positioning without encoder!");
-				}
-				break;
 			case CUSTOM_POSITIONING:
 				if(!isEncoderFunctional) {
 					System.err.println("No custom positioning with potentiometer");
@@ -184,13 +174,12 @@ public class Slider extends Subsystem implements SubsystemLoop {
 					mTarget = SliderTarget.NONE;
 				} else {
 					mTarget = SliderTarget.CUSTOM;
-					double setpoint = commands.robotSetpoints.sliderCustomSetpoint.get() * Constants.kSliderRevolutionsPerInch;
-					System.out.println("Custom setpoint in inches"+ commands.robotSetpoints.sliderCustomSetpoint.get());
-					System.out.println("Custom setpoint in revolutions " + setpoint);
-					mOutput.setPosition(setpoint, mEncoderGains);
+					mOutput.setPosition(commands.robotSetpoints.sliderCustomSetpoint.get(), mEncoderGains);
 				}
 				break;
 		}
+		
+		System.out.println(this.printStatus());
 	}
 	
 	/**
@@ -226,9 +215,11 @@ public class Slider extends Subsystem implements SubsystemLoop {
 			return true;
 		}
 		if (!mRobotState.sliderClosedLoopError.isPresent()) {
+			System.out.println("no slider error");
 			return false;
 		}
-		System.out.println(mRobotState.sliderClosedLoopError.get());
+//		System.out.println("Slider error: " + mRobotState.sliderClosedLoopError.get());
+		
 		return Math.abs(mRobotState.sliderClosedLoopError.get()) < kEncoderTolerance && mRobotState.sliderVelocity == 0;
 	}
 	
@@ -315,6 +306,6 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		return "Slider State: " + mState + "\n" + ((this.onTarget()) ? "On target":"Not on target") +
 				"\nTarget: " + mTarget + "\nOutput: " + mOutput.getSetpoint() + 
 				" with CANTalon in " + mOutput.getControlMode() + "\nEncoder value is " + mRobotState.sliderEncoder
-				+ "\nPotentiometer value is " + mRobotState.sliderPotentiometer;
+				+ "\nPotentiometer value is " + mRobotState.sliderPotentiometer + "\n";
 	}
 }

@@ -128,8 +128,9 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		logPeriodic();
-		commands = mRoutineManager.update(commands);
 		mHardwareUpdater.updateSensors(robotState);
+
+		commands = mRoutineManager.update(commands);
 		mHardwareUpdater.updateSubsystems();
 	}
 

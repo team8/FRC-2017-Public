@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
+import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.subsystems.Slider;
 import com.palyrobotics.frc2017.subsystems.Spatula;
 import com.palyrobotics.frc2017.subsystems.Spatula.SpatulaState;
@@ -15,45 +16,61 @@ import com.palyrobotics.frc2017.util.Subsystem;
  * @author Prashanti
  */
 public class CustomPositioningSliderRoutine extends Routine {
-	// Whether this routine is allowed to run or not
-	private boolean mAllowed;
+	private enum DistancePositioningState {
+		RAISING,
+		MOVING
+	}
+	private DistancePositioningState mState = DistancePositioningState.RAISING;
+	// Use to make sure routine ran at least once before "finished"
+	private boolean updated = false;
+	
 	private double target;
-	private boolean updated;
+	
+	private double startTime;
+	private static final double raiseTime = 1000;
 	
 	// Target should be absolute position in inches
 	public CustomPositioningSliderRoutine(double target) {
 		this.target = target;
-		updated = false;
 	}
 	
 	@Override
 	public void start() {
-		if (spatula.getState() == SpatulaState.DOWN) {
-			mAllowed = false;
-		} else {
-			mAllowed = true;
+		if (spatula.getState() == SpatulaState.DOWN || slider.getSliderState() == Slider.SliderState.WAITING) {
+			System.out.println("Autocorrecting spatula!");
+			mState = DistancePositioningState.RAISING;
 		}
+		else {
+			mState = DistancePositioningState.MOVING;
+		}
+		startTime = System.currentTimeMillis();
 	}
 
 	@Override
 	public Commands update(Commands commands) {
-		if (mAllowed) {
+		commands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.CUSTOM;
+		commands.robotSetpoints.sliderCustomSetpoint = Optional.of(target * Constants.kSliderRevolutionsPerInch);
+		updated = true;
+		switch(mState) {
+		case MOVING:
 			commands.wantedSliderState = Slider.SliderState.CUSTOM_POSITIONING;
-			commands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.CUSTOM;
-			commands.robotSetpoints.sliderCustomSetpoint = Optional.of(target);
-		} else {
-			commands.wantedSliderState = Slider.SliderState.IDLE;
-			commands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.NONE;
-			commands.robotSetpoints.sliderCustomSetpoint = Optional.empty();
+			break;
+		case RAISING:
+			if(System.currentTimeMillis() > (raiseTime+startTime)) {
+				System.out.println("Time up");
+				mState = DistancePositioningState.MOVING;
+				break;
+			}
+			commands.wantedSpatulaState = Spatula.SpatulaState.UP;
+			commands.wantedSliderState = Slider.SliderState.WAITING;
+			break;
 		}
+		
 		try {
 			slider.run(commands, this);
-			System.out.println(slider.printStatus());
 		} catch (IllegalAccessException e) {
-			System.err.println("Slider position routine rejected!");
 			e.printStackTrace();
 		}
-		updated = true;
 		return commands;
 	}
 
@@ -72,7 +89,8 @@ public class CustomPositioningSliderRoutine extends Routine {
 
 	@Override
 	public boolean finished() {
-		return updated && (!mAllowed || slider.onTarget());
+		//return updated && mState==DistancePositioningState.MOVING && slider.onTarget();	
+		return false;
 	}
 
 	@Override

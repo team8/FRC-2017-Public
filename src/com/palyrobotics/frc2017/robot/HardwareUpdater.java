@@ -247,8 +247,8 @@ class HardwareUpdater {
 			robotState.sliderPotentiometer = HardwareAdapter.SliderHardware.getInstance().sliderPotentiometer.getValue();
 			robotState.sliderVelocity = sliderTalon.getSpeed();
 			if (sliderTalon.getControlMode().isPID()) {
-				robotState.sliderClosedLoopError = Optional.of(sliderTalon.getClosedLoopError());
-//				System.out.println("Error "+robotState.sliderClosedLoopError.get());
+				//robotState.sliderClosedLoopError = Optional.of(sliderTalon.getClosedLoopError());
+				robotState.sliderClosedLoopError = Optional.of((int)(sliderTalon.getSetpoint() - sliderTalon.getPosition()));
 			} else {
 				robotState.sliderClosedLoopError = Optional.empty();
 			}
