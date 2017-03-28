@@ -453,21 +453,20 @@ public class AndroidConnectionHelper implements Runnable{
 		}
 	}
 
-	public double getXDist() {
-		if (!m_androidState.equals("STREAMING")) {
-//			System.out.println("Warning in AndroidConnectionHelper.getXDist(), " +
-//					"not streaming, android state is "+m_androidState+", returning last valid x_distance");
+	public double getXDist(){
+		if(!m_androidState.equals("STREAMING")){
+			System.out.println("Warning in AndroidConnectionHelper.getXDist(), " +
+					"not streaming, android state is "+m_androidState+", returning last valid x_distance");
 		}
 		return m_x_dist;
 	}
-	
-	public boolean isServerStarted(){
-		return this.m_adbServerCreated;
-	}
-	
 	public boolean isNexusConnected(){
 		String[] outp = RuntimeExecutor.getInstance().exec("adb devices").split("\\n");
 		return outp.length > 1;
+	}
+
+	public boolean isServerStarted(){
+		return m_adbServerCreated;
 	}
 
 	/**
