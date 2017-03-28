@@ -18,6 +18,10 @@ import java.util.ArrayList;
 
 /**
  * Created by Nihar on 2/11/17.
+<<<<<<< HEAD
+=======
+ * BBTurnAngle might be replaced with EncoderTurnAngle if no gyro
+>>>>>>> Add vision auto modes
  */
 public class VisionCenterPegAutoMode extends AutoModeBase {
 	private final CenterPegAutoMode.Alliance mAlliance;
@@ -27,14 +31,23 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 	private Gains mShortGains, mLongGains;
 	private double initialSliderPosition;	// distance from center in inches
 	private final double backupDistance = 10;	// distance in inches
+<<<<<<< HEAD
 	private final double pilotWaitTime = 1.75;	// time in seconds
 	private double bonusDistance = 28;
+=======
+	private final double pilotWaitTime = 3;	// time in seconds
+	private double bonusDistance = 12;
+>>>>>>> Add vision auto modes
 	private boolean isRightTarget;
 
 	public VisionCenterPegAutoMode(CenterPegAutoMode.Alliance alliance, boolean isRightTarget, boolean backup) {
 		mAlliance = alliance;
 		this.isRightTarget = isRightTarget;
+<<<<<<< HEAD
 		initialSliderPosition = (isRightTarget) ? -7 : -7;
+=======
+		initialSliderPosition = (isRightTarget) ? -7 : 7;
+>>>>>>> Add vision auto modes
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
 		mLongGains = Gains.steikLongDriveMotionMagicGains;
 
@@ -48,9 +61,15 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 
 	@Override
 	public void prestart() {
+<<<<<<< HEAD
 		String log = "Starting Vision Center Peg Auto Mode";
 		Logger.getInstance().logRobotThread("Starting Vision Center Peg Auto Mode");
 		if (!AndroidConnectionHelper.getInstance().isServerStarted()  || !AndroidConnectionHelper.getInstance().isNexusConnected()) {
+=======
+		String log = "Starting Center Peg Auto Mode";
+		Logger.getInstance().logRobotThread("Start center peg auto");
+		if (!AndroidConnectionHelper.getInstance().isServerStarted()) {
+>>>>>>> Add vision auto modes
 			System.out.println("Failed to find vision server, revert auto");
 			Logger.getInstance().logRobotThread("Failed to find vision server, revert");
 			CenterPegAutoMode fallback = new CenterPegAutoMode(mAlliance, true);
@@ -67,6 +86,7 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 						* Constants.kDriveTicksPerInch;
 		driveForwardSetpoint -= bonusDistance * Constants.kDriveTicksPerInch;
 		// Aegir: right +30
+<<<<<<< HEAD
 		// Vali: no compensation in order to end perpendicular
 		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
 			Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
@@ -77,6 +97,18 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 		driveBonus.leftMotor.setMotionMagic((bonusDistance+2) * Constants.kDriveTicksPerInch, mShortGains, Gains.kSteikShortDriveMotionMagicCruiseVelocity,
 				Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		driveBonus.rightMotor.setMotionMagic((bonusDistance+2) * Constants.kDriveTicksPerInch, mShortGains, Gains.kSteikShortDriveMotionMagicCruiseVelocity,
+=======
+		// Vali: left +100
+		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
+			Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
+		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint+30, mLongGains,
+				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
+		
+		DriveSignal driveBonus = DriveSignal.getNeutralSignal();
+		driveBonus.leftMotor.setMotionMagic(bonusDistance, mShortGains, Gains.kSteikShortDriveMotionMagicCruiseVelocity,
+				Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		driveBonus.rightMotor.setMotionMagic(bonusDistance, mShortGains, Gains.kSteikShortDriveMotionMagicCruiseVelocity,
+>>>>>>> Add vision auto modes
 				Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		
 		// Drive forward while moving slider to initial position
@@ -89,7 +121,11 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
 		if (mBackup) {
+<<<<<<< HEAD
 			sequence.add(getBackup(-1.5));		// Move slider slightly
+=======
+			sequence.add(getBackup(-2));		// Move slider slightly to the right
+>>>>>>> Add vision auto modes
 			sequence.add(new TimeoutRoutine(pilotWaitTime));
 		}
 
@@ -115,9 +151,15 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 
 		// drive forward same distance as backup
+<<<<<<< HEAD
 		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint+2*Constants.kDriveTicksPerInch, mShortGains, 
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint+2*Constants.kDriveTicksPerInch, mShortGains, 
+=======
+		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint-3, mShortGains, 
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint-3, mShortGains, 
+>>>>>>> Add vision auto modes
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		
 		// Create a routine that drives back, then moves the slider while moving back forward

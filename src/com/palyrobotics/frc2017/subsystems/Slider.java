@@ -263,23 +263,6 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		}
 	}
 	
-<<<<<<< HEAD
-	/**
-	 * Updates the control loop using vision targeting
-	 */
-	private void setSetpointsVision() {
-		if (onTargetEncoderPositioning()) {
-			mState = SliderState.IDLE;
-			mTarget = SliderTarget.NONE;
-		}
-		else {
-			double setpoint = AndroidConnectionHelper.getInstance().getXDist() * Constants.kSliderRevolutionsPerInch;
-			mOutput.setPosition(setpoint, mEncoderGains);
-		}
-	}
-	
-=======
->>>>>>> Add vision auto modes
 	public boolean onTarget() {
 		return onTargetEncoderPositioning() || onTargetPotentiometerPositioning();
 	}
