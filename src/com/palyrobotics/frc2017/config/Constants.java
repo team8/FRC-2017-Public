@@ -30,12 +30,12 @@ public class Constants extends ConstantsBase {
 	
 	//Sensitivities for quickturn
 	public static double kLowGearQuickTurnSensitivity = 0.8;
-	public static double kLowGearPreciseQuickTurnSensitivity = 0.3;
+	public static double kLowGearPreciseQuickTurnSensitivity = 0.35;
 	public static double kHighGearQuickTurnSensitivity = 0.8;
-	public static double kHighGearPreciseQuickTurnSensitivity = 0.3;
+	public static double kHighGearPreciseQuickTurnSensitivity = 0.35;
 	
 	//Threshold for quickturn sensitivity change
-	public static double kQuickTurnSensitivityThreshold = 0.6;
+	public static double kQuickTurnSensitivityThreshold = 0.85;
 
 	//The rate at which the QuickStopAccumulator will decrease
 	public static double kQuickStopAccumulatorDecreaseRate = 0.8;

@@ -223,7 +223,7 @@ public class SidePegAutoMode extends AutoModeBase {
 		name += "SliderInitialMove"+initialSliderPosition;
 		name += "EncoderTurn";
 		if (mBackup) {
-			name += "Backup";
+			name += "Backup"+backupPosition;
 		} else {
 			name += "NotBackup";
 		}
