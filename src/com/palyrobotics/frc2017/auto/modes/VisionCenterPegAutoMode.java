@@ -7,35 +7,35 @@ import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
+import com.palyrobotics.frc2017.behavior.routines.scoring.VisionSliderRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
+import com.palyrobotics.frc2017.util.logger.Logger;
+import com.palyrobotics.frc2017.vision.AndroidConnectionHelper;
 
 import java.util.ArrayList;
 
 /**
  * Created by Nihar on 2/11/17.
+ * BBTurnAngle might be replaced with EncoderTurnAngle if no gyro
  */
-public class CenterPegAutoMode extends AutoModeBase {
-	// Represents the variation of center peg auto based on what to do after scoring
-	public enum PostCenterAutoVariant {
-		NOTHING, CROSS_LEFT, CROSS_RIGHT
-	}
-	public enum Alliance {
-		BLUE, RED
-	}
-	private final Alliance mAlliance;
-	private SequentialRoutine mSequentialRoutine;
+public class VisionCenterPegAutoMode extends AutoModeBase {
+	private final CenterPegAutoMode.Alliance mAlliance;
+	private Routine mSequentialRoutine;
 	private boolean mBackup = true;
 	
 	private Gains mShortGains, mLongGains;
 	private double initialSliderPosition;	// distance from center in inches
 	private final double backupDistance = 10;	// distance in inches
 	private final double pilotWaitTime = 3;	// time in seconds
+	private double bonusDistance = 12;
+	private boolean isRightTarget;
 
-	public CenterPegAutoMode(Alliance alliance, boolean backup) {
+	public VisionCenterPegAutoMode(CenterPegAutoMode.Alliance alliance, boolean isRightTarget, boolean backup) {
 		mAlliance = alliance;
-		initialSliderPosition = (alliance == Alliance.BLUE) ? 0 : 0;
+		this.isRightTarget = isRightTarget;
+		initialSliderPosition = (isRightTarget) ? -7 : 7;
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
 		mLongGains = Gains.steikLongDriveMotionMagicGains;
 
@@ -50,13 +50,23 @@ public class CenterPegAutoMode extends AutoModeBase {
 	@Override
 	public void prestart() {
 		String log = "Starting Center Peg Auto Mode";
+		Logger.getInstance().logRobotThread("Start center peg auto");
+		if (!AndroidConnectionHelper.getInstance().isServerStarted()) {
+			System.out.println("Failed to find vision server, revert auto");
+			Logger.getInstance().logRobotThread("Failed to find vision server, revert");
+			CenterPegAutoMode fallback = new CenterPegAutoMode(mAlliance, true);
+			fallback.prestart();
+			mSequentialRoutine = fallback.getRoutine();
+			return;
+		}
 		// Construct sequence of routines to run
 		ArrayList<Routine> sequence = new ArrayList<>();
 		// Straight drive distance to the center peg
 		DriveSignal driveForward = DriveSignal.getNeutralSignal();
 		double driveForwardSetpoint =
-				((mAlliance == Alliance.BLUE) ? Constants.k254CenterPegDistanceInches : Constants.k254CenterPegDistanceInches)
+				((mAlliance == CenterPegAutoMode.Alliance.BLUE) ? Constants.k254CenterPegDistanceInches : Constants.k254CenterPegDistanceInches)
 						* Constants.kDriveTicksPerInch;
+		driveForwardSetpoint -= bonusDistance * Constants.kDriveTicksPerInch;
 		// Aegir: right +30
 		// Vali: left +100
 		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
@@ -64,15 +74,23 @@ public class CenterPegAutoMode extends AutoModeBase {
 		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint+30, mLongGains,
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		
+		DriveSignal driveBonus = DriveSignal.getNeutralSignal();
+		driveBonus.leftMotor.setMotionMagic(bonusDistance, mShortGains, Gains.kSteikShortDriveMotionMagicCruiseVelocity,
+				Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		driveBonus.rightMotor.setMotionMagic(bonusDistance, mShortGains, Gains.kSteikShortDriveMotionMagicCruiseVelocity,
+				Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		
 		// Drive forward while moving slider to initial position
 		ArrayList<Routine> initialSlide = new ArrayList<>();
 		initialSlide.add(new CANTalonRoutine(driveForward, true));
 		initialSlide.add(new CustomPositioningSliderRoutine(initialSliderPosition));
 		sequence.add(new ParallelRoutine(initialSlide));
+		sequence.add(new VisionSliderRoutine());
+		sequence.add(new CANTalonRoutine(driveBonus, true));
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
 		if (mBackup) {
-			sequence.add(getBackup(-3));		// Move slider slightly to the right
+			sequence.add(getBackup(-2));		// Move slider slightly to the right
 			sequence.add(new TimeoutRoutine(pilotWaitTime));
 		}
 
@@ -81,8 +99,8 @@ public class CenterPegAutoMode extends AutoModeBase {
 	}
 	@Override
 	public String toString() {
-		String name = (mAlliance == Alliance.BLUE) ? "BlueCenterPeg" : "RedCenterPeg";
-		return name;
+		String name = (mAlliance == CenterPegAutoMode.Alliance.BLUE) ? "BlueCenterPeg" : "RedCenterPeg";
+		return "Vision"+name;
 	}
 	/*
 	 * GET BACKUP

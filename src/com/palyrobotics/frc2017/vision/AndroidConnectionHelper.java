@@ -103,7 +103,6 @@ public class AndroidConnectionHelper implements Runnable{
 	private boolean m_visionRunning = false;
 	private boolean m_running = false;
 	private boolean mTesting = false;
-	private NetworkTable m_visionTable;
 
 	private double m_x_dist = 0;
 	private String m_androidState = "NONE";
@@ -175,10 +174,6 @@ public class AndroidConnectionHelper implements Runnable{
 		this.SetState(ConnectionState.STARTING_SERVER);
 		m_running = true;
 		m_streamState = streamState;
-		if (!mTesting) {
-			System.out.println("Warning: AndroidConnectionHelper.start(), VISION NETWORK TABLE IS NOT INITIALIZED");
-//			m_visionTable = NetworkTable.getTable("vision");
-		}
 		this.mTesting = isTesting;
 
 		System.out.println("Starting Thread: AndroidConnectionHelper ");
@@ -451,9 +446,9 @@ public class AndroidConnectionHelper implements Runnable{
 		}
 		return m_x_dist;
 	}
-
+	
 	public boolean isServerStarted(){
-		return m_adbServerCreated;
+		return this.m_adbServerCreated;
 	}
 
 	public boolean isNexusConnected(){

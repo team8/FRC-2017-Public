@@ -35,9 +35,9 @@ public class VisionSliderRoutine extends Routine {
 		commands.robotSetpoints.sliderSetpoint = SliderTarget.CUSTOM;
 		commands.wantedSpatulaState = Spatula.SpatulaState.UP;
 		double visionSetpoint = AndroidConnectionHelper.getInstance().getXDist();
-		commands.robotSetpoints.sliderCustomSetpoint = 
+		commands.robotSetpoints.sliderCustomSetpoint =
 				Optional.of(AndroidConnectionHelper.getInstance().getXDist() * Constants.kSliderRevolutionsPerInch);
-		
+
 		switch(mState) {
 		case START:
 			commands.wantedSliderState = Slider.SliderState.CUSTOM_POSITIONING;
@@ -81,6 +81,6 @@ public class VisionSliderRoutine extends Routine {
 
 	@Override
 	public String getName() {
-		return "Slider Vision Positioning Routine";
+		return "SliderVisionPositioningRoutine";
 	}
 }

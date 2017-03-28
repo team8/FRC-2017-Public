@@ -22,19 +22,12 @@ import java.util.ArrayList;
  * Configured for left vs right
  */
 public class VisionSidePegAutoMode extends AutoModeBase {
-	// Represents the peg we are going for
-	public enum SideAutoVariant {
-		RED_RIGHT, 	// Boiler
-		BLUE_RIGHT,	// Loading station
-		RED_LEFT, 	// Loading station
-		BLUE_LEFT	// Boiler
-	}
 
 	// Store configuration on construction
-	private final SideAutoVariant mVariant;
+	private final SidePegAutoMode.SideAutoVariant mVariant;
 	private final boolean mBackup;
 	
-	private SequentialRoutine mSequentialRoutine;
+	private Routine mSequentialRoutine;
 
 	// Long distance vs short distance
 	private Gains mLongGains, mShortGains;
@@ -47,7 +40,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 	double backupPosition = 4;
 	boolean isRightTarget;
 
-	public VisionSidePegAutoMode(SideAutoVariant direction, boolean rightTarget,
+	public VisionSidePegAutoMode(SidePegAutoMode.SideAutoVariant direction, boolean rightTarget,
 								 boolean backup) {
 		mVariant = direction;
 		isRightTarget = rightTarget;
@@ -69,6 +62,14 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 		System.out.println("Starting "+this.toString()+" Auto Mode");
 		Logger.getInstance().logRobotThread("Starting "+this.toString()+" Auto Mode");
 
+		if (!AndroidConnectionHelper.getInstance().isServerStarted()) {
+			System.out.println("Vision server not started!");
+			Logger.getInstance().logRobotThread("Vision server not detected, fallback to default side peg");
+			SidePegAutoMode backup = new SidePegAutoMode(mVariant, true);
+			backup.prestart();
+			mSequentialRoutine = backup.getRoutine();
+			return;
+		}
 		ArrayList<Routine> sequence = new ArrayList<>();
 
 		sequence.add(getDriveForward());
@@ -198,7 +199,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 	/*
 	 * GET BACKUP
 	 */
-	private SequentialRoutine getBackup(double sliderPosition) {
+	private Routine getBackup(double sliderPosition) {
 		DriveSignal driveBackup = DriveSignal.getNeutralSignal();
 		DriveSignal driveReturn = DriveSignal.getNeutralSignal();
 

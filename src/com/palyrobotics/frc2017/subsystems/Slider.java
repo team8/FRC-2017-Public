@@ -213,10 +213,8 @@ public class Slider extends Subsystem implements SubsystemLoop {
 			return true;
 		}
 		if (!mRobotState.sliderClosedLoopError.isPresent()) {
-			System.out.println("no slider error");
 			return false;
 		}
-//		System.out.println("Slider error: " + mRobotState.sliderClosedLoopError.get());
 		
 		return Math.abs(mRobotState.sliderClosedLoopError.get()) < kEncoderTolerance && mRobotState.sliderVelocity == 0;
 	}
@@ -229,7 +227,6 @@ public class Slider extends Subsystem implements SubsystemLoop {
 			mState = SliderState.IDLE;
 			mTarget = SliderTarget.NONE;
 		} else {
-			System.out.println("Target "+mEncoderTargetPositions.get(mTarget));
 			mOutput.setPosition(mEncoderTargetPositions.get(mTarget), mEncoderGains);
 		}
 	}
@@ -267,6 +264,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		}
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * Updates the control loop using vision targeting
 	 */
@@ -281,6 +279,8 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		}
 	}
 	
+=======
+>>>>>>> Add vision auto modes
 	public boolean onTarget() {
 		return onTargetEncoderPositioning() || onTargetPotentiometerPositioning();
 	}

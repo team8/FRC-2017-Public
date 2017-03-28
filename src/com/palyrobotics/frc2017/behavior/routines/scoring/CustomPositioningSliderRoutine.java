@@ -103,7 +103,7 @@ public class CustomPositioningSliderRoutine extends Routine {
 
 	@Override
 	public String getName() {
-		return "Slider Distance Custom Positioning Routine";
+		return "SliderDistanceCustomPositioningRoutine";
 	}
 
 }
