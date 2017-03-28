@@ -247,10 +247,10 @@ public class AndroidConnectionHelper implements Runnable{
 
 			if (connected) {
 				m_adbServerCreated = true;
-				return ConnectionState.IDLE;
-			} else {
-				return m_connectionState;
+//			} else {
+//				return m_connectionState;
 			}
+			return ConnectionState.IDLE;
 		}
 	}
 

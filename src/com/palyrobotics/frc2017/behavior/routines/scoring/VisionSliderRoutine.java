@@ -37,7 +37,6 @@ public class VisionSliderRoutine extends Routine {
 		double visionSetpoint = AndroidConnectionHelper.getInstance().getXDist();
 		commands.robotSetpoints.sliderCustomSetpoint =
 				Optional.of(AndroidConnectionHelper.getInstance().getXDist() * Constants.kSliderRevolutionsPerInch);
-
 		switch(mState) {
 		case START:
 			commands.wantedSliderState = Slider.SliderState.CUSTOM_POSITIONING;
