@@ -461,7 +461,7 @@ public class AndroidConnectionHelper implements Runnable{
 	}
 
 	public boolean isServerStarted(){
-		return m_adbServerCreated;
+		return this.m_adbServerCreated;
 	}
 
 	public boolean isNexusConnected(){
