@@ -49,8 +49,8 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 
 	@Override
 	public void prestart() {
-		String log = "Starting Center Peg Auto Mode";
-		Logger.getInstance().logRobotThread("Start center peg auto");
+		String log = "Starting Vision Center Peg Auto Mode";
+		Logger.getInstance().logRobotThread("Starting Vision Center Peg Auto Mode");
 		if (!AndroidConnectionHelper.getInstance().isServerStarted()) {
 			System.out.println("Failed to find vision server, revert auto");
 			Logger.getInstance().logRobotThread("Failed to find vision server, revert");
@@ -75,9 +75,9 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		
 		DriveSignal driveBonus = DriveSignal.getNeutralSignal();
-		driveBonus.leftMotor.setMotionMagic(bonusDistance, mShortGains, Gains.kSteikShortDriveMotionMagicCruiseVelocity,
+		driveBonus.leftMotor.setMotionMagic(bonusDistance * Constants.kDriveTicksPerInch, mShortGains, Gains.kSteikShortDriveMotionMagicCruiseVelocity,
 				Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		driveBonus.rightMotor.setMotionMagic(bonusDistance, mShortGains, Gains.kSteikShortDriveMotionMagicCruiseVelocity,
+		driveBonus.rightMotor.setMotionMagic(bonusDistance * Constants.kDriveTicksPerInch, mShortGains, Gains.kSteikShortDriveMotionMagicCruiseVelocity,
 				Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		
 		// Drive forward while moving slider to initial position
@@ -90,7 +90,7 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
 		if (mBackup) {
-			sequence.add(getBackup(-2));		// Move slider slightly to the right
+			sequence.add(getBackup(-2));		// Move slider slightly to the left
 			sequence.add(new TimeoutRoutine(pilotWaitTime));
 		}
 
@@ -116,9 +116,9 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 
 		// drive forward same distance as backup
-		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint-3, mShortGains, 
+		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint+3*Constants.kDriveTicksPerInch, mShortGains, 
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint-3, mShortGains, 
+		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint+3*Constants.kDriveTicksPerInch, mShortGains, 
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		
 		// Create a routine that drives back, then moves the slider while moving back forward

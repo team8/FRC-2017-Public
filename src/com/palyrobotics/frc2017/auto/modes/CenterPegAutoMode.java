@@ -10,6 +10,7 @@ import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSlide
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
+import com.palyrobotics.frc2017.util.logger.Logger;
 
 import java.util.ArrayList;
 
@@ -17,10 +18,6 @@ import java.util.ArrayList;
  * Created by Nihar on 2/11/17.
  */
 public class CenterPegAutoMode extends AutoModeBase {
-	// Represents the variation of center peg auto based on what to do after scoring
-	public enum PostCenterAutoVariant {
-		NOTHING, CROSS_LEFT, CROSS_RIGHT
-	}
 	public enum Alliance {
 		BLUE, RED
 	}
@@ -50,6 +47,7 @@ public class CenterPegAutoMode extends AutoModeBase {
 	@Override
 	public void prestart() {
 		String log = "Starting Center Peg Auto Mode";
+		Logger.getInstance().logRobotThread("Starting Center Peg Auto Mode");
 		// Construct sequence of routines to run
 		ArrayList<Routine> sequence = new ArrayList<>();
 		// Straight drive distance to the center peg
@@ -72,7 +70,7 @@ public class CenterPegAutoMode extends AutoModeBase {
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
 		if (mBackup) {
-			sequence.add(getBackup(-3));		// Move slider slightly to the right
+			sequence.add(getBackup(-3));		// Move slider slightly to the left
 			sequence.add(new TimeoutRoutine(pilotWaitTime));
 		}
 
@@ -98,9 +96,9 @@ public class CenterPegAutoMode extends AutoModeBase {
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 
 		// drive forward same distance as backup
-		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint-3, mShortGains, 
+		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint+3*Constants.kDriveTicksPerInch, mShortGains, 
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint-3, mShortGains, 
+		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint+3*Constants.kDriveTicksPerInch, mShortGains, 
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		
 		// Create a routine that drives back, then moves the slider while moving back forward
