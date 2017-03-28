@@ -438,9 +438,11 @@ public class AndroidConnectionHelper implements Runnable{
 //					}
 //					break;
 
-					double data_x = ((Number)json.get("x_displacement")).doubleValue();
-					System.out.println("Data: " + data_x);
-					this.x_dist = data_x;
+					Number data_x = ((Number)json.get("x_displacement"));
+					if (data_x != null) {
+						System.out.println("Data: " + data_x.doubleValue());
+						this.x_dist = data_x.doubleValue();
+					}
 					break;
 
 //				case "PAUSED":
