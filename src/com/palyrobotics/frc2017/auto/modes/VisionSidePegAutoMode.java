@@ -7,10 +7,9 @@ import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.*;
 import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
-import com.palyrobotics.frc2017.behavior.routines.scoring.AutocorrectPositioningSliderRoutine;
+import com.palyrobotics.frc2017.behavior.routines.scoring.VisionSliderRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
-import com.palyrobotics.frc2017.subsystems.Slider.SliderTarget;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.palyrobotics.frc2017.util.logger.Logger;
 
@@ -21,7 +20,7 @@ import java.util.ArrayList;
  * Goes for side peg autonomous
  * Configured for left vs right
  */
-public class SidePegAutoMode extends AutoModeBase {
+public class VisionSidePegAutoMode extends AutoModeBase {
 	// Represents the peg we are going for
 	public enum SideAutoVariant {
 		RED_RIGHT, 	// Boiler
@@ -39,14 +38,18 @@ public class SidePegAutoMode extends AutoModeBase {
 	// Long distance vs short distance
 	private Gains mLongGains, mShortGains;
 
-	private final double pilotWaitTime = 2; // time in seconds
-	private final double backupDistance = 10;	// distance in inches
+	private final double pilotWaitTime = 3; // time in seconds
+	private final double backupDistance = 10; // distance in inches
+	private double bonusDistance = 14; // extra space
 
 	double initialSliderPosition = 0;
-	double backupPosition = -4;
+	double backupPosition = 4;
+	boolean isRightTarget;
 
-	public SidePegAutoMode(SideAutoVariant direction, boolean backup) {
+	public VisionSidePegAutoMode(SideAutoVariant direction, boolean rightTarget,
+								 boolean backup) {
 		mVariant = direction;
+		isRightTarget = rightTarget;
 		mBackup = backup;
 		mLongGains = Gains.steikLongDriveMotionMagicGains;
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
@@ -70,20 +73,27 @@ public class SidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 		// loading station
 		case RED_LEFT:
+			backupPosition = 1;
+			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
+			break;
 		case BLUE_LEFT:
-			backupPosition*=-1;
+			backupPosition = 1;
 			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
 			break;
 		// boiler side
 		case RED_RIGHT:
+			backupPosition = -1;
+			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
+			break;
 		case BLUE_RIGHT:
+			backupPosition = -1;
 			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;
 		}
 		
 		sequence.add(getDriveToAirship());
-		sequence.add(new TimeoutRoutine(pilotWaitTime));	// Wait 2.5s so pilot can pull gear out
-
+		sequence.add(getFirstAttempt());
+		sequence.add(new TimeoutRoutine(pilotWaitTime));	// Wait so pilot can pull gear out
 		if (mBackup) {
 			sequence.add(getBackup(backupPosition));
 		}
@@ -100,26 +110,27 @@ public class SidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 		// loading station side
 		case RED_LEFT:
-			initialSliderPosition = 0;
 			driveForwardSetpoint = Constants.k254LoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_RIGHT:
-			initialSliderPosition = 0;
 			driveForwardSetpoint = Constants.k254LoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 			// boiler side
 		case RED_RIGHT:
-			initialSliderPosition = 0;
 			driveForwardSetpoint = Constants.k254BoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_LEFT:
-			initialSliderPosition = 0;
 			driveForwardSetpoint = Constants.k254BoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		default:
 			System.err.println("What in tarnation no side peg distance");
 			driveForwardSetpoint = 0;
 			break;
+		}
+		if (isRightTarget) {
+			initialSliderPosition = -7;
+		} else {
+			initialSliderPosition = 7;
 		}
 		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
@@ -158,6 +169,7 @@ public class SidePegAutoMode extends AutoModeBase {
 			driveToAirshipSetpoint = 0;
 			break;
 		}
+		driveToAirshipSetpoint -= bonusDistance*Constants.kDriveTicksPerInch;
 		driveToAirship.leftMotor.setMotionMagic(driveToAirshipSetpoint, mLongGains,
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		driveToAirship.rightMotor.setMotionMagic(driveToAirshipSetpoint, mLongGains,
@@ -165,6 +177,19 @@ public class SidePegAutoMode extends AutoModeBase {
 		
 		Logger.getInstance().logRobotThread("Drive to airship", driveToAirship);
 		return new CANTalonRoutine(driveToAirship, true);
+	}
+	
+	private Routine getFirstAttempt() {
+		double scoreSetpoint = bonusDistance*Constants.kDriveTicksPerInch;
+		DriveSignal driveScore = DriveSignal.getNeutralSignal();
+		driveScore.leftMotor.setMotionMagic(scoreSetpoint, mShortGains,
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		driveScore.rightMotor.setMotionMagic(scoreSetpoint, mShortGains,
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		ArrayList<Routine> scoreSequence = new ArrayList<>();
+		scoreSequence.add(new VisionSliderRoutine());
+		scoreSequence.add(new CANTalonRoutine(driveScore, true));
+		return new SequentialRoutine(scoreSequence);
 	}
 	/*
 	 * GET BACKUP
@@ -203,21 +228,22 @@ public class SidePegAutoMode extends AutoModeBase {
 	@Override
 	public String toString() {
 		String name;
+		name = "Vision";
 		switch (mVariant) {
 		case RED_LEFT:
-			name = "RedLeftSidePeg";
+			name += "RedLeftSidePeg";
 			break;
 		case RED_RIGHT:
-			name = "RedRightSidePeg";
+			name += "RedRightSidePeg";
 			break;
 		case BLUE_LEFT:
-			name = "BlueLeftSidePeg";
+			name += "BlueLeftSidePeg";
 			break;
 		case BLUE_RIGHT:
-			name = "BlueRightSidePeg";
+			name += "BlueRightSidePeg";
 			break;
 		default:
-			name = "SidePeg";
+			name += "SidePeg";
 			break;
 		}
 		name += "SliderInitialMove"+initialSliderPosition;

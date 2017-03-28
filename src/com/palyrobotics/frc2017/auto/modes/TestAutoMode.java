@@ -45,11 +45,11 @@ public class TestAutoMode extends AutoModeBase {
 ////		power.rightMotor.setPercentVBus(0.3);
 ////		return new DriveTimeRoutine(1, power);
 //		
-		sequence.add(new CustomPositioningSliderRoutine(5));
+//		sequence.add(new CustomPositioningSliderRoutine(5));
 		
-		//sequence.add(new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.CENTER));
-//		sequence.add(new VisionSliderRoutine());
-		sequence.add(new CANTalonRoutine(driveForward, true));
+//		sequence.add(new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.CENTER));
+		sequence.add(new VisionSliderRoutine());
+//		sequence.add(new CANTalonRoutine(driveForward, true));
 		return new SequentialRoutine(sequence);
 		
 		//return new CustomPositioningSliderRoutine(-3);

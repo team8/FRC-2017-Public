@@ -33,7 +33,7 @@ public class CenterPegAutoMode extends AutoModeBase {
 	private Gains mShortGains, mLongGains;
 	private double initialSliderPosition;	// distance from center in inches
 	private final double backupDistance = 10;	// distance in inches
-	private final double pilotWaitTime = 2.5;	// time in seconds
+	private final double pilotWaitTime = 3;	// time in seconds
 
 	public CenterPegAutoMode(Alliance alliance, PostCenterAutoVariant direction, boolean backup) {
 		mVariant = direction;
@@ -75,7 +75,7 @@ public class CenterPegAutoMode extends AutoModeBase {
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
 		if (mBackup) {
-			sequence.add(getBackup(2));		// Move slider slightly to the right
+			sequence.add(getBackup(-3));		// Move slider slightly to the right
 			sequence.add(new TimeoutRoutine(pilotWaitTime));
 		}
 

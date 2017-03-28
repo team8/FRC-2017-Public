@@ -177,9 +177,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 					mOutput.setPosition(commands.robotSetpoints.sliderCustomSetpoint.get(), mEncoderGains);
 				}
 				break;
-		}
-		
-		System.out.println(this.printStatus());
+		}		
 	}
 	
 	/**

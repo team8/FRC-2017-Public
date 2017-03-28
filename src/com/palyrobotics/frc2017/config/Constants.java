@@ -155,7 +155,7 @@ public class Constants extends ConstantsBase {
 	public static double k254LoadingStationForwardDistanceInches = 80;
 	public static double k254LoadingStationAirshipDistanceInches = 68;
 	public static double k254BoilerForwardDistanceInches = 64;
-	public static double k254BoilerAirshipDistanceInches = 80; // should be 81.5 but for safety
+	public static double k254BoilerAirshipDistanceInches = 82; // should be 81.5 but for safety
 	public static double kSidePegTurnAngleDegrees = 60;
 	
 	/*

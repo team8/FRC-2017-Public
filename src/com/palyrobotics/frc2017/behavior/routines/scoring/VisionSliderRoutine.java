@@ -34,6 +34,7 @@ public class VisionSliderRoutine extends Routine {
 	public Commands update(Commands commands) {
 		commands.robotSetpoints.sliderSetpoint = SliderTarget.CUSTOM;
 		commands.wantedSpatulaState = Spatula.SpatulaState.UP;
+		double visionSetpoint = AndroidConnectionHelper.getInstance().x_dist;
 		commands.robotSetpoints.sliderCustomSetpoint = 
 				Optional.of(AndroidConnectionHelper.getInstance().x_dist * Constants.kSliderRevolutionsPerInch);
 		

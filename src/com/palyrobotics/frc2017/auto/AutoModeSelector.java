@@ -20,7 +20,7 @@ public class AutoModeSelector {
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
-	int selectedIndex = 4;
+	int selectedIndex = 3;
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
 			instance = new AutoModeSelector();
@@ -46,8 +46,8 @@ public class AutoModeSelector {
   /*2*/ registerAutonomous(new CenterPegAutoMode(CenterPegAutoMode.Alliance.RED, // Alliance Color
 		  										 CenterPegAutoMode.PostCenterAutoVariant.NOTHING,  // Should be NOTHING.
 		  										 true)); // Backup boolean
-		
-  /*3*/	registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_LEFT, // Alliance color and side
+		// red left/ blue right = loading station, red right/blue left = boiler
+  /*3*/	registerAutonomous(new SidePegAutoMode(SidePegAutoMode.SideAutoVariant.RED_RIGHT, // Alliance color and side
 											   true)); // Should backup?
 	}
 
