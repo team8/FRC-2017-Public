@@ -51,7 +51,7 @@ public class VisionSliderRoutine extends Routine {
 		if (commands.robotSetpoints.sliderCustomSetpoint.isPresent()) {
 			System.out.println("Vision setpoint: "+visionSetpoint);
 		}
-		commands.robotSetpoints.sliderCustomSetpoint = 
+		commands.robotSetpoints.sliderCustomSetpoint =
 				Optional.of(visionSetpoint * Constants.kSliderRevolutionsPerInch);
 
 		switch(mState) {
