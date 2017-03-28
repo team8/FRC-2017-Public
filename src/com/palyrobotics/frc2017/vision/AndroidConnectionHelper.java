@@ -1,5 +1,6 @@
 package com.palyrobotics.frc2017.vision;
 
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import org.json.simple.parser.ParseException;
 import org.spectrum3847.RIOdroid.RIOdroid;
 import com.palyrobotics.frc2017.config.Constants;
@@ -102,8 +103,11 @@ public class AndroidConnectionHelper implements Runnable{
 	private boolean m_visionRunning = false;
 	private boolean m_running = false;
 	private boolean mTesting = false;
+	private NetworkTable m_visionTable;
 
-	public double x_dist = 0;
+	private double m_x_dist = 0;
+	private String m_androidState = "NONE";
+	private Object m_android_lock = new Object();
 
 
 	/**
@@ -198,7 +202,6 @@ public class AndroidConnectionHelper implements Runnable{
 				// Initializes RIOdroid usb and RIOadb adb daemon
 				if(!this.mTesting) {
 					RIOdroid.init();
-//					RuntimeExecutor.getInstance().init();
 
 					if(m_streamState.equals(StreamState.BROADCAST)){
 						// Forward the port and start the server socket for data
@@ -237,8 +240,8 @@ public class AndroidConnectionHelper implements Runnable{
 
 				connected = true;
 			} catch (Exception e) {
-//				System.out.println("Error: in AndroidConnectionHelper.InitializeServer(), "
-//						+ "could not connect.\n" + e.getStackTrace());
+				System.out.println("Error: in AndroidConnectionHelper.InitializeServer(), "
+						+ "could not connect.\n" + e.getStackTrace());
 			}
 
 			// Let it retry connection for 10 seconds, then give in
@@ -260,25 +263,23 @@ public class AndroidConnectionHelper implements Runnable{
 	 * Starts up the vision app
 	 */
 	public void StartVisionApp(){
+		if(!m_adbServerCreated){    // No abd server, can't start app
+			System.out.println("Warning: on call AndroidConnectionHelper.StartVisionApp(), " +
+					"adb server not started, abandoning app startup");
+			return;
+		}
+
 		if(m_visionRunning){	// This should never happen, but easily can due to outside calling
 			System.out.println("Warning: On call AndroidConnectionHelper.StartVisionApp(), "
 					+ "vision app already running (or function has been called before)");
 		}else{
 			if(m_connectionState.equals(ConnectionState.STARTING_SERVER)){
-				int count = 40;
-				int i = 0;
 				while(!m_connectionState.equals(ConnectionState.IDLE)){
 					try {
 						Thread.sleep(50);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
-					i++;
-					
-					if (i >= count){
-						//give up
-						break;
 					}
 				}
 
@@ -307,7 +308,7 @@ public class AndroidConnectionHelper implements Runnable{
 			}else{
 				System.out.println(RuntimeExecutor.getInstance().exec(
 						"adb shell am start -n " + Constants.kPackageName + "/" +
-						Constants.kPackageName + "." + Constants.kActivityName));
+								Constants.kPackageName + "." + Constants.kActivityName));
 			}
 
 			connected = true;
@@ -342,16 +343,16 @@ public class AndroidConnectionHelper implements Runnable{
 		}
 
 		switch (m_streamState){
-		case IDLE:
-			System.out.println("Error: in AndroidConnectionHelper.StreamVision(), "
-					+ "streaming in IDLE state, nothing streaming");
-			break;
-		case JSON:
-			this.StreamJSON();
-			break;
-		case BROADCAST:
-			this.StreamBroadcast();
-			break;
+			case IDLE:
+				System.out.println("Error: in AndroidConnectionHelper.StreamVision(), "
+						+ "streaming in IDLE state, nothing streaming");
+				break;
+			case JSON:
+				this.StreamJSON();
+				break;
+			case BROADCAST:
+				this.StreamBroadcast();
+				break;
 		}
 
 		return m_connectionState;
@@ -423,46 +424,26 @@ public class AndroidConnectionHelper implements Runnable{
 		if(json != null){
 			String state = (String) json.get("state");
 			if(!(state == null) && !state.equals("")){	// Handle based on state
-				switch(state){
-				case "STREAMING":
-//					// Get image data
-//					String data_s = ((String) json.get("image_rgb"));
-//
-//					// Convert image data to bytes
-//					if(!(data_s == null || data_s.equals(""))) {
-////						m_imageData  = DatatypeConverter.parseBase64Binary(data_s);
-//						if (!mTesting) {
-//							System.out.println("Warning: AndroidConnectionHelper.parseJSON(), NOT PUTTING DATA IN NETWORK TABLE");
-////							m_visionTable.putString("image_rgb", data_s);
-//						}
-//					}
-//					break;
-
-					Number data_x = ((Number)json.get("x_displacement"));
-					if (data_x != null) {
-						System.out.println("Data: " + data_x.doubleValue());
-						this.x_dist = data_x.doubleValue();
+				synchronized (m_android_lock) {
+					if (state == "STREAMING") {
+						// Get image data
+						Number data_x = ((Number) json.get("x_displacement"));
+						if (data_x != null) {
+							this.m_x_dist = data_x.doubleValue();
+						}
 					}
-					break;
-
-//				case "PAUSED":
-//					System.out.println("Vision Paused");
-//					break;
-
-				case "TERMINATED":
-					System.out.println("Vision Terminated");
-					break;
-
-				case "STARTUP":
-					System.out.println("Vision Starting Up");
-					break;
-
-				default:
-//					System.out.println("WHAT");
-					break;
+					m_androidState = state;
 				}
 			}
 		}
+	}
+
+	public double getXDist(){
+		if(m_androidState != "STREAMING"){
+			System.out.println("Warning in AndroidConnectionHelper.getXDist(), " +
+					"not streaming, android state is "+m_androidState+", returning last valid x_distance");
+		}
+		return m_x_dist;
 	}
 
 	/**
@@ -474,25 +455,25 @@ public class AndroidConnectionHelper implements Runnable{
 			ConnectionState initState = m_connectionState;
 			switch(m_connectionState){
 
-			case PREINIT:	// Shouldn't happen, but can due to error
-				System.out.println("Error: in AndroidConnectionHelper.run(), "
-						+ "thread running on preinit state");
-				break;
+				case PREINIT:	// Shouldn't happen, but can due to error
+					System.out.println("Error: in AndroidConnectionHelper.run(), "
+							+ "thread running on preinit state");
+					break;
 
-			case STARTING_SERVER:	// Triggered by start(), should be called externally
-				this.SetState(this.InitializeServer());
-				break;
+				case STARTING_SERVER:	// Triggered by start(), should be called externally
+					this.SetState(this.InitializeServer());
+					break;
 
-			case START_VISION_APP:	// Triggered by StartVisionApp(), should be called externally
-				this.SetState(this.VisionInit());
-				break;
+				case START_VISION_APP:	// Triggered by StartVisionApp(), should be called externally
+					this.SetState(this.VisionInit());
+					break;
 
-			case STREAMING:
-				this.SetState(this.StreamVision());
-				break;
+				case STREAMING:
+					this.SetState(this.StreamVision());
+					break;
 
-			case IDLE:
-				break;
+				case IDLE:
+					break;
 			}
 
 			// Reset state start time if state changed
