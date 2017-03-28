@@ -3,6 +3,14 @@ package com.palyrobotics.frc2017.auto;
 import com.palyrobotics.frc2017.auto.modes.*;
 import com.palyrobotics.frc2017.auto.modes.CenterPegAutoMode.Alliance;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
+import com.palyrobotics.frc2017.auto.modes.BaseLineAutoMode;
+import com.palyrobotics.frc2017.auto.modes.CenterPegAutoMode;
+import com.palyrobotics.frc2017.auto.modes.CenterPegAutoMode.Alliance;
+import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode;
+import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
+import com.palyrobotics.frc2017.auto.modes.TestAutoMode;
+import com.palyrobotics.frc2017.auto.modes.VisionCenterPegAutoMode;
+import com.palyrobotics.frc2017.auto.modes.VisionSidePegAutoMode;
 
 import org.json.simple.JSONArray;
 
@@ -27,7 +35,6 @@ public class AutoModeSelector {
 	 * comment for which auto mode the selectedIndex refers to
 	 */
 	int selectedIndex = AutoIndices.TRAJECTORY.get();
-
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
 			instance = new AutoModeSelector();

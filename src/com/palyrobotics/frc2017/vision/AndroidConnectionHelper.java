@@ -430,6 +430,7 @@ public class AndroidConnectionHelper implements Runnable{
 			String state = (String) json.get("state");
 			if(!(state == null) && !state.equals("")){	// Handle based on state
 				synchronized (m_android_lock) {
+					this.m_x_dist = ((Number) json.get("x_displacement")).doubleValue();
 					if (state.equals("STREAMING")) {
 						// Get image data
 						Number data_x = ((Number) json.get("x_displacement"));
@@ -452,14 +453,14 @@ public class AndroidConnectionHelper implements Runnable{
 		}
 	}
 
-	public double getXDist(){
-		if(!m_androidState.equals("STREAMING")){
+	public double getXDist() {
+		if (!m_androidState.equals("STREAMING")) {
 			System.out.println("Warning in AndroidConnectionHelper.getXDist(), " +
 					"not streaming, android state is "+m_androidState+", returning last valid x_distance");
 		}
 		return m_x_dist;
 	}
-
+	
 	public boolean isServerStarted(){
 		return this.m_adbServerCreated;
 	}
