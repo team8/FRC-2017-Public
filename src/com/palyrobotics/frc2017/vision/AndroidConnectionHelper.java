@@ -455,8 +455,8 @@ public class AndroidConnectionHelper implements Runnable{
 
 	public double getXDist() {
 		if (!m_androidState.equals("STREAMING")) {
-			System.out.println("Warning in AndroidConnectionHelper.getXDist(), " +
-					"not streaming, android state is "+m_androidState+", returning last valid x_distance");
+//			System.out.println("Warning in AndroidConnectionHelper.getXDist(), " +
+//					"not streaming, android state is "+m_androidState+", returning last valid x_distance");
 		}
 		return m_x_dist;
 	}
