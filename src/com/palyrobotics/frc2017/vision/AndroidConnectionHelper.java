@@ -460,13 +460,13 @@ public class AndroidConnectionHelper implements Runnable{
 		return m_x_dist;
 	}
 
+	public boolean isServerStarted(){
+		return m_adbServerCreated;
+	}
+	
 	public boolean isNexusConnected(){
 		String[] outp = RuntimeExecutor.getInstance().exec("adb devices").split("\\n");
 		return outp.length > 1;
-	}
-
-	public boolean isServerStarted(){
-		return m_adbServerCreated;
 	}
 
 	/**

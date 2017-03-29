@@ -201,8 +201,11 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledPeriodic() {
 		mHardwareUpdater.updateSensors(robotState);
+<<<<<<< HEAD
 //		System.out.println("Slider pot: "+robotState.sliderPotentiometer);
 //		System.out.println("Slider enc: "+robotState.sliderEncoder);
+=======
+>>>>>>> Tried gyro turn angle, update vision code
 //		System.out.println("Gyro: "+robotState.drivePose.heading);
 //		System.out.println("Left enc: " + robotState.drivePose.leftEnc +"\n"
 //				+"Right enc: "+robotState.drivePose.rightEnc);

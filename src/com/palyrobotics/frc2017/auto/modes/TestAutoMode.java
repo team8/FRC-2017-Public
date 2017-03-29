@@ -31,9 +31,33 @@ public class TestAutoMode extends AutoModeBase {
 	public Routine getRoutine() {
 		ArrayList<Routine> sequence = new ArrayList<Routine>();
 		
+<<<<<<< HEAD
 		sequence.add(new CustomPositioningSliderRoutine(-7));
 //		sequence.add(new EncoderTurnAngleRoutine(60));
 		sequence.add(new VisionSliderRoutine());
+=======
+		double driveForwardSetpoint = 5*Constants.kDriveTicksPerInch; //inches
+		DriveSignal driveForward = DriveSignal.getNeutralSignal();
+		
+		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, Gains.steikShortDriveMotionMagicGains,
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, Gains.steikShortDriveMotionMagicGains,
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		
+//		sequence.add(new CANTalonRoutine(driveForward, true));
+////		return routine;
+////		DriveSignal power = DriveSignal.getNeutralSignal();
+////		power.leftMotor.setPercentVBus(0.3);
+////		power.rightMotor.setPercentVBus(0.3);
+////		return new DriveTimeRoutine(1, power);
+//		
+//		sequence.add(new CustomPositioningSliderRoutine(5));
+		
+//		sequence.add(new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.CENTER));
+//		sequence.add(new VisionSliderRoutine());
+//		sequence.add(new CANTalonRoutine(driveForward, true));
+		sequence.add(new SafetyTurnAngleRoutine(90));
+>>>>>>> Tried gyro turn angle, update vision code
 		return new SequentialRoutine(sequence);
 		
 	}
