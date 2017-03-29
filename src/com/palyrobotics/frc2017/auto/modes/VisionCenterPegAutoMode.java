@@ -29,7 +29,7 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 	private double initialSliderPosition;	// distance from center in inches
 	private final double backupDistance = 10;	// distance in inches
 	private final double pilotWaitTime = 3;	// time in seconds
-	private double bonusDistance = 12;
+	private double bonusDistance = 14;
 	private boolean isRightTarget;
 
 	public VisionCenterPegAutoMode(CenterPegAutoMode.Alliance alliance, boolean isRightTarget, boolean backup) {

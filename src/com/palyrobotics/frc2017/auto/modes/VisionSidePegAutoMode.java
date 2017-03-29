@@ -47,6 +47,13 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 		mBackup = backup;
 		mLongGains = Gains.steikLongDriveMotionMagicGains;
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
+		
+		if (isRightTarget) {
+			initialSliderPosition = 0;
+		} else {
+			initialSliderPosition = 0;
+		}
+		System.out.println(initialSliderPosition);
 	}
 
 	@Override
@@ -131,11 +138,6 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 			System.err.println("What in tarnation no side peg distance");
 			driveForwardSetpoint = 0;
 			break;
-		}
-		if (isRightTarget) {
-			initialSliderPosition = -7;
-		} else {
-			initialSliderPosition = 7;
 		}
 		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);

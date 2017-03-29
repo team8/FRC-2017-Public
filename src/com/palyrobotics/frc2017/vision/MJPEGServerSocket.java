@@ -143,6 +143,7 @@ public class MJPEGServerSocket implements Runnable{
 		try {
 			m_server = new ServerSocket(m_port);
 			m_server.setReuseAddress(true);
+			System.out.println("Vision stream server started");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -150,8 +151,8 @@ public class MJPEGServerSocket implements Runnable{
 		this.SetState(MJPEGServerState.CONNECTING);
 		m_running = true;
 
-		System.out.println("Starting Thread: DataServerThread on port "+m_port);
-		(new Thread(this, "DataServerThread")).start();
+		System.out.println("Starting Thread: MJPEGServerThread on port "+m_port);
+		(new Thread(this, "MJPEGServerThread")).start();
 	}
 
 	/**

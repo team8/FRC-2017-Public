@@ -43,7 +43,7 @@ public class SidePegAutoMode extends AutoModeBase {
 	private final double backupDistance = 10;	// distance in inches
 
 	double initialSliderPosition = 0;
-	double backupPosition = -4;
+	double backupPosition = 0;
 
 	public SidePegAutoMode(SideAutoVariant direction, boolean backup) {
 		mVariant = direction;
@@ -70,13 +70,20 @@ public class SidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 		// loading station
 		case RED_LEFT:
+			backupPosition = 3;
+			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
+			break;
 		case BLUE_LEFT:
-			backupPosition*=-1;
+			backupPosition = -3;
 			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
 			break;
 		// boiler side
 		case RED_RIGHT:
+			backupPosition = 5;
+			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
+			break;
 		case BLUE_RIGHT:
+			backupPosition = -3;
 			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;
 		}
@@ -109,7 +116,7 @@ public class SidePegAutoMode extends AutoModeBase {
 			break;
 			// boiler side
 		case RED_RIGHT:
-			initialSliderPosition = 0;
+			initialSliderPosition = 7;
 			driveForwardSetpoint = Constants.k254BoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_LEFT:

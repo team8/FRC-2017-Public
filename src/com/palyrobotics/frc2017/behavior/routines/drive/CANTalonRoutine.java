@@ -46,7 +46,6 @@ public class CANTalonRoutine extends Routine {
 		timeout += System.currentTimeMillis();
 		
 		if (relativeSetpoint) {
-			System.out.println("CANTalon relative start point:" +Robot.getRobotState().drivePose.leftEnc);
 			if (mSignal.leftMotor.getControlMode() == CANTalon.TalonControlMode.MotionMagic) {
 				mSignal.leftMotor.setMotionMagic(mSignal.leftMotor.getSetpoint()+
 								Robot.getRobotState().drivePose.leftEnc,
@@ -107,7 +106,6 @@ public class CANTalonRoutine extends Routine {
 			return false;
 		}
 		if (!drive.hasController() || (drive.getController().getClass() == CANTalonDriveController.class && drive.controllerOnTarget())) {
-			System.out.println("CANTalon on target and finished!");
 		}
 		return !drive.hasController() || System.currentTimeMillis() > this.timeout || (drive.getController().getClass() == CANTalonDriveController.class && drive.controllerOnTarget());
 	}
