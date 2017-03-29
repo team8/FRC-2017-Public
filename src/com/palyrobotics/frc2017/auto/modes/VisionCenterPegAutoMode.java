@@ -36,8 +36,12 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 	private double bonusDistance = 28;
 =======
 	private final double pilotWaitTime = 3;	// time in seconds
+<<<<<<< HEAD
 	private double bonusDistance = 12;
 >>>>>>> Add vision auto modes
+=======
+	private double bonusDistance = 14;
+>>>>>>> Vision auto testing updates
 	private boolean isRightTarget;
 
 	public VisionCenterPegAutoMode(CenterPegAutoMode.Alliance alliance, boolean isRightTarget, boolean backup) {
