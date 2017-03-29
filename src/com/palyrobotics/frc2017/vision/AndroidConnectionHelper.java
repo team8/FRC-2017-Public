@@ -282,7 +282,7 @@ public class AndroidConnectionHelper implements Runnable{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					if (count>= limit){
+					if(count >= limit){
 						break;
 					}
 					count++;
