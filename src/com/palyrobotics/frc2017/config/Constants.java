@@ -56,7 +56,7 @@ public class Constants extends ConstantsBase {
 	/*
 	 * Control loop constants for both robots
 	 */
-	public static double kTurnInPlacePower = 0.2; // for bang bang
+	public static double kTurnInPlacePower = 0.17; // for bang bang
 	public static double kDriveMaxClosedLoopOutput = 8.0;
 	// Unit Conversions for CANTalons
 	public static double kDriveTicksPerInch = 360 / (3.95 * Math.PI);
@@ -152,9 +152,9 @@ public class Constants extends ConstantsBase {
 	public static double kBlueCenterPegDistanceInches = 108.5 - 31; // first num is to airship
 
 	// Side peg
-	public static double k254LoadingStationForwardDistanceInches = 84;
+	public static double k254LoadingStationForwardDistanceInches = 84; //84
 	public static double k254LoadingStationAirshipDistanceInches = 69;
-	public static double k254BoilerForwardDistanceInches = 70;
+	public static double k254BoilerForwardDistanceInches = 82; // 70
 	public static double k254BoilerAirshipDistanceInches = 82; // should be 81.5 but for safety
 	public static double kSidePegTurnAngleDegrees = 60;
 	

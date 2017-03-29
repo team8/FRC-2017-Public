@@ -37,7 +37,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 	private double bonusDistance = 14; // extra space
 
 	double initialSliderPosition = 0;
-	double backupPosition = 4;
+	double backupPosition = 0;
 	boolean isRightTarget;
 
 	public VisionSidePegAutoMode(SidePegAutoMode.SideAutoVariant direction, boolean rightTarget,

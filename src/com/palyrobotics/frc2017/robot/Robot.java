@@ -197,6 +197,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledPeriodic() {
 		mHardwareUpdater.updateSensors(robotState);
+//		System.out.println("Gyro: "+robotState.drivePose.heading);
 //		System.out.println("Left enc: " + robotState.drivePose.leftEnc +"\n"
 //				+"Right enc: "+robotState.drivePose.rightEnc);
 	}

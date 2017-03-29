@@ -40,9 +40,9 @@ public class BangBangTurnAngleController implements Drive.DriveController {
 		DriveSignal output = DriveSignal.getNeutralSignal();
 		if (mCachedPose.heading < mTargetHeading) {
 			output.leftMotor.setPercentVBus(this.mPower);
-			output.rightMotor.setPercentVBus(-(this.mPower +.05));
+			output.rightMotor.setPercentVBus(-(this.mPower));
 		} else {
-			output.leftMotor.setPercentVBus(-(this.mPower + .05));
+			output.leftMotor.setPercentVBus(-(this.mPower));
 			output.rightMotor.setPercentVBus(this.mPower);
 		}
 		return output;

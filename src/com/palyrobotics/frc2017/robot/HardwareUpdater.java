@@ -12,6 +12,8 @@ import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.logger.Logger;
 
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+
 import java.util.Optional;
 
 /**

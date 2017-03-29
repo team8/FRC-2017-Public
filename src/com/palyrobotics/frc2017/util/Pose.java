@@ -65,7 +65,8 @@ public class Pose {
 		copy.leftEnc = this.leftEnc;
 		copy.leftEncVelocity = this.leftEncVelocity;
 		copy.leftSpeed = this.leftSpeed;
-
+		copy.heading = this.heading;
+		copy.headingVelocity = this.headingVelocity;
 		copy.rightEnc = this.rightEnc;
 		copy.rightEncVelocity = this.rightEncVelocity;
 		copy.rightSpeed = this.rightSpeed;

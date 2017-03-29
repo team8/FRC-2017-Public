@@ -258,18 +258,18 @@ public class AndroidConnectionHelper implements Runnable{
 	 * Starts up the vision app
 	 */
 	public void StartVisionApp(){
-//		if(!m_adbServerCreated){    // No abd server, can't start app
-//			System.out.println("Warning: on call AndroidConnectionHelper.StartVisionApp(), " +
-//					"adb server not started, abandoning app startup");
+		if(!m_adbServerCreated){    // No abd server, can't start app
+			System.out.println("Warning: on call AndroidConnectionHelper.StartVisionApp(), " +
+					"adb server not started, abandoning app startup");
 //			return;
-//		}
+		}
 
 		if(m_visionRunning){	// This should never happen, but easily can due to outside calling
 			System.out.println("Warning: On call AndroidConnectionHelper.StartVisionApp(), "
 					+ "vision app already running (or function has been called before)");
 		}else{
 			if(m_connectionState.equals(ConnectionState.STARTING_SERVER)){
-				int limit = 60;
+				int limit = 40;
 				int count = 0;
 				while(!m_connectionState.equals(ConnectionState.IDLE)){
 					try {
@@ -450,7 +450,7 @@ public class AndroidConnectionHelper implements Runnable{
 	public boolean isServerStarted(){
 		return this.m_adbServerCreated;
 	}
-
+	
 	public boolean isNexusConnected(){
 		String[] outp = RuntimeExecutor.getInstance().exec("adb devices").split("\\n");
 		return outp.length > 1;

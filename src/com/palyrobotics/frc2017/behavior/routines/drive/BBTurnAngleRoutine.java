@@ -34,7 +34,7 @@ public class BBTurnAngleRoutine extends Routine {
 
 	@Override
 	public Commands update(Commands commands) {	
-		if (mState != GyroBBState.TIMED_OUT && (System.currentTimeMillis() - startTime > 3000)) {
+		if (mState != GyroBBState.TIMED_OUT && (System.currentTimeMillis() - startTime > 5000)) {
 			System.err.println("Timed out!");
 			mState = GyroBBState.TIMED_OUT;
 		}
