@@ -69,7 +69,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 		System.out.println("Starting "+this.toString()+" Auto Mode");
 		Logger.getInstance().logRobotThread("Starting "+this.toString()+" Auto Mode");
 
-		if (!AndroidConnectionHelper.getInstance().isServerStarted()) {
+		if (!AndroidConnectionHelper.getInstance().isServerStarted() || !AndroidConnectionHelper.getInstance().isNexusConnected()) {
 			System.out.println("Vision server not started!");
 			Logger.getInstance().logRobotThread("Vision server not detected, fallback to default side peg");
 			SidePegAutoMode backup = new SidePegAutoMode(mVariant, true);

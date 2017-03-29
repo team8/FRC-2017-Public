@@ -51,7 +51,7 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 	public void prestart() {
 		String log = "Starting Vision Center Peg Auto Mode";
 		Logger.getInstance().logRobotThread("Starting Vision Center Peg Auto Mode");
-		if (!AndroidConnectionHelper.getInstance().isServerStarted()) {
+		if (!AndroidConnectionHelper.getInstance().isServerStarted()  || !AndroidConnectionHelper.getInstance().isNexusConnected()) {
 			System.out.println("Failed to find vision server, revert auto");
 			Logger.getInstance().logRobotThread("Failed to find vision server, revert");
 			CenterPegAutoMode fallback = new CenterPegAutoMode(mAlliance, true);
