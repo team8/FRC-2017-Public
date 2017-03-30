@@ -180,10 +180,10 @@ public class Logger {
 		try {
 			// FYI, buffered writer closes the underlying filewriter and flushes the buffer
 			mWritingThread.interrupt();
-			mData = new ArrayList<>(mSubsystemThreadLogs);
-			mData.addAll(mRobotThreadLogs);
-			mData.sort(TimestampedString::compareTo);
 			synchronized (writingLock) {
+				mData = new ArrayList<>(mSubsystemThreadLogs);
+				mData.addAll(mRobotThreadLogs);
+				mData.sort(TimestampedString::compareTo);
 				mData.forEach((TimestampedString c) -> {
 					try {
 						bufferedWriter.write(c.getTimestampedString());

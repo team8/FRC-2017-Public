@@ -228,7 +228,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 		slideSequence.add(new CustomPositioningSliderRoutine(sliderPosition));
 		parallelSliding.add(new SequentialRoutine(slideSequence));
 		sequence.add(new ParallelRoutine(parallelSliding));
-		sequence.add(new CANTalonRoutine(driveReturn, true));
+		sequence.add(new CANTalonRoutine(driveReturn, true, 2));
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
 		return new SequentialRoutine(sequence);

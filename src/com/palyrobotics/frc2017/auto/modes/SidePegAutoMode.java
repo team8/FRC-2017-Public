@@ -79,7 +79,7 @@ public class SidePegAutoMode extends AutoModeBase {
 			break;
 		// boiler side
 		case RED_RIGHT:
-			backupPosition = 5;
+			backupPosition = -3;
 			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;
 		case BLUE_RIGHT:
@@ -116,7 +116,7 @@ public class SidePegAutoMode extends AutoModeBase {
 			break;
 			// boiler side
 		case RED_RIGHT:
-			initialSliderPosition = 7;
+			initialSliderPosition = -3;
 			driveForwardSetpoint = Constants.k254BoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_LEFT:

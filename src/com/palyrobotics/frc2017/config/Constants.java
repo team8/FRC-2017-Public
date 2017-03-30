@@ -147,15 +147,15 @@ public class Constants extends ConstantsBase {
 	public static double kBlueBaseLineDistanceInches = 93.3;
 
 	// Center peg
-	public static double k254CenterPegDistanceInches = 81;
+	public static double k254CenterPegDistanceInches = 80;
 	public static double kRedCenterPegDistanceInches = 113.75 - 31; // first number is to airship
 	public static double kBlueCenterPegDistanceInches = 108.5 - 31; // first num is to airship
 
 	// Side peg
 	public static double k254LoadingStationForwardDistanceInches = 80; //84
 	public static double k254LoadingStationAirshipDistanceInches = 66;
-	public static double k254BoilerForwardDistanceInches = 82; // 70
-	public static double k254BoilerAirshipDistanceInches = 82; // should be 81.5 but for safety
+	public static double k254BoilerForwardDistanceInches = 80; // 70
+	public static double k254BoilerAirshipDistanceInches = 73; // should be 81.5 but for safety
 	public static double kSidePegTurnAngleDegrees = 60;
 	
 	/*
