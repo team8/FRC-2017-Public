@@ -130,7 +130,7 @@ public class HardwareAdapter {
 	}
 	
 	/*
-	 * INTAKE - 2 VictorSPs
+	 * INTAKE - 1 VictorSP
 	 */
 	public static class IntakeHardware {
 		private static IntakeHardware instance = new IntakeHardware();
@@ -138,16 +138,13 @@ public class HardwareAdapter {
 		protected static IntakeHardware getInstance() {
 			return instance;
 		}
-		public final VictorSP leftIntakeMotor;
-		public final VictorSP rightIntakeMotor;
+		public final VictorSP intakeMotor;
 
 		private IntakeHardware() {
 			if (Constants.kRobotName == Constants.RobotName.STEIK) {
-				leftIntakeMotor = new VictorSP(Constants.kSteikLeftIntakeMotorDeviceID);
-				rightIntakeMotor = new VictorSP(Constants.kSteikRightIntakeMotorDeviceID);
+				intakeMotor = new VictorSP(Constants.kSteikIntakeMotorDeviceID);
 			} else {
-				leftIntakeMotor = null;
-				rightIntakeMotor = null;
+				intakeMotor = null;
 			}
 		}
 	}

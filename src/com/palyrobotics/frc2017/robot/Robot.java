@@ -78,7 +78,7 @@ public class Robot extends IterativeRobot {
 //			mSubsystemLooper.register(mFlippers);
 			mSubsystemLooper.register(mSlider);
 			mSubsystemLooper.register(mSpatula);
-//			mSubsystemLooper.register(mIntake);
+			mSubsystemLooper.register(mIntake);
 			mSubsystemLooper.register(mClimber);
 		} else {
 			try {

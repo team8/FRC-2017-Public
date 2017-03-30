@@ -68,8 +68,8 @@ public class Constants extends ConstantsBase {
 
 	// Aegir: 2172 RIGHT  |  3452 LEFT
 	// Vali: 2036 RIGHT | 3314 LEFT
-	public static final double kPotentiometerRightPos = 2172;
-	public static final double kPotentiometerLeftPos = 3452;
+	public static final double kPotentiometerRightPos = 2036;
+	public static final double kPotentiometerLeftPos = 3314;
 	public static final double kPotentiometerCenterPos = (kPotentiometerRightPos + kPotentiometerLeftPos) / 2;
 	
 	// Tolerances
@@ -130,10 +130,8 @@ public class Constants extends ConstantsBase {
 	public static int kSteikSpatulaPortRetract = 0;
 
 	// INTAKE
-	public static int kSteikLeftIntakeMotorDeviceID = 14;
-	public static int kSteikLeftIntakeMotorPDP = 11;
-	public static int kSteikRightIntakeMotorDeviceID = 12;
-	public static int kSteikRightIntakeMotorPDP = 13;
+	public static int kSteikIntakeMotorDeviceID = 14;
+	public static int kSteikIntakeMotorPDP = 11;
 
 	// CLIMBER
 	public static int kSteikClimberMotorDeviceID = 9;

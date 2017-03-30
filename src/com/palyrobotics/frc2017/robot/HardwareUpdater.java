@@ -282,8 +282,7 @@ class HardwareUpdater {
 		// SPATULA
 		HardwareAdapter.getInstance().getSpatula().spatulaSolenoid.set(mSpatula.getOutput());
 //		// INTAKE
-		HardwareAdapter.getInstance().getIntake().leftIntakeMotor.set(mIntake.getOutput());
-		HardwareAdapter.getInstance().getIntake().rightIntakeMotor.set(-mIntake.getOutput());
+		HardwareAdapter.getInstance().getIntake().intakeMotor.set(mIntake.getOutput());
 		// CLIMBER
 		updateCANTalonSRX(HardwareAdapter.getInstance().getClimber().climberTalon, mClimber.getOutput());
 	}

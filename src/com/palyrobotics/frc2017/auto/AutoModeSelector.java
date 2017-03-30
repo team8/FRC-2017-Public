@@ -33,7 +33,7 @@ public class AutoModeSelector {
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
-	int selectedIndex = AutoIndices.VISIONCENTERPEG.get();
+	int selectedIndex = AutoIndices.VISIONSIDEPEG.get();
 	
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
@@ -61,7 +61,7 @@ public class AutoModeSelector {
   /*3*/	registerAutonomous(new SidePegAutoMode(SideAutoVariant.RED_RIGHT, // Alliance color and side
 											   true)); // Should backup?
   /*4*/ registerAutonomous(new VisionCenterPegAutoMode(Alliance.BLUE, false, true)); // alliance, seeking right vision target?, backup?
-  /*5*/ registerAutonomous(new VisionSidePegAutoMode(SideAutoVariant.RED_RIGHT, // Field position
+  /*5*/ registerAutonomous(new VisionSidePegAutoMode(SideAutoVariant.RED_LEFT, // Field position
 		  										false, true)); // seeking right vision target?, backup?
 	}
 
