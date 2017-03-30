@@ -54,9 +54,8 @@ public class Robot extends IterativeRobot {
 		System.out.println("Start robotInit() for "+Constants.kRobotName.toString());
 		DashboardManager.getInstance().robotInit();
 		AndroidConnectionHelper.getInstance().start(AndroidConnectionHelper.StreamState.JSON);
-		AndroidConnectionHelper.getInstance().setFlash(true);
 		System.out.println("Finished starting");
-//		mLogger.setFileName("Qual53");
+		mLogger.setFileName("PracticeMatch");
 		mLogger.start();
 		mLogger.logRobotThread("robotInit() start");
 		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);
@@ -99,7 +98,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		System.out.println("Start autonomousInit()");
-		AndroidConnectionHelper.getInstance().setFlash(true);
 		mLogger.start();
 		mLogger.logRobotThread("Start autonomousInit()");
 		robotState.gamePeriod = RobotState.GamePeriod.AUTO;
@@ -149,7 +147,6 @@ public class Robot extends IterativeRobot {
 		commands.wantedDriveState = Drive.DriveState.CHEZY;	//switch to chezy after auto ends
 		commands = operatorInterface.updateCommands(commands);
 		mSubsystemLooper.start();
-		AndroidConnectionHelper.getInstance().setFlash(false);
 		mLogger.logRobotThread("End teleopInit()");
 		System.out.println("End teleopInit()");
 	}

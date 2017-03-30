@@ -51,7 +51,7 @@ public class SubsystemLooper {
 					RobotState robotState = Robot.getRobotState();
 					for (SubsystemLoop loop : mLoops) {
 						loop.update(commands, robotState);
-						Logger.getInstance().logSubsystemThread(loop.printStatus());
+//						Logger.getInstance().logSubsystemThread(loop.printStatus());
 					}
 					mDt = now - mTimeStamp;
 					mTimeStamp = now;
