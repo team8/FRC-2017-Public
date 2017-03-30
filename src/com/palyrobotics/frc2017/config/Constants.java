@@ -143,46 +143,36 @@ public class Constants extends ConstantsBase {
 
 	// Base line
 	public static double k254BaseLineDistanceInches = 93.3;
-	public static double kRedBaseLineDistanceInches = 93.3;
-	public static double kBlueBaseLineDistanceInches = 93.3;
+	public static double kRedBaseLineDistanceInches = 110;
+	public static double kBlueBaseLineDistanceInches = 110;
 
 	// Center peg
 	public static double k254CenterPegDistanceInches = 80;
-	public static double kRedCenterPegDistanceInches = 113.75 - 31; // first number is to airship
-	public static double kBlueCenterPegDistanceInches = 108.5 - 31; // first num is to airship
+	public static double kRedCenterPegDistanceInches = 79;
+	public static double kBlueCenterPegDistanceInches = 79.5;
 
 	// Side peg
-	public static double k254LoadingStationForwardDistanceInches = 80; //84
-	public static double k254LoadingStationAirshipDistanceInches = 66;
-	public static double k254BoilerForwardDistanceInches = 80; // 70
-	public static double k254BoilerAirshipDistanceInches = 73; // should be 81.5 but for safety
+	public static double k254LoadingStationForwardDistanceInches = 80; // 84, 80
+	public static double k254LoadingStationAirshipDistanceInches = 66; // 66
+	public static double k254BoilerForwardDistanceInches = 80; // 80
+	public static double k254BoilerAirshipDistanceInches = 73; // 81.5, 73
 	public static double kSidePegTurnAngleDegrees = 60;
-	
-	/*
-	 * CAD measurements -
-	 * loading airship distances look too short
-	 * blue right/loading - 67.87, 69.44
-	 * red left/loading - 73.85, 69.25
-	 * 
-	 * blue left/boiler - 65.92, 73.36
-	 * red right/boiler - 71.79, 73.36  
-	 */
-	
+		
 	// Blue right loading station
-	public static double kBlueLoadingStationForwardDistanceInches = 69; // 73, 69
-	public static double kBlueLoadingStationAirshipDistanceInches = 84; // 105, too far, 84
+	public static double kBlueLoadingStationForwardDistanceInches = 79.5; // 79.5 
+	public static double kBlueLoadingStationAirshipDistanceInches = 70; // 66, 70 
 	
 	// Red left loading station
-	public static double kRedLoadingStationForwardDistanceInches = 71; // 87.75, 75, 
-	public static double kRedLoadingStationAirshipDistanceInches = 84; // 108, 95
+	public static double kRedLoadingStationForwardDistanceInches = 79; // 79,  
+	public static double kRedLoadingStationAirshipDistanceInches = 70; // 66, 70 
 
 	// Blue left boiler
-	public static double kBlueBoilerForwardDistanceInches = 66; // 69, 67, 66
-	public static double kBlueBoilerAirshipDistanceInches = 70.5; // 107, 87.5, 70.5
+	public static double kBlueBoilerForwardDistanceInches = 79.5; // 79.5 
+	public static double kBlueBoilerAirshipDistanceInches = 73; // 73, 
 
 	// Red right boiler
-	public static double kRedBoilerForwardDistanceInches = 65; // 75, 64, 60, 64
-	public static double kRedBoilerAirshipDistanceInches = 70; // 106, 70
+	public static double kRedBoilerForwardDistanceInches = 79; // 
+	public static double kRedBoilerAirshipDistanceInches = 73; // 73,  
 
 	// !!! Loop rate of normal Looper
 	public static double kControlLoopsDt = 0.005;

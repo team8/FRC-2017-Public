@@ -32,7 +32,7 @@ public class CenterPegAutoMode extends AutoModeBase {
 
 	public CenterPegAutoMode(Alliance alliance, boolean backup) {
 		mAlliance = alliance;
-		initialSliderPosition = (alliance == Alliance.BLUE) ? 0 : 0;
+		initialSliderPosition = (alliance == Alliance.BLUE) ? -1 : -1;
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
 		mLongGains = Gains.steikLongDriveMotionMagicGains;
 
@@ -53,13 +53,13 @@ public class CenterPegAutoMode extends AutoModeBase {
 		// Straight drive distance to the center peg
 		DriveSignal driveForward = DriveSignal.getNeutralSignal();
 		double driveForwardSetpoint =
-				((mAlliance == Alliance.BLUE) ? Constants.k254CenterPegDistanceInches : Constants.k254CenterPegDistanceInches)
+				((mAlliance == Alliance.BLUE) ? Constants.kBlueCenterPegDistanceInches : Constants.kRedCenterPegDistanceInches)
 						* Constants.kDriveTicksPerInch;
 		// Aegir: right +30
 		// Vali: left +100
-		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
+		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint+100, mLongGains,
 			Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
-		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint+30, mLongGains,
+		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		
 		// Drive forward while moving slider to initial position

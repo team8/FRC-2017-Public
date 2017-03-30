@@ -123,17 +123,17 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 		// loading station side
 		case RED_LEFT:
-			driveForwardSetpoint = Constants.k254LoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = Constants.kRedLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_RIGHT:
-			driveForwardSetpoint = Constants.k254LoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = Constants.kBlueLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 			// boiler side
 		case RED_RIGHT:
-			driveForwardSetpoint = Constants.k254BoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = Constants.kRedBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_LEFT:
-			driveForwardSetpoint = Constants.k254BoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = Constants.kBlueBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		default:
 			System.err.println("What in tarnation no side peg distance");

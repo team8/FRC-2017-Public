@@ -39,7 +39,7 @@ public class SidePegAutoMode extends AutoModeBase {
 	// Long distance vs short distance
 	private Gains mLongGains, mShortGains;
 
-	private final double pilotWaitTime = 2; // time in seconds
+	private final double pilotWaitTime = 2.5; // time in seconds
 	private final double backupDistance = 10;	// distance in inches
 
 	double initialSliderPosition = 0;
@@ -108,20 +108,20 @@ public class SidePegAutoMode extends AutoModeBase {
 		// loading station side
 		case RED_LEFT:
 			initialSliderPosition = 0;
-			driveForwardSetpoint = Constants.k254LoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = Constants.kRedLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_RIGHT:
 			initialSliderPosition = 0;
-			driveForwardSetpoint = Constants.k254LoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = Constants.kBlueLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 			// boiler side
 		case RED_RIGHT:
 			initialSliderPosition = -3;
-			driveForwardSetpoint = Constants.k254BoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = Constants.kRedBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_LEFT:
 			initialSliderPosition = 0;
-			driveForwardSetpoint = Constants.k254BoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = Constants.kBlueBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		default:
 			System.err.println("What in tarnation no side peg distance");
@@ -148,17 +148,17 @@ public class SidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 		// loading station side
 		case RED_LEFT:
-			driveToAirshipSetpoint = Constants.k254LoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
+			driveToAirshipSetpoint = Constants.kRedLoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_RIGHT:
-			driveToAirshipSetpoint = Constants.k254LoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
+			driveToAirshipSetpoint = Constants.kBlueLoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 			// boiler side
 		case RED_RIGHT:
-			driveToAirshipSetpoint = Constants.k254BoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
+			driveToAirshipSetpoint = Constants.kRedBoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_LEFT:
-			driveToAirshipSetpoint = Constants.k254BoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
+			driveToAirshipSetpoint = Constants.kBlueBoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		default:
 			System.err.println("What in tarnation no side peg airship distance");

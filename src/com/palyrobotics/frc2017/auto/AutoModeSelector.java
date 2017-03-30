@@ -60,7 +60,7 @@ public class AutoModeSelector {
 		// red left/ blue right = loading station, red right/blue left = boiler
   /*3*/	registerAutonomous(new SidePegAutoMode(SideAutoVariant.RED_RIGHT, // Alliance color and side
 											   true)); // Should backup?
-  /*4*/ registerAutonomous(new VisionCenterPegAutoMode(Alliance.RED, false, true)); // alliance, seeking right vision target?, backup?
+  /*4*/ registerAutonomous(new VisionCenterPegAutoMode(Alliance.BLUE, false, true)); // alliance, seeking right vision target?, backup?
   /*5*/ registerAutonomous(new VisionSidePegAutoMode(SideAutoVariant.RED_RIGHT, // Field position
 		  										false, true)); // seeking right vision target?, backup?
 	}
