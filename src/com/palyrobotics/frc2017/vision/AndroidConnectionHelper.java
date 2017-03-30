@@ -250,7 +250,9 @@ public class AndroidConnectionHelper implements Runnable{
 //			} else {
 //				return m_connectionState;
 			}
-			return ConnectionState.IDLE;
+			System.out.println("Vision stream started");
+			this.m_visionRunning = true;
+			return ConnectionState.STREAMING;
 		}
 	}
 
@@ -339,8 +341,8 @@ public class AndroidConnectionHelper implements Runnable{
 	 */
 	private ConnectionState StreamVision(){
 		if(!m_visionRunning){	// This should never happen
-			System.out.println("Error: in AndroidConnectionHelper.StreamVision(), "
-					+ "vision program i not running (or has not been initialized inside this program)");
+//			System.out.println("Error: in AndroidConnectionHelper.StreamVision(), "
+//					+ "vision program i not running (or has not been initialized inside this program)");
 		}
 
 		switch (m_streamState){
@@ -369,9 +371,9 @@ public class AndroidConnectionHelper implements Runnable{
 		String out = "";
 		// Broadcast an Intent to the app signaling the call to get data
 		if(!mTesting){
-			out = RIOdroid.executeCommand("adb shell am broadcast -a "+Constants.kPackageName+".GET_DATA --es filler text");
+			out = RIOdroid.executeCommand("adb shell am broadcast -a "+Constants.kPackageName+".GET_DATA --es type data");
 		}else{
-			out = RuntimeExecutor.getInstance().exec("adb shell am broadcast -a "+Constants.kPackageName+".GET_DATA --es filler text");
+			out = RuntimeExecutor.getInstance().exec("adb shell am broadcast -a "+Constants.kPackageName+".GET_DATA --es type data");
 		}
 
 //		System.out.println(out);
@@ -406,7 +408,7 @@ public class AndroidConnectionHelper implements Runnable{
 	 * @param raw_data Raw JSON formatted data (String)
 	 */
 	private void parseJSON(String raw_data){
-		if(raw_data == null  || raw_data.equals("")){
+		if(raw_data == null  || raw_data.equals("") || raw_data.equals("error: no devices/emulators found")){
 			return;
 		}
 
@@ -436,6 +438,15 @@ public class AndroidConnectionHelper implements Runnable{
 					m_androidState = state;
 				}
 			}
+		}
+	}
+	
+	public void setFlash(boolean isFlashOn){
+		String out;
+		if(!mTesting){
+			out = RIOdroid.executeCommand("adb shell am broadcast -a "+Constants.kPackageName+".GET_DATA --es type flash --ez isFlash "+isFlashOn);
+		}else{
+			out = RuntimeExecutor.getInstance().exec("adb shell am broadcast -a "+Constants.kPackageName+".GET_DATA --es type flash --ez isFlash "+isFlashOn);
 		}
 	}
 

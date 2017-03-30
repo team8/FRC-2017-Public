@@ -169,7 +169,7 @@ public class Constants extends ConstantsBase {
 	public static double kBlueBoilerAirshipDistanceInches = 73; // 73, 
 
 	// Red right boiler
-	public static double kRedBoilerForwardDistanceInches = 79; // 
+	public static double kRedBoilerForwardDistanceInches = 82; // 79, 82
 	public static double kRedBoilerAirshipDistanceInches = 73; // 73,  
 
 	// !!! Loop rate of normal Looper
