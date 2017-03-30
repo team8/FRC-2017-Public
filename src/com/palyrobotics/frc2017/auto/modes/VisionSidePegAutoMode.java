@@ -34,7 +34,8 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 
 	private final double pilotWaitTime = 3; // time in seconds
 	private final double backupDistance = 10; // distance in inches
-	private double bonusDistance = 14; // extra space
+	private double overshootDistance = 5;
+	private double bonusDistance = 20; // extra space
 
 	double initialSliderPosition = 0;
 	double backupPosition = 0;
@@ -139,6 +140,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 			driveForwardSetpoint = 0;
 			break;
 		}
+		driveForwardSetpoint += overshootDistance;
 		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
@@ -195,7 +197,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		ArrayList<Routine> scoreSequence = new ArrayList<>();
 		scoreSequence.add(new VisionSliderRoutine());
-		scoreSequence.add(new CANTalonRoutine(driveScore, true));
+		scoreSequence.add(new CANTalonRoutine(driveScore, true, 2));
 		return new SequentialRoutine(scoreSequence);
 	}
 	/*

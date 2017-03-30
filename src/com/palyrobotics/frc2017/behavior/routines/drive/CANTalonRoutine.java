@@ -37,7 +37,7 @@ public class CANTalonRoutine extends Routine {
 	public CANTalonRoutine(DriveSignal controller, boolean relativeSetpoint, double timeout) {
 		this.mSignal = controller;
 		this.relativeSetpoint = relativeSetpoint;
-		this.timeout = timeout;
+		this.timeout = timeout * 1000;
 	}
 
 	@Override
