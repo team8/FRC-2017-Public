@@ -50,8 +50,8 @@ public class Constants extends ConstantsBase {
 	public static double kAlpha = 0.45;
 
 	// Manual control speed tuning
-	public static double kManualIntakeSpeed = 1.0;
-	public static double kManualExhaustSpeed = -1.0;
+	public static double kManualIntakeSpeed = -1.0;
+	public static double kManualExhaustSpeed = 1.0;
 
 	/*
 	 * Control loop constants for both robots
@@ -130,8 +130,8 @@ public class Constants extends ConstantsBase {
 	public static int kSteikSpatulaPortRetract = 0;
 
 	// INTAKE
-	public static int kSteikIntakeMotorDeviceID = 14;
-	public static int kSteikIntakeMotorPDP = 11;
+	public static int kSteikIntakeMotorDeviceID = 0;
+	public static int kSteikIntakeMotorPDP = 8;
 
 	// CLIMBER
 	public static int kSteikClimberMotorDeviceID = 9;

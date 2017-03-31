@@ -49,14 +49,16 @@ public class EncoderTurnAngleController implements DriveController {
 			return false;
 		}
 
-		double positionTolerance = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kAcceptableDrivePositionError : Constants.kAcceptableDrivePositionError;
+		double positionTolerance = ((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kAcceptableDrivePositionError : Constants.kAcceptableTurnAngleError) * 
+				Constants.kDriveInchesPerDegree * Constants.kDriveTicksPerInch;
 		double velocityTolerance = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kAcceptableDriveVelocityError : Constants.kAcceptableDriveVelocityError;
 
 		if(cachedPose == null) {
 			System.out.println("Cached pose is null");
 			return false;
 		}
-		
+//		System.out.println("Left: " + Math.abs(leftTarget - cachedPose.leftEnc) + 
+//				"Right: " + Math.abs(rightTarget - cachedPose.rightEnc));
 		if(Math.abs(cachedPose.leftSpeed) < velocityTolerance && Math.abs(cachedPose.rightSpeed) < velocityTolerance &&
 				Math.abs(leftTarget - cachedPose.leftEnc) < positionTolerance && Math.abs(rightTarget - cachedPose.rightEnc) < positionTolerance) {
 			return true;

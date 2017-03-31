@@ -72,17 +72,17 @@ public class OperatorInterface {
 		// Flippers
 		//TODO figure out flipper controls
 		// Left Flipper
-		if (mSliderStick.getRawButton(1)) {
-			newCommands.wantedFlipperSignal.leftFlipper = DoubleSolenoid.Value.kForward;
-		} else if (mSliderStick.getRawButton(1)) {
-			newCommands.wantedFlipperSignal.leftFlipper = DoubleSolenoid.Value.kReverse;
-		}
+//		if (mSliderStick.getRawButton(1)) {
+//			newCommands.wantedFlipperSignal.leftFlipper = DoubleSolenoid.Value.kForward;
+//		} else if (mSliderStick.getRawButton(1)) {
+//			newCommands.wantedFlipperSignal.leftFlipper = DoubleSolenoid.Value.kReverse;
+//		}
 		//Right Flipper
-		if (mSliderStick.getRawButton(1)) {
-			newCommands.wantedFlipperSignal.rightFlipper = DoubleSolenoid.Value.kForward;
-		} else if (mSliderStick.getRawButton(1)) {
-			newCommands.wantedFlipperSignal.rightFlipper = DoubleSolenoid.Value.kReverse;
-		}
+//		if (mSliderStick.getRawButton(1)) {
+//			newCommands.wantedFlipperSignal.rightFlipper = DoubleSolenoid.Value.kForward;
+//		} else if (mSliderStick.getRawButton(1)) {
+//			newCommands.wantedFlipperSignal.rightFlipper = DoubleSolenoid.Value.kReverse;
+//		}
 
 		// Slider
 		if (mSliderStick.getRawButton(2)) {	// opposite of preferred thumb position
@@ -117,9 +117,9 @@ public class OperatorInterface {
 		}
 
 		// Intake
-		if (mSliderStick.getRawButton(1)) {
+		if (mSliderStick.getRawButton(7)) {
 			newCommands.wantedIntakeState = Intake.IntakeState.INTAKE;
-		} else if (mSliderStick.getRawButton(11)) {
+		} else if (mSliderStick.getRawButton(6)) {
 			newCommands.wantedIntakeState = Intake.IntakeState.EXPEL;
 		} else {
 			newCommands.wantedIntakeState = Intake.IntakeState.IDLE;

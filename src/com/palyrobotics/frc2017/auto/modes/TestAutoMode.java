@@ -30,13 +30,13 @@ public class TestAutoMode extends AutoModeBase {
 	public Routine getRoutine() {
 		ArrayList<Routine> sequence = new ArrayList<Routine>();
 		
-		double driveForwardSetpoint = 5*Constants.kDriveTicksPerInch; //inches
-		DriveSignal driveForward = DriveSignal.getNeutralSignal();
-		
-		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, Gains.steikShortDriveMotionMagicGains,
-				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, Gains.steikShortDriveMotionMagicGains,
-				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+//		double driveForwardSetpoint = 5*Constants.kDriveTicksPerInch; //inches
+//		DriveSignal driveForward = DriveSignal.getNeutralSignal();
+//		
+//		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, Gains.steikShortDriveMotionMagicGains,
+//				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+//		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, Gains.steikShortDriveMotionMagicGains,
+//				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		
 //		sequence.add(new CANTalonRoutine(driveForward, true));
 ////		return routine;
@@ -50,7 +50,19 @@ public class TestAutoMode extends AutoModeBase {
 //		sequence.add(new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.CENTER));
 //		sequence.add(new VisionSliderRoutine());
 //		sequence.add(new CANTalonRoutine(driveForward, true));
-		sequence.add(new SafetyTurnAngleRoutine(90));
+		sequence.add(new EncoderTurnAngleRoutine(-60));
+//		sequence.add(new TimeoutRoutine(1));
+//		sequence.add(new EncoderTurnAngleRoutine(-60));
+//		sequence.add(new TimeoutRoutine(1));
+//		sequence.add(new EncoderTurnAngleRoutine(-60));
+//		sequence.add(new TimeoutRoutine(1));
+//		sequence.add(new EncoderTurnAngleRoutine(-60));
+//		sequence.add(new TimeoutRoutine(1));
+//		sequence.add(new EncoderTurnAngleRoutine(-60));
+//		sequence.add(new TimeoutRoutine(1));
+//		sequence.add(new EncoderTurnAngleRoutine(-60));
+//		sequence.add(new TimeoutRoutine(1));
+		
 		return new SequentialRoutine(sequence);
 		
 		//return new CustomPositioningSliderRoutine(-3);

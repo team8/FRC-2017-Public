@@ -8,6 +8,7 @@ import static org.junit.Assert.assertThat;
 import java.util.ArrayList;
 
 import com.palyrobotics.frc2017.auto.modes.*;
+import com.palyrobotics.frc2017.config.Constants;
 
 /**
  * Created by Nihar on 1/22/17.
@@ -83,5 +84,10 @@ public class AutoModeSelectorTest {
 		// Index of the newest auto mode should be the original list length
 		assertThat("AutoMode was registered incorrectly", auto.getAutoMode(initSize), equalTo(newAuto));
 		assertThat("AutoMode was registered incorrectly", auto.getAutoModeList(), equalTo(autoNames));
+	}
+	
+	@Test
+	public void ticksPerDegreeCalculation() {
+		System.out.println(Constants.kDriveInchesPerDegree * Constants.kDriveTicksPerInch);
 	}
 }
