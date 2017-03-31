@@ -39,6 +39,9 @@ public class VisionSliderRoutine extends Routine {
 			visionSetpoint = 0;
 		} else if (visionSetpoint <= -7) {
 			visionSetpoint = 0;
+		} // extend motion
+		else if (visionSetpoint < 0) {
+			visionSetpoint -= 0.5;
 		} else {
 			visionSetpoint += 0.5;
 		}

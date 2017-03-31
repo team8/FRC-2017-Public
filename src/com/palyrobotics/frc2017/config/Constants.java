@@ -159,11 +159,11 @@ public class Constants extends ConstantsBase {
 		
 	// Blue right loading station
 	public static double kBlueLoadingStationForwardDistanceInches = 79.5; // 79.5 
-	public static double kBlueLoadingStationAirshipDistanceInches = 70; // 66, 70 
+	public static double kBlueLoadingStationAirshipDistanceInches = 73; // 66, 70, 73
 	
 	// Red left loading station
 	public static double kRedLoadingStationForwardDistanceInches = 79; // 79  
-	public static double kRedLoadingStationAirshipDistanceInches = 70; // 66, 70
+	public static double kRedLoadingStationAirshipDistanceInches = 73; // 66, 70, 73
 
 	// Blue left boiler
 	public static double kBlueBoilerForwardDistanceInches = 82.5; // 79.5, 82.5

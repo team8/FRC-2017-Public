@@ -18,7 +18,6 @@ import java.util.ArrayList;
 
 /**
  * Created by Nihar on 2/11/17.
- * BBTurnAngle might be replaced with EncoderTurnAngle if no gyro
  */
 public class VisionCenterPegAutoMode extends AutoModeBase {
 	private final CenterPegAutoMode.Alliance mAlliance;
@@ -90,7 +89,7 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
 		if (mBackup) {
-			sequence.add(getBackup(-1));		// Move slider slightly
+			sequence.add(getBackup(-1.5));		// Move slider slightly
 			sequence.add(new TimeoutRoutine(pilotWaitTime));
 		}
 

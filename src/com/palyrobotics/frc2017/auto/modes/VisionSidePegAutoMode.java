@@ -87,21 +87,21 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 		// loading station
 		case RED_LEFT:
-			backupPosition = 1;
+			backupPosition = -4;
 			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
 			break;
-		case BLUE_LEFT:
-			backupPosition = 1;
-			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
+		case BLUE_RIGHT:
+			backupPosition = -4;
+			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;
 		// boiler side
 		case RED_RIGHT:
 			backupPosition = -1;
 			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;
-		case BLUE_RIGHT:
-			backupPosition = -1;
-			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
+		case BLUE_LEFT:
+			backupPosition = 1;
+			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
 			break;
 		}
 		
