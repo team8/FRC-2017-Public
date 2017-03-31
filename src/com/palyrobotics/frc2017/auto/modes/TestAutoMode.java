@@ -48,9 +48,9 @@ public class TestAutoMode extends AutoModeBase {
 //		sequence.add(new CustomPositioningSliderRoutine(5));
 		
 //		sequence.add(new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.CENTER));
-//		sequence.add(new VisionSliderRoutine());
+		sequence.add(new VisionSliderRoutine());
 //		sequence.add(new CANTalonRoutine(driveForward, true));
-		sequence.add(new EncoderTurnAngleRoutine(-60));
+//		sequence.add(new EncoderTurnAngleRoutine(-60));
 //		sequence.add(new TimeoutRoutine(1));
 //		sequence.add(new EncoderTurnAngleRoutine(-60));
 //		sequence.add(new TimeoutRoutine(1));

@@ -120,7 +120,7 @@ public class SidePegAutoMode extends AutoModeBase {
 			driveForwardSetpoint = Constants.kRedBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_LEFT:
-			initialSliderPosition = 0;
+			initialSliderPosition = 1;
 			driveForwardSetpoint = Constants.kBlueBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		default:

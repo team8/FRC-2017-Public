@@ -19,7 +19,8 @@ import java.util.ArrayList;
 /**
  * Created by Nihar on 2/11/17.
  * Goes for side peg autonomous
- * Configured for left vs right
+ * Can set initial slider position and a backup slider position (absolute, 
+ * not relative to the vision point)
  */
 public class VisionSidePegAutoMode extends AutoModeBase {
 
@@ -35,7 +36,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 	private final double pilotWaitTime = 3; // time in seconds
 	private final double backupDistance = 10; // distance in inches
 	private double overshootDistance = 0;
-	private double bonusDistance = 20; // extra space
+	private double bonusDistance = 26; // extra space
 
 	double initialSliderPosition = 0;
 	double backupPosition = 0;

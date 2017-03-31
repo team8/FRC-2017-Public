@@ -23,8 +23,8 @@ public class AutoModeSelector {
 	private ArrayList<AutoModeBase> mAutoModes = new ArrayList<>();
 	private enum AutoIndices {
 		DO_NOTHING(0), BASELINE(1),
-		CENTERPEG(2), SIDEPEG(3), VISIONCENTERPEG(4),
-		VISIONSIDEPEG(5), TEST(6);
+		CENTER_PEG(2), SIDE_PEG(3), VISION_CENTER_PEG(4),
+		VISION_SIDE_PEG(5), TEST(6);
 		private final int id;
 		AutoIndices(int id) {this.id = id;}
 		public int get() {return id;}
@@ -33,7 +33,7 @@ public class AutoModeSelector {
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
-	int selectedIndex = AutoIndices.VISIONSIDEPEG.get();
+	int selectedIndex = AutoIndices.VISION_SIDE_PEG.get();
 	
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
@@ -58,9 +58,9 @@ public class AutoModeSelector {
   /*2*/ registerAutonomous(new CenterPegAutoMode(Alliance.RED, // Alliance Color
 		  										 true)); // Backup boolean
 		// red left/ blue right = loading station, red right/blue left = boiler
-  /*3*/	registerAutonomous(new SidePegAutoMode(SideAutoVariant.BLUE_RIGHT, // Alliance color and side
+  /*3*/	registerAutonomous(new SidePegAutoMode(SideAutoVariant.BLUE_LEFT, // Alliance color and side
 											   true)); // Should backup?
-  /*4*/ registerAutonomous(new VisionCenterPegAutoMode(Alliance.BLUE, false, true)); // alliance, seeking right vision target?, backup?
+  /*4*/ registerAutonomous(new VisionCenterPegAutoMode(Alliance.RED, false, true)); // alliance, seeking right vision target?, backup?
   /*5*/ registerAutonomous(new VisionSidePegAutoMode(SideAutoVariant.BLUE_LEFT, // Field position
 		  										false, true)); // seeking right vision target?, backup?
 		registerAutonomous(new TestAutoMode());

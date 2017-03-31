@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import org.json.simple.parser.ParseException;
 import org.spectrum3847.RIOdroid.RIOdroid;
 import com.palyrobotics.frc2017.config.Constants;
+import com.palyrobotics.frc2017.util.logger.Logger;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -250,7 +251,8 @@ public class AndroidConnectionHelper implements Runnable{
 //			} else {
 //				return m_connectionState;
 			}
-			System.out.println("Vision stream started");
+			System.out.println((this.m_adbServerCreated) ? "Started vision stream":"Failed to start vision stream");
+			Logger.getInstance().logRobotThread((this.m_adbServerCreated) ? "Started vision stream":"Failed to start vision stream");
 			this.m_visionRunning = true;
 			return ConnectionState.STREAMING;
 		}

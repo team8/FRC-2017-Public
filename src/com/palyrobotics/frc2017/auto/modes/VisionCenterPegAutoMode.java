@@ -29,7 +29,7 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 	private double initialSliderPosition;	// distance from center in inches
 	private final double backupDistance = 10;	// distance in inches
 	private final double pilotWaitTime = 3;	// time in seconds
-	private double bonusDistance = 16;
+	private double bonusDistance = 24;
 	private boolean isRightTarget;
 
 	public VisionCenterPegAutoMode(CenterPegAutoMode.Alliance alliance, boolean isRightTarget, boolean backup) {
@@ -69,9 +69,9 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 		driveForwardSetpoint -= bonusDistance * Constants.kDriveTicksPerInch;
 		// Aegir: right +30
 		// Vali: left +100
-		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
+		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint+100, mLongGains,
 			Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
-		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint+30, mLongGains,
+		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		
 		DriveSignal driveBonus = DriveSignal.getNeutralSignal();
@@ -90,7 +90,7 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
 		if (mBackup) {
-			sequence.add(getBackup(-2));		// Move slider slightly to the left
+			sequence.add(getBackup(-1));		// Move slider slightly
 			sequence.add(new TimeoutRoutine(pilotWaitTime));
 		}
 

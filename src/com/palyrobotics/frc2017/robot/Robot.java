@@ -55,7 +55,7 @@ public class Robot extends IterativeRobot {
 		DashboardManager.getInstance().robotInit();
 		AndroidConnectionHelper.getInstance().start(AndroidConnectionHelper.StreamState.JSON);
 		System.out.println("Finished starting");
-		mLogger.setFileName("PracticeMatch");
+		mLogger.setFileName("Qual9");
 		mLogger.start();
 		mLogger.logRobotThread("robotInit() start");
 		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);
@@ -64,6 +64,10 @@ public class Robot extends IterativeRobot {
 		mLogger.logRobotThread("Alliance station: "+DriverStation.getInstance().getLocation());
 		try {
 			DriverStation.reportWarning("Auto is "+AutoModeSelector.getInstance().getAutoMode().toString(), false);
+			DriverStation.reportWarning((AndroidConnectionHelper.getInstance().isServerStarted()) ? 
+					"Nexus streaming": "Nexus not streaming", false);
+			mLogger.logRobotThread((AndroidConnectionHelper.getInstance().isServerStarted()) ? 
+					"Nexus streaming": "Nexus not streaming");
 			mLogger.logRobotThread("Auto", AutoModeSelector.getInstance().getAutoMode().toString());
 		} catch (NullPointerException e) {
 			mLogger.logRobotThread("Auto: "+e.getMessage());
@@ -127,7 +131,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousPeriodic() {
-		logPeriodic();
+//		logPeriodic();
 		mHardwareUpdater.updateSensors(robotState);
 
 		commands = mRoutineManager.update(commands);
@@ -157,8 +161,8 @@ public class Robot extends IterativeRobot {
 		mHardwareUpdater.updateSensors(robotState);
 		// Gets joystick commands
 		// Updates commands based on routines
-		mLogger.logRobotThread("Teleop Commands: ", commands);
-		logPeriodic();
+//		mLogger.logRobotThread("Teleop Commands: ", commands);
+//		logPeriodic();
 		commands = mRoutineManager.update(operatorInterface.updateCommands(commands));
 		//Update the hardware
 		mHardwareUpdater.updateSubsystems();
@@ -197,6 +201,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledPeriodic() {
 		mHardwareUpdater.updateSensors(robotState);
+//		System.out.println("Slider pot: "+robotState.sliderPotentiometer);
+//		System.out.println("Slider enc: "+robotState.sliderEncoder);
 //		System.out.println("Gyro: "+robotState.drivePose.heading);
 //		System.out.println("Left enc: " + robotState.drivePose.leftEnc +"\n"
 //				+"Right enc: "+robotState.drivePose.rightEnc);

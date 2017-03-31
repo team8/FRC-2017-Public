@@ -68,8 +68,9 @@ public class Constants extends ConstantsBase {
 
 	// Aegir: 2172 RIGHT  |  3452 LEFT
 	// Vali: 2036 RIGHT | 3314 LEFT
-	public static final double kPotentiometerRightPos = 2036;
-	public static final double kPotentiometerLeftPos = 3314;
+	// new belly pan shifts it 3 more on both
+	public static final double kPotentiometerRightPos = 2032;
+	public static final double kPotentiometerLeftPos = 3310;
 	public static final double kPotentiometerCenterPos = (kPotentiometerRightPos + kPotentiometerLeftPos) / 2;
 	
 	// Tolerances
@@ -161,15 +162,15 @@ public class Constants extends ConstantsBase {
 	public static double kBlueLoadingStationAirshipDistanceInches = 70; // 66, 70 
 	
 	// Red left loading station
-	public static double kRedLoadingStationForwardDistanceInches = 79; // 79,  
-	public static double kRedLoadingStationAirshipDistanceInches = 70; // 66, 70 
+	public static double kRedLoadingStationForwardDistanceInches = 79; // 79  
+	public static double kRedLoadingStationAirshipDistanceInches = 70; // 66, 70
 
 	// Blue left boiler
-	public static double kBlueBoilerForwardDistanceInches = 79.5; // 79.5 
+	public static double kBlueBoilerForwardDistanceInches = 82.5; // 79.5, 82.5
 	public static double kBlueBoilerAirshipDistanceInches = 73; // 73, 
 
 	// Red right boiler
-	public static double kRedBoilerForwardDistanceInches = 82; // 79, 82
+	public static double kRedBoilerForwardDistanceInches = 84; // 79, 84
 	public static double kRedBoilerAirshipDistanceInches = 73; // 73,  
 
 	// !!! Loop rate of normal Looper
