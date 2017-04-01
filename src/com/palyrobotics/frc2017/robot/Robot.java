@@ -55,7 +55,7 @@ public class Robot extends IterativeRobot {
 		DashboardManager.getInstance().robotInit();
 		AndroidConnectionHelper.getInstance().start(AndroidConnectionHelper.StreamState.JSON);
 		System.out.println("Finished starting");
-		mLogger.setFileName("Qual58");
+		mLogger.setFileName("PreElims");
 		mLogger.start();
 		mLogger.logRobotThread("robotInit() start");
 		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);

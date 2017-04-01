@@ -147,8 +147,8 @@ public class Constants extends ConstantsBase {
 
 	// Center peg
 	public static double k254CenterPegDistanceInches = 80;
-	public static double kRedCenterPegDistanceInches = 79;
-	public static double kBlueCenterPegDistanceInches = 79.5;
+	public static double kRedCenterPegDistanceInches = 82;
+	public static double kBlueCenterPegDistanceInches = 82;
 
 	// Side peg
 	public static double k254LoadingStationForwardDistanceInches = 80; // 84, 80

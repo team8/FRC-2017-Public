@@ -74,9 +74,9 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		
 		DriveSignal driveBonus = DriveSignal.getNeutralSignal();
-		driveBonus.leftMotor.setMotionMagic(bonusDistance * Constants.kDriveTicksPerInch, mShortGains, Gains.kSteikShortDriveMotionMagicCruiseVelocity,
+		driveBonus.leftMotor.setMotionMagic((bonusDistance+2) * Constants.kDriveTicksPerInch, mShortGains, Gains.kSteikShortDriveMotionMagicCruiseVelocity,
 				Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		driveBonus.rightMotor.setMotionMagic(bonusDistance * Constants.kDriveTicksPerInch, mShortGains, Gains.kSteikShortDriveMotionMagicCruiseVelocity,
+		driveBonus.rightMotor.setMotionMagic((bonusDistance+2) * Constants.kDriveTicksPerInch, mShortGains, Gains.kSteikShortDriveMotionMagicCruiseVelocity,
 				Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		
 		// Drive forward while moving slider to initial position

@@ -79,7 +79,7 @@ public class SidePegAutoMode extends AutoModeBase {
 			break;
 		// boiler side
 		case RED_RIGHT:
-			backupPosition = 4;
+			backupPosition = 2;
 			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;
 		case BLUE_RIGHT:
@@ -116,7 +116,7 @@ public class SidePegAutoMode extends AutoModeBase {
 			break;
 		// boiler side
 		case RED_RIGHT:
-			initialSliderPosition = 1;
+			initialSliderPosition = 0;
 			driveForwardSetpoint = Constants.kRedBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_LEFT:
@@ -165,13 +165,14 @@ public class SidePegAutoMode extends AutoModeBase {
 			driveToAirshipSetpoint = 0;
 			break;
 		}
+		driveToAirshipSetpoint += 2;
 		driveToAirship.leftMotor.setMotionMagic(driveToAirshipSetpoint, mLongGains,
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		driveToAirship.rightMotor.setMotionMagic(driveToAirshipSetpoint, mLongGains,
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		
 		Logger.getInstance().logRobotThread("Drive to airship", driveToAirship);
-		return new CANTalonRoutine(driveToAirship, true,4);
+		return new CANTalonRoutine(driveToAirship, true);
 	}
 	/*
 	 * GET BACKUP

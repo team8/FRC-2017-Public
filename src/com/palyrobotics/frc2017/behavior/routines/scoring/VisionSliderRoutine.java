@@ -21,7 +21,7 @@ public class VisionSliderRoutine extends Routine {
 		START, SENT
 	}
 	private VisionPositioningState mState = VisionPositioningState.START;
-	double offset = 8;
+	double offset = 7.5;
 	public VisionSliderRoutine() {
 	}
 	

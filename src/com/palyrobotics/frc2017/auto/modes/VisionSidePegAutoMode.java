@@ -36,7 +36,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 	private final double pilotWaitTime = 2.25; // time in seconds
 	private final double backupDistance = 10; // distance in inches
 	private double overshootDistance = 0;
-	private double bonusDistance = 26; // extra space
+	private double bonusDistance = 30; // extra space
 
 	double initialSliderPosition = 0;
 	double backupPosition = 0;
@@ -86,16 +86,16 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 		// loading station
 		case RED_LEFT:
-			backupPosition = -4;
+			backupPosition = 2;
 			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
 			break;
 		case BLUE_RIGHT:
-			backupPosition = -4;
+			backupPosition = 2;
 			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;
 		// boiler side
 		case RED_RIGHT:
-			backupPosition = -1;
+			backupPosition = 0;
 			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;
 		case BLUE_LEFT:
@@ -190,6 +190,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 	
 	private Routine getFirstAttempt() {
 		double scoreSetpoint = bonusDistance*Constants.kDriveTicksPerInch;
+		scoreSetpoint += 2;
 		DriveSignal driveScore = DriveSignal.getNeutralSignal();
 		driveScore.leftMotor.setMotionMagic(scoreSetpoint, mShortGains,
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
@@ -197,7 +198,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		ArrayList<Routine> scoreSequence = new ArrayList<>();
 		scoreSequence.add(new VisionSliderRoutine());
-		scoreSequence.add(new CANTalonRoutine(driveScore, true, 2));
+		scoreSequence.add(new CANTalonRoutine(driveScore, true));
 		return new SequentialRoutine(scoreSequence);
 	}
 	/*
