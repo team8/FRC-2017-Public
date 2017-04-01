@@ -21,7 +21,7 @@ public class VisionSliderRoutine extends Routine {
 		START, SENT
 	}
 	private VisionPositioningState mState = VisionPositioningState.START;
-	
+	double offset = 8;
 	public VisionSliderRoutine() {
 	}
 	
@@ -35,15 +35,15 @@ public class VisionSliderRoutine extends Routine {
 		commands.robotSetpoints.sliderSetpoint = SliderTarget.CUSTOM;
 		commands.wantedSpatulaState = Spatula.SpatulaState.UP;
 		double visionSetpoint = AndroidConnectionHelper.getInstance().getXDist();
-		if (visionSetpoint >= 7) {
-			visionSetpoint = 0;
-		} else if (visionSetpoint <= -7) {
-			visionSetpoint = 0;
+		if (visionSetpoint >= 7-offset) {
+			visionSetpoint = 7;
+		} else if (visionSetpoint <= -7-offset) {
+			visionSetpoint = -7;
 		} // extend motion
 		else if (visionSetpoint < 0) {
-			visionSetpoint -= 0.5;
+			visionSetpoint += offset;
 		} else {
-			visionSetpoint += 0.5;
+			visionSetpoint += offset;
 		}
 		if (commands.robotSetpoints.sliderCustomSetpoint.isPresent()) {
 			System.out.println("Vision setpoint: "+visionSetpoint);

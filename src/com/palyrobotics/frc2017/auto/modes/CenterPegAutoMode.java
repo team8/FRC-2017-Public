@@ -28,7 +28,7 @@ public class CenterPegAutoMode extends AutoModeBase {
 	private Gains mShortGains, mLongGains;
 	private double initialSliderPosition;	// distance from center in inches
 	private final double backupDistance = 10;	// distance in inches
-	private final double pilotWaitTime = 3;	// time in seconds
+	private final double pilotWaitTime = 2.5;	// time in seconds
 
 	public CenterPegAutoMode(Alliance alliance, boolean backup) {
 		mAlliance = alliance;
@@ -57,7 +57,7 @@ public class CenterPegAutoMode extends AutoModeBase {
 						* Constants.kDriveTicksPerInch;
 		// Aegir: right +30
 		// Vali: left +100
-		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint+100, mLongGains,
+		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
 			Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);

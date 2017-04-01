@@ -27,14 +27,14 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 	private Gains mShortGains, mLongGains;
 	private double initialSliderPosition;	// distance from center in inches
 	private final double backupDistance = 10;	// distance in inches
-	private final double pilotWaitTime = 3;	// time in seconds
-	private double bonusDistance = 24;
+	private final double pilotWaitTime = 2.25;	// time in seconds
+	private double bonusDistance = 28;
 	private boolean isRightTarget;
 
 	public VisionCenterPegAutoMode(CenterPegAutoMode.Alliance alliance, boolean isRightTarget, boolean backup) {
 		mAlliance = alliance;
 		this.isRightTarget = isRightTarget;
-		initialSliderPosition = (isRightTarget) ? 0 : 0;
+		initialSliderPosition = (isRightTarget) ? -7 : -7;
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
 		mLongGains = Gains.steikLongDriveMotionMagicGains;
 
@@ -67,8 +67,8 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 						* Constants.kDriveTicksPerInch;
 		driveForwardSetpoint -= bonusDistance * Constants.kDriveTicksPerInch;
 		// Aegir: right +30
-		// Vali: left +100
-		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint+100, mLongGains,
+		// Vali: no compensation in order to end perpendicular
+		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
 			Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);

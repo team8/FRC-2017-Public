@@ -55,7 +55,7 @@ public class Robot extends IterativeRobot {
 		DashboardManager.getInstance().robotInit();
 		AndroidConnectionHelper.getInstance().start(AndroidConnectionHelper.StreamState.JSON);
 		System.out.println("Finished starting");
-		mLogger.setFileName("Qual9");
+		mLogger.setFileName("Qual58");
 		mLogger.start();
 		mLogger.logRobotThread("robotInit() start");
 		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);
@@ -64,8 +64,8 @@ public class Robot extends IterativeRobot {
 		mLogger.logRobotThread("Alliance station: "+DriverStation.getInstance().getLocation());
 		try {
 			DriverStation.reportWarning("Auto is "+AutoModeSelector.getInstance().getAutoMode().toString(), false);
-			DriverStation.reportWarning((AndroidConnectionHelper.getInstance().isServerStarted()) ? 
-					"Nexus streaming": "Nexus not streaming", false);
+//			DriverStation.reportWarning((AndroidConnectionHelper.getInstance().isServerStarted()) ? 
+//					"Nexus streaming": "Nexus not streaming", false);
 			mLogger.logRobotThread((AndroidConnectionHelper.getInstance().isServerStarted()) ? 
 					"Nexus streaming": "Nexus not streaming");
 			mLogger.logRobotThread("Auto", AutoModeSelector.getInstance().getAutoMode().toString());

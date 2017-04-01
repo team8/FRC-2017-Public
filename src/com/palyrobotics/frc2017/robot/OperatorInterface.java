@@ -144,10 +144,10 @@ public class OperatorInterface {
 		// Left Stick trigger cancels current routine
 		newCommands.cancelCurrentRoutines = mDriveStick.getTrigger();
 
-		Logger.getInstance().logRobotThread("Drive stick", newCommands.leftStickInput);
-		Logger.getInstance().logRobotThread("Turn stick", newCommands.rightStickInput);
-		Logger.getInstance().logRobotThread("Slider stick", newCommands.sliderStickInput);
-		Logger.getInstance().logRobotThread("Climber stick", newCommands.climberStickInput);
+//		Logger.getInstance().logRobotThread("Drive stick", newCommands.leftStickInput);
+//		Logger.getInstance().logRobotThread("Turn stick", newCommands.rightStickInput);
+//		Logger.getInstance().logRobotThread("Slider stick", newCommands.sliderStickInput);
+//		Logger.getInstance().logRobotThread("Climber stick", newCommands.climberStickInput);
 
 		return newCommands;
 	}

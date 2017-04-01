@@ -33,7 +33,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 	// Long distance vs short distance
 	private Gains mLongGains, mShortGains;
 
-	private final double pilotWaitTime = 3; // time in seconds
+	private final double pilotWaitTime = 2.25; // time in seconds
 	private final double backupDistance = 10; // distance in inches
 	private double overshootDistance = 0;
 	private double bonusDistance = 26; // extra space
@@ -51,11 +51,10 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
 		
 		if (isRightTarget) {
-			initialSliderPosition = 0;
+			initialSliderPosition = -7;
 		} else {
-			initialSliderPosition = 0;
+			initialSliderPosition = -7;
 		}
-		System.out.println(initialSliderPosition);
 	}
 
 	@Override

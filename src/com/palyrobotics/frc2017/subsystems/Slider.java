@@ -169,7 +169,6 @@ public class Slider extends Subsystem implements SubsystemLoop {
 					mTarget = SliderTarget.CUSTOM;
 				}
 				if (onTargetEncoderPositioning()) {
-					System.out.println("on target");
 					mState = SliderState.IDLE;
 					mTarget = SliderTarget.NONE;
 				} else {

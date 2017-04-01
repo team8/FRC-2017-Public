@@ -67,8 +67,8 @@ public class Constants extends ConstantsBase {
 	public static double kSliderRevolutionsPerInch = 0.218099;
 
 	// Aegir: 2172 RIGHT  |  3452 LEFT
-	// Vali: 2036 RIGHT | 3314 LEFT
-	// new belly pan shifts it 3 more on both
+	// Vali: 2032 RIGHT | 3310 LEFT
+	// new belly pan shifted vali
 	public static final double kPotentiometerRightPos = 2032;
 	public static final double kPotentiometerLeftPos = 3310;
 	public static final double kPotentiometerCenterPos = (kPotentiometerRightPos + kPotentiometerLeftPos) / 2;
