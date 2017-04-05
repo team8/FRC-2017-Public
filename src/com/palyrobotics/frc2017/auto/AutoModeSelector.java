@@ -6,11 +6,7 @@ import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
 import com.palyrobotics.frc2017.auto.modes.BaseLineAutoMode;
 import com.palyrobotics.frc2017.auto.modes.CenterPegAutoMode;
 import com.palyrobotics.frc2017.auto.modes.CenterPegAutoMode.Alliance;
-import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
-import com.palyrobotics.frc2017.auto.modes.TestAutoMode;
-import com.palyrobotics.frc2017.auto.modes.VisionCenterPegAutoMode;
-import com.palyrobotics.frc2017.auto.modes.VisionSidePegAutoMode;
 
 import org.json.simple.JSONArray;
 

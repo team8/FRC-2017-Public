@@ -84,7 +84,7 @@ public class Main {
 			// Description of this auto mode path.
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint(kRedLoadingStationForward, 0, kTurnAngle));
+			p.addWaypoint(new WaypointSequence.Waypoint(kRedLoadingStationForward, 0, 0));
 			p.addWaypoint(new WaypointSequence.Waypoint(
 					(kRedLoadingStationForward +
 							Math.cos(kTurnAngle)*kRedLoadingStationAirship),
@@ -118,7 +118,7 @@ public class Main {
 			// turn left
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint(kRedBoilerForward, 0, -kTurnAngle));
+			p.addWaypoint(new WaypointSequence.Waypoint(kRedBoilerForward, 0, 0));
 			p.addWaypoint(new WaypointSequence.Waypoint(
 					kRedBoilerForward+Math.cos(kTurnAngle)*kRedBoilerAirship,
 					-Math.sin(kTurnAngle)*kRedBoilerAirship, -kTurnAngle));
@@ -183,10 +183,10 @@ public class Main {
 			// turn left
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint(kBlueLoadingStationForward, 0, -kTurnAngle));
+			p.addWaypoint(new WaypointSequence.Waypoint(kBlueLoadingStationForward, 0, 0));
 			p.addWaypoint(new WaypointSequence.Waypoint(
 					kBlueLoadingStationForward+Math.cos(kTurnAngle)*kBlueLoadingStationAirship,
-					kBlueLoadingStationAirship*Math.sin(kTurnAngle), -kTurnAngle));
+					-kBlueLoadingStationAirship*Math.sin(kTurnAngle), -kTurnAngle));
 
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);
@@ -216,7 +216,7 @@ public class Main {
 			// turn right
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint(kBlueBoilerForward, 0, kTurnAngle));
+			p.addWaypoint(new WaypointSequence.Waypoint(kBlueBoilerForward, 0, 0));
 			p.addWaypoint(new WaypointSequence.Waypoint(
 					kBlueBoilerForward+Math.cos(kTurnAngle)*kBlueBoilerAirship,
 					kBlueBoilerAirship*Math.sin(kTurnAngle), kTurnAngle));
@@ -247,7 +247,6 @@ public class Main {
 			final String path_name = "BlueCenter";
 
 			// Description of this auto mode path.
-			// Remember that this is for the GO LEFT CASE!
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
 			p.addWaypoint(new WaypointSequence.Waypoint(kBlueCenter, 0, 0));
