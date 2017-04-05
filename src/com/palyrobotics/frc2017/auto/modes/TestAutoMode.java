@@ -32,7 +32,7 @@ public class TestAutoMode extends AutoModeBase {
 		ArrayList<Routine> sequence = new ArrayList<Routine>();
 		
 		sequence.add(new CustomPositioningSliderRoutine(-7));
-		sequence.add(new EncoderTurnAngleRoutine(60));
+//		sequence.add(new EncoderTurnAngleRoutine(60));
 		sequence.add(new VisionSliderRoutine());
 		return new SequentialRoutine(sequence);
 		

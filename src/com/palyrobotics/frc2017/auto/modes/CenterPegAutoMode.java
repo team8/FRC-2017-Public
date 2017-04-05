@@ -32,7 +32,6 @@ public class CenterPegAutoMode extends AutoModeBase {
 
 	public CenterPegAutoMode(Alliance alliance, boolean backup) {
 		mAlliance = alliance;
-		initialSliderPosition = (alliance == Alliance.BLUE) ? -2 : -2;
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
 		mLongGains = Gains.steikLongDriveMotionMagicGains;
 
@@ -62,6 +61,7 @@ public class CenterPegAutoMode extends AutoModeBase {
 		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		
+		initialSliderPosition = (mAlliance == Alliance.BLUE) ? -2.5 : 0;
 		// Drive forward while moving slider to initial position
 		ArrayList<Routine> initialSlide = new ArrayList<>();
 		initialSlide.add(new CANTalonRoutine(driveForward, true));
@@ -70,7 +70,8 @@ public class CenterPegAutoMode extends AutoModeBase {
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
 		if (mBackup) {
-			sequence.add(getBackup(2));		// Move slider slightly to the left
+			double backup = (mAlliance == Alliance.BLUE) ? 0 : 5;
+			sequence.add(getBackup(backup));		// Move slider slightly to the left
 			sequence.add(new TimeoutRoutine(pilotWaitTime));
 		}
 
