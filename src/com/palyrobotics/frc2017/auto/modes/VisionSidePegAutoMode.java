@@ -51,18 +51,10 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
 		
 		if (isRightTarget) {
-<<<<<<< HEAD
 			initialSliderPosition = -7;
 		} else {
 			initialSliderPosition = -7;
 		}
-=======
-			initialSliderPosition = 0;
-		} else {
-			initialSliderPosition = 0;
-		}
-		System.out.println(initialSliderPosition);
->>>>>>> Vision auto testing updates
 	}
 
 	@Override
@@ -148,10 +140,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 			driveForwardSetpoint = 0;
 			break;
 		}
-<<<<<<< HEAD
 		driveForwardSetpoint += overshootDistance;
-=======
->>>>>>> Vision auto testing updates
 		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
