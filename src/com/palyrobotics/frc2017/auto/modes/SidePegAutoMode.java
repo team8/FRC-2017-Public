@@ -68,7 +68,6 @@ public class SidePegAutoMode extends AutoModeBase {
 
 		// NOTE: switch case falling, split by lefts vs rights
 		switch (mVariant) {
-		// loading station
 		case RED_LEFT:
 			backupPosition = 3;
 			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
@@ -81,7 +80,6 @@ public class SidePegAutoMode extends AutoModeBase {
 >>>>>>> Vision auto testing updates
 			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
 			break;
-		// boiler side
 		case RED_RIGHT:
 <<<<<<< HEAD
 			backupPosition = 2;
