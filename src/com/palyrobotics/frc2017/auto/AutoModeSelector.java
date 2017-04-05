@@ -1,17 +1,10 @@
 package com.palyrobotics.frc2017.auto;
 
-import com.palyrobotics.frc2017.auto.modes.BaseLineAutoMode;
-import com.palyrobotics.frc2017.auto.modes.CenterPegAutoMode;
+import com.palyrobotics.frc2017.auto.modes.*;
 import com.palyrobotics.frc2017.auto.modes.CenterPegAutoMode.Alliance;
-import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
-import com.palyrobotics.frc2017.auto.modes.TestAutoMode;
-import com.palyrobotics.frc2017.auto.modes.VisionCenterPegAutoMode;
-import com.palyrobotics.frc2017.auto.modes.VisionSidePegAutoMode;
 
 import org.json.simple.JSONArray;
-
-import com.palyrobotics.frc2017.auto.modes.DoNothingAutoMode;
 
 import java.util.ArrayList;
 
@@ -63,7 +56,9 @@ public class AutoModeSelector {
   /*4*/ registerAutonomous(new VisionCenterPegAutoMode(Alliance.BLUE, false, true)); // alliance, seeking right vision target?, backup?
   /*5*/ registerAutonomous(new VisionSidePegAutoMode(SideAutoVariant.BLUE_LEFT, // Field position
 		  										false, true)); // seeking right vision target?, backup?
+
 		registerAutonomous(new TestAutoMode());
+		registerAutonomous(new TestTrajectoryAutoMode(AutoPathLoader.kPathNames[3]));
 	}
 
 	/**

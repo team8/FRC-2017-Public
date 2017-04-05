@@ -6,6 +6,7 @@ import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
 import com.palyrobotics.frc2017.subsystems.controllers.CANTalonDriveController;
 import com.palyrobotics.frc2017.subsystems.controllers.EncoderTurnAngleController;
+import com.palyrobotics.frc2017.subsystems.controllers.TrajectoryFollowingController;
 import com.palyrobotics.frc2017.util.*;
 import com.palyrobotics.frc2017.subsystems.controllers.BangBangTurnAngleController;
 import com.palyrobotics.frc2017.config.Constants;
@@ -13,6 +14,8 @@ import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.archive.CheesyDriveHelper;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
+import com.team254.lib.trajectory.Path;
+import com.team254.lib.trajectory.Trajectory;
 
 /**
  * Represents the drivetrain
@@ -189,6 +192,16 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	public void setTurnAngleEncoderSetpoint(double angle) {
 		System.out.println("Encoder angle "+angle);
 		mController = new EncoderTurnAngleController(mCachedPose, angle);
+		newController = true;
+	}
+
+	/**
+	 * Motion profile hype
+	 * @param path Path to follow
+	 * @param useGyro Should correct heading using gyro or not
+	 */
+	public void setTrajectoryController(Path path, boolean useGyro) {
+		mController = new TrajectoryFollowingController(path, useGyro);
 		newController = true;
 	}
 
