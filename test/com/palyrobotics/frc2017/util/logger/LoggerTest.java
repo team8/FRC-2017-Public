@@ -40,11 +40,15 @@ public class LoggerTest {
 		logger.logSubsystemThread(Drive.getInstance().printStatus());
 		logger.logSubsystemThread(Slider.getInstance().printStatus());
 		logger.logRobotThread("Robot start");
+		logger.logRobotThread("Pre cleanup 1");
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+//		logger.cleanup();
+		logger.start();
+		logger.logRobotThread("Post cleanup 1");
 		logger.cleanup();
 	}
 

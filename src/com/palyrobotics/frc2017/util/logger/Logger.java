@@ -8,9 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.Date;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -184,6 +182,7 @@ public class Logger {
 				mData = new ArrayList<>(mSubsystemThreadLogs);
 				mData.addAll(mRobotThreadLogs);
 				mData.sort(TimestampedString::compareTo);
+				System.out.println("Last strings: "+Arrays.toString(mData.toArray()));
 				mData.forEach((TimestampedString c) -> {
 					try {
 						bufferedWriter.write(c.getTimestampedString());
@@ -196,7 +195,7 @@ public class Logger {
 				try {
 					bufferedWriter.write("Logger stopped");
 				} catch (IOException e) {
-					System.out.println("Unable to write logger stopped");
+					System.out.println("Unable to write, logger stopped");
 					e.printStackTrace();
 				}
 				bufferedWriter.flush();
@@ -211,11 +210,12 @@ public class Logger {
 		mData = new ArrayList<>();
 		mRunnable = () -> {
 			while (true) {
-				// If thread is killed, stop trying to write
+				// If thread is interrupted, cleanup
 				if (Thread.currentThread().isInterrupted()) {
 					try {
 						synchronized (writingLock) {
 							System.out.println("Logger interrupted, closing");
+							bufferedWriter.flush();
 							bufferedWriter.close();
 						}
 					} catch (IOException e) {
@@ -228,9 +228,11 @@ public class Logger {
 						if (isEnabled) {
 							mData = new ArrayList<>(mSubsystemThreadLogs);
 							mData.addAll(mRobotThreadLogs);
+							mData.sort(TimestampedString::compareTo);
+							System.out.println("Logger strings: "+Arrays.toString(mData.toArray()));
 							mSubsystemThreadLogs.clear();
 							mRobotThreadLogs.clear();
-							mData.sort(TimestampedString::compareTo);
+							System.out.println("Logger strings: "+Arrays.toString(mData.toArray()));
 							mData.forEach((TimestampedString c) -> {
 								try {
 									bufferedWriter.write(c.getTimestampedString());

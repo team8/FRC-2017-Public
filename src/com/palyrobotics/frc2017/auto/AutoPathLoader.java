@@ -4,6 +4,7 @@ import com.palyrobotics.frc2017.util.archive.team254.trajectory.TextFileReader;
 import com.team254.lib.trajectory.Path;
 import com.team254.lib.trajectory.io.TextFileDeserializer;
 
+import java.io.File;
 import java.util.Hashtable;
 
 /**
@@ -35,9 +36,18 @@ public class AutoPathLoader {
 
 	public static void loadPaths() {
 		double startTime = System.currentTimeMillis();
+		String os = System.getProperty("os.name");
+		String sourceDir;
+		if (os.startsWith("Mac") || os.startsWith("Windows")) {
+			sourceDir = "."+File.separatorChar+"paths"+File.separatorChar;
+		} else {
+			// Pray that this is a roborio because I don't know a programmer using Linux
+			sourceDir = "/home/lvuser/paths/";
+		}
+
 		TextFileDeserializer deserializer = new TextFileDeserializer();
 		for (int i = 0; i < kPathNames.length; ++i) {
-			TextFileReader reader = new TextFileReader("file://" + kPathNames[i] +
+			TextFileReader reader = new TextFileReader(sourceDir + kPathNames[i] +
 					".txt");
 
 			Path path = deserializer.deserialize(reader.readWholeFile());
