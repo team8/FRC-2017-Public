@@ -12,6 +12,7 @@ import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.palyrobotics.frc2017.util.logger.Logger;
+import com.palyrobotics.frc2017.vision.AndroidConnectionHelper;
 
 import java.util.ArrayList;
 
@@ -62,6 +63,9 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 
 	@Override
 	public void prestart() {
+		if(AndroidConnectionHelper.getInstance().isServerStarted()){
+			System.out.println("Failed to find vision server, revert auto");
+		}
 		System.out.println("Starting "+this.toString()+" Auto Mode");
 		Logger.getInstance().logRobotThread("Starting "+this.toString()+" Auto Mode");
 

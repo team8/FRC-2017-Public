@@ -276,7 +276,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 			mTarget = SliderTarget.NONE;
 		}
 		else {
-			double setpoint = AndroidConnectionHelper.getInstance().x_dist * Constants.kSliderRevolutionsPerInch;
+			double setpoint = AndroidConnectionHelper.getInstance().getXDist() * Constants.kSliderRevolutionsPerInch;
 			mOutput.setPosition(setpoint, mEncoderGains);
 		}
 	}
