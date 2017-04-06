@@ -53,6 +53,7 @@ public class VisionSliderRoutine extends Routine {
 		}
 		commands.robotSetpoints.sliderCustomSetpoint = 
 				Optional.of(visionSetpoint * Constants.kSliderRevolutionsPerInch);
+
 		switch(mState) {
 		case START:
 			commands.wantedSliderState = Slider.SliderState.CUSTOM_POSITIONING;
