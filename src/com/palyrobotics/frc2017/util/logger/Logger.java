@@ -18,6 +18,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * fileName defaults to ex: "Mar13 13-29" using 24-hr-time
  * Can set desired filename manually
  * If log file exists on first start, automatically creates new file
+ *
+ * If run on roboRIO, will attempt to copy the driverstation console log to this directory to save it
+ * No longer uses bufferedwriter, uses Guava Files to append to file
+ *
+ * FYI, buffered writer closes the underlying filewriter and flushes the buffer
  */
 public class Logger {
 	private static Logger instance = new Logger();
@@ -41,6 +46,9 @@ public class Logger {
 	// Stores the runnable for the thread to be restarted
 	private Runnable mRunnable;
 	private File mainLog;
+
+	// Finds the driver station console output
+	private File rioLog;
 
 	public boolean setFileName(String fileName) {
 		if (mainLog != null) {
@@ -77,6 +85,8 @@ public class Logger {
 			// Pray that this is a roborio
 			// TODO: Maybe find the exact OS name
 			filePath = "/home/lvuser/logs/" + fileName;
+			// TODO:
+			rioLog = new File("/home/lvuser/FRC_UserProgram.log");
 		}
 		int duplicatePrevent = 0;
 		mainLog = new File(filePath+File.separatorChar+"log.log");
@@ -84,11 +94,10 @@ public class Logger {
 			duplicatePrevent++;
 			mainLog = new File(filePath+File.separatorChar+"log"+duplicatePrevent+".log");
 		}
-		
-		// TODO: try w/ resources might be better suited for automatically closing
 		try {
 			// File header
 			Files.createParentDirs(mainLog);
+			Files.append("Robot log:"+ "\n", mainLog, Charsets.UTF_8);
 			Files.append(date.toString()+ "\n", mainLog, Charsets.UTF_8);
 			System.out.println("Created new log at " + filePath);
 		} catch (IOException e) {
@@ -153,13 +162,6 @@ public class Logger {
 	}
 	
 	public synchronized void cleanup() {
-		System.out.println("Log file: "+mainLog.getAbsolutePath());
-		// Commented out because it prevents final writing sometimes
-//		if (!isEnabled) {
-//			System.err.println("Already cleaned up");
-//			return;
-//		}
-		// FYI, buffered writer closes the underlying filewriter and flushes the buffer
 		mWritingThread.interrupt();
 	}
 	private Logger() {
@@ -171,12 +173,10 @@ public class Logger {
 							mData = new ArrayList<>(mRobotThreadLogs);
 							mData.addAll(mSubsystemThreadLogs);
 							mData.sort(TimestampedString::compareTo);
-							System.out.println("Logger strings: "+Arrays.toString(mData.toArray()));
 							mSubsystemThreadLogs.clear();
 							mRobotThreadLogs.clear();
 							mData.forEach((TimestampedString c) -> {
 								try {
-									System.out.println("Writing "+c.toString());
 									Files.append(c.getTimestampedString(), mainLog, Charsets.UTF_8);
 								} catch (IOException e) {
 									e.printStackTrace();
@@ -233,6 +233,14 @@ public class Logger {
 				e.printStackTrace();
 			}
 			isEnabled = false;
+		}
+		// Try to copy riolog to logging directory if it exists
+		if (rioLog != null) {
+			try {
+				Files.copy(rioLog, new File("/home/lvuser/logs/" + fileName));
+			} catch (IOException e) {
+				System.out.println("Unable to copy riolog");
+			}
 		}
 	}
 }
