@@ -7,6 +7,7 @@ import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
 import com.palyrobotics.frc2017.subsystems.controllers.CANTalonDriveController;
 import com.palyrobotics.frc2017.subsystems.controllers.EncoderTurnAngleController;
 import com.palyrobotics.frc2017.subsystems.controllers.TrajectoryFollowingController;
+import com.palyrobotics.frc2017.subsystems.controllers.GyroMotionMagicTurnAngleController;
 import com.palyrobotics.frc2017.util.*;
 import com.palyrobotics.frc2017.subsystems.controllers.BangBangTurnAngleController;
 import com.palyrobotics.frc2017.config.Constants;
@@ -192,6 +193,11 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	public void setTurnAngleEncoderSetpoint(double angle) {
 		System.out.println("Encoder angle "+angle);
 		mController = new EncoderTurnAngleController(mCachedPose, angle);
+		newController = true;
+	}
+	
+	public void setGyroMotionMagicTurnAngleSetpoint(double angle) {
+		mController = new GyroMotionMagicTurnAngleController(mCachedPose, angle);
 		newController = true;
 	}
 
