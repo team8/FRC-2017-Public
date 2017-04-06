@@ -9,7 +9,6 @@ public abstract class Subsystem implements SubsystemLoop {
 
 	public Subsystem(String name) {
 		this.mName = name;
-//		SystemManager.getInstance().add(this);
 	}
 	// Updates the subsystem with current commands and state
 	public abstract void update(Commands commands, RobotState robotState);

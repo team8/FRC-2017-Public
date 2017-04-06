@@ -1,4 +1,4 @@
-package com.palyrobotics.frc2017.util.archive.team254.trajectory;
+package com.palyrobotics.frc2017.util.archive.team254;
 
 import java.io.*;
 
@@ -19,7 +19,7 @@ public class TextFileReader {
 			// Open the new file
 			File file = new File(uri);
 			if (!file.exists()) {
-				System.err.println("Could not find specified file!");
+				System.err.println("TextFileReader could not find specified file!");
 				return;
 			}
 
@@ -28,7 +28,7 @@ public class TextFileReader {
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.err.println("Could not open file connection!");
+			System.err.println("TextFileReader Could not open file connection!");
 			closeFile();
 		}
 	}
@@ -38,7 +38,7 @@ public class TextFileReader {
 			// If we have a file open, close it
 			reader_.close();
 		} catch (IOException e) {
-			System.err.println("Could not close file");
+			System.err.println("TextFileReader Could not close file");
 		}
 	}
 

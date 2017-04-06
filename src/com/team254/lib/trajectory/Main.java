@@ -24,30 +24,31 @@ public class Main {
 	// Values pulled from gains
 	private static final double kShortVel = Gains.kSteikShortDriveMotionMagicCruiseVelocity/(Constants.kDriveSpeedUnitConversion*12);
 	private static final double kShortAccel = Gains.kSteikShortDriveMotionMagicMaxAcceleration/(Constants.kDriveSpeedUnitConversion*12);
-	private static final double kLongVel = Gains.kSteikLongDriveMotionMagicCruiseVelocity/(Constants.kDriveSpeedUnitConversion*12);
-	private static final double kLongAccel = Gains.kSteikLongDriveMotionMagicMaxAcceleration/(Constants.kDriveSpeedUnitConversion*12);
-
+//	private static final double kLongVel = Gains.kSteikLongDriveMotionMagicCruiseVelocity/(Constants.kDriveSpeedUnitConversion*12);
+//	private static final double kLongAccel = Gains.kSteikLongDriveMotionMagicMaxAcceleration/(Constants.kDriveSpeedUnitConversion*12);
+	private static final double kLongVel = 40.0/12;
+	private static final double kLongAccel = 40.0/12;
 	// Distances in feet, angles in radians
-	public static double kBackup = -0.8; // TODO: Why doesn't 10/12 work?
-	public static double kRedCenter = 82/12;
-	public static double kBlueCenter = 82/12;
+	public static double kBackup = -0.8; // TODO: Why doesn't 10/12 work? integer vs double?
+	public static double kRedCenter = 82.0/12;
+	public static double kBlueCenter = 82.0/12;
 	public static double kTurnAngle = Math.PI/3;
 
 	// Blue right loading station
 	public static double kBlueLoadingStationForward = 79.5/12; // 79.5
-	public static double kBlueLoadingStationAirship = 73/12; // 66, 70, 73
+	public static double kBlueLoadingStationAirship = 73.0/12; // 66, 70, 73
 
 	// Red left loading station
-	public static double kRedLoadingStationForward = 79/12; // 79
-	public static double kRedLoadingStationAirship = 73/12; // 66, 70, 73
+	public static double kRedLoadingStationForward = 79.0/12; // 79
+	public static double kRedLoadingStationAirship = 73.0/12; // 66, 70, 73
 
 	// Blue left boiler
 	public static double kBlueBoilerForward = 82.5/12; // 79.5, 82.5
-	public static double kBlueBoilerAirship = 73/12; // 73,
+	public static double kBlueBoilerAirship = 73.0/12; // 73,
 
 	// Red right boiler
-	public static double kRedBoilerForward = 84/12; // 79, 84
-	public static double kRedBoilerAirship = 73/12; // 73,
+	public static double kRedBoilerForward = 84.0/12; // 79, 84
+	public static double kRedBoilerAirship = 73.0/12; // 73,
 
 
 	public static void main(String[] args) {
@@ -310,7 +311,7 @@ public class Main {
 			// Description of this auto mode path.
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint(100/12, 0, 0));
+			p.addWaypoint(new WaypointSequence.Waypoint(100.0/12, 0, 0));
 
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);

@@ -17,7 +17,7 @@ public class AutoModeSelector {
 	private enum AutoIndices {
 		DO_NOTHING(0), BASELINE(1),
 		CENTER_PEG(2), SIDE_PEG(3), VISION_CENTER_PEG(4),
-		VISION_SIDE_PEG(5), TEST(6);
+		VISION_SIDE_PEG(5), TEST(6), TRAJECTORY(7);
 		private final int id;
 		AutoIndices(int id) {this.id = id;}
 		public int get() {return id;}
@@ -26,7 +26,7 @@ public class AutoModeSelector {
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
-	int selectedIndex = AutoIndices.VISION_SIDE_PEG.get();
+	int selectedIndex = AutoIndices.TRAJECTORY.get();
 	
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
@@ -58,7 +58,7 @@ public class AutoModeSelector {
 		  										false, true)); // seeking right vision target?, backup?
 
 		registerAutonomous(new TestAutoMode());
-		registerAutonomous(new TestTrajectoryAutoMode(AutoPathLoader.kPathNames[3]));
+		registerAutonomous(new TestTrajectoryAutoMode("BlueBoiler"));
 	}
 
 	/**

@@ -1,5 +1,7 @@
 package com.palyrobotics.frc2017.util.archive.team254.trajectory;
 
+import com.team254.lib.trajectory.Trajectory;
+
 /**
  * PID + Feedforward controller for following a Trajectory.
  *

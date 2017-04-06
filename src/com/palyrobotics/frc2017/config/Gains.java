@@ -5,12 +5,12 @@ public class Gains {
 	 * STEIK
 	 */
 	// Onboard motion profile aka trajectory follower
-	public static final double kSteikTrajectorykP = 0.1;
-	public static final double kSteikTrajectorykI = 0.01;
-	public static final double kSteikTrajectorykD = 0.1;
-	public static final double kSteikTrajectorykV = 0.5;
-	public static final double kSteikTrajectorykA = 0.0;
-	public static final double kSteikTrajectoryTurnkP = 0.01;
+	public static final double kSteikTrajectorykP = 0.001;
+	public static final double kSteikTrajectorykI = 0;
+	public static final double kSteikTrajectorykD = 0.005;
+	public static final double kSteikTrajectorykV = 0.07;
+	public static final double kSteikTrajectorykA = 0.000;
+	public static final double kSteikTrajectoryTurnkP = -0.02;
 
 	// Drive Distance PID control loop
 	public static final double kSteikDriveDistancekP = 0.5;

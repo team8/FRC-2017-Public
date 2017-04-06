@@ -1,5 +1,6 @@
 package com.palyrobotics.frc2017.subsystems.controllers;
 
+import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.robot.team254.lib.util.ChezyMath;
@@ -37,8 +38,8 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 		}
 		DriveSignal driveSignal = DriveSignal.getNeutralSignal();
 
-		double leftPower = mLeftFollower.calculate(state.drivePose.leftEnc);
-		double rightPower = mRightFollower.calculate(state.drivePose.rightEnc);
+		double leftPower = mLeftFollower.calculate(state.drivePose.leftEnc/Constants.kDriveTicksPerInch/12);
+		double rightPower = mRightFollower.calculate(state.drivePose.rightEnc/Constants.kDriveTicksPerInch/12);
 
 		if (!mGyroCorrection) {
 			driveSignal.leftMotor.setPercentVBus(leftPower);
@@ -46,9 +47,11 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 		} else {
 			double gyroError = ChezyMath.getDifferenceInAngleRadians(Math.toRadians(state.drivePose.heading), mLeftFollower.getHeading());
 			gyroError = Math.toDegrees(gyroError);
+			System.err.println("Using gyro!");
 			driveSignal.leftMotor.setPercentVBus(leftPower+Gains.kSteikTrajectoryTurnkP*gyroError);
 			driveSignal.rightMotor.setPercentVBus(rightPower-Gains.kSteikTrajectoryTurnkP*gyroError);
 		}
+		System.out.println(driveSignal.toString());
 		return driveSignal;
 	}
 

@@ -81,11 +81,11 @@ public class TrajectoryFollower {
     public double calculate(double position, double velocity) {
         double dt = config_.dt;
         if (!reset_) {
-            double now = Timer.getFPGATimestamp();
+            double now = System.currentTimeMillis()*1000;
             dt = now - last_timestamp_;
             last_timestamp_ = now;
         } else {
-            last_timestamp_ = Timer.getFPGATimestamp();
+            last_timestamp_ = System.currentTimeMillis()*1000;
         }
 
         if (isFinishedTrajectory()) {

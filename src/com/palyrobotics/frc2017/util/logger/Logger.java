@@ -182,7 +182,7 @@ public class Logger {
 				mData = new ArrayList<>(mSubsystemThreadLogs);
 				mData.addAll(mRobotThreadLogs);
 				mData.sort(TimestampedString::compareTo);
-				System.out.println("Last strings: "+Arrays.toString(mData.toArray()));
+//				System.out.println("Last strings: "+Arrays.toString(mData.toArray()));
 				mData.forEach((TimestampedString c) -> {
 					try {
 						bufferedWriter.write(c.getTimestampedString());
@@ -215,7 +215,7 @@ public class Logger {
 					try {
 						synchronized (writingLock) {
 							System.out.println("Logger interrupted, closing");
-							bufferedWriter.flush();
+//							bufferedWriter.flush();
 							bufferedWriter.close();
 						}
 					} catch (IOException e) {
@@ -229,10 +229,10 @@ public class Logger {
 							mData = new ArrayList<>(mSubsystemThreadLogs);
 							mData.addAll(mRobotThreadLogs);
 							mData.sort(TimestampedString::compareTo);
-							System.out.println("Logger strings: "+Arrays.toString(mData.toArray()));
+//							System.out.println("Logger strings: "+Arrays.toString(mData.toArray()));
 							mSubsystemThreadLogs.clear();
 							mRobotThreadLogs.clear();
-							System.out.println("Logger strings: "+Arrays.toString(mData.toArray()));
+//							System.out.println("Logger strings: "+Arrays.toString(mData.toArray()));
 							mData.forEach((TimestampedString c) -> {
 								try {
 									bufferedWriter.write(c.getTimestampedString());

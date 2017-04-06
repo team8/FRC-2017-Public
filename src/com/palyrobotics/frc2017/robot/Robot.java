@@ -11,8 +11,7 @@ import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.archive.SubsystemLooper;
 import com.palyrobotics.frc2017.util.logger.Logger;
 import com.palyrobotics.frc2017.vision.AndroidConnectionHelper;
-import com.palyrobotics.frc2017.robot.team254.lib.util.RobotData;
-import com.palyrobotics.frc2017.robot.team254.lib.util.SystemManager;
+import com.palyrobotics.frc2017.robot.team254.lib.util.Looper;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -31,6 +30,9 @@ public class Robot extends IterativeRobot {
 	private OperatorInterface operatorInterface = OperatorInterface.getInstance();
 	// Instantiate separate thread controls
 	private SubsystemLooper mSubsystemLooper = new SubsystemLooper();
+	// Instantiate hardware updaters
+	private Looper mHardwareEnabledLooper = new Looper();
+	private Looper mHardwareSensorLooper = new Looper();
 	private RoutineManager mRoutineManager = new RoutineManager();
 
 	// Subsystem controllers
@@ -44,10 +46,6 @@ public class Robot extends IterativeRobot {
 
 	// Hardware Updater
 	private HardwareUpdater mHardwareUpdater;
-
-	static {
-		SystemManager.getInstance().add(new RobotData());
-	}
 	
 	@Override
 	public void robotInit() {
@@ -55,7 +53,7 @@ public class Robot extends IterativeRobot {
 		DashboardManager.getInstance().robotInit();
 		AndroidConnectionHelper.getInstance().start(AndroidConnectionHelper.StreamState.JSON);
 		System.out.println("Finished starting");
-		mLogger.setFileName("QF2");
+//		mLogger.setFileName("PreElims");
 		mLogger.start();
 		mLogger.logRobotThread("robotInit() start");
 		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);
@@ -92,7 +90,10 @@ public class Robot extends IterativeRobot {
 			}
 			mSubsystemLooper.register(mDrive);
 		}
+		mHardwareSensorLooper.register(mHardwareUpdater.getHardwareSensorLoop());
+		mHardwareEnabledLooper.register(mHardwareUpdater.getHardwareEnabledLoop());
 		mHardwareUpdater.initHardware();
+		mHardwareSensorLooper.start();
 		System.out.println("Auto: "+AutoModeSelector.getInstance().getAutoMode().toString());
 //		AndroidConnectionHelper.getInstance().StartVisionApp();
 		System.out.println("End robotInit()");
@@ -106,6 +107,7 @@ public class Robot extends IterativeRobot {
 		mLogger.logRobotThread("Start autonomousInit()");
 		robotState.gamePeriod = RobotState.GamePeriod.AUTO;
 		mHardwareUpdater.configureTalons(false);
+		mHardwareEnabledLooper.start();
 		// Wait for talons to update
 		try {
 			System.out.println("Sleeping thread for 200 ms");
@@ -135,12 +137,12 @@ public class Robot extends IterativeRobot {
 		mHardwareUpdater.updateSensors(robotState);
 
 		commands = mRoutineManager.update(commands);
-		mHardwareUpdater.updateSubsystems();
 	}
 
 	@Override
 	public void teleopInit() {
 		System.out.println("Start teleopInit()");
+		mHardwareEnabledLooper.start();
 		mLogger.start();
 		mLogger.logRobotThread("Start teleopInit()");
 		robotState.gamePeriod = RobotState.GamePeriod.TELEOP;
@@ -158,14 +160,12 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		// Update RobotState
-		mHardwareUpdater.updateSensors(robotState);
 		// Gets joystick commands
 		// Updates commands based on routines
 //		mLogger.logRobotThread("Teleop Commands: ", commands);
 //		logPeriodic();
 		commands = mRoutineManager.update(operatorInterface.updateCommands(commands));
 		//Update the hardware
-		mHardwareUpdater.updateSubsystems();
 	}
 
 	@Override
@@ -184,6 +184,7 @@ public class Robot extends IterativeRobot {
 
 		// Stop controllers
 		mDrive.setNeutral();
+		mHardwareEnabledLooper.stop();
 		mHardwareUpdater.configureDriveTalons();
 		mHardwareUpdater.disableTalons();
 		DashboardManager.getInstance().enableCANTable(false);
@@ -201,11 +202,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledPeriodic() {
 		mHardwareUpdater.updateSensors(robotState);
-<<<<<<< HEAD
-//		System.out.println("Slider pot: "+robotState.sliderPotentiometer);
-//		System.out.println("Slider enc: "+robotState.sliderEncoder);
-=======
->>>>>>> Tried gyro turn angle, update vision code
 //		System.out.println("Gyro: "+robotState.drivePose.heading);
 //		System.out.println("Left enc: " + robotState.drivePose.leftEnc +"\n"
 //				+"Right enc: "+robotState.drivePose.rightEnc);

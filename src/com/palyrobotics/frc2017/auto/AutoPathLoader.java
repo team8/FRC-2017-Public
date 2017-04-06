@@ -1,6 +1,6 @@
 package com.palyrobotics.frc2017.auto;
 
-import com.palyrobotics.frc2017.util.archive.team254.trajectory.TextFileReader;
+import com.palyrobotics.frc2017.util.archive.team254.TextFileReader;
 import com.team254.lib.trajectory.Path;
 import com.team254.lib.trajectory.io.TextFileDeserializer;
 

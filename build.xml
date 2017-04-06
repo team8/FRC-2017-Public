@@ -24,7 +24,22 @@
   <property file="${user.home}/wpilib/wpilib.properties"/>
   <property file="build.properties"/>
   <property file="${user.home}/wpilib/java/${version}/ant/build.properties"/>
-
-  <import file="${wpilib.ant.dir}/build.xml"/>
-
+  <target name="deploy-paths" description="copy motion profiles to rio"
+    depends="get-target-ip">
+    <sequential>
+     <echo>[deploy-paths] Deploying paths from ${paths.dir} to ${rioPaths.dir}</echo>
+        <!---doesn't work if exists<sshexec host="${target}"
+                                   username="${username}"
+                                   password="${password}"
+                                   trust="true"
+                                   command="mkdir ${rioPaths.dir}"/>-->
+        <scp todir="${username}@${target}:${rioPaths.dir}" password="${password}" trust="true">
+        <fileset dir="${paths.dir}">
+          <include name="*.txt"/>
+        </fileset>
+      </scp>
+      <echo>Done deploying paths</echo>
+    </sequential>
+  </target>
+<import file="${wpilib.ant.dir}/build.xml"/>
 </project> 
