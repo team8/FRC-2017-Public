@@ -242,7 +242,7 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	}
 
 	@Override
-	public String printStatus() {
+	public String getStatus() {
 		return "Drive State: " + mState + "\nOutput Control Mode: " + mSignal.leftMotor.getControlMode() +
 				"\nLeft Setpoint: " + mSignal.leftMotor.getSetpoint() + "\nRight Setpoint: " + mSignal.rightMotor.getSetpoint() +
 				"\nLeft Enc: "+mCachedPose.leftEnc + "\nRight Enc: "+mCachedPose.rightEnc+

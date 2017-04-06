@@ -68,7 +68,7 @@ public class Spatula extends Subsystem implements SubsystemLoop {
 	}
 
 	@Override
-	public String printStatus() {
+	public String getStatus() {
 		return "Spatula State: " + mState;
 	}
 }

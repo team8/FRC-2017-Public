@@ -7,27 +7,30 @@ import com.palyrobotics.frc2017.robot.team254.lib.util.ChezyMath;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.util.Pose;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
+import com.palyrobotics.frc2017.util.archive.team254.trajectory.LegacyTrajectoryFollower;
+import com.palyrobotics.frc2017.util.archive.team254.trajectory.TrajectoryFollower;
 import com.team254.lib.trajectory.Path;
 import com.team254.lib.trajectory.Trajectory;
-import com.team254.lib.trajectory.TrajectoryFollower;
 
 /**
  * Created by Nihar on 4/5/17.
  */
 public class TrajectoryFollowingController implements Drive.DriveController {
-	private Trajectory mTrajectory;
-	private TrajectoryFollower mLeftFollower = new TrajectoryFollower();
-	private TrajectoryFollower mRightFollower = new TrajectoryFollower();
+	private LegacyTrajectoryFollower mLeftFollower = new LegacyTrajectoryFollower("left");
+	private LegacyTrajectoryFollower mRightFollower = new LegacyTrajectoryFollower("right");
 
 	private boolean mGyroCorrection;
 
 	public TrajectoryFollowingController(Path path, boolean correctUsingGyro) {
-		mLeftFollower.setTrajectory(path.getLeftWheelTrajectory());
+		// set trajectory gains
 		mLeftFollower.configure(Gains.kSteikTrajectorykP, Gains.kSteikTrajectorykI, Gains.kSteikTrajectorykD,
 				Gains.kSteikTrajectorykV, Gains.kSteikTrajectorykA);
-		mRightFollower.setTrajectory(path.getRightWheelTrajectory());
 		mRightFollower.configure(Gains.kSteikTrajectorykP, Gains.kSteikTrajectorykI, Gains.kSteikTrajectorykD,
 				Gains.kSteikTrajectorykV, Gains.kSteikTrajectorykA);
+
+		// set goals and paths
+		mRightFollower.setTrajectory(path.getRightWheelTrajectory());
+		mLeftFollower.setTrajectory(path.getLeftWheelTrajectory());
 		this.mGyroCorrection = correctUsingGyro;
 	}
 

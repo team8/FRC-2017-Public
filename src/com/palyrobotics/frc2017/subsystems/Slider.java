@@ -282,7 +282,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		return mOutput;
 	}
 	
-	public String printStatus() {
+	public String getStatus() {
 		return "Slider State: " + mState + "\n" + ((this.onTarget()) ? "On target":"Not on target") +
 				"\nTarget: " + mTarget + "\nOutput: " + mOutput.getSetpoint() + 
 				" with CANTalon in " + mOutput.getControlMode() + "\nEncoder value is " + mRobotState.sliderEncoder

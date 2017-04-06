@@ -60,7 +60,7 @@ public class SimpleClimber extends Subsystem implements SubsystemLoop {
 	}
 
 	@Override
-	public String printStatus() {
+	public String getStatus() {
 		return "";
 	}
 }

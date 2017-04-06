@@ -5,7 +5,6 @@ import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.robot.team254.lib.util.CrashTrackingRunnable;
-import com.palyrobotics.frc2017.util.Subsystem;
 import com.palyrobotics.frc2017.util.logger.Logger;
 
 import edu.wpi.first.wpilibj.Notifier;
@@ -51,7 +50,7 @@ public class SubsystemLooper {
 					RobotState robotState = Robot.getRobotState();
 					for (SubsystemLoop loop : mLoops) {
 						loop.update(commands, robotState);
-//						Logger.getInstance().logSubsystemThread(loop.printStatus());
+						Logger.getInstance().logSubsystemThread(loop.getStatus());
 					}
 					mDt = now - mTimeStamp;
 					mTimeStamp = now;
@@ -67,7 +66,7 @@ public class SubsystemLooper {
 				if (mPrinting && mAllowPrinting) {
 					double now = Timer.getFPGATimestamp();
 					for (SubsystemLoop loop : mLoops) {
-						System.out.println(loop.printStatus());
+						System.out.println(loop.getStatus());
 					}
 					mPrintDt = now - mPrintTimeStamp;
 					mPrintTimeStamp = now;

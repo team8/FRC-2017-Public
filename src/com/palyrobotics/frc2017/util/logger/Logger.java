@@ -26,9 +26,7 @@ public class Logger {
 	}
 
 	private String fileName = null;
-	// Buffered writer is flushed every 500ms and should be thread safe
-	private BufferedWriter bufferedWriter;
-	
+
 	private boolean isEnabled = false;
 	
 	private ArrayList<TimestampedString> mData;
@@ -45,7 +43,7 @@ public class Logger {
 	private File mainLog;
 
 	public boolean setFileName(String fileName) {
-		if (bufferedWriter != null) {
+		if (mainLog != null) {
 			System.err.println("Already created log file");
 			return false;
 		}
@@ -58,13 +56,8 @@ public class Logger {
 	 */
 	public void start() {
 		// If initialized before, then recreate the buffered writer and re-enable
-		if (bufferedWriter != null && mWritingThread != null) {
+		if (mWritingThread != null) {
 			isEnabled = true;
-			try {
-				bufferedWriter = Files.newWriter(mainLog, Charsets.UTF_8);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
 			mWritingThread = new Thread(mRunnable);
 			mWritingThread.start();
 			return;
@@ -96,19 +89,9 @@ public class Logger {
 		try {
 			// File header
 			Files.createParentDirs(mainLog);
-			bufferedWriter = Files.newWriter(mainLog, Charsets.UTF_8);
-			bufferedWriter.write(date.toString()+ "\n");
-			bufferedWriter.newLine();
-			bufferedWriter.flush();
+			Files.append(date.toString()+ "\n", mainLog, Charsets.UTF_8);
 			System.out.println("Created new log at " + filePath);
 		} catch (IOException e) {
-			if (bufferedWriter != null) {
-				try {
-					bufferedWriter.close();
-				} catch (IOException e2) {
-					e2.printStackTrace();
-				}
-			}
 			System.err.println("Failed to create log at "+filePath);
 			e.printStackTrace();
 		}
@@ -171,88 +154,85 @@ public class Logger {
 	
 	public synchronized void cleanup() {
 		System.out.println("Log file: "+mainLog.getAbsolutePath());
-		if (!isEnabled) {
-			System.err.println("Already cleaned up");
-			return;
-		}
-		try {
-			// FYI, buffered writer closes the underlying filewriter and flushes the buffer
-			mWritingThread.interrupt();
-			synchronized (writingLock) {
-				mData = new ArrayList<>(mSubsystemThreadLogs);
-				mData.addAll(mRobotThreadLogs);
-				mData.sort(TimestampedString::compareTo);
-//				System.out.println("Last strings: "+Arrays.toString(mData.toArray()));
-				mData.forEach((TimestampedString c) -> {
-					try {
-						bufferedWriter.write(c.getTimestampedString());
-					} catch (IOException e) {
-						System.out.println("Unable to write last strings");
-						e.printStackTrace();
-					}
-				});
-				mData.clear();
-				try {
-					bufferedWriter.write("Logger stopped");
-				} catch (IOException e) {
-					System.out.println("Unable to write, logger stopped");
-					e.printStackTrace();
-				}
-				bufferedWriter.flush();
-			}
-			bufferedWriter.close();
-			isEnabled = false;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		// Commented out because it prevents final writing sometimes
+//		if (!isEnabled) {
+//			System.err.println("Already cleaned up");
+//			return;
+//		}
+		// FYI, buffered writer closes the underlying filewriter and flushes the buffer
+		mWritingThread.interrupt();
 	}
 	private Logger() {
 		mData = new ArrayList<>();
 		mRunnable = () -> {
 			while (true) {
-				// If thread is interrupted, cleanup
-				if (Thread.currentThread().isInterrupted()) {
-					try {
-						synchronized (writingLock) {
-							System.out.println("Logger interrupted, closing");
-//							bufferedWriter.flush();
-							bufferedWriter.close();
-						}
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					return;
-				}
-				try {
 					synchronized (writingLock) {
 						if (isEnabled) {
-							mData = new ArrayList<>(mSubsystemThreadLogs);
-							mData.addAll(mRobotThreadLogs);
+							mData = new ArrayList<>(mRobotThreadLogs);
+							mData.addAll(mSubsystemThreadLogs);
 							mData.sort(TimestampedString::compareTo);
-//							System.out.println("Logger strings: "+Arrays.toString(mData.toArray()));
+							System.out.println("Logger strings: "+Arrays.toString(mData.toArray()));
 							mSubsystemThreadLogs.clear();
 							mRobotThreadLogs.clear();
-//							System.out.println("Logger strings: "+Arrays.toString(mData.toArray()));
 							mData.forEach((TimestampedString c) -> {
 								try {
-									bufferedWriter.write(c.getTimestampedString());
+									System.out.println("Writing "+c.toString());
+									Files.append(c.getTimestampedString(), mainLog, Charsets.UTF_8);
 								} catch (IOException e) {
 									e.printStackTrace();
 								}
 							});
 							mData.clear();
-							bufferedWriter.flush();
 						}
 					}
-				Thread.sleep(500);
-				} catch (IOException e) {
-					e.printStackTrace();
+				try {
+					Thread.sleep(500);
 				} catch (InterruptedException e){
-					// No value in stack trace
-					//e.printStackTrace();
+					shutdown();
+					return;
+				}
+				// If thread is interrupted, cleanup
+				if (Thread.currentThread().isInterrupted()) {
+					shutdown();
 					return;
 				}
 			}
 		};
+	}
+
+	public String getLogPath() {
+		if (mainLog != null) {
+			return mainLog.getAbsolutePath();
+		} else {
+			return "NoLogYet";
+		}
+	}
+
+	// Used to cleanup internally, write out last words, etc
+	private synchronized void shutdown() {
+		System.out.println("Shutting down");
+		synchronized (writingLock) {
+			mData = new ArrayList<>(mRobotThreadLogs);
+			mData.addAll(mSubsystemThreadLogs);
+			mData.sort(TimestampedString::compareTo);
+			mData.forEach((TimestampedString c) -> {
+				try {
+					Files.append(c.getTimestampedString(), mainLog, Charsets.UTF_8);
+				} catch (IOException e) {
+					System.out.println("Unable to write last strings");
+					e.printStackTrace();
+				}
+			});
+			mRobotThreadLogs.clear();
+			mSubsystemThreadLogs.clear();
+			mData.clear();
+			try {
+				Files.append("Logger stopped \n", mainLog, Charsets.UTF_8);
+			} catch (IOException e) {
+				System.out.println("Unable to write, logger stopped");
+				e.printStackTrace();
+			}
+			isEnabled = false;
+		}
 	}
 }

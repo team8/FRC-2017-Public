@@ -26,6 +26,11 @@ public class LoggerTest {
 		logger.logRobotThread("New message");
 		// messages should be flushed
 		logger.cleanup();
+		try {
+			Thread.sleep(100);
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Test
@@ -37,19 +42,29 @@ public class LoggerTest {
 		Slider.getInstance().start();
 		Slider.getInstance().update(Robot.getCommands(), Robot.getRobotState());
 		Drive.getInstance().update(Robot.getCommands(), Robot.getRobotState());
-		logger.logSubsystemThread(Drive.getInstance().printStatus());
-		logger.logSubsystemThread(Slider.getInstance().printStatus());
+//		logger.logSubsystemThread(Drive.getInstance().getStatus());
+//		logger.logSubsystemThread(Slider.getInstance().getStatus());
 		logger.logRobotThread("Robot start");
-		logger.logRobotThread("Pre cleanup 1");
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-//		logger.cleanup();
+		logger.logRobotThread("Pre cleanup 1");
+		logger.cleanup();
 		logger.start();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		logger.logRobotThread("Post cleanup 1");
 		logger.cleanup();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Test

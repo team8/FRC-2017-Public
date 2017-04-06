@@ -155,7 +155,7 @@ public class Climber extends Subsystem implements SubsystemLoop {
 	}
 
 	@Override
-	public String printStatus() {
+	public String getStatus() {
 		return "Climber State: " + mState + "\nOutput Control Mode: " + mOutput.getControlMode() + 
 				"\nOutput: " + mOutput.getSetpoint()+"\n";
 	}

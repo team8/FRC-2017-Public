@@ -190,12 +190,10 @@ public class Robot extends IterativeRobot {
 		DashboardManager.getInstance().enableCANTable(false);
 		mLogger.logRobotThread("End disabledInit()");
 		mLogger.cleanup();
-		
+		System.out.println("Log file: "+mLogger.getLogPath());
 		// Manually run garbage collector
 		System.gc();
 		
-		System.out.println("Encoder: "+robotState.drivePose.leftEnc);
-		System.out.println("Gyro: "+robotState.drivePose.heading);
 		System.out.println("End disabledInit()");
 	}
 
