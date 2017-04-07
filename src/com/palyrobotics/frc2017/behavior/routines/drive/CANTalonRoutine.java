@@ -61,6 +61,7 @@ public class CANTalonRoutine extends Routine {
 						Robot.getRobotState().drivePose.leftEnc, mSignal.leftMotor.gains);
 				mSignal.rightMotor.setPosition(mSignal.rightMotor.getSetpoint()+
 						Robot.getRobotState().drivePose.rightEnc, mSignal.rightMotor.gains);
+				
 
 			}
 		}

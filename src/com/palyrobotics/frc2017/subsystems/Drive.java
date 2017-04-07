@@ -5,6 +5,7 @@ import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
 import com.palyrobotics.frc2017.subsystems.controllers.CANTalonDriveController;
+import com.palyrobotics.frc2017.subsystems.controllers.DriveStraightController;
 import com.palyrobotics.frc2017.subsystems.controllers.EncoderTurnAngleController;
 import com.palyrobotics.frc2017.subsystems.controllers.TrajectoryFollowingController;
 import com.palyrobotics.frc2017.subsystems.controllers.GyroMotionMagicTurnAngleController;
@@ -211,6 +212,11 @@ public class Drive extends Subsystem implements SubsystemLoop {
 		newController = true;
 	}
 
+	public void setDriveStraight(double distance) {
+		mController = new DriveStraightController(mCachedPose, distance);
+		newController = true;
+	}
+	
 	// Wipes current controller
 	public void resetController() {
 		mController = null;
