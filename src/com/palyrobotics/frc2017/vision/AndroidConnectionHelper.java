@@ -45,7 +45,7 @@ import org.json.simple.parser.JSONParser;
  * <h1><b>External Access Functions</b>
  * 	<br><BLOCKQUOTE>For using as a wrapper for RIOdroid</BLOCKQUOTE></h1>
  * 	<ul>
- * 		<li>{@link AndroidConnectionHelper#start(StreamState)}</li>
+ * 		<li>{@link AndroidConnectionHelper#start()}</li>
  * 		<li>{@link AndroidConnectionHelper#StartVisionApp()}</li>
  * 	</ul>
  *
@@ -84,11 +84,10 @@ public class AndroidConnectionHelper implements Runnable{
 	 * <ul>
 	 *     <li>{@link StreamState#IDLE}</li>
 	 *     <li>{@link StreamState#JSON}</li>
-	 *     <li>{@link StreamState#BROADCAST}</li>
 	 * </ul>
 	 */
 	public enum StreamState{
-		IDLE, JSON, BROADCAST
+		IDLE, JSON
 	}
 
 	// Instance and state variables
@@ -99,7 +98,6 @@ public class AndroidConnectionHelper implements Runnable{
 	// Utility variables
 	private double m_secondsAlive = 0;
 	private double m_stateAliveTime = 0;
-	private byte[] m_imageData = null;
 	private boolean m_adbServerCreated = false;
 	private boolean m_visionRunning = false;
 	private boolean m_running = false;
@@ -150,8 +148,8 @@ public class AndroidConnectionHelper implements Runnable{
 	/**
 	 * Starts the AndroidConnectionHelper thread
 	 */
-	public void start(StreamState state){
-		this.start(false, state);
+	public void start(){
+		this.start(false);
 	}
 
 	/**
@@ -159,7 +157,7 @@ public class AndroidConnectionHelper implements Runnable{
 	 * <br>(accounts for running program for testing)
 	 * @param isTesting
 	 */
-	public void start(boolean isTesting, StreamState streamState){
+	public void start(boolean isTesting){
 
 		if(m_connectionState != ConnectionState.PREINIT) {    // This should never happen
 			System.out.println("Error: in AndroidConnectionHelper.start(), "
@@ -174,7 +172,7 @@ public class AndroidConnectionHelper implements Runnable{
 		// Initialize Thread Variables
 		this.SetState(ConnectionState.STARTING_SERVER);
 		m_running = true;
-		m_streamState = streamState;
+		m_streamState = StreamState.JSON;
 		this.mTesting = isTesting;
 
 		System.out.println("Starting Thread: AndroidConnectionHelper ");
@@ -187,86 +185,96 @@ public class AndroidConnectionHelper implements Runnable{
 	 * @return The state after execution
 	 */
 	private ConnectionState InitializeServer() {
+
+		if(!this.isNexusConnected()){
+//			System.out.println("Error: in AndroidConnectionHelper.InitializeServer(), " +
+//					"nexus is not connected");
+			return this.m_connectionState;
+		}
+
+		if(m_adbServerCreated){
+			if(!this.isAppStarted()){
+				System.out.println("Vision app not started, starting app");
+				Logger.getInstance().logRobotThread("Vision app not started, starting app");
+
+				this.VisionInit();
+			} else {
+				this.m_visionRunning = true;
+			}
+
+			if (this.m_visionRunning) {
+				System.out.println("Connected to vision app");
+				Logger.getInstance().logRobotThread("Connected to vision app");
+				return ConnectionState.STREAMING;
+			} else {
+				System.out.println("Could not start vision app, retrying");
+				Logger.getInstance().logRobotThread("Could not start vision app, retrying");
+				return this.m_connectionState;
+			}
+		} else {
+			this.InitializeAdbServer();
+			return this.m_connectionState;
+		}
+
+	}
+
+	private void InitializeAdbServer() {
 		boolean connected = false;
 
-		if(m_adbServerCreated){	// This should never happen
-			System.out.print("Error: in AndroidConnectionHelper.InitializeServer(), "
-					+ "adb server already connected (or this function was called before)");
-			return ConnectionState.IDLE;
-		}else {
-			try {    // RIOadb.init() possible error is not being handled, sketchily fix later
-				// Initializes RIOdroid usb and RIOadb adb daemon
-				if(!this.mTesting) {
-					RIOdroid.init();
+		try {
+			// Initializes RIOdroid usb and RIOadb adb daemon
+			if (!this.mTesting) {
+				RIOdroid.init();
 
-					if(m_streamState.equals(StreamState.BROADCAST)){
-						// Forward the port and start the server socket for data
-						RIOdroid.executeCommand("adb reverse tcp:" +
-								Constants.kAndroidDataSocketPort + " tcp:" +
-								Constants.kAndroidDataSocketPort);
-						System.out.println("Starting DataServerThread");
-						DataServerThread.getInstance().start(Constants.kAndroidDataSocketPort);
-					}
+				// Forward the port and start the server socket for vision
+				RIOdroid.executeCommand("adb reverse tcp:" +
+						Constants.kAndroidVisionSocketPort + " tcp:" +
+						Constants.kAndroidVisionSocketPort);
+				System.out.println("Starting VisionServerThread");
+				VisionServerThread.getInstance().start(mTesting);
+			} else {
+				RuntimeExecutor.getInstance().init();
 
-					// Forward the port and start the server socket for vision
-					RIOdroid.executeCommand("adb reverse tcp:" +
-							Constants.kAndroidVisionSocketPort + " tcp:" +
-							Constants.kAndroidVisionSocketPort);
-					System.out.println("Starting VisionServerThread");
-					VisionServerThread.getInstance().start(mTesting);
-				}else{
-					RuntimeExecutor.getInstance().init();
-
-					if(m_streamState.equals(StreamState.BROADCAST)){
-						// Forward the port and start the server socket
-						RuntimeExecutor.getInstance().exec("adb reverse tcp:" +
-								Constants.kAndroidDataSocketPort + " tcp:" +
-								Constants.kAndroidDataSocketPort);
-						System.out.println("Starting VisionServerThread");
-						DataServerThread.getInstance().start(Constants.kAndroidDataSocketPort);
-					}
-
-					// Forward the port and start the server socket for vision
-					RuntimeExecutor.getInstance().exec("adb reverse tcp:" +
-							Constants.kAndroidVisionSocketPort + " tcp:" +
-							Constants.kAndroidVisionSocketPort);
-					System.out.println("Starting VisionServerThread");
-					VisionServerThread.getInstance().start(mTesting);
-				}
-
-				connected = true;
-			} catch (Exception e) {
-				System.out.println("Error: in AndroidConnectionHelper.InitializeServer(), "
-						+ "could not connect.\n" + e.getStackTrace());
+				// Forward the port and start the server socket for vision
+				RuntimeExecutor.getInstance().exec("adb reverse tcp:" +
+						Constants.kAndroidVisionSocketPort + " tcp:" +
+						Constants.kAndroidVisionSocketPort);
+				System.out.println("Starting VisionServerThread");
+				VisionServerThread.getInstance().start(mTesting);
 			}
 
-			// Let it retry connection for 10 seconds, then give in
-			if (m_secondsAlive - m_stateAliveTime > 10 && !connected) {
-				System.out.println("Error: in AndroidConnectionHelper.InitializeServer(), "
-						+ "connection timed out");
-			}
-
-			if (connected) {
-				m_adbServerCreated = true;
-//			} else {
-//				return m_connectionState;
-			}
-			System.out.println((this.m_adbServerCreated) ? "Started vision stream":"Failed to start vision stream");
-			Logger.getInstance().logRobotThread((this.m_adbServerCreated) ? "Started vision stream":"Failed to start vision stream");
-			this.m_visionRunning = true;
-			return ConnectionState.STREAMING;
+			connected = true;
+		} catch (Exception e) {
+			System.out.println("Error: in AndroidConnectionHelper.InitializeServer(), "
+					+ "could not connect.\n" + e.getStackTrace());
 		}
+
+		if(connected){      // Adb server started successfully
+			m_adbServerCreated = true;
+			System.out.println("Adb server started");
+			Logger.getInstance().logRobotThread("Adb server started");
+		} else {            // Adb server failed to start
+			System.out.println("Failed to start adb server");
+			Logger.getInstance().logRobotThread("Failed to start adb server");
+		}
+
+//		// Let it retry connection for 10 seconds, then give in
+//		if (m_secondsAlive - m_stateAliveTime > 10 && !connected) {
+//			System.out.println("Error: in AndroidConnectionHelper.InitializeServer(), "
+//					+ "connection timed out");
+//		}
+
 	}
 
 	/**
 	 * Starts up the vision app
 	 */
 	public void StartVisionApp(){
-		if(!m_adbServerCreated){    // No abd server, can't start app
-			System.out.println("Warning: on call AndroidConnectionHelper.StartVisionApp(), " +
-					"adb server not started, abandoning app startup");
-//			return;
-		}
+//		if(!m_adbServerCreated){    // No abd server, can't start app
+//			System.out.println("Warning: on call AndroidConnectionHelper.StartVisionApp(), " +
+//					"adb server not started, abandoning app startup");
+////			return;
+//		}
 
 		if(m_visionRunning){	// This should never happen, but easily can due to outside calling
 			System.out.println("Warning: On call AndroidConnectionHelper.StartVisionApp(), "
@@ -303,17 +311,17 @@ public class AndroidConnectionHelper implements Runnable{
 	 */
 	private ConnectionState VisionInit(){
 		boolean connected = false;
-
-		try {	// RIOadb.init() possible error is not being handled, sketchily fix later
-			// Starts app through adb shell, and outputs the returned console message
+		try {
+			// Starts app through adb shell, and stores the returned console message (for debugging)
+			String outp = null;
 			if(!this.mTesting) {
-				System.out.println(RIOdroid.executeCommand(
+				outp = RIOdroid.executeCommand(
 						"adb shell am start -n " + Constants.kPackageName + "/" +
-								Constants.kPackageName + "." + Constants.kActivityName));
+								Constants.kPackageName + "." + Constants.kActivityName);
 			}else{
-				System.out.println(RuntimeExecutor.getInstance().exec(
+				outp = RuntimeExecutor.getInstance().exec(
 						"adb shell am start -n " + Constants.kPackageName + "/" +
-								Constants.kPackageName + "." + Constants.kActivityName));
+								Constants.kPackageName + "." + Constants.kActivityName);
 			}
 
 			connected = true;
@@ -322,17 +330,11 @@ public class AndroidConnectionHelper implements Runnable{
 					+ "could not connect.\n" + e.getStackTrace());
 		}
 
-		// Let it retry connection for 10 seconds, then give in
-		if (m_secondsAlive - m_stateAliveTime > 10) {
-			System.out.println("Error: in AndroidConnectionHelper.VisionInit(), "
-					+ "connection timed out");
-		}
-
-		if(connected) {
+		if(connected) {     // App started successfully
 			m_visionRunning = true;
 			System.out.println("Starting Vision Stream");
 			return ConnectionState.STREAMING;
-		} else {
+		} else {            // Failed to start app
 			return m_connectionState;
 		}
 	}
@@ -343,8 +345,8 @@ public class AndroidConnectionHelper implements Runnable{
 	 */
 	private ConnectionState StreamVision(){
 		if(!m_visionRunning){	// This should never happen
-//			System.out.println("Error: in AndroidConnectionHelper.StreamVision(), "
-//					+ "vision program i not running (or has not been initialized inside this program)");
+			System.out.println("Error: in AndroidConnectionHelper.StreamVision(), "
+					+ "vision program i not running (or has not been initialized inside this program)");
 		}
 
 		switch (m_streamState){
@@ -353,10 +355,7 @@ public class AndroidConnectionHelper implements Runnable{
 						+ "streaming in IDLE state, nothing streaming");
 				break;
 			case JSON:
-				this.StreamJSON();
-				break;
-			case BROADCAST:
-				this.StreamBroadcast();
+				this.extractData(this.StreamJSON());
 				break;
 		}
 
@@ -364,33 +363,10 @@ public class AndroidConnectionHelper implements Runnable{
 	}
 
 	/**
-	 * Streams vision data via sending a broadcast and
-	 * receiving the output data through a socket
-	 */
-	private void StreamBroadcast(){
-		DataServerThread.getInstance().AwaitClient();
-
-		String out = "";
-		// Broadcast an Intent to the app signaling the call to get data
-		if(!mTesting){
-			out = RIOdroid.executeCommand("adb shell am broadcast -a "+Constants.kPackageName+".GET_DATA --es type data");
-		}else{
-			out = RuntimeExecutor.getInstance().exec("adb shell am broadcast -a "+Constants.kPackageName+".GET_DATA --es type data");
-		}
-
-//		System.out.println(out);
-
-		// Receive data from android client
-		String raw_data = DataServerThread.getInstance().AwaitOutput();
-
-		parseJSON(raw_data);
-	}
-
-	/**
 	 * Streams vision data via pulling a JSON file with
 	 * data written to it
 	 */
-	private void StreamJSON(){
+	private JSONObject StreamJSON(){
 		String raw_data;
 
 		// Read the JSON file which stores the vision data
@@ -402,16 +378,16 @@ public class AndroidConnectionHelper implements Runnable{
 					+ "/files/data.json");
 		}
 
-		parseJSON(raw_data);
+		return parseJSON(raw_data);
 	}
 
 	/**
 	 * Computes parsing of streamed data (for now just prints to console)
 	 * @param raw_data Raw JSON formatted data (String)
 	 */
-	private void parseJSON(String raw_data){
+	private JSONObject parseJSON(String raw_data){
 		if(raw_data == null  || raw_data.equals("") || raw_data.equals("error: no devices/emulators found")){
-			return;
+			return null;
 		}
 
 		// Create JSONObject from the raw String data
@@ -425,6 +401,10 @@ public class AndroidConnectionHelper implements Runnable{
 //			e.printStackTrace();
 		}
 
+		return json;
+	}
+
+	private void extractData(JSONObject json){
 		// Compute based on app state (given in the data)
 		if(json != null){
 			String state = (String) json.get("state");
@@ -454,15 +434,38 @@ public class AndroidConnectionHelper implements Runnable{
 	}
 
 	public double getXDist(){
-		if(!m_androidState.equals("STREAMING")){
+		if(!m_visionRunning) {
+			System.out.println("Error in AndroidConnectionHelper.getXDist(), " +
+					"no connection to vision app, returning default/last valid value");
+		} else if(!m_androidState.equals("STREAMING")){
 			System.out.println("Warning in AndroidConnectionHelper.getXDist(), " +
 					"not streaming, android state is "+m_androidState+", returning last valid x_distance");
 		}
 		return m_x_dist;
 	}
 	public boolean isNexusConnected(){
+		boolean hasDevice = false;
 		String[] outp = RuntimeExecutor.getInstance().exec("adb devices").split("\\n");
-		return outp.length > 1;
+
+		for(int i=1; i<outp.length && !hasDevice; i++){
+			hasDevice = outp[i].contains("device");
+		}
+		return hasDevice;
+	}
+
+	public boolean isAppStarted(){
+		JSONObject json = this.StreamJSON();
+
+		if (json != null) {
+			String state = (String) json.get("state");
+			if (state != null && !state.equals("")) {
+				if(state.equals("STREAMING")){
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	public boolean isServerStarted(){

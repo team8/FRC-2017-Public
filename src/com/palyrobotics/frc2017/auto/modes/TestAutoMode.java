@@ -45,6 +45,9 @@ public class TestAutoMode extends AutoModeBase {
 			setpoint*=-1;
 		}
 		sequence.add(new CustomPositioningSliderRoutine(Math.random()*5));
+
+//		sequence.add(new CustomPositioningSliderRoutine(-7));
+//		sequence.add(new VisionSliderRoutine());
 		return new SequentialRoutine(sequence);
 	}
 

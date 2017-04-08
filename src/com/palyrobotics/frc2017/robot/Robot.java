@@ -52,7 +52,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		System.out.println("Start robotInit() for "+Constants.kRobotName.toString());
 		DashboardManager.getInstance().robotInit();
-		AndroidConnectionHelper.getInstance().start(AndroidConnectionHelper.StreamState.JSON);
+		AndroidConnectionHelper.getInstance().start();
 		System.out.println("Finished starting");
 		mLogger.setFileName("PracticeMatch");
 		mLogger.start();

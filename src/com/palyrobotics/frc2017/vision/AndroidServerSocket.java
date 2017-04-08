@@ -88,7 +88,7 @@ public class AndroidServerSocket implements Runnable{
 	private Object lock = new Object();
 
 	/**
-	 * Creates a DataServerThread instance
+	 * Creates a AndroidServerSocket instance
 	 * Cannot be called outside as a Singleton
 	 */
 	public AndroidServerSocket(boolean testing, int port){
@@ -112,21 +112,21 @@ public class AndroidServerSocket implements Runnable{
 	 * (DEBUG) Logs the Socket state
 	 */
 	private void logSocketState(){
-		System.out.println("Debug: DataServerThread AndroidServerState - "+ m_androidServerState);
+		System.out.println("Debug: AndroidServerSocket AndroidServerState - "+ m_androidServerState);
 	}
 
 	/**
-	 * Starts the DataServerThread thread
+	 * Starts the AndroidServerSocket thread
 	 * <br>Created server socket opens on given port
 	 */
 	public void start(){
 		if(!m_androidServerState.equals(AndroidServerState.PREINIT)){ // This should never happen
-			System.out.println("Error: in DataServerThread.start(), " +
+			System.out.println("Error: in AndroidServerSocket.start(), " +
 					"socket is already initialized");
 		}
 
 		if(m_running){  // This should never happen
-			System.out.println("Error: in DataServerThread.start(), " +
+			System.out.println("Error: in AndroidServerSocket.start(), " +
 					"thread is already running");
 		}
 
@@ -140,8 +140,8 @@ public class AndroidServerSocket implements Runnable{
 		this.SetState(AndroidServerState.CONNECTING);
 		m_running = true;
 
-		System.out.println("Starting Thread: DataServerThread on port "+m_port);
-		(new Thread(this, "DataServerThread")).start();
+		System.out.println("Starting Thread: AndroidServerSocket on port "+m_port);
+		(new Thread(this, "AndroidServerSocket")).start();
 	}
 
 	private byte[] readBytes(){
@@ -260,7 +260,7 @@ public class AndroidServerSocket implements Runnable{
 			switch (m_androidServerState){
 
 				case PREINIT:   // This should never happen
-					System.out.println("Error: in DataServerThread.run(), " +
+					System.out.println("Error: in AndroidServerSocket.run(), " +
 							"thread running on preinit state");
 					break;
 

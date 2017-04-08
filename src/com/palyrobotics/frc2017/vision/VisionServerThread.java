@@ -80,7 +80,7 @@ public class VisionServerThread implements Runnable{
 	private MJPEGServerSocket m_mjpegServer;
 
 	/**
-	 * Creates a DataServerThread instance
+	 * Creates a VisionServerThread instance
 	 * Cannot be called outside as a Singleton
 	 */
 	private VisionServerThread(){}
@@ -107,22 +107,22 @@ public class VisionServerThread implements Runnable{
 	 * (DEBUG) Logs the Socket state
 	 */
 	private void logSocketState(){
-		System.out.println("Debug: DataServerThread AndroidServerState - "+ m_visionServerState);
+		System.out.println("Debug: VisionServerThread AndroidServerState - "+ m_visionServerState);
 	}
 
 	/**
-	 * Starts the DataServerThread thread
+	 * Starts the VisionServerThread thread
 	 * <br>Created server socket opens on given port
 	 */
 	public void start(boolean testing){
 
 		if(!m_visionServerState.equals(VisionServerState.PREINIT)){ // This should never happen
-			System.out.println("Error: in DataServerThread.start(), " +
+			System.out.println("Error: in VisionServerThread.start(), " +
 					"socket is already initialized");
 		}
 
 		if(m_running){  // This should never happen
-			System.out.println("Error: in DataServerThread.start(), " +
+			System.out.println("Error: in VisionServerThread.start(), " +
 					"thread is already running");
 		}
 
@@ -138,7 +138,7 @@ public class VisionServerThread implements Runnable{
 		m_running = true;
 
 		System.out.println("Starting Thread: VisionServerThread");
-		(new Thread(this, "DataServerThread")).start();
+		(new Thread(this, "VisionServerThread")).start();
 	}
 
 	private VisionServerState InitializeConnections() {
@@ -155,21 +155,8 @@ public class VisionServerThread implements Runnable{
 		// Initialize data
 		byte[] data = m_androidServer.getData();
 
-		// Write Image to JPEG file
+		// Write Image to JPEG stream
 		try {
-//			BufferedImage image = ImageIO.read( new ByteArrayInputStream(data));
-//			System.out.println("Writing to file");
-//			ImageIO.write(image, "JPEG", new File(path));
-
-//			if (null == data || data.length == 0) {
-//				BufferedImage img = ImageIO.read(new File(m_defaultJPEGPath));
-//				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//				ImageIO.write(img, "JPEG", baos);
-//				baos.close();
-//
-//				data = baos.toByteArray();
-//			}
-//			System.out.println("WOW!");
 			m_mjpegServer.handle(data);
 
 		} catch (IOException e) {
@@ -189,7 +176,7 @@ public class VisionServerThread implements Runnable{
 			switch (m_visionServerState){
 
 				case PREINIT:   // This should never happen
-					System.out.println("Error: in DataServerThread.run(), " +
+					System.out.println("Error: in VisionServerThread.run(), " +
 							"thread running on preinit state");
 					break;
 
