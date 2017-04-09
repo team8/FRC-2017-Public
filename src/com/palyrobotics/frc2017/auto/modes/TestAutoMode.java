@@ -3,8 +3,10 @@ package com.palyrobotics.frc2017.auto.modes;
 import java.util.ArrayList;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
+import com.palyrobotics.frc2017.behavior.ParallelRoutine;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
+import com.palyrobotics.frc2017.behavior.routines.SpatulaDownAutocorrectRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.DriveTimeRoutine;
@@ -29,12 +31,23 @@ public class TestAutoMode extends AutoModeBase {
 
 	@Override
 	public Routine getRoutine() {
-		ArrayList<Routine> sequence = new ArrayList<Routine>();
+		ArrayList<Routine> parallel = new ArrayList<Routine>();
 		
-		sequence.add(new CustomPositioningSliderRoutine(-7));
-//		sequence.add(new EncoderTurnAngleRoutine(60));
-		sequence.add(new VisionSliderRoutine());
-		return new SequentialRoutine(sequence);
+		double setpoint = -100 * 
+				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks : Constants.kDriveTicksPerInch);
+		Gains gains = ((Constants.kRobotName == Constants.RobotName.DERICA) ? Gains.dericaPosition : Gains.steikLongDriveMotionMagicGains);
+		DriveSignal driveBack = DriveSignal.getNeutralSignal();
+		driveBack.leftMotor.setMotionMagic(setpoint, gains, Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
+		driveBack.rightMotor.setMotionMagic(setpoint, gains, Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
+		parallel.add(new CANTalonRoutine(driveBack, true));
+		
+		ArrayList<Routine> sequence = new ArrayList<Routine>();
+		sequence.add(new TimeoutRoutine(1));
+		sequence.add(new SpatulaDownAutocorrectRoutine());
+		
+		parallel.add(new SequentialRoutine(sequence));
+		
+		return new ParallelRoutine(parallel);
 		
 	}
 

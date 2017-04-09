@@ -30,7 +30,7 @@ public class AutoModeSelector {
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
-	int selectedIndex = AutoIndices.TRAJECTORY.get();
+	int selectedIndex = AutoIndices.TEST.get();
 
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
