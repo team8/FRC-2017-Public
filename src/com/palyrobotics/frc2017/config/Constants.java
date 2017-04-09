@@ -69,8 +69,8 @@ public class Constants extends ConstantsBase {
 	// Aegir: 2172 RIGHT  |  3452 LEFT
 	// Vali: 2032 RIGHT | 3310 LEFT
 	// new belly pan shifted vali
-	public static final double kPotentiometerRightPos = 2032;
-	public static final double kPotentiometerLeftPos = 3310;
+	public static final double kPotentiometerRightPos = 2178;
+	public static final double kPotentiometerLeftPos = 3435;
 	public static final double kPotentiometerCenterPos = (kPotentiometerRightPos + kPotentiometerLeftPos) / 2;
 	
 	// Tolerances

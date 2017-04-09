@@ -39,15 +39,16 @@ public class TestAutoMode extends AutoModeBase {
 		DriveSignal driveBack = DriveSignal.getNeutralSignal();
 		driveBack.leftMotor.setMotionMagic(setpoint, gains, Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		driveBack.rightMotor.setMotionMagic(setpoint, gains, Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
-		parallel.add(new CANTalonRoutine(driveBack, true));
 		
 		ArrayList<Routine> sequence = new ArrayList<Routine>();
-		sequence.add(new TimeoutRoutine(1));
-		sequence.add(new SpatulaDownAutocorrectRoutine());
+		sequence.add(new CANTalonRoutine(driveBack, true));
 		
-		parallel.add(new SequentialRoutine(sequence));
+		parallel.add(new SpatulaDownAutocorrectRoutine());
+		parallel.add(new CANTalonRoutine(driveBack, true));
 		
-		return new ParallelRoutine(parallel);
+		sequence.add(new ParallelRoutine(parallel));
+		
+		return new SequentialRoutine(sequence);
 		
 	}
 

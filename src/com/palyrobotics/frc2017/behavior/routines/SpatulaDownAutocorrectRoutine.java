@@ -2,6 +2,7 @@ package com.palyrobotics.frc2017.behavior.routines;
 
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
+import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.subsystems.Slider;
 import com.palyrobotics.frc2017.subsystems.Spatula;
 import com.palyrobotics.frc2017.util.Subsystem;
@@ -24,12 +25,15 @@ public class SpatulaDownAutocorrectRoutine extends Routine {
 	@Override
 	public Commands update(Commands commands) {
 		mUpdated = true;
+		commands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.CENTER;
 		switch (mState) {
 		case CENTERING:
 			commands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.CENTER;
 			commands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
-			if (System.currentTimeMillis() > 100 && slider.onTarget()) {
+			if (System.currentTimeMillis()-mStartTime > 300 && Robot.getRobotState().sliderVelocity == 0) {
 				mState = AutocorrectState.FLIPPING;
+				System.out.println("I AM FLIPPING");
+
 				break;
 			}
 			break;
@@ -61,7 +65,7 @@ public class SpatulaDownAutocorrectRoutine extends Routine {
 
 	@Override
 	public boolean finished() {
-		return mUpdated && mState == AutocorrectState.FLIPPING && (System.currentTimeMillis() - mStartTime) > 200;
+		return mUpdated && mState == AutocorrectState.FLIPPING && (System.currentTimeMillis() - mStartTime) > 2000;
 	}
 
 	@Override
