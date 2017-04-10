@@ -25,7 +25,7 @@ public class SpatulaDownAutocorrectRoutine extends Routine {
 	@Override
 	public Commands update(Commands commands) {
 		mUpdated = true;
-		commands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.CENTER;
+//		commands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.CENTER;
 		switch (mState) {
 		case CENTERING:
 			commands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.CENTER;
