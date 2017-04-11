@@ -302,8 +302,9 @@ class HardwareUpdater {
 		if (HardwareAdapter.getInstance().getClimber().climberTalon != null) {
 			robotState.climberEncoder = HardwareAdapter.ClimberHardware.getInstance().climberTalon.getPosition();
 		}
-		
-		robotState.sliderPosition = HardwareAdapter.SliderHardware.getInstance().sliderTalon.getPosition();
+		if (HardwareAdapter.getInstance().getSlider().sliderTalon != null) {
+			robotState.sliderPosition = HardwareAdapter.SliderHardware.getInstance().sliderTalon.getPosition();
+		}
 	}
 
 	/**

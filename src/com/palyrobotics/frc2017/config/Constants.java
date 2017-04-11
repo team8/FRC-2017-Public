@@ -8,7 +8,7 @@ public class Constants extends ConstantsBase {
 	}
 
 	// Initialization constants
-	public static final RobotName kRobotName = RobotName.DERICA;
+	public static final RobotName kRobotName = RobotName.STEIK;
 	public static final boolean kCalibrateSliderWithPotentiometer = true;
 	
 	// Android app information
