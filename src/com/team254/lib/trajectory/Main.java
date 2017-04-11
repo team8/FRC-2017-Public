@@ -50,7 +50,11 @@ public class Main {
 	public static double kRedBoilerForward = 84.0/12; // 79, 84
 	public static double kRedBoilerAirship = 73.0/12; // 73,
 
-
+	public static WaypointSequence.Waypoint getWaypoint(double x, double y, double angle) {
+		return new WaypointSequence.Waypoint(y, x, angle);
+	}
+	
+	
 	public static void main(String[] args) {
 		String directory = "./paths";
 		if (args.length >= 1) {
@@ -69,6 +73,7 @@ public class Main {
 
 		// from Steik CAD, 26.375 inches roughly
 		final double kWheelbaseWidth = 26.375 / 12;
+
 
 		/*
 			RED AUTONOMOUS PATHS
@@ -98,6 +103,41 @@ public class Main {
 			TextFileSerializer js = new TextFileSerializer();
 			String serialized = js.serialize(path);
 //			System.out.print(serialized);
+			String fullpath = joinPath(directory, path_name + ".txt");
+			if (!writeFile(fullpath, serialized)) {
+				System.err.println(fullpath + " could not be written!!!!");
+				System.exit(1);
+			} else {
+				System.out.println("Wrote " + fullpath);
+			}
+		}
+		
+		{
+			config.dt = kDt;
+			config.max_acc = kLongAccel;
+			config.max_jerk = 50.0;
+			config.max_vel = kLongVel;
+			// Path name must be a valid Java class name.
+			final String path_name = "GoToNeutral";
+			// turn right
+	
+			// Description of this auto mode path.
+			WaypointSequence p = new WaypointSequence(10);
+
+		    p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
+		    p.addWaypoint(getWaypoint(8, -6, Math.PI/3));
+		    p.addWaypoint(getWaypoint(10, -3,0));
+		    p.addWaypoint(getWaypoint(10, 10, 0));
+//		    p.addWaypoint(getWaypoint(6,17, 0));
+//			p.addWaypoint(new WaypointSequence.Waypoint(7, 15, 0));
+	
+			Path path = PathGenerator.makePath(p, config,
+					kWheelbaseWidth, path_name);
+	
+			// Outputs to the directory supplied as the first argument.
+			TextFileSerializer js = new TextFileSerializer();
+			String serialized = js.serialize(path);
+	//		System.out.print(serialized);
 			String fullpath = joinPath(directory, path_name + ".txt");
 			if (!writeFile(fullpath, serialized)) {
 				System.err.println(fullpath + " could not be written!!!!");
