@@ -41,4 +41,7 @@
 	<lib name="RIOdroid.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/RIOdroid.jar!/"/>
 	</lib>
+	<lib name="navx_frc.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/navx_frc.jar!/"/>
+	</lib>
 </component>

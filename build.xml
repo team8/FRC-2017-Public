@@ -28,11 +28,19 @@
     depends="get-target-ip">
     <sequential>
      <echo>[deploy-paths] Deploying paths from ${paths.dir} to ${rioPaths.dir}</echo>
-        <!---doesn't work if exists<sshexec host="${target}"
+     <if>
+     <not>
+      <available file="${directory}" type="dir" />
+     </not>
+       <then>
+       <sshexec host="${target}"
                                    username="${username}"
                                    password="${password}"
                                    trust="true"
-                                   command="mkdir ${rioPaths.dir}"/>-->
+                                   command="mkdir ${rioPaths.dir}"/>
+        <echo>[deploy-paths]Creating paths directory on rio</echo>
+      </then>
+    </if>
         <scp todir="${username}@${target}:${rioPaths.dir}" password="${password}" trust="true">
         <fileset dir="${paths.dir}">
           <include name="*.txt"/>

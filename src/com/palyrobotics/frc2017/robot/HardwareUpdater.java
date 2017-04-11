@@ -2,6 +2,7 @@ package com.palyrobotics.frc2017.robot;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
+import com.kauailabs.navx.frc.AHRS;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.RobotState;
@@ -14,6 +15,8 @@ import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.logger.Logger;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.GyroBase;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 import java.util.Optional;
 
@@ -112,11 +115,11 @@ class HardwareUpdater {
 		Logger.getInstance().logRobotThread("Disabling talons");
 		HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon.disable();
 		HardwareAdapter.getInstance().getDrivetrain().leftSlave1Talon.disable();
-		HardwareAdapter.getInstance().getDrivetrain().leftSlave2Talon.disable();
 		HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon.disable();
 		HardwareAdapter.getInstance().getDrivetrain().rightSlave1Talon.disable();
-		HardwareAdapter.getInstance().getDrivetrain().rightSlave2Talon.disable();
 		if(Constants.kRobotName == RobotName.STEIK) {
+			HardwareAdapter.getInstance().getDrivetrain().leftSlave2Talon.disable();
+			HardwareAdapter.getInstance().getDrivetrain().rightSlave2Talon.disable();
 			HardwareAdapter.getInstance().getClimber().climberTalon.disable();
 			HardwareAdapter.getInstance().getSlider().sliderTalon.disable();
 		}
@@ -250,7 +253,7 @@ class HardwareUpdater {
 		robotState.rightControlMode = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getControlMode();
 		robotState.leftSetpoint = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getSetpoint();
 		robotState.rightSetpoint = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getSetpoint();
-		ADXRS453_Gyro gyro = HardwareAdapter.DrivetrainHardware.getInstance().gyro;
+		AHRS gyro = HardwareAdapter.DrivetrainHardware.getInstance().gyro;
 		if (gyro != null) {
 			robotState.drivePose.heading = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getAngle();
 			robotState.drivePose.headingVelocity = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getRate();

@@ -1,6 +1,7 @@
 package com.palyrobotics.frc2017.robot;
 
 import com.ctre.CANTalon;
+import com.kauailabs.navx.frc.AHRS;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.robot.team254.lib.util.ADXRS453_Gyro;
@@ -35,7 +36,8 @@ public class HardwareAdapter {
 		// If encoders are wired directly to RIO use the following objects
 //		public final Encoder leftEncoder;
 //		public final Encoder rightEncoder;
-		public final ADXRS453_Gyro gyro;
+//		public final ADXRS453_Gyro gyro;
+		public final AHRS gyro;
 
 		private DrivetrainHardware() {
 			if(Constants.kRobotName == Constants.RobotName.DERICA) {
@@ -45,7 +47,7 @@ public class HardwareAdapter {
 				rightMasterTalon = new CANTalon(Constants2016.kDericaRightDriveMasterDeviceID);
 				rightSlave1Talon = new CANTalon(Constants2016.kDericaRightDriveSlaveDeviceID);
 				rightSlave2Talon = null;
-				gyro = new ADXRS453_Gyro();
+				gyro = new AHRS(SerialPort.Port.kMXP);
 			} else {
 				leftMasterTalon = new CANTalon(Constants.kSteikLeftDriveMasterDeviceID);
 				leftSlave1Talon = new CANTalon(Constants.kSteikLeftDriveSlaveDeviceID);
@@ -53,12 +55,7 @@ public class HardwareAdapter {
 				rightMasterTalon = new CANTalon(Constants.kSteikRightDriveMasterDeviceID);
 				rightSlave1Talon = new CANTalon(Constants.kSteikRightDriveSlaveDeviceID);
 				rightSlave2Talon = new CANTalon(Constants.kSteikRightDriveOtherSlaveDeviceID);
-				ADXRS453_Gyro tempGyro = new ADXRS453_Gyro();
-				if (tempGyro.isSPINull()) {
-					gyro = null;
-				} else {
-					gyro = tempGyro;
-				}
+				gyro = new AHRS(SerialPort.Port.kMXP);
 			}
 		}
 	}

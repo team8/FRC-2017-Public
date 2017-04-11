@@ -14,7 +14,6 @@
 	<classpathentry kind="lib" path="res/hamcrest-core-1.3.jar"/>
 	<classpathentry kind="lib" path="res/junit-4.12.jar"/>
 	<classpathentry kind="lib" path="lib/RIOdroid.jar"/>
-	<classpathentry kind="var" path="USERLIBS_DIR/navx_frc.jar"/>
-	<classpathentry kind="var" path="navx-mxp"/>
+	<classpathentry kind="lib" path="lib/navx_frc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
