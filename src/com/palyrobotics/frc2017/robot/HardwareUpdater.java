@@ -109,6 +109,10 @@ class HardwareUpdater {
 	void initHardware() {
 		Logger.getInstance().logRobotThread("Init hardware");
 		configureTalons(true);
+		AHRS gyro = HardwareAdapter.getInstance().getDrivetrain().gyro;
+		if (gyro != null) {
+			gyro.reset();
+		}
 	}
 	
 	void disableTalons() {
@@ -345,14 +349,14 @@ class HardwareUpdater {
 	 * Helper method for processing a CANTalonOutput for an SRX
 	 */
 	private void updateCANTalonSRX(CANTalon talon, CANTalonOutput output) {
-			talon.changeControlMode(output.getControlMode());
-			if(output.getControlMode().isPID() || output.getControlMode() == TalonControlMode.MotionMagic) {
-				talon.setPID(output.gains.P, output.gains.I, output.gains.D, output.gains.F, output.gains.izone, output.gains.rampRate, output.profile);
-			}
-			if (output.getControlMode() == CANTalon.TalonControlMode.MotionMagic) {
-				talon.setMotionMagicAcceleration(output.accel);
-				talon.setMotionMagicCruiseVelocity(output.cruiseVel);
-			}
+		talon.changeControlMode(output.getControlMode());
+		if(output.getControlMode().isPID() || output.getControlMode() == TalonControlMode.MotionMagic) {
+			talon.setPID(output.gains.P, output.gains.I, output.gains.D, output.gains.F, output.gains.izone, output.gains.rampRate, output.profile);
+		}
+		if (output.getControlMode() == CANTalon.TalonControlMode.MotionMagic) {
+			talon.setMotionMagicAcceleration(output.accel);
+			talon.setMotionMagicCruiseVelocity(output.cruiseVel);
+		}
 		talon.set(output.getSetpoint());
 	}
 }

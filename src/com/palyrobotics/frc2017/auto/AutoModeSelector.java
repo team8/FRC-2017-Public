@@ -30,7 +30,7 @@ public class AutoModeSelector {
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
-	int selectedIndex = AutoIndices.TEST.get();
+	int selectedIndex = AutoIndices.TRAJECTORY.get();
 
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
@@ -62,7 +62,7 @@ public class AutoModeSelector {
 		  										false, true)); // seeking right vision target?, backup?
 
 		registerAutonomous(new TestAutoMode());
-		registerAutonomous(new TestTrajectoryAutoMode("BlueBoiler"));
+		registerAutonomous(new TestTrajectoryAutoMode("RedLoading"));
 	}
 
 	/**

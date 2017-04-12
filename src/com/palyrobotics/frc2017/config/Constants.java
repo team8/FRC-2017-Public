@@ -174,7 +174,7 @@ public class Constants extends ConstantsBase {
 	public static double kRedBoilerAirshipDistanceInches = 73; // 73,  
 
 	// !!! Loop rate of normal Looper
-	public static double kControlLoopsDt = 0.005;
+	public static double kNormalLoopsDt = 0.005;
 
 	// !!! Loop rate of subsystem updates
 	public static double kSubsystemLooperDt = 0.005;

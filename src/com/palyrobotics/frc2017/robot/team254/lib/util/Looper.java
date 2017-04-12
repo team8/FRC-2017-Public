@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Looper {
 	// SubsystemLoop update rate
-	private final double kPeriod = Constants.kControlLoopsDt;
+	private final double kPeriod = Constants.kNormalLoopsDt;
 
 	private boolean running_;
 

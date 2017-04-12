@@ -5,12 +5,12 @@ public class Gains {
 	 * STEIK
 	 */
 	// Onboard motion profile aka trajectory follower
-	public static final double kSteikTrajectorykP = 0.0;
-	public static final double kSteikTrajectorykI = 0.0; // may be unused
-	public static final double kSteikTrajectorykD = 0.0;
-	public static final double kSteikTrajectorykV = 0.07;
-	public static final double kSteikTrajectorykA = 0.000;
-	public static final double kSteikTrajectoryTurnkP = -0.02;
+	public static final double kSteikTrajectorykP = 0.01;
+	public static final double kSteikTrajectorykI = 0.0; // is unused
+	public static final double kSteikTrajectorykD = 0.005;
+	public static final double kSteikTrajectorykV = 0.077;
+	public static final double kSteikTrajectorykA = 0.03;
+	public static final double kSteikTrajectoryTurnkP = -0.06;
 
 	// Drive Distance PID control loop
 	public static final double kSteikDriveDistancekP = 0.5;
@@ -55,13 +55,13 @@ public class Gains {
 			kSteikLongDriveMotionMagickF, kSteikLongDriveMotionMagickIzone, kSteikLongDriveMotionMagickRampRate);
 
 	// Drive Motion Magic turn angle gains
-	public static final double kSteikTurnMotionMagicCruiseVelocity = 72 * Constants.kDriveSpeedUnitConversion;
-	public static final double kSteikTurnMotionMagicMaxAcceleration = 36 * Constants.kDriveSpeedUnitConversion;
-	public static final double kSteikTurnMotionMagickP = 6.0;
-	public static final double kSteikTurnMotionMagickI = 0.01;
-	public static final double kSteikTurnMotionMagickD = 210;
+	public static final double kSteikTurnMotionMagicCruiseVelocity = 110 * Constants.kDriveSpeedUnitConversion;
+	public static final double kSteikTurnMotionMagicMaxAcceleration = 80 * Constants.kDriveSpeedUnitConversion;
+	public static final double kSteikTurnMotionMagickP = 2.0;
+	public static final double kSteikTurnMotionMagickI = 0.01; //0.02 is too high
+	public static final double kSteikTurnMotionMagickD = 400;
 	public static final double kSteikTurnMotionMagickF = 2.0;
-	public static final int kSteikTurnMotionMagickIzone = 50;
+	public static final int kSteikTurnMotionMagickIzone = 30;
 	public static final double kSteikTurnMotionMagickRampRate = 0.0;
 	public static final Gains steikTurnMotionMagicGains = new Gains(kSteikTurnMotionMagickP, kSteikTurnMotionMagickI, kSteikTurnMotionMagickD,
 			kSteikTurnMotionMagickF, kSteikTurnMotionMagickIzone, kSteikTurnMotionMagickRampRate);

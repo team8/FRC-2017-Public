@@ -47,10 +47,12 @@ public class GyroMotionMagicTurnAngleController implements DriveController {
 			kTolerance = Constants.kAcceptableTurnAngleError;
 		}
 		
-		mLeftTarget = priorSetpoint.leftEnc + (angle * kInchesPerDegree * kTicksPerInch);
-		System.out.println("Left target: " + mLeftTarget);
-		mRightTarget = priorSetpoint.rightEnc - (angle * kInchesPerDegree * kTicksPerInch);
-		System.out.println("Right target: " + mRightTarget);
+		System.out.println("Current heading: " + mCachedPose.heading);
+		System.out.println("Target heading: " + mTargetHeading);
+		mLeftTarget = priorSetpoint.leftEnc - (angle * kInchesPerDegree * kTicksPerInch);
+//		System.out.println("Left target: " + mLeftTarget);
+		mRightTarget = priorSetpoint.rightEnc + (angle * kInchesPerDegree * kTicksPerInch);
+//		System.out.println("Right target: " + mRightTarget);
 		
 		mLeftOutput = new CANTalonOutput();
 		mLeftOutput.setMotionMagic(mLeftTarget, mGains, mCruiseVel, mMaxAccel);
@@ -62,9 +64,11 @@ public class GyroMotionMagicTurnAngleController implements DriveController {
 	public DriveSignal update(RobotState state) {
 		mCachedPose = state.drivePose;
 		double error = mTargetHeading - mCachedPose.heading;
-		
-		mLeftTarget = mCachedPose.leftEnc + (error * kInchesPerDegree * kTicksPerInch);
-		mRightTarget = mCachedPose.rightEnc - (error * kInchesPerDegree * kTicksPerInch);
+//		System.out.println(mCachedPose.headingVelocity);
+		// Compensate for current motion
+//		error -= mCachedPose.headingVelocity*Constants.kSubsystemLooperDt;
+		mLeftTarget = mCachedPose.leftEnc - (error * kInchesPerDegree * kTicksPerInch);
+		mRightTarget = mCachedPose.rightEnc + (error * kInchesPerDegree * kTicksPerInch);
 		mLeftOutput.setMotionMagic(mLeftTarget, mGains, mCruiseVel, mMaxAccel);
 		mRightOutput.setMotionMagic(mRightTarget, mGains, mCruiseVel, mMaxAccel);
 
@@ -78,17 +82,34 @@ public class GyroMotionMagicTurnAngleController implements DriveController {
 
 	@Override
 	public boolean onTarget() {
-		if (Robot.getRobotState().leftSetpoint != mLeftOutput.getSetpoint() || Robot.getRobotState().rightSetpoint != mRightOutput.getSetpoint() ||
-				Robot.getRobotState().leftControlMode != mLeftOutput.getControlMode() || Robot.getRobotState().rightControlMode != mRightOutput.getControlMode()) {
-			System.out.println("Mismatched desired talon and actual talon states!");
-			return false;
-		}
+		// Wait for controller to be added before finishing routine
+//		if (mLeftOutput.getSetpoint() != Robot.getRobotState().leftSetpoint) {
+//			System.out.println("Mismatched desired talon and actual talon setpoints! desired, actual");
+//			System.out.println("Left: " + mLeftOutput.getSetpoint()+", "+Robot.getRobotState().leftSetpoint);
+//			return false;
+//		}
+//		else if (mRightOutput.getSetpoint() != Robot.getRobotState().rightSetpoint) {
+//			System.out.println("Mismatched desired talon and actual talon setpoints! desired, actual");
+//			System.out.println("Right: " + mRightOutput.getSetpoint()+", "+Robot.getRobotState().rightSetpoint);
+//			return false;
+//		}
+//		else if (mLeftOutput.getControlMode() != Robot.getRobotState().leftControlMode) {
+//			System.out.println("Mismatched desired talon and actual talon states!");
+//			System.out.println(mLeftOutput.getControlMode() + ", "+Robot.getRobotState().leftControlMode);
+//			return false;
+//		}
+//		else if (mRightOutput.getControlMode() != Robot.getRobotState().rightControlMode) {
+//			System.out.println("Mismatched desired talon and actual talon states!");
+//			System.out.println(mRightOutput.getControlMode()+","+Robot.getRobotState().rightControlMode);
+//			return false;
+//		}
 		if (mCachedPose == null) {
 			System.out.println("Cached pose is null");
 			return false;
 		}
 		
-		return Math.abs(Robot.getRobotState().drivePose.heading - mTargetHeading) < kTolerance;
+		return Math.abs(Robot.getRobotState().drivePose.heading - mTargetHeading) < kTolerance
+				&& Math.abs(Robot.getRobotState().drivePose.headingVelocity)<0.05;
 	}
 
 }

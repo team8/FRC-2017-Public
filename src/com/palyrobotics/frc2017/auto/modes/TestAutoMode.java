@@ -9,6 +9,7 @@ import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.SpatulaDownAutocorrectRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
+import com.palyrobotics.frc2017.behavior.routines.drive.DriveStraightRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.DriveTimeRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.GyroMotionMagicTurnAngleRoutine;
@@ -34,24 +35,20 @@ public class TestAutoMode extends AutoModeBase {
 	public Routine getRoutine() {
 //		ArrayList<Routine> parallel = new ArrayList<Routine>();
 //		
-//		double setpoint = -100 * 
-//				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks : Constants.kDriveTicksPerInch);
-//		Gains gains = ((Constants.kRobotName == Constants.RobotName.DERICA) ? Gains.dericaPosition : Gains.steikLongDriveMotionMagicGains);
-//		DriveSignal driveBack = DriveSignal.getNeutralSignal();
-//		driveBack.leftMotor.setMotionMagic(setpoint, gains, Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
-//		driveBack.rightMotor.setMotionMagic(setpoint, gains, Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
-//		
-//		ArrayList<Routine> sequence = new ArrayList<Routine>();
-//		sequence.add(new CANTalonRoutine(driveBack, true));
-//		
-//		parallel.add(new SpatulaDownAutocorrectRoutine());
-//		parallel.add(new CANTalonRoutine(driveBack, true));
-//		
+		ArrayList<Routine> sequence = new ArrayList<Routine>();
+
 //		sequence.add(new ParallelRoutine(parallel));
 //		
-//		return new SequentialRoutine(sequence);
-		
-		return new GyroMotionMagicTurnAngleRoutine(90);
+//		sequence.add(new GyroMotionMagicTurnAngleRoutine(90));
+//		sequence.add(new TimeoutRoutine(1));
+//		sequence.add(new GyroMotionMagicTurnAngleRoutine(90));
+//		sequence.add(new TimeoutRoutine(1));
+//		sequence.add(new GyroMotionMagicTurnAngleRoutine(90));
+//		sequence.add(new TimeoutRoutine(1));
+//		sequence.add(new GyroMotionMagicTurnAngleRoutine(90));
+//		sequence.add(new TimeoutRoutine(1));
+		sequence.add(new DriveStraightRoutine(75));
+		return new SequentialRoutine(sequence);
 	}
 
 	@Override

@@ -135,7 +135,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 //		logPeriodic();
 		mHardwareUpdater.updateSensors(robotState);
-		System.out.println(robotState.sliderEncoder);
+//		System.out.println(robotState.sliderEncoder);
 		commands = mRoutineManager.update(commands);
 	}
 
@@ -193,16 +193,16 @@ public class Robot extends IterativeRobot {
 		System.out.println("Log file: "+mLogger.getLogPath());
 		// Manually run garbage collector
 		System.gc();
-		
+		System.out.println("Gyro: "+robotState.drivePose.heading);
 		System.out.println("End disabledInit()");
 	}
 
 	@Override
 	public void disabledPeriodic() {
 		mHardwareUpdater.updateSensors(robotState);
-		System.out.println("Gyro: "+robotState.drivePose.heading);
-		System.out.println("Left enc: " + robotState.drivePose.leftEnc +"\n"
-				+"Right enc: "+robotState.drivePose.rightEnc);
+//		System.out.println("Gyro: "+robotState.drivePose.heading);
+//		System.out.println("Left enc: " + robotState.drivePose.leftEnc +"\n"
+//				+"Right enc: "+robotState.drivePose.rightEnc);
 	}
 	// Call during tele and auto periodic
 	private void logPeriodic() {

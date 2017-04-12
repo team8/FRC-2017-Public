@@ -3,6 +3,8 @@ package com.palyrobotics.frc2017.subsystems.controllers;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.config.Constants.RobotName;
+import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.robot.team254.lib.util.SynchronousPID;
 import com.palyrobotics.frc2017.subsystems.Drive.DriveController;
@@ -19,26 +21,21 @@ public class DriveStraightController implements DriveController {
 	private SynchronousPID forwardPID;
 	private SynchronousPID headingPID;
 	
-	private final double kTolerance = 1;
+	private final double kTolerance;
 	
 	public DriveStraightController(Pose priorSetpoint, double distance) {
-		target = priorSetpoint.leftEnc + (distance * Constants.kDriveTicksPerInch);
+		target = (priorSetpoint.leftEnc + priorSetpoint.rightEnc)/2 + (distance * Constants.kDriveTicksPerInch);
 		System.out.println("Target: "+target);
 		cachedPose = priorSetpoint;
 		
-		if(Constants.kRobotName.equals(Constants.RobotName.STEIK)) {
-			mGains = Gains.steikTurnMotionMagicGains;
-		} else {
-			mGains = Gains.dericaPosition;
-		}
-		
+		mGains = new Gains(.00035, 0, 0.0015, 0, 0, 0);
+		kTolerance = (Constants.kRobotName == RobotName.DERICA) ? Constants2016.kAcceptableDriveError : Constants.kAcceptableDrivePositionError;
 		forwardPID = new SynchronousPID(mGains.P, mGains.I, mGains.D);
-		headingPID = new SynchronousPID(mGains.P, mGains.I, mGains.D);
+		headingPID = new SynchronousPID(Gains.kSteikTrajectoryTurnkP, 0, 0.005);
 		forwardPID.setOutputRange(-1, 1);
-		headingPID.setOutputRange(-1, 1);
-		forwardPID.setSetpoint(distance);
+		headingPID.setOutputRange(-0.2, 0.2);
 		forwardPID.setSetpoint(target);
-		headingPID.setSetpoint(0);
+		headingPID.setSetpoint(priorSetpoint.heading);
 		
 	}
 
@@ -50,7 +47,9 @@ public class DriveStraightController implements DriveController {
 		}
 		
 		return Math.abs(Robot.getRobotState().drivePose.heading) < kTolerance &&
-				Math.abs((Robot.getRobotState().drivePose.leftEnc + Robot.getRobotState().drivePose.rightEnc)/2  - target) < kTolerance;
+				Math.abs((Robot.getRobotState().drivePose.leftEnc + Robot.getRobotState().drivePose.rightEnc)/2  - target) < kTolerance
+				&& Math.abs(Robot.getRobotState().drivePose.leftSpeed)<0.01
+				&& Math.abs(Robot.getRobotState().drivePose.rightSpeed)<0.01;
 	}
 	
 
@@ -59,12 +58,13 @@ public class DriveStraightController implements DriveController {
 		CANTalonOutput leftOutput = new CANTalonOutput();
 		CANTalonOutput rightOutput = new CANTalonOutput();
 		cachedPose = state.drivePose;
+		double distanceSoFar = state.drivePose.leftEnc+state.drivePose.rightEnc;
+		distanceSoFar /= 2;
+		double throttle = forwardPID.calculate(distanceSoFar);
+		double turn = headingPID.calculate(state.drivePose.heading) * Constants.kDriveInchesPerDegree;
 		
-		double forward = forwardPID.calculate(state.drivePose.leftEnc * Constants.kDriveTicksPerInch);
-		double angle = headingPID.calculate(state.drivePose.heading);
-		
-		leftOutput.setPercentVBus(forward + angle);
-		rightOutput.setPercentVBus(forward - angle);
+		leftOutput.setPercentVBus(throttle + turn);
+		rightOutput.setPercentVBus(throttle - turn);
 			
 		return new DriveSignal(leftOutput, rightOutput);
 	}
