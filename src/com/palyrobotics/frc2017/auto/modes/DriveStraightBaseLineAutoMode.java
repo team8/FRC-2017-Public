@@ -21,8 +21,7 @@ public class DriveStraightBaseLineAutoMode extends AutoModeBase {
 	@Override
 	public Routine getRoutine() {
 		// Drive straight until baseline
-		double setpoint = ((mAlliance == CenterPegAutoMode.Alliance.BLUE) ? Constants.kBlueBaseLineDistanceInches : Constants.kRedBaseLineDistanceInches)
-						* Constants.kDriveTicksPerInch;
+		double setpoint = ((mAlliance == CenterPegAutoMode.Alliance.BLUE) ? Constants.kBlueBaseLineDistanceInches : Constants.kRedBaseLineDistanceInches);
 		mRoutine = new DriveStraightRoutine(setpoint);
 		return mRoutine;
 	}

@@ -28,7 +28,7 @@ public class DriveStraightController implements DriveController {
 		System.out.println("Target: "+target);
 		cachedPose = priorSetpoint;
 		
-		mGains = new Gains(.00035, 0, 0.0015, 0, 0, 0);
+		mGains = new Gains(.00035, 0.001, 0.0015, 0, 0, 0);
 		kTolerance = (Constants.kRobotName == RobotName.DERICA) ? Constants2016.kAcceptableDriveError : Constants.kAcceptableDrivePositionError;
 		forwardPID = new SynchronousPID(mGains.P, mGains.I, mGains.D);
 		headingPID = new SynchronousPID(Gains.kSteikTrajectoryTurnkP, 0, 0.005);
@@ -65,6 +65,9 @@ public class DriveStraightController implements DriveController {
 		
 		leftOutput.setPercentVBus(throttle + turn);
 		rightOutput.setPercentVBus(throttle - turn);
+		
+		System.out.println("Left enc: " + state.drivePose.leftEnc + " Right enc: " + state.drivePose.rightEnc);
+//		System.out.println("Left: " + leftOutput.getSetpoint() + "Right: " + rightOutput.getSetpoint());
 			
 		return new DriveSignal(leftOutput, rightOutput);
 	}

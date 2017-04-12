@@ -102,20 +102,20 @@ public class DriveStraightSidePegAutoMode extends AutoModeBase {
 		// loading station side
 		case RED_LEFT:
 			initialSliderPosition = 0;
-			driveForwardSetpoint = Constants.kRedLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = Constants.kRedLoadingStationForwardDistanceInches;
 			break;
 		case BLUE_RIGHT:
 			initialSliderPosition = -1.5;
-			driveForwardSetpoint = Constants.kBlueLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = Constants.kBlueLoadingStationForwardDistanceInches;
 			break;
 		// boiler side
 		case RED_RIGHT:
 			initialSliderPosition = 0;
-			driveForwardSetpoint = Constants.kRedBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = Constants.kRedBoilerForwardDistanceInches;
 			break;
 		case BLUE_LEFT:
 			initialSliderPosition = 2.5;
-			driveForwardSetpoint = Constants.kBlueBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = Constants.kBlueBoilerForwardDistanceInches;
 			break;
 		default:
 			System.err.println("What in tarnation no side peg distance");
@@ -137,17 +137,17 @@ public class DriveStraightSidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 		// loading station side
 		case RED_LEFT:
-			driveToAirshipSetpoint = Constants.kRedLoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
+			driveToAirshipSetpoint = Constants.kRedLoadingStationAirshipDistanceInches;
 			break;
 		case BLUE_RIGHT:
-			driveToAirshipSetpoint = Constants.kBlueLoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
+			driveToAirshipSetpoint = Constants.kBlueLoadingStationAirshipDistanceInches;
 			break;
 		// boiler side
 		case RED_RIGHT:
-			driveToAirshipSetpoint = Constants.kRedBoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
+			driveToAirshipSetpoint = Constants.kRedBoilerAirshipDistanceInches;
 			break;
 		case BLUE_LEFT:
-			driveToAirshipSetpoint = Constants.kBlueBoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
+			driveToAirshipSetpoint = Constants.kBlueBoilerAirshipDistanceInches;
 			break;
 		default:
 			System.err.println("What in tarnation no side peg airship distance");
@@ -163,7 +163,7 @@ public class DriveStraightSidePegAutoMode extends AutoModeBase {
 	 * GET BACKUP
 	 */
 	private SequentialRoutine getBackup(double sliderPosition) {
-		double driveBackupSetpoint = -backupDistance * Constants.kDriveTicksPerInch;
+		double driveBackupSetpoint = -backupDistance;
 		
 		// Create a routine that drives back, then moves the slider while moving back forward
 		ArrayList<Routine> sequence = new ArrayList<>();
@@ -174,7 +174,7 @@ public class DriveStraightSidePegAutoMode extends AutoModeBase {
 		slideSequence.add(new CustomPositioningSliderRoutine(sliderPosition));
 		parallelSliding.add(new SequentialRoutine(slideSequence));
 		sequence.add(new ParallelRoutine(parallelSliding));
-		sequence.add(new DriveStraightRoutine(-driveBackupSetpoint + 3 * Constants.kDriveTicksPerInch));
+		sequence.add(new DriveStraightRoutine(-driveBackupSetpoint + 3));
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
 		return new SequentialRoutine(sequence);
@@ -183,8 +183,8 @@ public class DriveStraightSidePegAutoMode extends AutoModeBase {
 	 * GET NEUTRAL ZONE
 	 */
 	private SequentialRoutine getDriveToNeutralZone() {
-		double driveBackupSetpoint = -(backupDistance + 12) * Constants.kDriveTicksPerInch;
-		double driveToNeutralZoneSetpoint = this.neutralZoneDistance * Constants.kDriveTicksPerInch;
+		double driveBackupSetpoint = -(backupDistance + 12);
+		double driveToNeutralZoneSetpoint = this.neutralZoneDistance;
 		
 		ArrayList<Routine> sequence = new ArrayList<>();
 		

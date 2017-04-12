@@ -30,7 +30,7 @@ public class AutoModeSelector {
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
-	int selectedIndex = AutoIndices.TRAJECTORY.get();
+	int selectedIndex = AutoIndices.DRIVE_STRAIGHT_CENTER_PEG.get();
 
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
@@ -61,8 +61,8 @@ public class AutoModeSelector {
   /*5*/ registerAutonomous(new VisionSidePegAutoMode(SideAutoVariant.BLUE_LEFT, // Field position
 		  										false, true)); // seeking right vision target?, backup?
   /*6*/ registerAutonomous(new DriveStraightBaseLineAutoMode(Alliance.RED));
-  /*7*/ registerAutonomous(new DriveStraightCenterPegAutoMode(Alliance.BLUE, DriveStraightCenterPegAutoMode.PostScoreVariant.NEUTRAL_ZONE_RIGHT));
-  /*8*/ registerAutonomous(new DriveStraightSidePegAutoMode(SideAutoVariant.BLUE_LEFT, DriveStraightSidePegAutoMode.PostScoreVariant.NEUTRAL_ZONE));
+  /*7*/ registerAutonomous(new DriveStraightCenterPegAutoMode(Alliance.BLUE, DriveStraightCenterPegAutoMode.PostScoreVariant.BACKUP));
+  /*8*/ registerAutonomous(new DriveStraightSidePegAutoMode(SideAutoVariant.BLUE_LEFT, DriveStraightSidePegAutoMode.PostScoreVariant.BACKUP));
 		
   /*9*/ registerAutonomous(new TestAutoMode());
   /*10*/registerAutonomous(new TestTrajectoryAutoMode("RedLoading"));

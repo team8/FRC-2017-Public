@@ -58,8 +58,7 @@ public class DriveStraightCenterPegAutoMode extends AutoModeBase {
 		ArrayList<Routine> sequence = new ArrayList<>();
 		// Straight drive distance to the center peg
 		double driveForwardSetpoint =
-				((mAlliance == CenterPegAutoMode.Alliance.BLUE) ? Constants.kBlueCenterPegDistanceInches : Constants.kRedCenterPegDistanceInches)
-						* Constants.kDriveTicksPerInch;
+				((mAlliance == CenterPegAutoMode.Alliance.BLUE) ? Constants.kBlueCenterPegDistanceInches : Constants.kRedCenterPegDistanceInches);
 		
 		initialSliderPosition = (mAlliance == CenterPegAutoMode.Alliance.BLUE) ? -2.5 : 0;
 		
@@ -110,7 +109,7 @@ public class DriveStraightCenterPegAutoMode extends AutoModeBase {
 	 * GET BACKUP
 	 */
 	private SequentialRoutine getBackup(double sliderPosition) {
-		double driveBackupSetpoint = -backupDistance * Constants.kDriveTicksPerInch;
+		double driveBackupSetpoint = -backupDistance;
 		
 		// Create a routine that drives back, then moves the slider while moving back forward
 		ArrayList<Routine> sequence = new ArrayList<>();
@@ -121,7 +120,7 @@ public class DriveStraightCenterPegAutoMode extends AutoModeBase {
 		slideSequence.add(new CustomPositioningSliderRoutine(sliderPosition));
 		parallelSliding.add(new SequentialRoutine(slideSequence));
 		sequence.add(new ParallelRoutine(parallelSliding));
-		sequence.add(new DriveStraightRoutine(-driveBackupSetpoint + 3 * Constants.kDriveTicksPerInch));
+		sequence.add(new DriveStraightRoutine(-driveBackupSetpoint + 3));
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
 		return new SequentialRoutine(sequence);
@@ -130,9 +129,9 @@ public class DriveStraightCenterPegAutoMode extends AutoModeBase {
 	 * GET NEUTRAL ZONE
 	 */
 	private SequentialRoutine getDriveToNeutralZone(double angle) {
-		double driveBackupSetpoint = -(backupDistance + 12) * Constants.kDriveTicksPerInch;
-		double driveClearAirshipSetpoint = clearAirshipDistance * Constants.kDriveTicksPerInch;
-		double driveToNeutralZoneSetpoint = neutralZoneDistance * Constants.kDriveTicksPerInch;
+		double driveBackupSetpoint = -(backupDistance + 12);
+		double driveClearAirshipSetpoint = clearAirshipDistance;
+		double driveToNeutralZoneSetpoint = neutralZoneDistance;
 		
 		ArrayList<Routine> sequence = new ArrayList<>();
 		
