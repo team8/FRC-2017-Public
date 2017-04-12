@@ -5,8 +5,6 @@ import com.palyrobotics.frc2017.auto.modes.CenterPegAutoMode.Alliance;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
 import com.palyrobotics.frc2017.auto.modes.BaseLineAutoMode;
 import com.palyrobotics.frc2017.auto.modes.CenterPegAutoMode;
-import com.palyrobotics.frc2017.auto.modes.CenterPegAutoMode.Alliance;
-import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
 
 import org.json.simple.JSONArray;
 
@@ -20,8 +18,10 @@ public class AutoModeSelector {
 	private ArrayList<AutoModeBase> mAutoModes = new ArrayList<>();
 	private enum AutoIndices {
 		DO_NOTHING(0), BASELINE(1),
-		CENTER_PEG(2), SIDE_PEG(3), VISION_CENTER_PEG(4),
-		VISION_SIDE_PEG(5), TEST(6), TRAJECTORY(7);
+		CENTER_PEG(2), SIDE_PEG(3), 
+		VISION_CENTER_PEG(4), VISION_SIDE_PEG(5), 
+		DRIVE_STRAIGHT_BASELINE(6), DRIVE_STRAIGHT_CENTER_PEG(7), DRIVE_STRAIGHT_SIDE_PEG(8),
+		TEST(9), TRAJECTORY(10);
 		private final int id;
 		AutoIndices(int id) {this.id = id;}
 		public int get() {return id;}
@@ -60,9 +60,12 @@ public class AutoModeSelector {
   /*4*/ registerAutonomous(new VisionCenterPegAutoMode(Alliance.BLUE, false, true)); // alliance, seeking right vision target?, backup?
   /*5*/ registerAutonomous(new VisionSidePegAutoMode(SideAutoVariant.BLUE_LEFT, // Field position
 		  										false, true)); // seeking right vision target?, backup?
-
-		registerAutonomous(new TestAutoMode());
-		registerAutonomous(new TestTrajectoryAutoMode("RedLoading"));
+  /*6*/ registerAutonomous(new DriveStraightBaseLineAutoMode(Alliance.RED));
+  /*7*/ registerAutonomous(new DriveStraightCenterPegAutoMode(Alliance.BLUE, DriveStraightCenterPegAutoMode.PostScoreVariant.NEUTRAL_ZONE_RIGHT));
+  /*8*/ registerAutonomous(new DriveStraightSidePegAutoMode(SideAutoVariant.BLUE_LEFT, DriveStraightSidePegAutoMode.PostScoreVariant.NEUTRAL_ZONE));
+		
+  /*9*/ registerAutonomous(new TestAutoMode());
+  /*10*/registerAutonomous(new TestTrajectoryAutoMode("RedLoading"));
 	}
 
 	/**

@@ -199,7 +199,7 @@ public class SidePegAutoToCenterAutoMode extends AutoModeBase {
 			driveToAirshipSetpoint = 0;
 			break;
 		}
-		driveToAirshipSetpoint += 2;
+		driveToAirshipSetpoint += 2 * Constants.kDriveTicksPerInch;
 		driveToAirship.leftMotor.setMotionMagic(driveToAirshipSetpoint, mLongGains,
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		driveToAirship.rightMotor.setMotionMagic(driveToAirshipSetpoint, mLongGains,
@@ -222,12 +222,6 @@ public class SidePegAutoToCenterAutoMode extends AutoModeBase {
 		driveBackup.rightMotor.setMotionMagic(driveBackupSetpoint, mShortGains, 
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 
-		// drive forward same distance as backup
-		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint+3*Constants.kDriveTicksPerInch, mShortGains, 
-				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint+3*Constants.kDriveTicksPerInch, mShortGains, 
-				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		
 		// Create a routine that drives back, then moves the slider while moving back forward
 		ArrayList<Routine> sequence = new ArrayList<>();
 
