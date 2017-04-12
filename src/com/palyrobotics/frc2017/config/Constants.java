@@ -22,7 +22,7 @@ public class Constants extends ConstantsBase {
 	public static int kAndroidVisionSocketPort = 8009;
 	public static int kMJPEGServerSocketPort = 1180;
 
-	// Cheesy Drive tuning
+	// Cheesy Drive
 
 	//Sensitivities for how fast non-quickturn turning is
 	public static double kLowGearDriveSensitivity = .70;
@@ -48,6 +48,8 @@ public class Constants extends ConstantsBase {
 	//(1-alpha) is how much the QuickStopAccumulator is affected by the previous QuickStopAccumulator
 	//Range: (0, 1)
 	public static double kAlpha = 0.45;
+
+	public static double kCyclesUntilStop = 50;
 
 	// Manual control speed tuning
 	public static double kManualIntakeSpeed = -1.0;

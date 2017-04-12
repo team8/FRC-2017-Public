@@ -11,13 +11,22 @@ import com.palyrobotics.frc2017.robot.team254.lib.util.Util;
  */
 public class CheesyDriveHelper {
 	private double mOldWheel, mQuickStopAccumulator;
+	private boolean mInitialBrake;
+	private double mOldThrottle, mBrakeRate;
 	private final double kWheelStickDeadband = 0.02;
 	private final double kThrottleStickDeadband = 0.02;
 
 	public DriveSignal cheesyDrive(Commands commands, RobotState robotState) {
 		double throttle = -commands.leftStickInput.y;
 		double wheel = commands.rightStickInput.x;
+
+		//Quickturn if right trigger is pressed
 		boolean isQuickTurn = commands.rightStickInput.triggerPressed;
+
+		//Braking if left trigger is pressed
+		boolean isBraking = commands.leftStickInput.triggerPressed;
+
+		//Always on low gear
 		boolean isHighGear = false;
 
 		double wheelNonLinearity;
@@ -86,7 +95,32 @@ public class CheesyDriveHelper {
 		} else {
 			negInertiaAccumulator = 0;
 		}
-		linearPower = throttle;
+
+		//Handle braking
+		if(isBraking) {
+			//Set up braking rates for linear deceleration in a set amount of time
+			if(mInitialBrake) {
+				mInitialBrake = false;
+
+				//Old throttle initially set to throttle
+				mOldThrottle = throttle;
+
+				//Braking rate set
+				mBrakeRate = mOldThrottle/Constants.kCyclesUntilStop;
+			}
+
+			//If braking is not complete, decrease by the brake rate
+			if(Math.abs(mOldThrottle) >= Math.abs(mBrakeRate)) {
+				//reduce throttle
+				mOldThrottle -= mBrakeRate;
+				linearPower = mOldThrottle;
+			} else {
+				linearPower = 0;
+			}
+		} else {
+			linearPower = throttle;
+			mInitialBrake = true;
+		}
 
 		// Quickturn!
 		if (isQuickTurn) {
@@ -115,8 +149,11 @@ public class CheesyDriveHelper {
 			angularPower = wheel * sensitivity;
 		} else {
 			overPower = 0.0;
+
+			//Sets turn amount
 			angularPower = Math.abs(throttle) * wheel * sensitivity
 					- mQuickStopAccumulator;
+
 			if (mQuickStopAccumulator > Constants.kQuickStopAccumulatorDecreaseThreshold) {
 				mQuickStopAccumulator -= Constants.kQuickStopAccumulatorDecreaseRate;
 			} else if (mQuickStopAccumulator < -Constants.kQuickStopAccumulatorDecreaseThreshold) {
