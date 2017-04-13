@@ -1,6 +1,7 @@
 package com.palyrobotics.frc2017.auto.modes;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
+import com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode;
 import com.palyrobotics.frc2017.behavior.ParallelRoutine;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
@@ -9,7 +10,7 @@ import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.DriveStraightRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.GyroMotionMagicTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
-import com.palyrobotics.frc2017.config.Constants;
+import com.palyrobotics.frc2017.config.AutoDistances;
 import com.palyrobotics.frc2017.util.logger.Logger;
 
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class DriveStraightCenterPegAutoMode extends AutoModeBase {
 		ArrayList<Routine> sequence = new ArrayList<>();
 		// Straight drive distance to the center peg
 		double driveForwardSetpoint =
-				((mAlliance == CenterPegAutoMode.Alliance.BLUE) ? Constants.kBlueCenterPegDistanceInches : Constants.kRedCenterPegDistanceInches);
+				((mAlliance == CenterPegAutoMode.Alliance.BLUE) ? AutoDistances.kBlueCenterPegDistanceInches : AutoDistances.kRedCenterPegDistanceInches);
 		
 		initialSliderPosition = (mAlliance == CenterPegAutoMode.Alliance.BLUE) ? -2.5 : 0;
 		

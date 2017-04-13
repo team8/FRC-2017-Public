@@ -3,7 +3,7 @@ package com.palyrobotics.frc2017.auto;
 import org.junit.Test;
 
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode;
-import com.palyrobotics.frc2017.auto.modes.VisionSidePegAutoMode;
+import com.palyrobotics.frc2017.auto.modes.archive.VisionSidePegAutoMode;
 
 public class AutoModeStringTest {
 	@Test

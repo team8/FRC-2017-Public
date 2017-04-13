@@ -78,7 +78,7 @@ public class Constants extends ConstantsBase {
 	// Tolerances
 	public static double kAcceptableDrivePositionError = 15;
 	public static double kAcceptableDriveVelocityError = 5;
-	public static double kAcceptableTurnAngleError = 1;//0.5;
+	public static double kAcceptableTurnAngleError = 0.5;
 	public static double kAcceptableSliderPositionError;
 
 	public static double kSliderMaxVoltage = 6.0; // open loop limit
@@ -142,38 +142,7 @@ public class Constants extends ConstantsBase {
 
 	// !!! Physical constants
 
-	// Base line
-	public static double k254BaseLineDistanceInches = 93.3;
-	public static double kRedBaseLineDistanceInches = 110;
-	public static double kBlueBaseLineDistanceInches = 110;
-
-	// Center peg
-	public static double k254CenterPegDistanceInches = 80;
-	public static double kRedCenterPegDistanceInches = 82;
-	public static double kBlueCenterPegDistanceInches = 82;
-
-	// Side peg
-	public static double k254LoadingStationForwardDistanceInches = 80; // 84, 80
-	public static double k254LoadingStationAirshipDistanceInches = 66; // 66
-	public static double k254BoilerForwardDistanceInches = 80; // 80
-	public static double k254BoilerAirshipDistanceInches = 73; // 81.5, 73
 	public static double kSidePegTurnAngleDegrees = 60;
-
-	// Blue right loading station
-	public static double kBlueLoadingStationForwardDistanceInches = 79.5; // 79.5 
-	public static double kBlueLoadingStationAirshipDistanceInches = 73; // 66, 70, 73
-	
-	// Red left loading station
-	public static double kRedLoadingStationForwardDistanceInches = 79; // 79  
-	public static double kRedLoadingStationAirshipDistanceInches = 73; // 66, 70, 73
-
-	// Blue left boiler
-	public static double kBlueBoilerForwardDistanceInches = 82.5; // 79.5, 82.5
-	public static double kBlueBoilerAirshipDistanceInches = 73; // 73, 
-
-	// Red right boiler
-	public static double kRedBoilerForwardDistanceInches = 84; // 79, 84
-	public static double kRedBoilerAirshipDistanceInches = 73; // 73,  
 
 	// !!! Loop rate of normal Looper
 	public static double kNormalLoopsDt = 0.005;

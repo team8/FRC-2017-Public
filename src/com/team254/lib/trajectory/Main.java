@@ -1,5 +1,6 @@
 package com.team254.lib.trajectory;
 
+import com.palyrobotics.frc2017.config.AutoDistances;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.team254.lib.trajectory.io.TextFileSerializer;
@@ -12,7 +13,6 @@ import java.io.IOException;
 /**
  * @author Jared341
  * Auto paths configured for Team 8 2017 by Nihar Mitra
- * Minimum distance exists
  */
 public class Main {
 	// default values
@@ -27,27 +27,9 @@ public class Main {
 	// 180, 120 in/s
 	private static final double kLongVel = 75.0/12;
 	private static final double kLongAccel = 100.0/12;
-	// Distances in feet, angles in radians
-	public static double kBackup = -0.8; // TODO: Why doesn't 10/12 work? integer vs double?
-	public static double kRedCenter = 82.0/12;
-	public static double kBlueCenter = 82.0/12;
 	public static double kTurnAngle = Math.PI/3;
 
-	// Blue right loading station
-	public static double kBlueLoadingStationForward = 79.5/12; // 79.5
-	public static double kBlueLoadingStationAirship = 73.0/12; // 66, 70, 73
-
-	// Red left loading station
-	public static double kRedLoadingStationForward = 79.0/12; // 79
-	public static double kRedLoadingStationAirship = 73.0/12; // 66, 70, 73
-
-	// Blue left boiler
-	public static double kBlueBoilerForward = 82.5/12; // 79.5, 82.5
-	public static double kBlueBoilerAirship = 73.0/12; // 73,
-
-	// Red right boiler
-	public static double kRedBoilerForward = 84.0/12; // 79, 84
-	public static double kRedBoilerAirship = 73.0/12; // 73,
+	// Forward distance needs to go 110-30 minimum
 
 	public static WaypointSequence.Waypoint getWaypoint(double x, double y, double angle) {
 		return new WaypointSequence.Waypoint(y, x, angle);
@@ -73,7 +55,6 @@ public class Main {
 		// from Steik CAD, 26.375 inches roughly
 		final double kWheelbaseWidth = 26.375 / 12;
 
-
 		/*
 			RED AUTONOMOUS PATHS
 		 */
@@ -89,11 +70,11 @@ public class Main {
 			// Description of this auto mode path.
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint(kRedLoadingStationForward, 0, 0));
+			p.addWaypoint(new WaypointSequence.Waypoint(AutoDistances.kRedLoadingStationForward, 0, 0));
 			p.addWaypoint(new WaypointSequence.Waypoint(
-					(kRedLoadingStationForward +
-							Math.cos(kTurnAngle)*kRedLoadingStationAirship),
-					(Math.sin(kTurnAngle)* kRedLoadingStationAirship), kTurnAngle));
+					(AutoDistances.kRedLoadingStationForward +
+							Math.cos(kTurnAngle)* AutoDistances.kRedLoadingStationAirship),
+					(Math.sin(kTurnAngle)* AutoDistances.kRedLoadingStationAirship), kTurnAngle));
 
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);
@@ -158,10 +139,10 @@ public class Main {
 			// turn left
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint(kRedBoilerForward, 0, 0));
+			p.addWaypoint(new WaypointSequence.Waypoint(AutoDistances.kRedBoilerForward, 0, 0));
 			p.addWaypoint(new WaypointSequence.Waypoint(
-					kRedBoilerForward+Math.cos(kTurnAngle)*kRedBoilerAirship,
-					-Math.sin(kTurnAngle)*kRedBoilerAirship, -kTurnAngle));
+					AutoDistances.kRedBoilerForward+Math.cos(kTurnAngle)* AutoDistances.kRedBoilerAirship,
+					-Math.sin(kTurnAngle)* AutoDistances.kRedBoilerAirship, -kTurnAngle));
 
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);
@@ -191,7 +172,7 @@ public class Main {
 			// Description of this auto mode path.
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint(kRedCenter, 0, 0));
+			p.addWaypoint(new WaypointSequence.Waypoint(AutoDistances.kRedCenter, 0, 0));
 
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);
@@ -223,10 +204,10 @@ public class Main {
 			// turn left
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint(kBlueLoadingStationForward, 0, 0));
+			p.addWaypoint(new WaypointSequence.Waypoint(AutoDistances.kBlueLoadingStationForward, 0, 0));
 			p.addWaypoint(new WaypointSequence.Waypoint(
-					kBlueLoadingStationForward+Math.cos(kTurnAngle)*kBlueLoadingStationAirship,
-					-kBlueLoadingStationAirship*Math.sin(kTurnAngle), -kTurnAngle));
+					AutoDistances.kBlueLoadingStationForward+Math.cos(kTurnAngle)* AutoDistances.kBlueLoadingStationAirship,
+					-AutoDistances.kBlueLoadingStationAirship*Math.sin(kTurnAngle), -kTurnAngle));
 
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);
@@ -256,10 +237,10 @@ public class Main {
 			// turn right
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint(kBlueBoilerForward, 0, 0));
+			p.addWaypoint(new WaypointSequence.Waypoint(AutoDistances.kBlueBoilerForward, 0, 0));
 			p.addWaypoint(new WaypointSequence.Waypoint(
-					kBlueBoilerForward+Math.cos(kTurnAngle)*kBlueBoilerAirship,
-					kBlueBoilerAirship*Math.sin(kTurnAngle), kTurnAngle));
+					AutoDistances.kBlueBoilerForward+Math.cos(kTurnAngle)* AutoDistances.kBlueBoilerAirship,
+					AutoDistances.kBlueBoilerAirship*Math.sin(kTurnAngle), kTurnAngle));
 
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);
@@ -289,7 +270,7 @@ public class Main {
 			// Description of this auto mode path.
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint(kBlueCenter, 0, 0));
+			p.addWaypoint(new WaypointSequence.Waypoint(AutoDistances.kBlueCenter, 0, 0));
 
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);

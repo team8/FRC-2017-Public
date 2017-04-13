@@ -9,6 +9,6 @@ import org.junit.Test;
 public class RandomTest {
 	@Test
 	public void test() throws Exception {
-		System.out.println((new Float(0).equals(new Float(-0))));
+		System.out.println(82/12);
 	}
 }

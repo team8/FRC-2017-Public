@@ -34,7 +34,6 @@ public class CheesyDriveHelper {
 		wheel = handleDeadband(wheel, kWheelStickDeadband);
 		throttle = handleDeadband(throttle, kThrottleStickDeadband);
 
-		throttle = remapThrottle(throttle);
 		double negInertia = wheel - mOldWheel;
 		mOldWheel = wheel;
 
@@ -60,7 +59,7 @@ public class CheesyDriveHelper {
 		double sensitivity;
 
 		double angularPower;
-		double linearPower;
+		double linearPower = remapThrottle(throttle);;
 
 		// Negative inertia!
 		double negInertiaAccumulator = 0.0;
@@ -104,7 +103,7 @@ public class CheesyDriveHelper {
 				mInitialBrake = false;
 
 				//Old throttle initially set to throttle
-				mOldThrottle = throttle;
+				mOldThrottle = linearPower;
 
 				//Braking rate set
 				mBrakeRate = mOldThrottle/Constants.kCyclesUntilStop;
@@ -119,7 +118,6 @@ public class CheesyDriveHelper {
 				linearPower = 0;
 			}
 		} else {
-			linearPower = throttle;
 			mInitialBrake = true;
 		}
 

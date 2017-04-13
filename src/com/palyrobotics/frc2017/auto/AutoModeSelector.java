@@ -1,10 +1,9 @@
 package com.palyrobotics.frc2017.auto;
 
 import com.palyrobotics.frc2017.auto.modes.*;
-import com.palyrobotics.frc2017.auto.modes.CenterPegAutoMode.Alliance;
+import com.palyrobotics.frc2017.auto.modes.archive.*;
+import com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode.Alliance;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
-import com.palyrobotics.frc2017.auto.modes.BaseLineAutoMode;
-import com.palyrobotics.frc2017.auto.modes.CenterPegAutoMode;
 
 import org.json.simple.JSONArray;
 
@@ -30,7 +29,7 @@ public class AutoModeSelector {
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
-	int selectedIndex = AutoIndices.SIDE_PEG.get();
+	int selectedIndex = AutoIndices.TRAJECTORY.get();
 
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
@@ -54,6 +53,9 @@ public class AutoModeSelector {
 
   /*2*/ registerAutonomous(new CenterPegAutoMode(Alliance.BLUE, // Alliance Color
 		  										 true)); // Backup boolean
+  /*3*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.BLUE));
+  /*4*/ registerAutonomous(new MotionProfileSidePegAutoMode(SideAutoVariant.BLUE_LEFT,
+				false)); // use gyro or not
 		// red left/ blue right = loading station, red right/blue left = boiler
   /*3*/	registerAutonomous(new SidePegAutoMode(SideAutoVariant.RED_LEFT, // Alliance color and side
 											   true)); // Should backup?
@@ -65,7 +67,7 @@ public class AutoModeSelector {
   /*8*/ registerAutonomous(new DriveStraightSidePegAutoMode(SideAutoVariant.RED_LEFT, DriveStraightSidePegAutoMode.PostScoreVariant.BACKUP));
 		
   /*9*/ registerAutonomous(new TestAutoMode());
-  /*10*/registerAutonomous(new TestTrajectoryAutoMode("RedLoading"));
+  /*10*/registerAutonomous(new TestTrajectoryAutoMode("BlueCenter"));
 	}
 
 	/**

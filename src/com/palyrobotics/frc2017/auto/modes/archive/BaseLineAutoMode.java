@@ -1,8 +1,9 @@
-package com.palyrobotics.frc2017.auto.modes;
+package com.palyrobotics.frc2017.auto.modes.archive;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
+import com.palyrobotics.frc2017.config.AutoDistances;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.Gains;
@@ -27,7 +28,7 @@ public class BaseLineAutoMode extends AutoModeBase {
 		// Drive straight until baseline
 		DriveSignal driveForward = DriveSignal.getNeutralSignal();
 		double setpoint =
-				((mAlliance == CenterPegAutoMode.Alliance.BLUE) ? Constants.kBlueBaseLineDistanceInches : Constants.kRedBaseLineDistanceInches)
+				((mAlliance == CenterPegAutoMode.Alliance.BLUE) ? AutoDistances.kBlueBaseLineDistanceInches : AutoDistances.kRedBaseLineDistanceInches)
 						*
 				((Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kDericaInchesToTicks
 						: Constants.kDriveTicksPerInch);

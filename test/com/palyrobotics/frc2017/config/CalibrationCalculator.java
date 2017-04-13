@@ -14,9 +14,9 @@ public class CalibrationCalculator {
 		 * 4098 right
 		 */
 		double kSidePegDistanceLoadingStationInches = (blue) ? 
-				Constants.kBlueLoadingStationForwardDistanceInches : Constants.kRedLoadingStationForwardDistanceInches;
+				AutoDistances.kBlueLoadingStationForwardDistanceInches : AutoDistances.kRedLoadingStationForwardDistanceInches;
 		double kSidePegDistanceToAirshipLoadingStationInches = (blue) ?
-				Constants.kBlueLoadingStationAirshipDistanceInches : Constants.kRedLoadingStationAirshipDistanceInches;
+				AutoDistances.kBlueLoadingStationAirshipDistanceInches : AutoDistances.kRedLoadingStationAirshipDistanceInches;
 		
 		System.out.println("Loading side");
 		double left = kSidePegDistanceLoadingStationInches * Constants.kDriveTicksPerInch;
@@ -36,9 +36,9 @@ public class CalibrationCalculator {
 		
 		// Final values - 4192, 3438.
 		double kSidePegDistanceBoilerInches = (blue) ?
-				Constants.kBlueBoilerForwardDistanceInches : Constants.kRedBoilerForwardDistanceInches;
+				AutoDistances.kBlueBoilerForwardDistanceInches : AutoDistances.kRedBoilerForwardDistanceInches;
 		double kSidePegDistanceToAirshipBoilerInches = (blue) ?
-				Constants.kBlueBoilerAirshipDistanceInches : Constants.kBlueBoilerAirshipDistanceInches;
+				AutoDistances.kBlueBoilerAirshipDistanceInches : AutoDistances.kBlueBoilerAirshipDistanceInches;
 		System.out.println("Boiler side");
 		double left = kSidePegDistanceBoilerInches * Constants.kDriveTicksPerInch;
 		double right = left;
@@ -54,7 +54,7 @@ public class CalibrationCalculator {
 	
 	@Test
 	public void calculateBaseline() {
-		double kBaseLineDistanceInches = (blue) ? Constants.kBlueBaseLineDistanceInches : Constants.kRedBaseLineDistanceInches;
+		double kBaseLineDistanceInches = (blue) ? AutoDistances.kBlueBaseLineDistanceInches : AutoDistances.kRedBaseLineDistanceInches;
 		System.out.println("Base line");
 		System.out.println(kBaseLineDistanceInches * Constants.kDriveTicksPerInch);
 		System.out.println("");
@@ -66,7 +66,7 @@ public class CalibrationCalculator {
 		 * 114.375 inches red
 		 * 108.5 inches blue
 		 */
-		double kCenterPegDistanceInches = (blue) ? Constants.kBlueCenterPegDistanceInches : Constants.kRedCenterPegDistanceInches;
+		double kCenterPegDistanceInches = (blue) ? AutoDistances.kBlueCenterPegDistanceInches : AutoDistances.kRedCenterPegDistanceInches;
 		System.out.println("Center peg");
 		System.out.println(kCenterPegDistanceInches * Constants.kDriveTicksPerInch);
 		System.out.println("");

@@ -1,5 +1,8 @@
 package com.palyrobotics.frc2017.auto;
 
+import com.palyrobotics.frc2017.auto.modes.archive.BaseLineAutoMode;
+import com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode;
+import com.palyrobotics.frc2017.auto.modes.archive.DoNothingAutoMode;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -7,7 +10,6 @@ import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 
-import com.palyrobotics.frc2017.auto.modes.*;
 import com.palyrobotics.frc2017.config.Constants;
 
 /**

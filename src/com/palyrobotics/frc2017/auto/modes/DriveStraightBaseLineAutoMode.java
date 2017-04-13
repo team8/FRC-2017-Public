@@ -1,9 +1,10 @@
 package com.palyrobotics.frc2017.auto.modes;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
+import com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.routines.drive.DriveStraightRoutine;
-import com.palyrobotics.frc2017.config.Constants;
+import com.palyrobotics.frc2017.config.AutoDistances;
 import com.palyrobotics.frc2017.util.logger.Logger;
 
 /**
@@ -21,7 +22,7 @@ public class DriveStraightBaseLineAutoMode extends AutoModeBase {
 	@Override
 	public Routine getRoutine() {
 		// Drive straight until baseline
-		double setpoint = ((mAlliance == CenterPegAutoMode.Alliance.BLUE) ? Constants.kBlueBaseLineDistanceInches : Constants.kRedBaseLineDistanceInches);
+		double setpoint = ((mAlliance == CenterPegAutoMode.Alliance.BLUE) ? AutoDistances.kBlueBaseLineDistanceInches : AutoDistances.kRedBaseLineDistanceInches);
 		mRoutine = new DriveStraightRoutine(setpoint);
 		return mRoutine;
 	}

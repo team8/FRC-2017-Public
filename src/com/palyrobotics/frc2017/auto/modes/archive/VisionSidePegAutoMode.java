@@ -1,6 +1,7 @@
-package com.palyrobotics.frc2017.auto.modes;
+package com.palyrobotics.frc2017.auto.modes.archive;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
+import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode;
 import com.palyrobotics.frc2017.behavior.ParallelRoutine;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
@@ -8,6 +9,7 @@ import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.*;
 import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
 import com.palyrobotics.frc2017.behavior.routines.scoring.VisionSliderRoutine;
+import com.palyrobotics.frc2017.config.AutoDistances;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
@@ -123,17 +125,17 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 		// loading station side
 		case RED_LEFT:
-			driveForwardSetpoint = Constants.kRedLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = AutoDistances.kRedLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_RIGHT:
-			driveForwardSetpoint = Constants.kBlueLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = AutoDistances.kBlueLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 			// boiler side
 		case RED_RIGHT:
-			driveForwardSetpoint = Constants.kRedBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = AutoDistances.kRedBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_LEFT:
-			driveForwardSetpoint = Constants.kBlueBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = AutoDistances.kBlueBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		default:
 			System.err.println("What in tarnation no side peg distance");
@@ -161,17 +163,17 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 		// loading station side
 		case RED_LEFT:
-			driveToAirshipSetpoint = Constants.k254LoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
+			driveToAirshipSetpoint = AutoDistances.k254LoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_RIGHT:
-			driveToAirshipSetpoint = Constants.k254LoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
+			driveToAirshipSetpoint = AutoDistances.k254LoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 			// boiler side
 		case RED_RIGHT:
-			driveToAirshipSetpoint = Constants.k254BoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
+			driveToAirshipSetpoint = AutoDistances.k254BoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_LEFT:
-			driveToAirshipSetpoint = Constants.k254BoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
+			driveToAirshipSetpoint = AutoDistances.k254BoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		default:
 			System.err.println("What in tarnation no side peg airship distance");

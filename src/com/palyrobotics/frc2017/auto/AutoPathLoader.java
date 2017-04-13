@@ -32,9 +32,15 @@ public class AutoPathLoader {
 			"Red center",
 			"Red loading"
 	};
-	static Hashtable paths_ = new Hashtable();
+	static Hashtable paths_ = null;
 
 	public static void loadPaths() {
+		// Only run once
+		if (paths_ == null) {
+			return;
+		} else {
+			paths_ = new Hashtable();
+		}
 		double startTime = System.currentTimeMillis();
 		String os = System.getProperty("os.name");
 		String sourceDir;

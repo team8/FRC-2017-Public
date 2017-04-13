@@ -11,21 +11,15 @@ import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
+import com.palyrobotics.frc2017.config.AutoDistances;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.palyrobotics.frc2017.util.logger.Logger;
 
-public class SidePegAutoToCenterAutoMode extends AutoModeBase {
-	
-	// Represents the peg we are going for
-	public enum SideAutoVariant {
-		RED_RIGHT, 	// Boiler
-		BLUE_RIGHT,	// Loading station
-		RED_LEFT, 	// Loading station
-		BLUE_LEFT	// Boiler
-	}
+import static com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
 
+public class SidePegAutoToCenterAutoMode extends AutoModeBase {
 	// Store configuration on construction
 	private final SideAutoVariant mVariant;
 	private final boolean mBackup;
@@ -141,20 +135,20 @@ public class SidePegAutoToCenterAutoMode extends AutoModeBase {
 		// loading station side
 		case RED_LEFT:
 			initialSliderPosition = 0;
-			driveForwardSetpoint = Constants.kRedLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = AutoDistances.kRedLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_RIGHT:
 			initialSliderPosition = -1.5;
-			driveForwardSetpoint = Constants.kBlueLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = AutoDistances.kBlueLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		// boiler side
 		case RED_RIGHT:
 			initialSliderPosition = 0;
-			driveForwardSetpoint = Constants.kRedBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = AutoDistances.kRedBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_LEFT:
 			initialSliderPosition = 2.5;
-			driveForwardSetpoint = Constants.kBlueBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
+			driveForwardSetpoint = AutoDistances.kBlueBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		default:
 			System.err.println("What in tarnation no side peg distance");
@@ -182,17 +176,17 @@ public class SidePegAutoToCenterAutoMode extends AutoModeBase {
 		switch (mVariant) {
 		// loading station side
 		case RED_LEFT:
-			driveToAirshipSetpoint = Constants.kRedLoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
+			driveToAirshipSetpoint = AutoDistances.kRedLoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_RIGHT:
-			driveToAirshipSetpoint = Constants.kBlueLoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
+			driveToAirshipSetpoint = AutoDistances.kBlueLoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 			// boiler side
 		case RED_RIGHT:
-			driveToAirshipSetpoint = Constants.kRedBoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
+			driveToAirshipSetpoint = AutoDistances.kRedBoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_LEFT:
-			driveToAirshipSetpoint = Constants.kBlueBoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
+			driveToAirshipSetpoint = AutoDistances.kBlueBoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		default:
 			System.err.println("What in tarnation no side peg airship distance");

@@ -8,6 +8,7 @@ import com.palyrobotics.frc2017.behavior.routines.SpatulaDownAutocorrectRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.*;
 import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
+import com.palyrobotics.frc2017.config.AutoDistances;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.util.logger.Logger;
 
@@ -102,20 +103,20 @@ public class DriveStraightSidePegAutoMode extends AutoModeBase {
 		// loading station side
 		case RED_LEFT:
 			initialSliderPosition = 0;
-			driveForwardSetpoint = Constants.kRedLoadingStationForwardDistanceInches;
+			driveForwardSetpoint = AutoDistances.kRedLoadingStationForwardDistanceInches;
 			break;
 		case BLUE_RIGHT:
 			initialSliderPosition = -1.5;
-			driveForwardSetpoint = Constants.kBlueLoadingStationForwardDistanceInches;
+			driveForwardSetpoint = AutoDistances.kBlueLoadingStationForwardDistanceInches;
 			break;
 		// boiler side
 		case RED_RIGHT:
 			initialSliderPosition = 0;
-			driveForwardSetpoint = Constants.kRedBoilerForwardDistanceInches;
+			driveForwardSetpoint = AutoDistances.kRedBoilerForwardDistanceInches;
 			break;
 		case BLUE_LEFT:
 			initialSliderPosition = 2.5;
-			driveForwardSetpoint = Constants.kBlueBoilerForwardDistanceInches;
+			driveForwardSetpoint = AutoDistances.kBlueBoilerForwardDistanceInches;
 			break;
 		default:
 			System.err.println("What in tarnation no side peg distance");
@@ -137,17 +138,17 @@ public class DriveStraightSidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 		// loading station side
 		case RED_LEFT:
-			driveToAirshipSetpoint = Constants.kRedLoadingStationAirshipDistanceInches;
+			driveToAirshipSetpoint = AutoDistances.kRedLoadingStationAirshipDistanceInches;
 			break;
 		case BLUE_RIGHT:
-			driveToAirshipSetpoint = Constants.kBlueLoadingStationAirshipDistanceInches;
+			driveToAirshipSetpoint = AutoDistances.kBlueLoadingStationAirshipDistanceInches;
 			break;
 		// boiler side
 		case RED_RIGHT:
-			driveToAirshipSetpoint = Constants.kRedBoilerAirshipDistanceInches;
+			driveToAirshipSetpoint = AutoDistances.kRedBoilerAirshipDistanceInches;
 			break;
 		case BLUE_LEFT:
-			driveToAirshipSetpoint = Constants.kBlueBoilerAirshipDistanceInches;
+			driveToAirshipSetpoint = AutoDistances.kBlueBoilerAirshipDistanceInches;
 			break;
 		default:
 			System.err.println("What in tarnation no side peg airship distance");

@@ -1,4 +1,4 @@
-package com.palyrobotics.frc2017.auto.modes;
+package com.palyrobotics.frc2017.auto.modes.archive;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.auto.AutoPathLoader;
@@ -15,11 +15,12 @@ public class TestTrajectoryAutoMode extends AutoModeBase {
 
 	public TestTrajectoryAutoMode(String pathName) {
 		AutoPathLoader.loadPaths();
+		mDesired = pathName;
 		mPath = AutoPathLoader.get(pathName);
 	}
 	@Override
 	public String toString() {
-		return "TestTrajectoryAutoMode";
+		return "TestTrajectoryAutoMode"+mDesired;
 	}
 
 	@Override
@@ -28,6 +29,6 @@ public class TestTrajectoryAutoMode extends AutoModeBase {
 
 	@Override
 	public Routine getRoutine() {
-		return new DrivePathRoutine(mPath, false);
+		return new DrivePathRoutine(mPath, true);
 	}
 }
