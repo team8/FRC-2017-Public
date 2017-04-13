@@ -16,18 +16,17 @@ import java.io.IOException;
  */
 public class Main {
 	// default values
-	private static final double kMaxAcc = 120/12;
+	private static final double kMaxAcc = 120.0/12;
 	private static final double kMaxJerk = 60.0;
-	private static final double kMaxVel = 200/12;
+	private static final double kMaxVel = 200.0/12;
 	private static final double kDt = 0.005;
 
 	// Values pulled from gains
 	private static final double kShortVel = Gains.kSteikShortDriveMotionMagicCruiseVelocity/(Constants.kDriveSpeedUnitConversion*12);
 	private static final double kShortAccel = Gains.kSteikShortDriveMotionMagicMaxAcceleration/(Constants.kDriveSpeedUnitConversion*12);
-//	private static final double kLongVel = Gains.kSteikLongDriveMotionMagicCruiseVelocity/(Constants.kDriveSpeedUnitConversion*12);
-//	private static final double kLongAccel = Gains.kSteikLongDriveMotionMagicMaxAcceleration/(Constants.kDriveSpeedUnitConversion*12);
-	private static final double kLongVel = 40.0/12;
-	private static final double kLongAccel = 40.0/12;
+	// 180, 120 in/s
+	private static final double kLongVel = 75.0/12;
+	private static final double kLongAccel = 100.0/12;
 	// Distances in feet, angles in radians
 	public static double kBackup = -0.8; // TODO: Why doesn't 10/12 work? integer vs double?
 	public static double kRedCenter = 82.0/12;

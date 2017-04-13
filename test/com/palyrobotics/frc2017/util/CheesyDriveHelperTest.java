@@ -47,6 +47,11 @@ public class CheesyDriveHelperTest {
 		testCommands.rightStickInput.x = -0.5;
 	}
 
+	@Test
+	public void testChezy() {
+		System.out.println(mTestCDH.remapThrottle(0));
+	}
+
 	// Helper method to check if two numbers have the same sign
 	private boolean matchSign(double n1, double n2) {
 		return (n1 <= 0) == (n2 <= 0);

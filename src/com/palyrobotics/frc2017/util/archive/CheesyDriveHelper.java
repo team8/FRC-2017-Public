@@ -34,6 +34,7 @@ public class CheesyDriveHelper {
 		wheel = handleDeadband(wheel, kWheelStickDeadband);
 		throttle = handleDeadband(throttle, kThrottleStickDeadband);
 
+		throttle = remapThrottle(throttle);
 		double negInertia = wheel - mOldWheel;
 		mOldWheel = wheel;
 
@@ -195,5 +196,17 @@ public class CheesyDriveHelper {
 	 */
 	private double handleDeadband(double val, double deadband) {
 		return (Math.abs(val) > Math.abs(deadband)) ? val : 0.0;
+	}
+
+	/**
+	 * Throttle tuning functions
+	 */
+	public double remapThrottle(double initialThrottle) {
+		double x = Math.abs(initialThrottle);
+		double eric = 0.7*x + 1/(1/(0.15)+Math.pow(Math.E,-64*(x-0.35)))
+		+1/(1/(0.15)+Math.pow(Math.E,-64*(x-0.75)));
+		return Math.signum(initialThrottle)*(Math.pow(x, 2));
+//		return Math.signum(initialThrottle)*eric;
+//		return Math.signum(initialThrottle)*x;
 	}
 }

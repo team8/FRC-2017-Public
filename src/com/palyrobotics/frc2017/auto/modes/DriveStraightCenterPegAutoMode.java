@@ -85,6 +85,10 @@ public class DriveStraightCenterPegAutoMode extends AutoModeBase {
 			break;
 		}
 
+		for (Routine r : sequence) {
+			System.out.println(r.getName());
+		}
+
 		mSequentialRoutine = new SequentialRoutine(sequence);
 	}
 	
