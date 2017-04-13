@@ -37,9 +37,9 @@ public class AutoPathLoader {
 	public static void loadPaths() {
 		// Only run once
 		if (paths_ == null) {
-			return;
-		} else {
 			paths_ = new Hashtable();
+		} else {
+			return;
 		}
 		double startTime = System.currentTimeMillis();
 		String os = System.getProperty("os.name");

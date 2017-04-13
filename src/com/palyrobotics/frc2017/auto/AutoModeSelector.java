@@ -20,7 +20,8 @@ public class AutoModeSelector {
 		CENTER_PEG(2), SIDE_PEG(3), 
 		VISION_CENTER_PEG(4), VISION_SIDE_PEG(5), 
 		DRIVE_STRAIGHT_BASELINE(6), DRIVE_STRAIGHT_CENTER_PEG(7), DRIVE_STRAIGHT_SIDE_PEG(8),
-		TEST(9), TRAJECTORY(10);
+		TRAJECTORY_CENTER(9), TRAJECTORY_SIDE(10),
+		TEST(11), TEST_TRAJECTORY(12);
 		private final int id;
 		AutoIndices(int id) {this.id = id;}
 		public int get() {return id;}
@@ -29,7 +30,7 @@ public class AutoModeSelector {
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
-	int selectedIndex = AutoIndices.TRAJECTORY.get();
+	int selectedIndex = AutoIndices.TEST_TRAJECTORY.get();
 
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
@@ -53,9 +54,6 @@ public class AutoModeSelector {
 
   /*2*/ registerAutonomous(new CenterPegAutoMode(Alliance.BLUE, // Alliance Color
 		  										 true)); // Backup boolean
-  /*3*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.BLUE));
-  /*4*/ registerAutonomous(new MotionProfileSidePegAutoMode(SideAutoVariant.BLUE_LEFT,
-				false)); // use gyro or not
 		// red left/ blue right = loading station, red right/blue left = boiler
   /*3*/	registerAutonomous(new SidePegAutoMode(SideAutoVariant.RED_LEFT, // Alliance color and side
 											   true)); // Should backup?
@@ -66,8 +64,12 @@ public class AutoModeSelector {
   /*7*/ registerAutonomous(new DriveStraightCenterPegAutoMode(Alliance.BLUE, DriveStraightCenterPegAutoMode.PostScoreVariant.BACKUP));
   /*8*/ registerAutonomous(new DriveStraightSidePegAutoMode(SideAutoVariant.RED_LEFT, DriveStraightSidePegAutoMode.PostScoreVariant.BACKUP));
 		
-  /*9*/ registerAutonomous(new TestAutoMode());
-  /*10*/registerAutonomous(new TestTrajectoryAutoMode("BlueCenter"));
+  /*9*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.BLUE));
+  /*10*/ registerAutonomous(new MotionProfileSidePegAutoMode(SideAutoVariant.BLUE_LEFT,
+				false)); // use gyro or not
+  
+  /*11*/ registerAutonomous(new TestAutoMode());
+  /*12*/registerAutonomous(new TestTrajectoryAutoMode("BlueCenter"));
 	}
 
 	/**
