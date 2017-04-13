@@ -61,6 +61,7 @@ public class DriveStraightRoutine extends Routine {
 	
 	@Override
 	public Commands cancel(Commands commands) {
+		System.out.println("Cancelling DriveStraightRoutine");
 		state = DriveStraightRoutineState.DONE;
 		commands.wantedDriveState = Drive.DriveState.NEUTRAL;
 		drive.resetController();
@@ -75,7 +76,7 @@ public class DriveStraightRoutine extends Routine {
 	
 	@Override
 	public String getName() {
-		return "DriveStraightController";
+		return "DriveStraightRoutine";
 	}
 
 }

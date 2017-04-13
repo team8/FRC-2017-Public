@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.util.BoundaryException;
 public class SynchronousPID {
     private double m_P;            // factor for "proportional" control
     private double m_I;            // factor for "integral" control
+    private double m_izone;        // error needs to be within izone to kick in "integral" control
     private double m_D;            // factor for "derivative" control
     private double m_maximumOutput = 1.0;    // |maximum output|
     private double m_minimumOutput = -1.0;    // |minimum output|
@@ -27,7 +28,7 @@ public class SynchronousPID {
     public SynchronousPID() {
     }
 
-    /**
+      /**
      * Allocate a PID object with the given constants for P, I, D
      *
      * @param Kp the proportional coefficient
@@ -38,6 +39,21 @@ public class SynchronousPID {
         m_P = Kp;
         m_I = Ki;
         m_D = Kd;
+        m_izone = Double.MAX_VALUE;
+    }
+
+    /**
+     * Allocate a PID object with the given constants for P, I, D
+     *
+     * @param Kp the proportional coefficient
+     * @param Ki the integral coefficient
+     * @param Kd the derivative coefficient
+     */
+    public SynchronousPID(double Kp, double Ki, double Kd, double Kizone) {
+        m_P = Kp;
+        m_I = Ki;
+        m_D = Kd;
+        m_izone = Kizone;
     }
 
     /**
@@ -62,7 +78,8 @@ public class SynchronousPID {
         }
 
         if ((m_error * m_P < m_maximumOutput) &&
-                (m_error * m_P > m_minimumOutput)) {
+                (m_error * m_P > m_minimumOutput) &&
+                m_error < m_izone) {
             m_totalError += m_error;
         } else {
             m_totalError = 0;

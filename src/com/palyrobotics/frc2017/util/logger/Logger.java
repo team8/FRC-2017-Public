@@ -45,6 +45,8 @@ public class Logger {
 	private Thread mWritingThread = null;
 	// Stores the runnable for the thread to be restarted
 	private Runnable mRunnable;
+
+	private int duplicatePrevent = 0;
 	private File mainLog;
 
 	// Finds the driver station console output
@@ -86,9 +88,8 @@ public class Logger {
 			// TODO: Maybe find the exact OS name
 			filePath = "/home/lvuser/logs/" + fileName;
 			// TODO:
-			rioLog = new File("/home/lvuser/FRC_UserProgram.log");
+			rioLog = new File("/var/local/natinst/log/FRC_UserProgram.log");
 		}
-		int duplicatePrevent = 0;
 		mainLog = new File(filePath+File.separatorChar+"log.log");
 		while (mainLog.exists()) {
 			duplicatePrevent++;
@@ -237,9 +238,10 @@ public class Logger {
 		// Try to copy riolog to logging directory if it exists
 		if (rioLog != null) {
 			try {
-				Files.copy(rioLog, new File("/home/lvuser/logs/" + fileName));
+				Files.copy(rioLog, new File("/home/lvuser/logs/" + fileName+"/riolog"+duplicatePrevent+".log"));
 			} catch (IOException e) {
 				System.out.println("Unable to copy riolog");
+				e.printStackTrace();
 			}
 		}
 	}

@@ -28,9 +28,9 @@ public class DriveStraightController implements DriveController {
 		System.out.println("Target: "+target);
 		cachedPose = priorSetpoint;
 		
-		mGains = new Gains(.00035, 0.001, 0.0015, 0, 0, 0);
+		mGains = new Gains(.00035, 0.000004, 0.002, 0, 200, 0);
 		kTolerance = (Constants.kRobotName == RobotName.DERICA) ? Constants2016.kAcceptableDriveError : Constants.kAcceptableDrivePositionError;
-		forwardPID = new SynchronousPID(mGains.P, mGains.I, mGains.D);
+		forwardPID = new SynchronousPID(mGains.P, mGains.I, mGains.D, mGains.izone);
 		headingPID = new SynchronousPID(Gains.kSteikTrajectoryTurnkP, 0, 0.005);
 		forwardPID.setOutputRange(-1, 1);
 		headingPID.setOutputRange(-0.2, 0.2);
@@ -48,8 +48,8 @@ public class DriveStraightController implements DriveController {
 		
 		return Math.abs(Robot.getRobotState().drivePose.heading) < kTolerance &&
 				Math.abs((Robot.getRobotState().drivePose.leftEnc + Robot.getRobotState().drivePose.rightEnc)/2  - target) < kTolerance
-				&& Math.abs(Robot.getRobotState().drivePose.leftSpeed)<0.01
-				&& Math.abs(Robot.getRobotState().drivePose.rightSpeed)<0.01;
+				&& Math.abs(Robot.getRobotState().drivePose.leftSpeed)<0.05
+				&& Math.abs(Robot.getRobotState().drivePose.rightSpeed)<0.05;
 	}
 	
 
@@ -61,14 +61,13 @@ public class DriveStraightController implements DriveController {
 		double distanceSoFar = state.drivePose.leftEnc+state.drivePose.rightEnc;
 		distanceSoFar /= 2;
 		double throttle = forwardPID.calculate(distanceSoFar);
-		double turn = headingPID.calculate(state.drivePose.heading) * Constants.kDriveInchesPerDegree;
-		
+//		double turn = headingPID.calculate(state.drivePose.heading) * Constants.kDriveInchesPerDegree;
+		double turn = 0;
 		leftOutput.setPercentVBus(throttle + turn);
 		rightOutput.setPercentVBus(throttle - turn);
 		
-		System.out.println("Left enc: " + state.drivePose.leftEnc + " Right enc: " + state.drivePose.rightEnc);
-//		System.out.println("Left: " + leftOutput.getSetpoint() + "Right: " + rightOutput.getSetpoint());
-			
+		System.out.println(forwardPID.getError());
+
 		return new DriveSignal(leftOutput, rightOutput);
 	}
 
