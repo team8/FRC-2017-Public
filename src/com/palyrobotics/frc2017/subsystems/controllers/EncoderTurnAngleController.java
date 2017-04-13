@@ -61,6 +61,7 @@ public class EncoderTurnAngleController implements DriveController {
 //				"Right: " + Math.abs(rightTarget - cachedPose.rightEnc));
 		if(Math.abs(cachedPose.leftSpeed) < velocityTolerance && Math.abs(cachedPose.rightSpeed) < velocityTolerance &&
 				Math.abs(leftTarget - cachedPose.leftEnc) < positionTolerance && Math.abs(rightTarget - cachedPose.rightEnc) < positionTolerance) {
+			System.out.println("turn angle done");
 			return true;
 		}
 		else return false;

@@ -205,8 +205,17 @@ public class CheesyDriveHelper {
 		double x = Math.abs(initialThrottle);
 		double eric = 0.7*x + 1/(1/(0.15)+Math.pow(Math.E,-64*(x-0.35)))
 		+1/(1/(0.15)+Math.pow(Math.E,-64*(x-0.75)));
-		return Math.signum(initialThrottle)*(Math.pow(x, 2));
+		double nihar;
+		if(x < 0.3) {
+			nihar = x*x;
+		} else if(x < 0.75) {
+			nihar = 2*0.3*x;
+		} else {
+			nihar = (1-0.45)/(1-0.75)*(x-0.75) + 0.45; 
+		}
+//		return Math.signum(initialThrottle)*nihar;
+//		return Math.signum(initialThrottle)*(Math.pow(x, 2));
 //		return Math.signum(initialThrottle)*eric;
-//		return Math.signum(initialThrottle)*x;
+		return Math.signum(initialThrottle)*x;
 	}
 }

@@ -35,7 +35,7 @@ public class Constants extends ConstantsBase {
 	public static double kHighGearPreciseQuickTurnSensitivity = 0.35;
 	
 	//Threshold for quickturn sensitivity change
-	public static double kQuickTurnSensitivityThreshold = 0.85;
+	public static double kQuickTurnSensitivityThreshold = 0.90;
 
 	//The rate at which the QuickStopAccumulator will decrease
 	public static double kQuickStopAccumulatorDecreaseRate = 0.8;
@@ -71,14 +71,14 @@ public class Constants extends ConstantsBase {
 	// Aegir: 2172 RIGHT  |  3452 LEFT
 	// Vali: 2032 RIGHT | 3310 LEFT
 	// new belly pan shifted vali
-	public static final double kPotentiometerRightPos = 2178;
-	public static final double kPotentiometerLeftPos = 3435;
+	public static final double kPotentiometerRightPos = 2199;//2178;
+	public static final double kPotentiometerLeftPos = 3499;//3435;
 	public static final double kPotentiometerCenterPos = (kPotentiometerRightPos + kPotentiometerLeftPos) / 2;
 	
 	// Tolerances
 	public static double kAcceptableDrivePositionError = 15;
 	public static double kAcceptableDriveVelocityError = 5;
-	public static double kAcceptableTurnAngleError = 0.5;
+	public static double kAcceptableTurnAngleError = 1;//0.5;
 	public static double kAcceptableSliderPositionError;
 
 	public static double kSliderMaxVoltage = 6.0; // open loop limit
