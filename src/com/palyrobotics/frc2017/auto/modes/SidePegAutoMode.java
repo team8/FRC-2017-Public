@@ -4,6 +4,7 @@ import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.behavior.ParallelRoutine;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
+import com.palyrobotics.frc2017.behavior.routines.SpatulaDownAutocorrectRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.*;
 import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
@@ -28,10 +29,16 @@ public class SidePegAutoMode extends AutoModeBase {
 		RED_LEFT, 	// Loading station
 		BLUE_LEFT	// Boiler
 	}
+	// Represents post score action
+	public enum SideAutoPostVariant {
+		NONE,
+		BACKUP,
+		NEUTRAL_ZONE
+	}
 
 	// Store configuration on construction
 	private final SideAutoVariant mVariant;
-	private final boolean mBackup;
+	private final SideAutoPostVariant mPostVariant;
 	
 	private SequentialRoutine mSequentialRoutine;
 
@@ -40,13 +47,14 @@ public class SidePegAutoMode extends AutoModeBase {
 
 	private final double pilotWaitTime = 2.5; // time in seconds
 	private final double backupDistance = 10;	// distance in inches
+	private final double neutralZoneDistance = 12 * 14;	// distance in inches
 
-	double initialSliderPosition = 0;
-	double backupPosition = 0;
+	private double initialSliderPosition = 0;	// slider position in inches
+	private double backupPosition = 0;	// slider position in inches
 
-	public SidePegAutoMode(SideAutoVariant direction, boolean backup) {
+	public SidePegAutoMode(SideAutoVariant direction, SideAutoPostVariant postScore) {
 		mVariant = direction;
-		mBackup = backup;
+		mPostVariant = postScore;
 		mLongGains = Gains.steikLongDriveMotionMagicGains;
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
 	}
@@ -65,7 +73,6 @@ public class SidePegAutoMode extends AutoModeBase {
 
 		sequence.add(getDriveForward());
 
-		// NOTE: switch case falling, split by lefts vs rights
 		switch (mVariant) {
 		case RED_LEFT:
 			backupPosition = 3;
@@ -88,8 +95,15 @@ public class SidePegAutoMode extends AutoModeBase {
 		sequence.add(getDriveToAirship());
 		sequence.add(new TimeoutRoutine(pilotWaitTime));	// Wait 2.5s so pilot can pull gear out
 
-		if (mBackup) {
+		switch (mPostVariant) {
+		case NONE:
+			break;
+		case BACKUP:
 			sequence.add(getBackup(backupPosition));
+			break;
+		case NEUTRAL_ZONE:
+			sequence.add(getDriveToNeutralZone());
+			break;
 		}
 
 		mSequentialRoutine = new SequentialRoutine(sequence);
@@ -204,6 +218,54 @@ public class SidePegAutoMode extends AutoModeBase {
 		
 		return new SequentialRoutine(sequence);
 	}
+	/*
+	 * GET NEUTRAL ZONE
+	 */
+	private SequentialRoutine getDriveToNeutralZone() {
+		double driveBackupSetpoint = -(backupDistance + 12) * Constants.kDriveTicksPerInch;
+		double driveToNeutralZoneSetpoint = neutralZoneDistance * Constants.kDriveTicksPerInch;
+		
+		DriveSignal backupSignal = DriveSignal.getNeutralSignal();
+		backupSignal.leftMotor.setMotionMagic(driveBackupSetpoint, mShortGains, 
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		backupSignal.rightMotor.setMotionMagic(driveBackupSetpoint, mShortGains, 
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		
+		DriveSignal neutralZoneSignal = DriveSignal.getNeutralSignal();
+		neutralZoneSignal.leftMotor.setMotionMagic(driveToNeutralZoneSetpoint, mShortGains, 
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		neutralZoneSignal.rightMotor.setMotionMagic(driveToNeutralZoneSetpoint, mShortGains, 
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		
+		ArrayList<Routine> sequence = new ArrayList<>();
+		
+		// Back up while lowering spatula
+		ArrayList<Routine> parallel = new ArrayList<>();
+		parallel.add(new CANTalonRoutine(backupSignal, true));
+		ArrayList<Routine> spatulaSequence = new ArrayList<>();
+		spatulaSequence.add(new TimeoutRoutine(1));
+		spatulaSequence.add(new SpatulaDownAutocorrectRoutine());
+		parallel.add(new SequentialRoutine(spatulaSequence));
+		sequence.add(new ParallelRoutine(parallel));
+
+		// Turn towards neutral zone
+		// Intentional switch-case falling
+		switch (mVariant) {
+		case RED_LEFT:
+		case BLUE_LEFT:
+			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
+			break;
+		case RED_RIGHT:
+		case BLUE_RIGHT:
+			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
+			break;
+		}
+		
+		// Drive forward
+		sequence.add(new CANTalonRoutine(neutralZoneSignal, true));
+		
+		return new SequentialRoutine(sequence);
+	}
 
 	@Override
 	public String toString() {
@@ -227,10 +289,15 @@ public class SidePegAutoMode extends AutoModeBase {
 		}
 		name += "SliderInitialMove"+initialSliderPosition;
 		name += "EncoderTurn";
-		if (mBackup) {
-			name += "Backup"+backupPosition;
-		} else {
-			name += "NotBackup";
+		switch (mPostVariant) {
+		case NONE:
+			break;
+		case BACKUP:
+			name += "Backup" + backupPosition;
+			break;
+		case NEUTRAL_ZONE:
+			name += "NeutralZone";
+			break;
 		}
 		return name;
 	}

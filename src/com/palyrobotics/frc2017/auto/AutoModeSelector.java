@@ -1,9 +1,13 @@
 package com.palyrobotics.frc2017.auto;
 
 import com.palyrobotics.frc2017.auto.modes.*;
+import com.palyrobotics.frc2017.auto.modes.DriveStraightCenterPegAutoMode.CenterAutoPostVariant;
 import com.palyrobotics.frc2017.auto.modes.archive.*;
 import com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode.Alliance;
+import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoPostVariant;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
+import com.palyrobotics.frc2017.auto.modes.TrajectoryCenterPegAutoMode.TrajectoryCenterPostVariant;
+import com.palyrobotics.frc2017.auto.modes.TrajectorySidePegAutoMode.TrajectorySidePostVariant;
 
 import org.json.simple.JSONArray;
 
@@ -21,7 +25,8 @@ public class AutoModeSelector {
 		VISION_CENTER_PEG(4), VISION_SIDE_PEG(5), 
 		DRIVE_STRAIGHT_BASELINE(6), DRIVE_STRAIGHT_CENTER_PEG(7), DRIVE_STRAIGHT_SIDE_PEG(8),
 		TRAJECTORY_CENTER(9), TRAJECTORY_SIDE(10),
-		TEST(11), TEST_TRAJECTORY(12);
+		MO_PRO_SIDE(11),
+		TEST(12), TEST_TRAJECTORY(13);
 		private final int id;
 		AutoIndices(int id) {this.id = id;}
 		public int get() {return id;}
@@ -56,20 +61,21 @@ public class AutoModeSelector {
 		  										 true)); // Backup boolean
 		// red left/ blue right = loading station, red right/blue left = boiler
   /*3*/	registerAutonomous(new SidePegAutoMode(SideAutoVariant.RED_LEFT, // Alliance color and side
-											   true)); // Should backup?
+											   SideAutoPostVariant.BACKUP)); // Should backup?
   /*4*/ registerAutonomous(new VisionCenterPegAutoMode(Alliance.BLUE, false, true)); // alliance, seeking right vision target?, backup?
   /*5*/ registerAutonomous(new VisionSidePegAutoMode(SideAutoVariant.BLUE_LEFT, // Field position
 		  										false, true)); // seeking right vision target?, backup?
   /*6*/ registerAutonomous(new DriveStraightBaseLineAutoMode(Alliance.RED));
-  /*7*/ registerAutonomous(new DriveStraightCenterPegAutoMode(Alliance.BLUE, DriveStraightCenterPegAutoMode.PostScoreVariant.BACKUP));
-  /*8*/ registerAutonomous(new DriveStraightSidePegAutoMode(SideAutoVariant.RED_LEFT, DriveStraightSidePegAutoMode.PostScoreVariant.BACKUP));
+  /*7*/ registerAutonomous(new DriveStraightCenterPegAutoMode(Alliance.BLUE, CenterAutoPostVariant.BACKUP));
+  /*8*/ registerAutonomous(new DriveStraightSidePegAutoMode(SideAutoVariant.RED_LEFT, SideAutoPostVariant.BACKUP));
 		
-  /*9*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.BLUE));
-  /*10*/ registerAutonomous(new MotionProfileSidePegAutoMode(SideAutoVariant.BLUE_LEFT,
+  /*9*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.BLUE, TrajectoryCenterPostVariant.NONE));
+  /*10*/registerAutonomous(new TrajectorySidePegAutoMode(SideAutoVariant.BLUE_LEFT, TrajectorySidePostVariant.NONE));
+  /*11*/registerAutonomous(new MotionProfileSidePegAutoMode(SideAutoVariant.BLUE_LEFT,
 				false)); // use gyro or not
   
-  /*11*/ registerAutonomous(new TestAutoMode());
-  /*12*/registerAutonomous(new TestTrajectoryAutoMode("RedBoiler"));
+  /*12*/registerAutonomous(new TestAutoMode());
+  /*13*/registerAutonomous(new TestTrajectoryAutoMode("RedBoiler"));
 	}
 
 	/**

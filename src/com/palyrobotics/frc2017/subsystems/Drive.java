@@ -207,8 +207,8 @@ public class Drive extends Subsystem implements SubsystemLoop {
 	 * @param path Path to follow
 	 * @param useGyro Should correct heading using gyro or not
 	 */
-	public void setTrajectoryController(Path path, boolean useGyro) {
-		mController = new TrajectoryFollowingController(path, useGyro);
+	public void setTrajectoryController(Path path, Gains gains, boolean useGyro, boolean inverted) {
+		mController = new TrajectoryFollowingController(path, gains, useGyro, inverted);
 		newController = true;
 	}
 

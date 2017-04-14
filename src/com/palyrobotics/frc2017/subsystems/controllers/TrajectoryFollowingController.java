@@ -17,15 +17,17 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 	private LegacyTrajectoryFollower mLeftFollower = new LegacyTrajectoryFollower("left");
 	private LegacyTrajectoryFollower mRightFollower = new LegacyTrajectoryFollower("right");
 
+	private final Gains mGains;
 	private boolean mGyroCorrection;
-
 	private boolean mIllegalPath;
 
-	public TrajectoryFollowingController(Path path, boolean correctUsingGyro) {
+	public TrajectoryFollowingController(Path path, Gains gains, boolean correctUsingGyro, boolean inverted) {
+		mGains = gains;
+		
 		// set trajectory gains
-		mLeftFollower.configure(Gains.kSteikTrajectorykP, Gains.kSteikTrajectorykI, Gains.kSteikTrajectorykD,
+		mLeftFollower.configure(gains.P, gains.I, gains.D,
 				Gains.kSteikTrajectorykV, Gains.kSteikTrajectorykA);
-		mRightFollower.configure(Gains.kSteikTrajectorykP, Gains.kSteikTrajectorykI, Gains.kSteikTrajectorykD,
+		mRightFollower.configure(gains.P, gains.I, gains.D,
 				Gains.kSteikTrajectorykV, Gains.kSteikTrajectorykA);
 
 		// set goals and paths
@@ -36,9 +38,12 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 		} else {
 			mIllegalPath = false;
 		}
+		path.getRightWheelTrajectory().setInvertedY(inverted);
+		path.getLeftWheelTrajectory().setInvertedY(inverted);
 		mRightFollower.setTrajectory(path.getRightWheelTrajectory());
 		mLeftFollower.setTrajectory(path.getLeftWheelTrajectory());
-		this.mGyroCorrection = correctUsingGyro;
+		
+		mGyroCorrection = correctUsingGyro;
 	}
 
 	@Override

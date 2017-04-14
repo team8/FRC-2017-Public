@@ -21,15 +21,17 @@ import java.util.ArrayList;
  * @author Ailyn Tong
  */
 public class DriveStraightCenterPegAutoMode extends AutoModeBase {
-	// Store configuration on construction
-	private final CenterPegAutoMode.Alliance mAlliance;
-	public enum PostScoreVariant {
+	// Represents post score action
+	public enum CenterAutoPostVariant {
 		NONE,
 		BACKUP,
 		NEUTRAL_ZONE_LEFT,
 		NEUTRAL_ZONE_RIGHT
 	}
-	private final PostScoreVariant mVariant;
+	
+	// Store configuration on construction
+	private final CenterPegAutoMode.Alliance mAlliance;
+	private final CenterAutoPostVariant mVariant;
 	
 	private SequentialRoutine mSequentialRoutine;
 	
@@ -41,7 +43,7 @@ public class DriveStraightCenterPegAutoMode extends AutoModeBase {
 	private final double clearAirshipDistance = 5 * 14;	// distance in inches
 	private final double neutralZoneDistance = 12 * 14;	// distance in inches
 
-	public DriveStraightCenterPegAutoMode(CenterPegAutoMode.Alliance alliance, PostScoreVariant variant) {
+	public DriveStraightCenterPegAutoMode(CenterPegAutoMode.Alliance alliance, CenterAutoPostVariant variant) {
 		mAlliance = alliance;
 		mVariant = variant;
 	}

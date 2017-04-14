@@ -10,6 +10,9 @@ public class Gains {
 	public static final double kSteikTrajectorykD = 0.01; //0.02
 	public static final double kSteikTrajectorykV = 0.076;
 	public static final double kSteikTrajectorykA = 0.018;
+	public static final Gains steikTrajectory = new Gains(kSteikTrajectorykP, kSteikTrajectorykI, kSteikTrajectorykD,
+			0, 0, 0);
+	
 	public static final double kSteikTrajectoryTurnkP = -0.01; //-0.01
 
 
@@ -18,8 +21,10 @@ public class Gains {
 	public static final double kSteikDriveDistancekP = 0.5;
 	public static final double kSteikDriveDistancekI = 0.0025;
 	public static final double kSteikDriveDistancekD = 12.0;
-	public static final double kSteikDriveDistancekIzone = 125;
+	public static final int kSteikDriveDistancekIzone = 125;
 	public static final double kSteikDriveDistancekRampRate = 0.0;
+	public static final Gains steikDriveDistance = new Gains(kSteikDriveDistancekP, kSteikDriveDistancekI, kSteikDriveDistancekD,
+			0, kSteikDriveDistancekIzone, kSteikDriveDistancekRampRate);
 
 	// Drive Velocity offboard control loop
 	public static final double kSteikDriveVelocitykP = 6.0;

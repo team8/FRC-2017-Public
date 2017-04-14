@@ -22,12 +22,7 @@ import java.util.ArrayList;
 public class DriveStraightSidePegAutoMode extends AutoModeBase {
 	// Store configuration on construction
 	private final SidePegAutoMode.SideAutoVariant mVariant;
-	public enum PostScoreVariant {
-		NONE,
-		BACKUP,
-		NEUTRAL_ZONE
-	}
-	private final PostScoreVariant mPostVariant;
+	private final SidePegAutoMode.SideAutoPostVariant mPostVariant;
 	
 	private SequentialRoutine mSequentialRoutine;
 
@@ -35,12 +30,12 @@ public class DriveStraightSidePegAutoMode extends AutoModeBase {
 	private final double backupDistance = 10;	// distance in inches
 	private final double neutralZoneDistance = 12 * 14;	// distance in inches
 
-	private double initialSliderPosition = 0;
-	private double backupPosition = 0;
+	private double initialSliderPosition = 0;	// slider position in inches
+	private double backupPosition = 0;	// slider position in inches
 
-	public DriveStraightSidePegAutoMode(SidePegAutoMode.SideAutoVariant direction, PostScoreVariant postVariant) {
+	public DriveStraightSidePegAutoMode(SidePegAutoMode.SideAutoVariant direction, SidePegAutoMode.SideAutoPostVariant postScore) {
 		mVariant = direction;
-		mPostVariant = postVariant;
+		mPostVariant = postScore;
 	}
 
 	@Override
@@ -185,7 +180,7 @@ public class DriveStraightSidePegAutoMode extends AutoModeBase {
 	 */
 	private SequentialRoutine getDriveToNeutralZone() {
 		double driveBackupSetpoint = -(backupDistance + 12);
-		double driveToNeutralZoneSetpoint = this.neutralZoneDistance;
+		double driveToNeutralZoneSetpoint = neutralZoneDistance;
 		
 		ArrayList<Routine> sequence = new ArrayList<>();
 		

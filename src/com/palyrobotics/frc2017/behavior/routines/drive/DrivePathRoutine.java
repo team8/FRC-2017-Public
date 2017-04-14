@@ -2,6 +2,7 @@ package com.palyrobotics.frc2017.behavior.routines.drive;
 
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
+import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.util.Subsystem;
 import com.team254.lib.trajectory.Path;
@@ -12,20 +13,24 @@ import com.team254.lib.trajectory.Trajectory;
  */
 public class DrivePathRoutine extends Routine {
 	private Path mPath;
+	private Gains mGains;
 	private boolean mUseGyro;
+	private boolean mInverted;
 	/**
 	 *
 	 * @param path Path to follow
 	 * @param useGyro Whether to correct variations using gyro
 	 */
-	public DrivePathRoutine(Path path, boolean useGyro) {
+	public DrivePathRoutine(Path path, Gains gains, boolean useGyro, boolean inverted) {
 		this.mPath = path;
+		this.mGains = gains;
 		this.mUseGyro = useGyro;
+		this.mInverted = inverted;
 	}
 
 	@Override
 	public void start() {
-		drive.setTrajectoryController(mPath, mUseGyro);
+		drive.setTrajectoryController(mPath, mGains, mUseGyro, mInverted);
 	}
 
 	@Override

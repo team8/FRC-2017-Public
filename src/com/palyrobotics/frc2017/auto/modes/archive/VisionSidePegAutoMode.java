@@ -2,6 +2,7 @@ package com.palyrobotics.frc2017.auto.modes.archive;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode;
+import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoPostVariant;
 import com.palyrobotics.frc2017.behavior.ParallelRoutine;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
@@ -75,7 +76,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 		if (!AndroidConnectionHelper.getInstance().isServerStarted() || !AndroidConnectionHelper.getInstance().isNexusConnected()) {
 			System.out.println("Vision server not started!");
 			Logger.getInstance().logRobotThread("Vision server not detected, fallback to default side peg");
-			SidePegAutoMode backup = new SidePegAutoMode(mVariant, true);
+			SidePegAutoMode backup = new SidePegAutoMode(mVariant, SideAutoPostVariant.BACKUP);
 			backup.prestart();
 			mSequentialRoutine = backup.getRoutine();
 			return;

@@ -1,7 +1,10 @@
 package com.palyrobotics.frc2017.auto.modes;
 
+import java.util.ArrayList;
+
 import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.auto.AutoPathLoader;
+import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
 import com.palyrobotics.frc2017.behavior.ParallelRoutine;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
@@ -15,24 +18,19 @@ import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.team254.lib.trajectory.Path;
 
-import static com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode.Alliance;
-
-import java.util.ArrayList;
-
 /**
- * Created by Nihar on 4/13/17.
+ * Side peg autonomous using motion profiles
+ * @author Ailyn Tong
  */
-public class TrajectoryCenterPegAutoMode extends AutoModeBase {
-	public enum TrajectoryCenterPostVariant {
+public class TrajectorySidePegAutoMode extends AutoModeBase {
+	public enum TrajectorySidePostVariant {
 		NONE,
 		BACKUP,
-		NEUTRAL_ZONE_LEFT,
-		NEUTRAL_ZONE_RIGHT,
-		BOTH_LEFT,
-		BOTH_RIGHT
+		NEUTRAL_ZONE,
+		BOTH
 	}
-	private final Alliance mVariant;
-	private final TrajectoryCenterPostVariant mPostVariant;
+	private final SideAutoVariant mVariant;
+	private final TrajectorySidePostVariant mPostVariant;
 	private Path mPath, mPostPath;
 	
 	private final boolean mUseGyro = true;
@@ -46,9 +44,9 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 	
 	private SequentialRoutine mSequentialRoutine;
 	
-	public TrajectoryCenterPegAutoMode(Alliance variant, TrajectoryCenterPostVariant postScore) {
+	public TrajectorySidePegAutoMode(SideAutoVariant direction, TrajectorySidePostVariant postScore) {
 		AutoPathLoader.loadPaths();
-		mVariant = variant;
+		mVariant = direction;
 		mPostVariant = postScore;
 		mTrajectoryGains = Gains.steikTrajectory;
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
@@ -60,11 +58,21 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 		
 		sequence.add(new DriveSensorResetRoutine());
 		switch (mVariant) {
-		case BLUE:
-			mPath = AutoPathLoader.get("BlueCenter");
+		case BLUE_LEFT:
+			mPath = AutoPathLoader.get("BlueBoiler");
+			mPostInverted = true;
 			break;
-		case RED:
-			mPath = AutoPathLoader.get("RedCenter");
+		case BLUE_RIGHT:
+			mPath = AutoPathLoader.get("BlueLoading");
+			mPostInverted = false;
+			break;
+		case RED_LEFT:
+			mPath = AutoPathLoader.get("RedLoading");
+			mPostInverted = true;
+			break;
+		case RED_RIGHT:
+			mPath = AutoPathLoader.get("RedBoiler");
+			mPostInverted = false;
 			break;
 		}
 		sequence.add(new DrivePathRoutine(mPath, mTrajectoryGains, mUseGyro, false));
@@ -78,35 +86,18 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 			mPostPath = null;
 			sequence.add(getBackup(backupPosition));
 			break;
-		case NEUTRAL_ZONE_LEFT:
-			mPostPath = AutoPathLoader.get("CenterGoToNeutral");
-			mPostInverted = true;
-			break;
-		case NEUTRAL_ZONE_RIGHT:
-			mPostPath = AutoPathLoader.get("CenterGoToNeutral");
-			mPostInverted = false;
-			break;
-		case BOTH_LEFT:
-			mPostPath = AutoPathLoader.get("CenterGoToNeutral");
-			mPostInverted = true;
-			sequence.add(getBackup(backupPosition));
-			break;
-		case BOTH_RIGHT:
-			mPostPath = AutoPathLoader.get("CenterGoToNeutral");
-			mPostInverted = false;
-			sequence.add(getBackup(backupPosition));
-			break;
-		}
-		if (mPostPath != null) {
+		case NEUTRAL_ZONE:
+			mPostPath = AutoPathLoader.get("SideGoToNeutral");
 			sequence.add(new DrivePathRoutine(mPostPath, mTrajectoryGains, mUseGyro, mPostInverted));
+			break;
+		case BOTH:
+			mPostPath = AutoPathLoader.get("SideGoToNeutral");
+			sequence.add(getBackup(backupPosition));
+			sequence.add(new DrivePathRoutine(mPostPath, mTrajectoryGains, mUseGyro, mPostInverted));
+			break;
 		}
 		
 		mSequentialRoutine = new SequentialRoutine(sequence);
-	}
-
-	@Override
-	public Routine getRoutine() {
-		return mSequentialRoutine;
 	}
 	/*
 	 * GET BACKUP
@@ -143,7 +134,13 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 	}
 
 	@Override
+	public Routine getRoutine() {
+		return mSequentialRoutine;
+	}
+
+	@Override
 	public String toString() {
-		return "TrajectoryCenterPegAutoMode";
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

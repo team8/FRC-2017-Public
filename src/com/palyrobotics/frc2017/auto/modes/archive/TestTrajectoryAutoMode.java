@@ -6,6 +6,7 @@ import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.DrivePathRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.DriveSensorResetRoutine;
+import com.palyrobotics.frc2017.config.Gains;
 import com.team254.lib.trajectory.Path;
 
 import java.util.ArrayList;
@@ -35,9 +36,9 @@ public class TestTrajectoryAutoMode extends AutoModeBase {
 	public Routine getRoutine() {
 		ArrayList<Routine> sequence = new ArrayList<>();
 		sequence.add(new DriveSensorResetRoutine());
-		sequence.add(new DrivePathRoutine(mPath, true));
+		sequence.add(new DrivePathRoutine(mPath, Gains.steikTrajectory, true, false));
 		sequence.add(new DriveSensorResetRoutine());
-		sequence.add(new DrivePathRoutine(AutoPathLoader.get("GoToNeutral"), true));
+		sequence.add(new DrivePathRoutine(AutoPathLoader.get("GoToNeutral"), Gains.steikTrajectory, true, false));
 		return new SequentialRoutine(sequence);
 	}
 }
