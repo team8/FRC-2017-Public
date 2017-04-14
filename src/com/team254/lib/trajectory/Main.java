@@ -26,8 +26,8 @@ public class Main {
 	private static final double kShortVel = Gains.kSteikShortDriveMotionMagicCruiseVelocity/(Constants.kDriveSpeedUnitConversion*12);
 	private static final double kShortAccel = Gains.kSteikShortDriveMotionMagicMaxAcceleration/(Constants.kDriveSpeedUnitConversion*12);
 	// 180, 120 in/s
-	private static final double kLongVel = 100.0/12;
-	private static final double kLongAccel = 100.0/12;
+	private static final double kLongVel = 80.0/12;
+	private static final double kLongAccel = 80.0/12;
 	public static double kTurnAngle = Math.PI/3;
 
 	// Forward distance needs to go 110-30 minimum
@@ -98,7 +98,7 @@ public class Main {
 			config.max_jerk = 50.0;
 			config.max_vel = kLongVel;
 			// Path name must be a valid Java class name.
-			final String path_name = "GoToNeutral";
+			final String path_name = "CenterGoToNeutral";
 			// turn right
 	
 			// Description of this auto mode path.
@@ -306,6 +306,36 @@ public class Main {
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
 			p.addWaypoint(new WaypointSequence.Waypoint(-0.8, 0, 0));
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
+			Path path = PathGenerator.makePath(p, config,
+					kWheelbaseWidth, path_name);
+
+			// Outputs to the directory supplied as the first argument.
+			TextFileSerializer js = new TextFileSerializer();
+			String serialized = js.serialize(path);
+			//System.out.print(serialized);
+			String fullpath = joinPath(directory, path_name + ".txt");
+			if (!writeFile(fullpath, serialized)) {
+				System.err.println(fullpath + " could not be written!!!!1");
+				System.exit(1);
+			} else {
+				System.out.println("Wrote " + fullpath);
+			}
+		}
+
+		{
+			config.dt = kDt;
+			config.max_acc = kLongAccel;
+			config.max_jerk = 50.0;
+			config.max_vel = kLongVel;
+			// Path name must be a valid Java class name.
+			final String path_name = "RightSideDriveToNeutral";
+
+			// Description of this auto mode path.
+			WaypointSequence p = new WaypointSequence(10);
+			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
+//			p.addWaypoint(new WaypointSequence.Waypoint(-50*Math.sin(Math.PI/6), 50*Math.cos(Math.PI/6), 0));
+			p.addWaypoint(new WaypointSequence.Waypoint(20/12, 20/12, 5*Math.PI/12));
+			p.addWaypoint(new WaypointSequence.Waypoint(100/12, 40/12, Math.PI/3));
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);
 

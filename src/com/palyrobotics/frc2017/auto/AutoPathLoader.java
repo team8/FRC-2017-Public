@@ -24,7 +24,7 @@ public class AutoPathLoader {
 			"RedCenter",
 			"RedLoading",
 			"CenterGoToNeutral",	// right side
-			"SideGoToNeutral"	// right side
+			"RightSideDriveToNeutral"	// right side
 	};
 	public final static String[] kPathDescriptions = { "Backup", "Baseline",
 			"Blue boiler",
@@ -34,7 +34,7 @@ public class AutoPathLoader {
 			"Red center",
 			"Red loading",
 			"Go to neutral zone from center peg",
-			"Go to neutral zone from side peg"
+			"Go to neutral zone from right side peg"
 	};
 	static Hashtable paths_ = null;
 

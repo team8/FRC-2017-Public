@@ -1,5 +1,6 @@
 package com.palyrobotics.frc2017.util.archive.team254.trajectory;
 
+import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.team254.lib.trajectory.Trajectory;
 
 /**
@@ -54,6 +55,8 @@ public class LegacyTrajectoryFollower {
             current_heading = segment.heading;
             current_segment++;
             System.out.println(this.name+" error: " + error);
+
+            DashboardManager.getInstance().updateCANTable(error+","+output+","+distance_so_far);
             return output;
         } else {
             return 0;

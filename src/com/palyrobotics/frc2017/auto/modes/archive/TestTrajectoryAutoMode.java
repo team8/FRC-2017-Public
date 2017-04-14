@@ -19,7 +19,7 @@ public class TestTrajectoryAutoMode extends AutoModeBase {
 	private String mDesired;
 
 	public TestTrajectoryAutoMode() {
-		mDesired = "RedLoading";
+		mDesired = "RightSideDriveToNeutral";
 		AutoPathLoader.loadPaths();
 		mPath = AutoPathLoader.get(mDesired);
 	}
