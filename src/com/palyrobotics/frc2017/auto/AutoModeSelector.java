@@ -73,9 +73,8 @@ public class AutoModeSelector {
   /*10*/registerAutonomous(new TrajectorySidePegAutoMode(SideAutoVariant.BLUE_LEFT, TrajectorySidePostVariant.NONE));
   /*11*/registerAutonomous(new MotionProfileSidePegAutoMode(SideAutoVariant.BLUE_LEFT,
 				false)); // use gyro or not
-  
   /*12*/registerAutonomous(new TestAutoMode());
-  /*13*/registerAutonomous(new TestTrajectoryAutoMode("RedBoiler"));
+  /*13*/registerAutonomous(new TestTrajectoryAutoMode());
 	}
 
 	/**

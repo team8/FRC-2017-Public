@@ -71,11 +71,10 @@ public class Main {
 			// Description of this auto mode path.
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint(kRedLoadingStationForward, 0, 0));
+			p.addWaypoint(new WaypointSequence.Waypoint(50.0/12, 0, 0));
 			p.addWaypoint(new WaypointSequence.Waypoint(
-					(kRedLoadingStationForward +
-							Math.cos(kTurnAngle)* kRedLoadingStationAirship),
-					(Math.sin(kTurnAngle)* kRedLoadingStationAirship), kTurnAngle));
+					kRedLoadingPegX/12.0,
+					kRedLoadingPegY/12.0, kTurnAngle));
 
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);

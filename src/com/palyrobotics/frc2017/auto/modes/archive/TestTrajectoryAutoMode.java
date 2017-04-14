@@ -18,10 +18,10 @@ public class TestTrajectoryAutoMode extends AutoModeBase {
 	private Path mPath;
 	private String mDesired;
 
-	public TestTrajectoryAutoMode(String pathName) {
+	public TestTrajectoryAutoMode() {
+		mDesired = "RedLoading";
 		AutoPathLoader.loadPaths();
-		mDesired = pathName;
-		mPath = AutoPathLoader.get(pathName);
+		mPath = AutoPathLoader.get(mDesired);
 	}
 	@Override
 	public String toString() {
@@ -38,7 +38,7 @@ public class TestTrajectoryAutoMode extends AutoModeBase {
 		sequence.add(new DriveSensorResetRoutine());
 		sequence.add(new DrivePathRoutine(mPath, Gains.steikTrajectory, true, false));
 		sequence.add(new DriveSensorResetRoutine());
-		sequence.add(new DrivePathRoutine(AutoPathLoader.get("GoToNeutral"), Gains.steikTrajectory, true, false));
+//		sequence.add(new DrivePathRoutine(AutoPathLoader.get("GoToNeutral"), Gains.steikTrajectory, true, false));
 		return new SequentialRoutine(sequence);
 	}
 }

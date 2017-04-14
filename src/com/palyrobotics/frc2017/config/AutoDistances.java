@@ -43,8 +43,8 @@ public class AutoDistances {
 	public static double kBlueLoadingStationForward = 50.0/12; // 79.5
 	public static double kBlueLoadingStationAirship = 73.0/12; // 66, 70, 73
 	// Red left loading station
-	public static double kRedLoadingStationForward = 50.0/12; // 79
-	public static double kRedLoadingStationAirship = 73.0/12; // 66, 70, 73
+	public static double kRedLoadingPegX = 115.0; // 79
+	public static double kRedLoadingPegY = 63.22; // 66, 70, 73
 	// Blue left boiler
 	public static double kBlueBoilerForward = 50.0/12; // 79.5, 82.5
 	public static double kBlueBoilerAirship = 73.0/12; // 73,
