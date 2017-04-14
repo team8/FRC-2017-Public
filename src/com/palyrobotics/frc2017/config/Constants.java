@@ -80,6 +80,8 @@ public class Constants extends ConstantsBase {
 	public static double kAcceptableDriveVelocityError = 5;
 	public static double kAcceptableTurnAngleError = 0.5;
 	public static double kAcceptableSliderPositionError;
+	public static double kAcceptableGyroZeroError = 3;
+	public static double kAcceptableEncoderZeroError = 10;
 
 	public static double kSliderMaxVoltage = 6.0; // open loop limit
 	public static double kSliderPeakOutputVoltage = 4.0; // closed loop limit

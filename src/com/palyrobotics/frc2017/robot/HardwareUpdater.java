@@ -111,7 +111,7 @@ class HardwareUpdater {
 		configureTalons(true);
 		AHRS gyro = HardwareAdapter.getInstance().getDrivetrain().gyro;
 		if (gyro != null) {
-			gyro.reset();
+			gyro.zeroYaw();
 		}
 	}
 	

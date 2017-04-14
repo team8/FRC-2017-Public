@@ -39,6 +39,14 @@ public class HardwareAdapter {
 //		public final ADXRS453_Gyro gyro;
 		public final AHRS gyro;
 
+		public static void resetSensors() {
+			instance.gyro.zeroYaw();
+			instance.leftMasterTalon.setEncPosition(0);
+			instance.leftMasterTalon.setPosition(0);
+			instance.rightMasterTalon.setEncPosition(0);
+			instance.rightMasterTalon.setPosition(0);
+		}
+
 		private DrivetrainHardware() {
 			if(Constants.kRobotName == Constants.RobotName.DERICA) {
 				leftMasterTalon = new CANTalon(Constants2016.kDericaLeftDriveMasterDeviceID);
