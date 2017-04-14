@@ -19,6 +19,7 @@ if "Red" in path_to_output:
 else:
 	color='b'
 
+plt.axis('equal')
 plt.xlabel("X Position")
 plt.ylabel("Y Position")
 

@@ -19,6 +19,8 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 
 	private boolean mGyroCorrection;
 
+	private boolean mIllegalPath;
+
 	public TrajectoryFollowingController(Path path, boolean correctUsingGyro) {
 		// set trajectory gains
 		mLeftFollower.configure(Gains.kSteikTrajectorykP, Gains.kSteikTrajectorykI, Gains.kSteikTrajectorykD,
@@ -27,6 +29,13 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 				Gains.kSteikTrajectorykV, Gains.kSteikTrajectorykA);
 
 		// set goals and paths
+		if (path == null) {
+			mIllegalPath = true;
+			System.out.println("No path!");
+			return;
+		} else {
+			mIllegalPath = false;
+		}
 		mRightFollower.setTrajectory(path.getRightWheelTrajectory());
 		mLeftFollower.setTrajectory(path.getLeftWheelTrajectory());
 		this.mGyroCorrection = correctUsingGyro;
@@ -34,11 +43,13 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 
 	@Override
 	public DriveSignal update(RobotState state) {
+		if (mIllegalPath) {
+			return DriveSignal.getNeutralSignal();
+		}
 		if (onTarget()) {
 			return DriveSignal.getNeutralSignal();
 		}
 		DriveSignal driveSignal = DriveSignal.getNeutralSignal();
-
 		double leftPower = mLeftFollower.calculate(state.drivePose.leftEnc/Constants.kDriveTicksPerInch/12);
 		double rightPower = mRightFollower.calculate(state.drivePose.rightEnc/Constants.kDriveTicksPerInch/12);
 
@@ -48,9 +59,8 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 		} else {
 			double gyroError = ChezyMath.getDifferenceInAngleRadians(Math.toRadians(state.drivePose.heading), mLeftFollower.getHeading());
 			gyroError = Math.toDegrees(gyroError);
-			System.out.println("Gyro: "+gyroError);
-			driveSignal.leftMotor.setPercentVBus(leftPower+Gains.kSteikTrajectoryTurnkP *gyroError);
-			driveSignal.rightMotor.setPercentVBus(rightPower-Gains.kSteikTrajectoryTurnkP *gyroError);
+			driveSignal.leftMotor.setPercentVBus(leftPower+Gains.kSteikTrajectoryTurnkP*gyroError);
+			driveSignal.rightMotor.setPercentVBus(rightPower-Gains.kSteikTrajectoryTurnkP*gyroError);
 		}
 		return driveSignal;
 	}
@@ -63,6 +73,6 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 
 	@Override
 	public boolean onTarget() {
-		return mLeftFollower.isFinishedTrajectory() && mRightFollower.isFinishedTrajectory();
+		return !mIllegalPath | mLeftFollower.isFinishedTrajectory() && mRightFollower.isFinishedTrajectory();
 	}
 }

@@ -69,7 +69,7 @@ public class AutoModeSelector {
 				false)); // use gyro or not
   
   /*11*/ registerAutonomous(new TestAutoMode());
-  /*12*/registerAutonomous(new TestTrajectoryAutoMode("BlueCenter"));
+  /*12*/registerAutonomous(new TestTrajectoryAutoMode("RedBoiler"));
 	}
 
 	/**

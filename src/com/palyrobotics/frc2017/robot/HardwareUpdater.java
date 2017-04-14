@@ -111,7 +111,6 @@ class HardwareUpdater {
 		configureTalons(true);
 		AHRS gyro = HardwareAdapter.getInstance().getDrivetrain().gyro;
 		if (gyro != null) {
-			gyro.zeroYaw();
 			int i = 0;
 			while (!gyro.isConnected()) {
 				i++;
@@ -121,6 +120,7 @@ class HardwareUpdater {
 				}
 			}
 		}
+		gyro.zeroYaw();
 	}
 	
 	void disableTalons() {
