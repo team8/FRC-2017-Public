@@ -8,9 +8,7 @@ import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.util.Pose;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.palyrobotics.frc2017.util.archive.team254.trajectory.LegacyTrajectoryFollower;
-import com.palyrobotics.frc2017.util.archive.team254.trajectory.TrajectoryFollower;
 import com.team254.lib.trajectory.Path;
-import com.team254.lib.trajectory.Trajectory;
 
 /**
  * Created by Nihar on 4/5/17.
@@ -50,10 +48,10 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 		} else {
 			double gyroError = ChezyMath.getDifferenceInAngleRadians(Math.toRadians(state.drivePose.heading), mLeftFollower.getHeading());
 			gyroError = Math.toDegrees(gyroError);
-			driveSignal.leftMotor.setPercentVBus(leftPower+Gains.kSteikTrajectoryTurnkP*gyroError);
-			driveSignal.rightMotor.setPercentVBus(rightPower-Gains.kSteikTrajectoryTurnkP*gyroError);
+			System.out.println("Gyro: "+gyroError);
+			driveSignal.leftMotor.setPercentVBus(leftPower+Gains.kSteikTrajectoryTurnkP *gyroError);
+			driveSignal.rightMotor.setPercentVBus(rightPower-Gains.kSteikTrajectoryTurnkP *gyroError);
 		}
-		System.out.println(driveSignal.toString());
 		return driveSignal;
 	}
 

@@ -38,7 +38,7 @@ class HardwareUpdater {
 		}
 
 		@Override
-		public void onStart() {			
+		public void onStart() {
 		}
 
 		@Override
@@ -112,6 +112,14 @@ class HardwareUpdater {
 		AHRS gyro = HardwareAdapter.getInstance().getDrivetrain().gyro;
 		if (gyro != null) {
 			gyro.zeroYaw();
+			int i = 0;
+			while (!gyro.isConnected()) {
+				i++;
+				if (i > 1000) {
+					System.out.println("waited for gyro to connect, didn't find");
+					break;
+				}
+			}
 		}
 	}
 	

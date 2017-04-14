@@ -5,7 +5,7 @@ assert len(sys.argv) > 1
 
 path_to_output = sys.argv[1]
 
-FILE_SEPERATOR = "," # The default is space separated values.  This can be changed to comma seperated
+FILE_SEPERATOR = " " # The default is space separated values.  This can be changed to comma seperated
 
 f = open(path_to_output, "r").readlines()
 

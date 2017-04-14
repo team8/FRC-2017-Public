@@ -37,7 +37,7 @@ public class HardwareAdapter {
 //		public final Encoder leftEncoder;
 //		public final Encoder rightEncoder;
 //		public final ADXRS453_Gyro gyro;
-		public final AHRS gyro;
+		public AHRS gyro;
 
 		public static void resetSensors() {
 			instance.gyro.zeroYaw();
@@ -63,7 +63,7 @@ public class HardwareAdapter {
 				rightMasterTalon = new CANTalon(Constants.kSteikRightDriveMasterDeviceID);
 				rightSlave1Talon = new CANTalon(Constants.kSteikRightDriveSlaveDeviceID);
 				rightSlave2Talon = new CANTalon(Constants.kSteikRightDriveOtherSlaveDeviceID);
-				gyro = new AHRS(SerialPort.Port.kMXP);
+				gyro = new AHRS(SPI.Port.kMXP);
 			}
 		}
 	}

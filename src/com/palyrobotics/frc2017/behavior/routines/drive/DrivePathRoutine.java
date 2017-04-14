@@ -25,7 +25,7 @@ public class DrivePathRoutine extends Routine {
 
 	@Override
 	public void start() {
-		drive.setTrajectoryController(mPath, false);
+		drive.setTrajectoryController(mPath, mUseGyro);
 	}
 
 	@Override
@@ -53,6 +53,6 @@ public class DrivePathRoutine extends Routine {
 
 	@Override
 	public String getName() {
-		return "DrivePathRoutine";
+		return "DrivePathRoutine"+((mUseGyro)?"gyro":"noGyro");
 	}
 }
