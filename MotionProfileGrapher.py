@@ -23,8 +23,8 @@ plt.axis('equal')
 plt.xlabel("X Position")
 plt.ylabel("Y Position")
 
-data_y = [i[6] for i in data]
-data_x = [i[7] for i in data]
+data_y = [float(i[6]) for i in data]
+data_x = [-float(i[7]) for i in data]
 
 plt.axhline(0, color=color)
 plt.axvline(0, color=color)
