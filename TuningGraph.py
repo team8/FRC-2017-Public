@@ -18,8 +18,8 @@ plt.xlabel("X Position")
 plt.ylabel("Y Position")
 
 # 0 is error, 1 is output, 2 is velocity
-data_y = [i[0] for i in data]
-data_x = [i for i in range(data_y)]
+data_y = [i[1] for i in data]
+data_x = [i for i in range(len(data_y))]
 # plt.axis('equal')
-plt.scatter(data_x, data_y, color=color)
+plt.scatter(data_x, data_y, color="b")
 plt.show()
