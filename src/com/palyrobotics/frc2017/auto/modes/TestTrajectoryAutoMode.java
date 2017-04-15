@@ -1,4 +1,4 @@
-package com.palyrobotics.frc2017.auto.modes.archive;
+package com.palyrobotics.frc2017.auto.modes;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.auto.AutoPathLoader;
@@ -19,7 +19,7 @@ public class TestTrajectoryAutoMode extends AutoModeBase {
 	private String mDesired;
 
 	public TestTrajectoryAutoMode() {
-		mDesired = "RedLoading";
+		mDesired = "RedBoiler";
 		AutoPathLoader.loadPaths();
 		mPath = AutoPathLoader.get(mDesired);
 	}

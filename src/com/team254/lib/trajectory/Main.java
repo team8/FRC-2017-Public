@@ -17,17 +17,17 @@ import static com.palyrobotics.frc2017.config.AutoDistances.*;
  */
 public class Main {
 	// default values
+	private static final double kMaxVel = 180.0/12;
 	private static final double kMaxAcc = 120.0/12;
-	private static final double kMaxJerk = 90.0;
-	private static final double kMaxVel = 200.0/12;
+	private static final double kMaxJerk = 50.0;
 	private static final double kDt = 0.005;
 
 	// Values pulled from gains
 	private static final double kShortVel = Gains.kSteikShortDriveMotionMagicCruiseVelocity/(Constants.kDriveSpeedUnitConversion*12);
 	private static final double kShortAccel = Gains.kSteikShortDriveMotionMagicMaxAcceleration/(Constants.kDriveSpeedUnitConversion*12);
 	// 180, 120 in/s
-	private static final double kLongVel = 80.0/12;
-	private static final double kLongAccel = 80.0/12;
+	private static final double kLongVel = 60.0/12;
+	private static final double kLongAccel = 60.0/12;
 	public static double kTurnAngle = Math.PI/3;
 
 	// Forward distance needs to go 110-30 minimum

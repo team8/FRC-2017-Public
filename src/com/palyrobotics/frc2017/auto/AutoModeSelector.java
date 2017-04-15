@@ -25,8 +25,7 @@ public class AutoModeSelector {
 		VISION_CENTER_PEG(4), VISION_SIDE_PEG(5), 
 		DRIVE_STRAIGHT_BASELINE(6), DRIVE_STRAIGHT_CENTER_PEG(7), DRIVE_STRAIGHT_SIDE_PEG(8),
 		TRAJECTORY_CENTER(9), TRAJECTORY_SIDE(10),
-		MO_PRO_SIDE(11),
-		TEST(12), TEST_TRAJECTORY(13);
+		TEST(11), TEST_TRAJECTORY(12);
 		private final int id;
 		AutoIndices(int id) {this.id = id;}
 		public int get() {return id;}
@@ -35,7 +34,7 @@ public class AutoModeSelector {
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
-	int selectedIndex = AutoIndices.TRAJECTORY_SIDE.get();
+	int selectedIndex = AutoIndices.TEST_TRAJECTORY.get();
 
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
@@ -71,10 +70,8 @@ public class AutoModeSelector {
 		
   /*9*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.BLUE, TrajectoryCenterPostVariant.NONE));
   /*10*/registerAutonomous(new TrajectorySidePegAutoMode(SideAutoVariant.RED_RIGHT, TrajectorySidePostVariant.BACKUP));
-  /*11*/registerAutonomous(new MotionProfileSidePegAutoMode(SideAutoVariant.BLUE_LEFT,
-				false)); // use gyro or not
-  /*12*/registerAutonomous(new TestAutoMode());
-  /*13*/registerAutonomous(new TestTrajectoryAutoMode());
+  /*11*/registerAutonomous(new TestAutoMode());
+  /*12*/registerAutonomous(new TestTrajectoryAutoMode());
 	}
 
 	/**

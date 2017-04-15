@@ -50,8 +50,6 @@ public class LegacyTrajectoryFollower {
             double output = kp_ * error + kd_ * ((error - last_error_)
                     / segment.dt - segment.vel) + (kv_ * segment.vel
                     + ka_ * segment.acc);
-            System.out.println("Diff: "+(segment.vel-(error - last_error_)
-                    / segment.dt));
             last_error_ = error;
             current_heading = segment.heading;
             current_segment++;
