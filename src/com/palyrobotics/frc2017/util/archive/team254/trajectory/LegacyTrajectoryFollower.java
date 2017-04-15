@@ -54,9 +54,9 @@ public class LegacyTrajectoryFollower {
             last_error_ = error;
             current_heading = segment.heading;
             current_segment++;
-            System.out.println(this.name+" error: " + error);
-
-            DashboardManager.getInstance().updateCANTable(error+","+output+","+distance_so_far);
+            if (this.name=="left") {
+                DashboardManager.getInstance().updateCANTable(error + "," + output + "," + distance_so_far);
+            }
             return output;
         } else {
             return 0;

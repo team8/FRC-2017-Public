@@ -52,8 +52,8 @@ while True:
         exit(0)
 
     if recording:
-        print table.getString("status","")
+        #print table.getString("status","")
         f.write(table.getString("status",""))
 
-    time.sleep(.001)
+    time.sleep(0.005)
     # print "Wait"
