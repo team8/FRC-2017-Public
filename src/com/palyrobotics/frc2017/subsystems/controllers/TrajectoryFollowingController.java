@@ -38,8 +38,10 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 		} else {
 			mIllegalPath = false;
 		}
-		path.getRightWheelTrajectory().setInvertedY(inverted);
-		path.getLeftWheelTrajectory().setInvertedY(inverted);
+		if (inverted) {
+			path.getRightWheelTrajectory().setInvertedY(inverted);
+			path.getLeftWheelTrajectory().setInvertedY(inverted);
+		}
 		mRightFollower.setTrajectory(path.getRightWheelTrajectory());
 		mLeftFollower.setTrajectory(path.getLeftWheelTrajectory());
 		
@@ -67,7 +69,6 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 			gyroError = Math.toDegrees(gyroError);
 			double gyroCorrection = Gains.kSteikTrajectoryTurnkP*gyroError;
 			if (gyroError > 2) {
-				System.out.println(gyroCorrection);
 				gyroCorrection = Math.signum(gyroCorrection)*0.1;
 			}
 			driveSignal.leftMotor.setPercentVBus(leftPower+gyroCorrection);

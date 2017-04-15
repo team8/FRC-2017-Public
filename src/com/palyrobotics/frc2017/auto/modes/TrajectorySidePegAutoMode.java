@@ -12,6 +12,7 @@ import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.DrivePathRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.DriveSensorResetRoutine;
+import com.palyrobotics.frc2017.behavior.routines.drive.GyroMotionMagicTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
@@ -31,7 +32,7 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 	}
 	private final SideAutoVariant mVariant;
 	private final TrajectorySidePostVariant mPostVariant;
-	private Path mPath, mPostPath;
+	private Path mPath, mPath2, mPostPath;
 	
 	private final boolean mUseGyro = true;
 	private boolean mPostInverted;
@@ -40,7 +41,7 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 	private final double backupDistance = 10;	// distance in inches
 	private final double pilotWaitTime = 2;	// time in seconds
 	
-	private double backupPosition = 0;
+	private double backupPosition = 2;
 	
 	private SequentialRoutine mSequentialRoutine;
 	
@@ -72,10 +73,18 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 			break;
 		case RED_RIGHT:
 			mPath = AutoPathLoader.get("RedBoiler");
+			mPath2 = AutoPathLoader.get("RedBoilerAirship");
 			mPostInverted = false;
 			break;
 		}
-		sequence.add(new DrivePathRoutine(mPath, mTrajectoryGains, mUseGyro, false));
+		ArrayList<Routine> parallelSlider = new ArrayList<>();
+		parallelSlider.add(new DrivePathRoutine(mPath, mTrajectoryGains, mUseGyro, false));
+		parallelSlider.add(new CustomPositioningSliderRoutine(0));
+
+		sequence.add(new ParallelRoutine(parallelSlider));
+		sequence.add(new GyroMotionMagicTurnAngleRoutine(60));
+		sequence.add(new DriveSensorResetRoutine());
+		sequence.add(new DrivePathRoutine(mPath2, mTrajectoryGains, mUseGyro, false));
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		sequence.add(new DriveSensorResetRoutine());
 		switch (mPostVariant) {
@@ -141,6 +150,6 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return null;
+		return "TrajectorySidePegAuto"+mVariant+mPostVariant;
 	}
 }

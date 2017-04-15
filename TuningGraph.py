@@ -1,9 +1,10 @@
 import sys
 import matplotlib.pyplot as plt
 
-assert len(sys.argv) > 1
+assert len(sys.argv) > 2
 
 path_to_output = sys.argv[1]
+index = int(sys.argv[2])
 
 FILE_SEPARATOR = "," # The default is space separated values.  This can be changed to comma seperated
 
@@ -18,7 +19,7 @@ plt.xlabel("X Position")
 plt.ylabel("Y Position")
 
 # 0 is error, 1 is output, 2 is velocity
-data_y = [i[1] for i in data]
+data_y = [i[index] for i in data]
 data_x = [i for i in range(len(data_y))]
 # plt.axis('equal')
 plt.scatter(data_x, data_y, color="b")

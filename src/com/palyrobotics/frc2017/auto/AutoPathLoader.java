@@ -25,7 +25,8 @@ public class AutoPathLoader {
 			"RedLoading",
 			"CenterGoToNeutral",	// right side
 			"RightSideDriveToNeutral",	// right side
-			"LeftSideDriveToNeutral"
+			"LeftSideDriveToNeutral",
+			"RedBoilerAirship"
 	};
 	public final static String[] kPathDescriptions = { "Backup", "Baseline",
 			"Blue boiler",

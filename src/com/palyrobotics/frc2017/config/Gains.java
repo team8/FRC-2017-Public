@@ -64,10 +64,10 @@ public class Gains {
 	public static final double kSteikTurnMotionMagicCruiseVelocity = 110 * Constants.kDriveSpeedUnitConversion;
 	public static final double kSteikTurnMotionMagicMaxAcceleration = 80 * Constants.kDriveSpeedUnitConversion;
 	public static final double kSteikTurnMotionMagickP = 2.0;
-	public static final double kSteikTurnMotionMagickI = 0.01; //0.02 is too high
-	public static final double kSteikTurnMotionMagickD = 400;
+	public static final double kSteikTurnMotionMagickI = 0.006; //0.02 is too high
+	public static final double kSteikTurnMotionMagickD = 350;
 	public static final double kSteikTurnMotionMagickF = 2.0;
-	public static final int kSteikTurnMotionMagickIzone = 30;
+	public static final int kSteikTurnMotionMagickIzone = 100;
 	public static final double kSteikTurnMotionMagickRampRate = 0.0;
 	public static final Gains steikTurnMotionMagicGains = new Gains(kSteikTurnMotionMagickP, kSteikTurnMotionMagickI, kSteikTurnMotionMagickD,
 			kSteikTurnMotionMagickF, kSteikTurnMotionMagickIzone, kSteikTurnMotionMagickRampRate);

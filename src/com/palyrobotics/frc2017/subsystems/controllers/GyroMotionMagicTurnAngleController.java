@@ -107,7 +107,8 @@ public class GyroMotionMagicTurnAngleController implements DriveController {
 			System.out.println("Cached pose is null");
 			return false;
 		}
-		
+		System.out.println("On target "+(Math.abs(Robot.getRobotState().drivePose.heading - mTargetHeading) < 3.4));
+		System.out.println(Robot.getRobotState().drivePose.heading);
 		return Math.abs(Robot.getRobotState().drivePose.heading - mTargetHeading) < kTolerance
 				&& Math.abs(Robot.getRobotState().drivePose.headingVelocity)<0.05;
 	}
