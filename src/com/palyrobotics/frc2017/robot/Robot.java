@@ -105,6 +105,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("Start autonomousInit()");
 		mLogger.start();
 		mLogger.logRobotThread("Start autonomousInit()");
+		DashboardManager.getInstance().enableCANTable(true);
 		robotState.gamePeriod = RobotState.GamePeriod.AUTO;
 		mHardwareUpdater.configureTalons(false);
 		mHardwareEnabledLooper.start();
@@ -113,10 +114,9 @@ public class Robot extends IterativeRobot {
 			System.out.println("Sleeping thread for 200 ms");
 			Thread.sleep(200);
 		} catch (InterruptedException e) {
-			
+
 		}
 		mHardwareUpdater.updateSensors(robotState);
-		DashboardManager.getInstance().enableCANTable(true);
 		// Start control loops
 		mSubsystemLooper.start();
 

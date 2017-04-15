@@ -3,6 +3,7 @@ package com.palyrobotics.frc2017.subsystems.controllers;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.robot.team254.lib.util.ChezyMath;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.util.Pose;
@@ -69,8 +70,9 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 			double gyroCorrection = Gains.kSteikTrajectoryTurnkP*gyroError;
 			// prevent fishtailing from overcorrection
 			if (Math.abs(gyroError) > 2) {
-				gyroCorrection = Math.signum(gyroCorrection)*0.1;
+				gyroCorrection = Math.signum(gyroCorrection)*0.01;
 			}
+//			DashboardManager.getInstance().updateCANTable(Math.toDegrees(mLeftFollower.getHeading())+","+state.drivePose.heading+","+gyroError+","+gyroCorrection);
 			driveSignal.leftMotor.setPercentVBus(leftPower+gyroCorrection);
 			driveSignal.rightMotor.setPercentVBus(rightPower-gyroCorrection);
 		}

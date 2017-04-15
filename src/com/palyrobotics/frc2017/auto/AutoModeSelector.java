@@ -68,8 +68,8 @@ public class AutoModeSelector {
   /*7*/ registerAutonomous(new DriveStraightCenterPegAutoMode(Alliance.BLUE, CenterAutoPostVariant.BACKUP));
   /*8*/ registerAutonomous(new DriveStraightSidePegAutoMode(SideAutoVariant.RED_LEFT, SideAutoPostVariant.BACKUP));
 		
-  /*9*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.BLUE, TrajectoryCenterPostVariant.NONE));
-  /*10*/registerAutonomous(new TrajectorySidePegAutoMode(SideAutoVariant.RED_RIGHT, TrajectorySidePostVariant.BACKUP));
+  /*9*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.RED, TrajectoryCenterPostVariant.BACKUP));
+  /*10*/registerAutonomous(new TrajectorySidePegAutoMode(SideAutoVariant.BLUE_LEFT, TrajectorySidePostVariant.NEUTRAL_ZONE));
   /*11*/registerAutonomous(new TestAutoMode());
   /*12*/registerAutonomous(new TestTrajectoryAutoMode());
 	}

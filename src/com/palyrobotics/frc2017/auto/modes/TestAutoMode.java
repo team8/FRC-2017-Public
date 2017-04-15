@@ -47,8 +47,8 @@ public class TestAutoMode extends AutoModeBase {
 //		sequence.add(new TimeoutRoutine(1));
 //		sequence.add(new GyroMotionMagicTurnAngleRoutine(90));
 //		sequence.add(new TimeoutRoutine(1));
-		sequence.add(new DriveStraightRoutine(75));
-		return new SequentialRoutine(sequence);
+//		sequence.add(new DriveStraightRoutine(75));
+		return getDrop();
 	}
 
 	@Override
@@ -60,4 +60,27 @@ public class TestAutoMode extends AutoModeBase {
 	public void prestart() {
 		System.out.println("Starting TestAutoMode");
 	}
+
+	private SequentialRoutine getDrop() {
+		Gains 	mShortGains = Gains.steikShortDriveMotionMagicGains;
+
+
+		DriveSignal driveBackup = DriveSignal.getNeutralSignal();
+		double driveBackupSetpoint = -30 * Constants.kDriveTicksPerInch;
+		driveBackup.leftMotor.setMotionMagic(driveBackupSetpoint, mShortGains,
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		driveBackup.rightMotor.setMotionMagic(driveBackupSetpoint, mShortGains,
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+
+		ArrayList<Routine> sequence = new ArrayList<>();
+		ArrayList<Routine> parallelDrop = new ArrayList<>();
+
+		parallelDrop.add(new CANTalonRoutine(driveBackup, true));
+		parallelDrop.add(new SpatulaDownAutocorrectRoutine());
+		sequence.add(new ParallelRoutine(parallelDrop));
+		sequence.add(new EncoderTurnAngleRoutine(180));
+
+		return new SequentialRoutine(sequence);
+	}
+
 }

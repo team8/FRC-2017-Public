@@ -1,6 +1,8 @@
 package com.palyrobotics.frc2017.util.archive.team254.trajectory;
 
+import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
+import com.palyrobotics.frc2017.robot.Robot;
 import com.team254.lib.trajectory.Trajectory;
 
 /**
@@ -50,12 +52,20 @@ public class LegacyTrajectoryFollower {
             double output = kp_ * error + kd_ * ((error - last_error_)
                     / segment.dt - segment.vel) + (kv_ * segment.vel
                     + ka_ * segment.acc);
+            // ignore spikes
+            if (Math.abs((error - last_error_)
+                    / segment.dt - segment.vel) > 10) {
+                output -= 0.5 * kd_ * ((error - last_error_)
+                        / segment.dt - segment.vel);
+            }
+            if (this.name.equals("left")) {
+                DashboardManager.getInstance().updateCANTable(
+                        error + "," + output + "," + distance_so_far
+                +","+(Robot.getRobotState().drivePose.leftSpeed/(12.0*Constants.kDriveSpeedUnitConversion))+","+segment.vel+","+segment.acc);
+            }
             last_error_ = error;
             current_heading = segment.heading;
             current_segment++;
-            if (this.name=="left") {
-                DashboardManager.getInstance().updateCANTable(error + "," + output + "," + distance_so_far);
-            }
             return output;
         } else {
             return 0;

@@ -56,6 +56,15 @@ public class DashboardManager {
 	
 	public void updateCANTable(String string) {
 		if (canTable != null) {
+			if (canTable == null) {
+				try {
+					this.canTable = NetworkTable.getTable(CAN_TABLE_NAME);
+				}
+				catch (UnsatisfiedLinkError e) {
+				}
+				catch (NoClassDefFoundError e) {}
+			}
+
 			canTable.putString("status", string+"\n");
 		}
 	}

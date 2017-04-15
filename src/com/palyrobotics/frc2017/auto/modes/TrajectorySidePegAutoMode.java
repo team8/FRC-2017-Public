@@ -1,5 +1,6 @@
 package com.palyrobotics.frc2017.auto.modes;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
@@ -8,11 +9,9 @@ import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
 import com.palyrobotics.frc2017.behavior.ParallelRoutine;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
+import com.palyrobotics.frc2017.behavior.routines.SpatulaDownAutocorrectRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
-import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
-import com.palyrobotics.frc2017.behavior.routines.drive.DrivePathRoutine;
-import com.palyrobotics.frc2017.behavior.routines.drive.DriveSensorResetRoutine;
-import com.palyrobotics.frc2017.behavior.routines.drive.GyroMotionMagicTurnAngleRoutine;
+import com.palyrobotics.frc2017.behavior.routines.drive.*;
 import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
@@ -32,15 +31,16 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 	}
 	private final SideAutoVariant mVariant;
 	private final TrajectorySidePostVariant mPostVariant;
-	private Path mPath, mPath2, mPostPath;
+	private Path mPath, mPostPath;
 	
-	private final boolean mUseGyro = true;
+	private final boolean mUseGyro = false;
 	private boolean mPostInverted;
 	
 	private final Gains mTrajectoryGains, mShortGains;
 	private final double backupDistance = 10;	// distance in inches
 	private final double pilotWaitTime = 2;	// time in seconds
-	
+
+	private double initialSliderPosition;
 	private double backupPosition = 2;
 	
 	private SequentialRoutine mSequentialRoutine;
@@ -61,30 +61,31 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 		case BLUE_LEFT:
 			mPath = AutoPathLoader.get("BlueBoiler");
+			initialSliderPosition = 0;
 			mPostInverted = true;
 			break;
 		case BLUE_RIGHT:
 			mPath = AutoPathLoader.get("BlueLoading");
+			initialSliderPosition = 0;
 			mPostInverted = false;
 			break;
 		case RED_LEFT:
 			mPath = AutoPathLoader.get("RedLoading");
+			initialSliderPosition = 0;
 			mPostInverted = true;
 			break;
 		case RED_RIGHT:
 			mPath = AutoPathLoader.get("RedBoiler");
-			mPath2 = AutoPathLoader.get("RedBoilerAirship");
+			initialSliderPosition = 0;
 			mPostInverted = false;
 			break;
 		}
 		ArrayList<Routine> parallelSlider = new ArrayList<>();
+		parallelSlider.add(new CustomPositioningSliderRoutine(initialSliderPosition));
 		parallelSlider.add(new DrivePathRoutine(mPath, mTrajectoryGains, mUseGyro, false));
-		parallelSlider.add(new CustomPositioningSliderRoutine(0));
 
 		sequence.add(new ParallelRoutine(parallelSlider));
-		sequence.add(new GyroMotionMagicTurnAngleRoutine(60));
 		sequence.add(new DriveSensorResetRoutine());
-		sequence.add(new DrivePathRoutine(mPath2, mTrajectoryGains, mUseGyro, false));
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		sequence.add(new DriveSensorResetRoutine());
 		switch (mPostVariant) {
@@ -96,12 +97,14 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 			sequence.add(getBackup(backupPosition));
 			break;
 		case NEUTRAL_ZONE:
-			mPostPath = AutoPathLoader.get("SideGoToNeutral");
+			sequence.add(getDrop());
+			mPostPath = AutoPathLoader.get("RightSideDriveToNeutral");
 			sequence.add(new DrivePathRoutine(mPostPath, mTrajectoryGains, mUseGyro, mPostInverted));
 			break;
 		case BOTH:
-			mPostPath = AutoPathLoader.get("SideGoToNeutral");
+			mPostPath = AutoPathLoader.get("RightSideDriveToNeutral");
 			sequence.add(getBackup(backupPosition));
+			sequence.add(getDrop());
 			sequence.add(new DrivePathRoutine(mPostPath, mTrajectoryGains, mUseGyro, mPostInverted));
 			break;
 		}
@@ -139,6 +142,25 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 		sequence.add(new CANTalonRoutine(driveReturn, true));
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
+		return new SequentialRoutine(sequence);
+	}
+
+	private SequentialRoutine getDrop() {
+		DriveSignal driveBackup = DriveSignal.getNeutralSignal();
+		double driveBackupSetpoint = -30 * Constants.kDriveTicksPerInch;
+		driveBackup.leftMotor.setMotionMagic(driveBackupSetpoint, mShortGains,
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		driveBackup.rightMotor.setMotionMagic(driveBackupSetpoint, mShortGains,
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+
+		ArrayList<Routine> sequence = new ArrayList<>();
+		ArrayList<Routine> parallelDrop = new ArrayList<>();
+
+		parallelDrop.add(new CANTalonRoutine(driveBackup, true));
+		parallelDrop.add(new SpatulaDownAutocorrectRoutine());
+		sequence.add(new ParallelRoutine(parallelDrop));
+		sequence.add(new EncoderTurnAngleRoutine(180));
+
 		return new SequentialRoutine(sequence);
 	}
 

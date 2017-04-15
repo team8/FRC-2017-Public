@@ -37,20 +37,19 @@ public class AutoDistances {
 
 	// Distances in feet, angles in radians
 	public static double kBackup = -0.8;
-	public static double kRedCenter = 100.0/12;
-	public static double kBlueCenter = 82.0/12;
+	public static double kRedCenter = 89.0/12;
+	public static double kBlueCenter = 93.0/12;
 	// Blue right loading station
-	public static double kBlueLoadingStationForward = 50.0/12; // 79.5
-	public static double kBlueLoadingStationAirship = 73.0/12; // 66, 70, 73
+	public static double kBlueLoadingPegX = 115.0; // 79.5
+	public static double kBlueLoadingPegY = 70.0; // 66, 70, 73
 	// Red left loading station
 	public static double kRedLoadingPegX = 115.0; // 79
 	public static double kRedLoadingPegY = 63.22; // 66, 70, 73
 	// Blue left boiler
-	public static double kBlueBoilerForward = 50.0/12; // 79.5, 82.5
-	public static double kBlueBoilerAirship = 73.0/12; // 73,
+	public static double kBlueBoilerPegX = 100; // 79.5, 82.5
+	public static double kBlueBoilerPegY = 82; // 73,
 	// Red right boiler
 	// should be positive
-	public static double kRedBoilerPegX=115;
-	public static double kRedBoilerPegY=60.621;
-	public static double kRedBoilerAirship = 73.0/12; // 73,
+	public static double kRedBoilerPegX=100;
+	public static double kRedBoilerPegY=82;
 }

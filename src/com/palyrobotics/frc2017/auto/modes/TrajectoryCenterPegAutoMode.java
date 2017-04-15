@@ -42,7 +42,7 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 	private final double backupDistance = 10;	// distance in inches
 	private final double pilotWaitTime = 2;	// time in seconds
 	
-	private double backupPosition = 0;
+	private double backupPosition = -3;
 	
 	private SequentialRoutine mSequentialRoutine;
 	
@@ -50,7 +50,8 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 		AutoPathLoader.loadPaths();
 		mVariant = variant;
 		mPostVariant = postScore;
-		mTrajectoryGains = Gains.steikTrajectory;
+		mTrajectoryGains = new Gains(Gains.kSteikTrajectoryStraightkP, Gains.kSteikTrajectorykI,
+				Gains.kSteikTrajectoryStraightkD, 0, 0 ,0);
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
 	}
 
@@ -67,7 +68,14 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 			mPath = AutoPathLoader.get("RedCenter");
 			break;
 		}
-		sequence.add(new DrivePathRoutine(mPath, mTrajectoryGains, mUseGyro, false));
+
+		double initialSliderPosition = (mVariant == Alliance.BLUE) ? 0 : 0;
+		// Drive forward while moving slider to initial position
+		ArrayList<Routine> initialSlide = new ArrayList<>();
+		initialSlide.add(new CustomPositioningSliderRoutine(initialSliderPosition));
+		initialSlide.add(new DrivePathRoutine(mPath, mTrajectoryGains, mUseGyro, false));
+		sequence.add(new ParallelRoutine(initialSlide));
+
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		sequence.add(new DriveSensorResetRoutine());
 		switch (mPostVariant) {
@@ -122,9 +130,9 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 
 		// drive forward same distance as backup
-		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint+3*Constants.kDriveTicksPerInch, mShortGains, 
+		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint, mShortGains,
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint+3*Constants.kDriveTicksPerInch, mShortGains, 
+		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint, mShortGains,
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		
 		// Create a routine that drives back, then moves the slider while moving back forward
@@ -132,7 +140,7 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 		ArrayList<Routine> parallelSliding = new ArrayList<>();
 		parallelSliding.add(new CANTalonRoutine(driveBackup, true));
 		ArrayList<Routine> slideSequence = new ArrayList<>();
-		slideSequence.add(new TimeoutRoutine(0.5));
+		slideSequence.add(new TimeoutRoutine(0.3));
 		slideSequence.add(new CustomPositioningSliderRoutine(sliderPosition));
 		parallelSliding.add(new SequentialRoutine(slideSequence));
 		sequence.add(new ParallelRoutine(parallelSliding));
