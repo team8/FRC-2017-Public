@@ -2,6 +2,7 @@ package com.palyrobotics.frc2017.auto.modes;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.auto.AutoPathLoader;
+import com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode.Alliance;
 import com.palyrobotics.frc2017.behavior.ParallelRoutine;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
@@ -15,24 +16,14 @@ import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.team254.lib.trajectory.Path;
 
-import static com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode.Alliance;
-
 import java.util.ArrayList;
 
 /**
  * Created by Nihar on 4/13/17.
  */
 public class TrajectoryCenterPegAutoMode extends AutoModeBase {
-	public enum TrajectoryCenterPostVariant {
-		NONE,
-		BACKUP,
-		NEUTRAL_ZONE_LEFT,
-		NEUTRAL_ZONE_RIGHT,
-		BOTH_LEFT,
-		BOTH_RIGHT
-	}
 	private final Alliance mVariant;
-	private final TrajectoryCenterPostVariant mPostVariant;
+	private boolean mBackup = true;
 	private Path mPath, mPostPath;
 	
 	private final boolean mUseGyro = true;
@@ -46,10 +37,10 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 	
 	private SequentialRoutine mSequentialRoutine;
 	
-	public TrajectoryCenterPegAutoMode(Alliance variant, TrajectoryCenterPostVariant postScore) {
+	public TrajectoryCenterPegAutoMode(Alliance variant, boolean backup) {
 		AutoPathLoader.loadPaths();
 		mVariant = variant;
-		mPostVariant = postScore;
+		mBackup = backup;
 		mTrajectoryGains = new Gains(Gains.kSteikTrajectoryStraightkP, Gains.kSteikTrajectorykI,
 				Gains.kSteikTrajectoryStraightkD, 0, 0 ,0);
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
@@ -78,35 +69,10 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		sequence.add(new DriveSensorResetRoutine());
-		switch (mPostVariant) {
-		case NONE:
-			mPostPath = null;
-			break;
-		case BACKUP:
-			mPostPath = null;
-			sequence.add(getBackup(backupPosition));
-			break;
-		case NEUTRAL_ZONE_LEFT:
-			mPostPath = AutoPathLoader.get("CenterGoToNeutral");
-			mPostInverted = true;
-			break;
-		case NEUTRAL_ZONE_RIGHT:
-			mPostPath = AutoPathLoader.get("CenterGoToNeutral");
-			mPostInverted = false;
-			break;
-		case BOTH_LEFT:
-			mPostPath = AutoPathLoader.get("CenterGoToNeutral");
-			mPostInverted = true;
-			sequence.add(getBackup(backupPosition));
-			break;
-		case BOTH_RIGHT:
-			mPostPath = AutoPathLoader.get("CenterGoToNeutral");
-			mPostInverted = false;
-			sequence.add(getBackup(backupPosition));
-			break;
-		}
-		if (mPostPath != null) {
-			sequence.add(new DrivePathRoutine(mPostPath, mTrajectoryGains, mUseGyro, mPostInverted));
+	
+		if (mBackup) {
+			sequence.add(getBackup(backupPosition));		// Move slider slightly to the left
+			sequence.add(new TimeoutRoutine(pilotWaitTime));
 		}
 		
 		mSequentialRoutine = new SequentialRoutine(sequence);

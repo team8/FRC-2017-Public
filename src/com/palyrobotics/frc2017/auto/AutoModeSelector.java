@@ -6,7 +6,6 @@ import com.palyrobotics.frc2017.auto.modes.archive.*;
 import com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode.Alliance;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoPostVariant;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
-import com.palyrobotics.frc2017.auto.modes.TrajectoryCenterPegAutoMode.TrajectoryCenterPostVariant;
 import com.palyrobotics.frc2017.auto.modes.TrajectorySidePegAutoMode.TrajectorySidePostVariant;
 
 import org.json.simple.JSONArray;
@@ -68,7 +67,7 @@ public class AutoModeSelector {
   /*7*/ registerAutonomous(new DriveStraightCenterPegAutoMode(Alliance.BLUE, CenterAutoPostVariant.BACKUP));
   /*8*/ registerAutonomous(new DriveStraightSidePegAutoMode(SideAutoVariant.RED_LEFT, SideAutoPostVariant.BACKUP));
 		
-  /*9*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.RED, TrajectoryCenterPostVariant.BACKUP));
+  /*9*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.RED, true));
   /*10*/registerAutonomous(new TrajectorySidePegAutoMode(SideAutoVariant.BLUE_RIGHT, TrajectorySidePostVariant.BACKUP));
   /*11*/registerAutonomous(new TestAutoMode());
   /*12*/registerAutonomous(new TestTrajectoryAutoMode());

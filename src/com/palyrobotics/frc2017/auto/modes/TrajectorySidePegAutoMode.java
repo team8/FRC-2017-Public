@@ -10,6 +10,7 @@ import com.palyrobotics.frc2017.behavior.ParallelRoutine;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.SpatulaDownAutocorrectRoutine;
+import com.palyrobotics.frc2017.behavior.routines.SpatulaUpRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.*;
 import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
@@ -155,11 +156,15 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 
 		ArrayList<Routine> sequence = new ArrayList<>();
 		ArrayList<Routine> parallelDrop = new ArrayList<>();
+		ArrayList<Routine> spatulaSequence = new ArrayList<>();
 
 		parallelDrop.add(new CANTalonRoutine(driveBackup, true));
-		parallelDrop.add(new SpatulaDownAutocorrectRoutine());
+		spatulaSequence.add(new TimeoutRoutine(1));
+		spatulaSequence.add(new SpatulaDownAutocorrectRoutine());
+		parallelDrop.add(new SequentialRoutine(spatulaSequence));
 		sequence.add(new ParallelRoutine(parallelDrop));
 		sequence.add(new EncoderTurnAngleRoutine(180));
+		sequence.add(new SpatulaUpRoutine());
 
 		return new SequentialRoutine(sequence);
 	}
