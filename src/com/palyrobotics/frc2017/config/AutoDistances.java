@@ -40,16 +40,16 @@ public class AutoDistances {
 	public static double kRedCenter = 89.0/12;
 	public static double kBlueCenter = 93.0/12;
 	// Blue right loading station
-	public static double kBlueLoadingPegX = 115.0; // 79.5
-	public static double kBlueLoadingPegY = 70.0; // 66, 70, 73
+	public static double kBlueLoadingPegX = 99.5+7;//115.0; // 79.5
+	public static double kBlueLoadingPegY = 53.25+30;//70.0; // 66, 70, 73
 	// Red left loading station
-	public static double kRedLoadingPegX = 115.0; // 79
-	public static double kRedLoadingPegY = 63.22; // 66, 70, 73
+	public static double kRedLoadingPegX = 102+10;//115.0; // 79
+	public static double kRedLoadingPegY = 53.5;//63.22; // 66, 70, 73
 	// Blue left boiler
-	public static double kBlueBoilerPegX = 100; // 79.5, 82.5
-	public static double kBlueBoilerPegY = 82; // 73,
+	public static double kBlueBoilerPegX = 100;//100; // 79.5, 82.5
+	public static double kBlueBoilerPegY = 63;//82; // 73,
 	// Red right boiler
 	// should be positive
-	public static double kRedBoilerPegX=100;
-	public static double kRedBoilerPegY=82;
+	public static double kRedBoilerPegX=101;//100;
+	public static double kRedBoilerPegY=62;//82;
 }
