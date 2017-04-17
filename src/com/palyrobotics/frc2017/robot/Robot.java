@@ -5,6 +5,7 @@ import com.palyrobotics.frc2017.auto.AutoModeSelector;
 import com.palyrobotics.frc2017.behavior.RoutineManager;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Constants;
+import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.subsystems.*;
@@ -103,6 +104,13 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		System.out.println("Start autonomousInit()");
+		System.out.println("kP: " + Gains.kSteikTrajectorykP);
+		System.out.println("kI: " + Gains.kSteikTrajectorykI);
+		System.out.println("kD: " + Gains.kSteikTrajectorykD);
+		System.out.println("kV: " + Gains.kSteikTrajectorykV);
+		System.out.println("kA: " + Gains.kSteikTrajectorykA);
+		System.out.println("Turn kP: " + Gains.kSteikTrajectoryTurnkP);
+
 		mLogger.start();
 		mLogger.logRobotThread("Start autonomousInit()");
 		DashboardManager.getInstance().enableCANTable(true);
@@ -201,6 +209,7 @@ public class Robot extends IterativeRobot {
 //		System.out.println("Gyro: "+robotState.drivePose.heading);
 //		System.out.println("Left enc: " + robotState.drivePose.leftEnc +"\n"
 //				+"Right enc: "+robotState.drivePose.rightEnc);
+		Gains.updateNetworkTableGains();
 	}
 	// Call during tele and auto periodic
 	private void logPeriodic() {

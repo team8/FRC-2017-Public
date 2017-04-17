@@ -19,23 +19,23 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 	private LegacyTrajectoryFollower mLeftFollower = new LegacyTrajectoryFollower("left");
 	private LegacyTrajectoryFollower mRightFollower = new LegacyTrajectoryFollower("right");
 
-	private final Gains mGains;
 	private boolean mGyroCorrection;
 	private boolean mIllegalPath;
 
 	private SynchronousPID headingPID;
 
 	public TrajectoryFollowingController(Path path, Gains gains, boolean correctUsingGyro, boolean inverted) {
-		mGains = gains;
 		
-		headingPID = new SynchronousPID(Gains.kSteikTrajectoryTurnkP, 0, 0.005);
+		/* unused
+		headingPID = new SynchronousPID(Gains.kSteikTrajectoryTurnkP, 0, Gains.kSteikTrajectoryTurnkD);
 		headingPID.setOutputRange(-0.2, 0.2);
 		headingPID.setSetpoint(0);
+		*/
 		
 		// set trajectory gains
-		mLeftFollower.configure(gains.P, gains.I, gains.D,
+		mLeftFollower.configure(Gains.kSteikTrajectorykP, Gains.kSteikTrajectorykI, Gains.kSteikTrajectorykD,
 				Gains.kSteikTrajectorykV, Gains.kSteikTrajectorykA);
-		mRightFollower.configure(gains.P, gains.I, gains.D,
+		mRightFollower.configure(Gains.kSteikTrajectorykP, Gains.kSteikTrajectorykI, Gains.kSteikTrajectorykD,
 				Gains.kSteikTrajectorykV, Gains.kSteikTrajectorykA);
 
 		// set goals and paths
@@ -65,24 +65,35 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 			return DriveSignal.getNeutralSignal();
 		}
 		DriveSignal driveSignal = DriveSignal.getNeutralSignal();
-		double leftPower = mLeftFollower.calculate(state.drivePose.leftEnc/Constants.kDriveTicksPerInch/12, state.drivePose.leftEncVelocity/Constants.kDriveSpeedUnitConversion/12);
-		double rightPower = mRightFollower.calculate(state.drivePose.rightEnc/Constants.kDriveTicksPerInch/12, state.drivePose.rightEncVelocity/Constants.kDriveSpeedUnitConversion/12);
+
+		double leftPower = mLeftFollower.calculate(state.drivePose.leftEnc/Constants.kDriveTicksPerInch/12);
+		double rightPower = mRightFollower.calculate(state.drivePose.rightEnc/Constants.kDriveTicksPerInch/12);
+		
+		double gyroError = 0;
 
 		if (!mGyroCorrection) {
 			driveSignal.leftMotor.setPercentVBus(leftPower);
 			driveSignal.rightMotor.setPercentVBus(rightPower);
 		} else {
-			double gyroError = ChezyMath.getDifferenceInAngleRadians(Math.toRadians(state.drivePose.heading), mLeftFollower.getHeading());
+			gyroError = ChezyMath.getDifferenceInAngleRadians(Math.toRadians(state.drivePose.heading), mLeftFollower.getHeading());
 			gyroError = Math.toDegrees(gyroError);
-			double gyroCorrection = headingPID.calculate(gyroError) * Constants.kDriveInchesPerDegree;
-//			if (gyroError > 2) {
-//				System.out.println(gyroCorrection);
-//				gyroCorrection = Math.signum(gyroCorrection)*0.1;
-//			}
-			driveSignal.leftMotor.setPercentVBus(leftPower-gyroCorrection);
-			driveSignal.rightMotor.setPercentVBus(rightPower+gyroCorrection);
+
+			double gyroCorrection = Gains.kSteikTrajectoryTurnkP*gyroError;
+			
+			// prevent fishtailing from overcorrection
+			if (Math.abs(gyroError) > 2) {
+				gyroCorrection = Math.signum(gyroCorrection)*0.01;
+			}
+
+			driveSignal.leftMotor.setVoltage((leftPower-gyroCorrection)*12);
+			driveSignal.rightMotor.setVoltage((rightPower+gyroCorrection)*12);
 		}
+		
+		DashboardManager.getInstance().updateCANTable(mLeftFollower.getCanTableString() + ", " + mRightFollower.getCanTableString() + ", " + gyroError);
+		
 		return driveSignal;
+		
+		
 	}
 
 	@Override

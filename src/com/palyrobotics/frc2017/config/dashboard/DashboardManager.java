@@ -1,8 +1,11 @@
 package com.palyrobotics.frc2017.config.dashboard;
 
+import com.palyrobotics.frc2017.config.Gains;
+
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class DashboardManager {
+	
 	private boolean enableCANTable = true;
 
 	private static DashboardManager instance = new DashboardManager();
@@ -10,7 +13,7 @@ public class DashboardManager {
 	public static final String TABLE_NAME = "RobotTable";
 	public static final String CAN_TABLE_NAME = "data_table";
 	
-	private NetworkTable robotTable;
+	public NetworkTable robotTable;
 	private NetworkTable canTable;
 	
 	public static DashboardManager getInstance() {
@@ -22,8 +25,10 @@ public class DashboardManager {
 	public void robotInit() {
 		try {
 			this.robotTable = NetworkTable.getTable(TABLE_NAME);
+			Gains.initNetworkTableGains();
 			if (enableCANTable) {
 				this.canTable = NetworkTable.getTable(CAN_TABLE_NAME);
+				NetworkTable.setUpdateRate(.015);
 			}
 		}
 		catch (UnsatisfiedLinkError e) {

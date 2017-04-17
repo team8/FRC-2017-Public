@@ -41,7 +41,7 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 		AutoPathLoader.loadPaths();
 		mVariant = variant;
 		mBackup = backup;
-		mTrajectoryGains = new Gains(Gains.kSteikTrajectoryStraightkP, Gains.kSteikTrajectorykI,
+		mTrajectoryGains = new Gains(Gains.kSteikTrajectoryStraightkP, Gains.kSteikTrajectoryStraightkI,
 				Gains.kSteikTrajectoryStraightkD, 0, 0 ,0);
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
 	}

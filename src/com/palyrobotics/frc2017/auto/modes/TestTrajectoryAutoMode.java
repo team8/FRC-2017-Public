@@ -36,7 +36,7 @@ public class TestTrajectoryAutoMode extends AutoModeBase {
 	public Routine getRoutine() {
 		ArrayList<Routine> sequence = new ArrayList<>();
 		sequence.add(new DriveSensorResetRoutine());
-		sequence.add(new DrivePathRoutine(mPath, Gains.steikTrajectory, false, false));
+		sequence.add(new DrivePathRoutine(mPath, Gains.steikTrajectory, true, false));
 		sequence.add(new DriveSensorResetRoutine());
 //		sequence.add(new DrivePathRoutine(AutoPathLoader.get("GoToNeutral"), Gains.steikTrajectory, true, false));
 		return new SequentialRoutine(sequence);

@@ -1,7 +1,6 @@
 package com.palyrobotics.frc2017.util.archive.team254.trajectory;
 
 import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.robot.Robot;
 import com.team254.lib.trajectory.Trajectory;
 
@@ -23,6 +22,10 @@ public class LegacyTrajectoryFollower {
     private int current_segment;
     private Trajectory profile_;
     public String name;
+    
+    private double last_calc_velocity_error;
+    
+    private String canTableString;
 
     public LegacyTrajectoryFollower(String name) {
         this.name = name;
@@ -45,32 +48,41 @@ public class LegacyTrajectoryFollower {
         profile_ = profile;
     }
 
-    public double calculate(double distance_so_far, double velocity) {
+    public double calculate(double distance_so_far) {
 
         if (current_segment < profile_.getNumSegments()) {
             Trajectory.Segment segment = profile_.getSegment(current_segment);
             double error = segment.pos - distance_so_far;
-
-            double calc_velocity_error = ((error - last_error_)) / segment.dt - segment.vel;
-
-            if(Math.abs(calc_velocity_error) > 0.5) {
-                calc_velocity_error = 0;
-            }
-
-//            double output = kp_ * error + kd_ * ((error - last_error_)
-//                    / segment.dt - segment.vel) + (kv_ * segment.vel
-//                    + ka_ * segment.acc);
+            
+            double calc_velocity_error;
+            double speed = Math.abs((error - last_error_)) / segment.dt;
+            double speed_tolerance = 1.0;
+            
+            if (speed < speed_tolerance) calc_velocity_error = last_calc_velocity_error;
+            else calc_velocity_error = ((error - last_error_)) / segment.dt - segment.vel;
 
             double output = kp_ * error + kd_ * calc_velocity_error + kv_ * segment.vel + ka_ * segment.acc;
 
-            float actual_vel = (float) ((float) ((error - last_error_)) / segment.dt);
-            if (this.name=="left") {
-                DashboardManager.getInstance().updateCANTable(segment.vel + "," + error + "," + calc_velocity_error + "," + (error * kp_) + "," + (calc_velocity_error * kd_));
-            }
+            setCanTableString(new double[] {
+            		output,
+            		segment.pos,
+            		segment.vel,
+            		segment.acc,
+            		distance_so_far,
+            		(Robot.getRobotState().drivePose.leftSpeed/(12.0*Constants.kDriveSpeedUnitConversion)),
+//            		((error - last_error_)) / segment.dt,
+            		error,
+            		segment.vel-(Robot.getRobotState().drivePose.leftSpeed/(12.0*Constants.kDriveSpeedUnitConversion))
+//            		((error - last_error_)) / segment.dt - segment.vel
+            });
+            
             last_error_ = error;
+            last_calc_velocity_error = calc_velocity_error;
+            
             current_heading = segment.heading;
             current_segment++;
             return output;
+            
         } else {
             return 0;
         }
@@ -94,5 +106,17 @@ public class LegacyTrajectoryFollower {
 
     public int getNumSegments() {
         return profile_.getNumSegments();
+    }
+    
+    private void setCanTableString(double[] a) {
+    	canTableString = "";
+    	for(int i = 0; i < a.length-1; i++) {
+    		canTableString = canTableString + Double.toString(a[i]) + ", ";
+    	}
+    	canTableString = canTableString + Double.toString(a[a.length-1]);
+    }
+    
+    public String getCanTableString() {
+    	return this.canTableString;
     }
 }
