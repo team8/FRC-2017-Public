@@ -68,13 +68,12 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 			double gyroError = ChezyMath.getDifferenceInAngleRadians(Math.toRadians(state.drivePose.heading), mLeftFollower.getHeading());
 			gyroError = Math.toDegrees(gyroError);
 			double gyroCorrection = Gains.kSteikTrajectoryTurnkP*gyroError;
-			// prevent fishtailing from overcorrection
-			if (Math.abs(gyroError) > 2) {
-				gyroCorrection = Math.signum(gyroCorrection)*0.01;
-			}
-//			DashboardManager.getInstance().updateCANTable(Math.toDegrees(mLeftFollower.getHeading())+","+state.drivePose.heading+","+gyroError+","+gyroCorrection);
-			driveSignal.leftMotor.setPercentVBus(leftPower+gyroCorrection);
-			driveSignal.rightMotor.setPercentVBus(rightPower-gyroCorrection);
+//			if (gyroError > 2) {
+//				System.out.println(gyroCorrection);
+//				gyroCorrection = Math.signum(gyroCorrection)*0.1;
+//			}
+			driveSignal.leftMotor.setPercentVBus(leftPower-gyroCorrection);
+			driveSignal.rightMotor.setPercentVBus(rightPower+gyroCorrection);
 		}
 		return driveSignal;
 	}

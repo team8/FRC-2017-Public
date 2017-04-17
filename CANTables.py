@@ -1,4 +1,3 @@
-from optparse import OptionParser
 from networktables import NetworkTable
 import datetime
 import time
@@ -10,13 +9,6 @@ import time
 
 # AUTHOR: Robbie Selwyn
 
-parser = OptionParser()
-
-parser.add_option('-f', '--file',
-                  action="store", dest="fname",
-                  help="Custom filename.", default="")
-
-options, args = parser.parse_args()
 
 IP = "roborio-8-frc.local"
 
@@ -33,17 +25,11 @@ time.sleep(1)
 print "Started Listening"
 
 while True:
-    
+
     if table.getString("start", "") == "true" and not recording:
         print "Received Start"
         recording = True
-        if options.fname == "":
-            # Uncomment this if you want files that are named with a timestamp
-            #f = open("-".join(str(datetime.datetime.now()).split(" ")).split(".")[0].replace(":","") + ".csv", "w")
-
-            f = open("can-data.csv", "w")
-        else:
-            f = open(options.fname, "w")
+        f = open("can-data.csv", "w")
 
     if table.getString("end", "") == "true" and recording:
         print "Received End"
@@ -55,5 +41,5 @@ while True:
         #print table.getString("status","")
         f.write(table.getString("status",""))
 
-    time.sleep(0.005)
+    time.sleep(0.02)
     # print "Wait"

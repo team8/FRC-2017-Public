@@ -11,13 +11,20 @@ public class Gains {
 	//trajec d = 0.015
 	//trajec v = 0.077
 	//trajec turnkp = -0.005
-	
-	public static final double kSteikTrajectorykP = 0.8; //0.075
-	public static final double kSteikTrajectorykI = 0.0; // is unused
-	public static final double kSteikTrajectorykD = 0.015; //0.00
+
+	public static final double kSteikTrajectorykP = 1;//1.00; //0.05
+	public static final double kSteikTrajectorykI = 0;//0.09*0.7*8*10; // is unused
+	public static final double kSteikTrajectorykD = 0.2;//0.0005;//0.01;//0.01*0.7; //0.01
 	public static final double kSteikTrajectorykV = 0.077;
-	public static final double kSteikTrajectorykA = 0.05;
-	public static final double kSteikTrajectoryTurnkP = -0.002; //-0.01
+	public static final double kSteikTrajectorykA = 0.000;
+	public static final double kSteikTrajectoryTurnkP = 0.01;//0.01; //-0.01
+
+//	public static final double kSteikTrajectorykP = 0.075; //0.05
+//	public static final double kSteikTrajectorykI = 0.0; // is unused
+//	public static final double kSteikTrajectorykD = 0.01; //0.01
+//	public static final double kSteikTrajectorykV = 0.077;
+//	public static final double kSteikTrajectorykA = 0.000;
+//	public static final double kSteikTrajectoryTurnkP = //-0.007; //-0.01
 	public static final Gains steikTrajectory = new Gains(kSteikTrajectorykP, kSteikTrajectorykI, kSteikTrajectorykD,
 			0, 0, 0);
 

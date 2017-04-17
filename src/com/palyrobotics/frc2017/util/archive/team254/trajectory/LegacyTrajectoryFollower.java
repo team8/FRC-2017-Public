@@ -18,6 +18,7 @@ public class LegacyTrajectoryFollower {
     private double kv_;
     private double ka_;
     private double last_error_;
+
     private double current_heading = 0;
     private int current_segment;
     private Trajectory profile_;
@@ -49,19 +50,22 @@ public class LegacyTrajectoryFollower {
         if (current_segment < profile_.getNumSegments()) {
             Trajectory.Segment segment = profile_.getSegment(current_segment);
             double error = segment.pos - distance_so_far;
-            double output = kp_ * error + kd_ * ((error - last_error_)
-                    / segment.dt - segment.vel) + (kv_ * segment.vel
-                    + ka_ * segment.acc);
-            // ignore spikes
-            if (Math.abs((error - last_error_)
-                    / segment.dt - segment.vel) > 10) {
-                output -= 0.5 * kd_ * ((error - last_error_)
-                        / segment.dt - segment.vel);
+
+            double calc_velocity_error = ((error - last_error_)) / segment.dt - segment.vel;
+
+            if(Math.abs(calc_velocity_error) > 0.5) {
+                calc_velocity_error = 0;
             }
-            if (this.name.equals("left")) {
-                DashboardManager.getInstance().updateCANTable(
-                        error + "," + output + "," + distance_so_far
-                +","+(Robot.getRobotState().drivePose.leftSpeed/(12.0*Constants.kDriveSpeedUnitConversion))+","+segment.vel+","+segment.acc);
+
+//            double output = kp_ * error + kd_ * ((error - last_error_)
+//                    / segment.dt - segment.vel) + (kv_ * segment.vel
+//                    + ka_ * segment.acc);
+
+            double output = kp_ * error + kd_ * calc_velocity_error + kv_ * segment.vel + ka_ * segment.acc;
+
+            float actual_vel = (float) ((float) ((error - last_error_)) / segment.dt);
+            if (this.name=="left") {
+                DashboardManager.getInstance().updateCANTable(segment.vel + "," + error + "," + calc_velocity_error + "," + (error * kp_) + "," + (calc_velocity_error * kd_));
             }
             last_error_ = error;
             current_heading = segment.heading;
