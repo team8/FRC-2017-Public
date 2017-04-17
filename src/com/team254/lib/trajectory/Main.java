@@ -171,7 +171,7 @@ public class Main {
 			// Description of this auto mode path.
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint(kRedCenter, 0, 0));
+			p.addWaypoint(new WaypointSequence.Waypoint(10, 0, 0));
 
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);

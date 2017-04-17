@@ -18,8 +18,6 @@ public class LegacyTrajectoryFollower {
     private double kv_;
     private double ka_;
     private double last_error_;
-    private double last_calc_velocity_error_ = 0;
-    private double last_distance_traveled_ = 0;
 
     private double current_heading = 0;
     private int current_segment;
@@ -53,18 +51,11 @@ public class LegacyTrajectoryFollower {
             Trajectory.Segment segment = profile_.getSegment(current_segment);
             double error = segment.pos - distance_so_far;
 
-            double calc_velocity_error = (((error - last_error_)) / segment.dt)-segment.vel;
+            double calc_velocity_error = ((error - last_error_)) / segment.dt - segment.vel;
 
-            //used to be 0.5
-            if(Math.abs(calc_velocity_error) > 3) {
+            if(Math.abs(calc_velocity_error) > 0.5) {
                 calc_velocity_error = 0;
             }
-//            if(last_distance_traveled_ == distance_so_far) {
-//                System.out.println("Aaaaaaaaaaa");
-//                calc_velocity_error = last_calc_velocity_error_;
-//            }
-            last_distance_traveled_ = distance_so_far;
-            last_calc_velocity_error_ = calc_velocity_error;
 
 //            double output = kp_ * error + kd_ * ((error - last_error_)
 //                    / segment.dt - segment.vel) + (kv_ * segment.vel
@@ -72,10 +63,9 @@ public class LegacyTrajectoryFollower {
 
             double output = kp_ * error + kd_ * calc_velocity_error + kv_ * segment.vel + ka_ * segment.acc;
 
+            float actual_vel = (float) ((float) ((error - last_error_)) / segment.dt);
             if (this.name=="left") {
-                //blue, red, green
-                DashboardManager.getInstance().updateCANTable(error + "," + (error * kp_) + "," + ((error - last_error_)) / segment.dt);
-//                DashboardManager.getInstance().updateCANTable(segment.vel + "," + error + "," + calc_velocity_error + "," + (error * kp_) + "," + (calc_velocity_error * kd_));
+                DashboardManager.getInstance().updateCANTable(segment.vel + "," + error + "," + calc_velocity_error + "," + (error * kp_) + "," + (calc_velocity_error * kd_));
             }
             last_error_ = error;
             current_heading = segment.heading;
