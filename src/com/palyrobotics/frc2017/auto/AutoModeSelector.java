@@ -33,7 +33,7 @@ public class AutoModeSelector {
 	/**
 	 * comment for which auto mode the selectedIndex refers to
 	 */
-	int selectedIndex = AutoIndices.SIDE_PEG.get();
+	int selectedIndex = AutoIndices.TEST.get();
 
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
@@ -68,7 +68,7 @@ public class AutoModeSelector {
   /*8*/ registerAutonomous(new DriveStraightSidePegAutoMode(SideAutoVariant.RED_LEFT, SideAutoPostVariant.BACKUP));
 		
   /*9*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.RED, true));
-  /*10*/registerAutonomous(new TrajectorySidePegAutoMode(SideAutoVariant.BLUE_RIGHT, TrajectorySidePostVariant.BACKUP));
+  /*10*/registerAutonomous(new TrajectorySidePegAutoMode(SideAutoVariant.BLUE_RIGHT, TrajectorySidePostVariant.NEUTRAL_ZONE));
   /*11*/registerAutonomous(new TestAutoMode());
   /*12*/registerAutonomous(new TestTrajectoryAutoMode());
 	}

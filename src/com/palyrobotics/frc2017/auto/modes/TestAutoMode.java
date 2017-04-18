@@ -6,6 +6,7 @@ import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.behavior.ParallelRoutine;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
+import com.palyrobotics.frc2017.behavior.routines.SliderSensorResetRoutine;
 import com.palyrobotics.frc2017.behavior.routines.SpatulaDownAutocorrectRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
@@ -48,7 +49,10 @@ public class TestAutoMode extends AutoModeBase {
 //		sequence.add(new GyroMotionMagicTurnAngleRoutine(90));
 //		sequence.add(new TimeoutRoutine(1));
 //		sequence.add(new DriveStraightRoutine(75));
-		return getDrop();
+		//return getDrop();
+		sequence.add(new SliderSensorResetRoutine());
+		sequence.add(new CustomPositioningSliderRoutine(0));
+		return new SequentialRoutine(sequence);
 	}
 
 	@Override

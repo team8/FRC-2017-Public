@@ -6,6 +6,7 @@ import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.robot.HardwareAdapter;
 import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.subsystems.Slider;
 import com.palyrobotics.frc2017.subsystems.Spatula;
@@ -56,6 +57,13 @@ public class CustomPositioningSliderRoutine extends Routine {
 		switch(mState) {
 		case MOVING:
 			commands.wantedSliderState = Slider.SliderState.CUSTOM_POSITIONING;
+			try {
+				slider.run(commands, this);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+			}
 			break;
 		case RAISING:
 			if(System.currentTimeMillis() > (raiseTime+startTime)) {
@@ -67,18 +75,12 @@ public class CustomPositioningSliderRoutine extends Routine {
 			commands.wantedSliderState = Slider.SliderState.WAITING;
 			break;
 		}
-		
-		try {
-			slider.run(commands, this);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
 		return commands;
 	}
 
 	@Override
 	public Commands cancel(Commands commands) {
-		System.out.println("custom routine cancel called");
+		System.out.println("CUSTOM POSITITIONING SLIDER ROUTINE HAS FINISHED");
 		commands.wantedSliderState = Slider.SliderState.IDLE;
 		commands.robotSetpoints.sliderCustomSetpoint = Optional.empty();
 		try {
@@ -92,8 +94,13 @@ public class CustomPositioningSliderRoutine extends Routine {
 	@Override
 	public boolean finished() {
 		RobotState robotState = Robot.getRobotState();
-		return updated && mState==DistancePositioningState.MOVING && 
-				(System.currentTimeMillis() - startTime > 200) && (robotState.sliderVelocity == 0);
+
+		if(!HardwareAdapter.getInstance().getSlider().sliderTalon.getControlMode().isPID()) {
+			return false;
+		}
+
+		return updated && mState==DistancePositioningState.MOVING &&
+				(System.currentTimeMillis() - startTime > 200) && (robotState.sliderVelocity == 0) && slider.onTarget();
 	}
 
 	@Override

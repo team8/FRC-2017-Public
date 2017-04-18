@@ -58,8 +58,8 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 			return DriveSignal.getNeutralSignal();
 		}
 		DriveSignal driveSignal = DriveSignal.getNeutralSignal();
-		double leftPower = mLeftFollower.calculate(state.drivePose.leftEnc/Constants.kDriveTicksPerInch/12);
-		double rightPower = mRightFollower.calculate(state.drivePose.rightEnc/Constants.kDriveTicksPerInch/12);
+		double leftPower = mLeftFollower.calculate(state.drivePose.leftEnc/Constants.kDriveTicksPerInch/12, state.drivePose.leftEncVelocity/Constants.kDriveSpeedUnitConversion/12);
+		double rightPower = mRightFollower.calculate(state.drivePose.rightEnc/Constants.kDriveTicksPerInch/12, state.drivePose.rightEncVelocity/Constants.kDriveSpeedUnitConversion/12);
 
 		if (!mGyroCorrection) {
 			driveSignal.leftMotor.setPercentVBus(leftPower);

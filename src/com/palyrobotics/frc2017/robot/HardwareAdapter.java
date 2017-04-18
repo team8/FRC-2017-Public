@@ -102,7 +102,11 @@ public class HardwareAdapter {
 		}
 		public final CANTalon sliderTalon;
 		public final AnalogInput sliderPotentiometer;
-		
+
+		public static void resetEncoder() {
+			instance.sliderTalon.reset();
+		}
+
 		private SliderHardware() {
 			if (Constants.kRobotName == Constants.RobotName.STEIK){
 				sliderTalon = new CANTalon(Constants.kSteikSliderMotorDeviceID);

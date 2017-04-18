@@ -1,7 +1,7 @@
 import sys
 import matplotlib.pyplot as plt
 
-assert len(sys.argv) > 2
+assert len(sys.argv) > 1
 
 path_to_output = sys.argv[1]
 # index = int(sys.argv[2])
@@ -30,16 +30,16 @@ data_x_2 = [i for i in range(len(data_y_2))]
 data_y_3 = [i[2] for i in data]
 data_x_3 = [i for i in range(len(data_y_3))]
 
-data_y_4 = [i[3] for i in data]
-data_x_4 = [i for i in range(len(data_y_4))]
+#data_y_4 = [i[3] for i in data]
+#data_x_4 = [i for i in range(len(data_y_4))]
 
-data_y_5 = [i[4] for i in data]
-data_x_5 = [i for i in range(len(data_y_5))]
+#data_y_5 = [i[4] for i in data]
+#data_x_5 = [i for i in range(len(data_y_5))]
 
 # plt.axis('equal')
 plt.scatter(data_x, data_y, color="b")
 plt.scatter(data_x_2, data_y_2, color='r')
 plt.scatter(data_x_3, data_y_3, color='g')
-plt.scatter(data_x_4, data_y_4, color='yellow')
-plt.scatter(data_x_5, data_y_5, color='purple')
+#plt.scatter(data_x_4, data_y_4, color='yellow')
+#plt.scatter(data_x_5, data_y_5, color='purple')
 plt.show()

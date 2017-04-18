@@ -65,8 +65,8 @@ public class CenterPegAutoMode extends AutoModeBase {
 		initialSliderPosition = (mAlliance == Alliance.BLUE) ? -2.5 : 0;
 		// Drive forward while moving slider to initial position
 		ArrayList<Routine> initialSlide = new ArrayList<>();
-		initialSlide.add(new CANTalonRoutine(driveForward, true));
 		initialSlide.add(new CustomPositioningSliderRoutine(initialSliderPosition));
+		initialSlide.add(new CANTalonRoutine(driveForward, true));
 		sequence.add(new ParallelRoutine(initialSlide));
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		

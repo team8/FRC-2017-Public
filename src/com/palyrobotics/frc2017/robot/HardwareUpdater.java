@@ -306,9 +306,11 @@ class HardwareUpdater {
 			robotState.sliderPotentiometer = HardwareAdapter.SliderHardware.getInstance().sliderPotentiometer.getValue();
 			robotState.sliderVelocity = sliderTalon.getSpeed();
 			if (sliderTalon.getControlMode().isPID()) {
+				System.out.println("SLIDER CONTROL LOOP IS PID");
 				robotState.sliderClosedLoopError = Optional.of(sliderTalon.getClosedLoopError());
 //				robotState.sliderClosedLoopError = Optional.of();
 			} else {
+				System.out.println("SLIDER CONTROL LOOP IS NOT PID");
 				robotState.sliderClosedLoopError = Optional.empty();
 			}
 		}

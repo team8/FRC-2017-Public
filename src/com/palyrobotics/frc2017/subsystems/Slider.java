@@ -10,6 +10,7 @@ import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
+import com.palyrobotics.frc2017.robot.HardwareAdapter;
 import com.palyrobotics.frc2017.robot.team254.lib.util.CrashTracker;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Subsystem;
@@ -171,9 +172,17 @@ public class Slider extends Subsystem implements SubsystemLoop {
 				if (onTargetEncoderPositioning()) {
 					mState = SliderState.IDLE;
 					mTarget = SliderTarget.NONE;
+					System.out.println("on target, clearing");
 				} else {
 					mTarget = SliderTarget.CUSTOM;
+					//problem  below
+					System.out.println("SLIDER CUSTOM SETPOINT: " + commands.robotSetpoints.sliderCustomSetpoint.get());
 					mOutput.setPosition(commands.robotSetpoints.sliderCustomSetpoint.get(), mEncoderGains);
+					try {
+						Thread.sleep(75);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 				break;
 		}		
@@ -208,13 +217,26 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	 * @return if the control loop is on target
 	 */
 	private boolean onTargetEncoderPositioning() {
+//		System.out.println(mRobotState.sliderClosedLoopError.isPresent());
+//		System.out.println(mRobotState.sliderVelocity);
+
 		if (mTarget == SliderTarget.NONE) {
+//			System.out.println("no slider target");
 			return true;
 		}
-		if (!mRobotState.sliderClosedLoopError.isPresent()) {
+
+		try {
+			if(mRobotState.sliderClosedLoopError != null) {
+				if (!mRobotState.sliderClosedLoopError.isPresent()) {
+					return false;
+				}
+			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
 			return false;
 		}
-		
+		System.out.println("SLIDER CLOSED LOOP ERROR: " + mRobotState.sliderClosedLoopError.get());
+
 		return Math.abs(mRobotState.sliderClosedLoopError.get()) < kEncoderTolerance && mRobotState.sliderVelocity == 0;
 	}
 	
@@ -264,7 +286,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	}
 	
 	public boolean onTarget() {
-		return onTargetEncoderPositioning() || onTargetPotentiometerPositioning();
+		return (onTargetEncoderPositioning() || onTargetPotentiometerPositioning());
 	}
 	
 	/**
