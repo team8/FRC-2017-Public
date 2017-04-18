@@ -138,7 +138,7 @@ public class SidePegAutoToCenterAutoMode extends AutoModeBase {
 			driveForwardSetpoint = AutoDistances.kRedLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_RIGHT:
-			initialSliderPosition = -1.5;
+			initialSliderPosition = 0;
 			driveForwardSetpoint = AutoDistances.kBlueLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		// boiler side
@@ -147,7 +147,7 @@ public class SidePegAutoToCenterAutoMode extends AutoModeBase {
 			driveForwardSetpoint = AutoDistances.kRedBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_LEFT:
-			initialSliderPosition = 2.5;
+			initialSliderPosition = 0;
 			driveForwardSetpoint = AutoDistances.kBlueBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		default:

@@ -45,9 +45,9 @@ public class SidePegAutoMode extends AutoModeBase {
 	// Long distance vs short distance
 	private Gains mLongGains, mShortGains;
 
-	private final double pilotWaitTime = 2.5; // time in seconds
-	private final double backupDistance = 10;	// distance in inches
-	private final double neutralZoneDistance = 12 * 14;	// distance in inches
+	private final double pilotWaitTime = 1.5; // time in seconds
+	private final double backupDistance = 35;	// distance in inches
+	private final double neutralZoneDistance = 12 * 20;	// distance in inches
 
 	private double initialSliderPosition = 0;	// slider position in inches
 	private double backupPosition = 0;	// slider position in inches
@@ -122,7 +122,7 @@ public class SidePegAutoMode extends AutoModeBase {
 			driveForwardSetpoint = AutoDistances.kRedLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_RIGHT:
-			initialSliderPosition = -1.5;
+			initialSliderPosition = 0;
 			driveForwardSetpoint = AutoDistances.kBlueLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		// boiler side
@@ -131,7 +131,7 @@ public class SidePegAutoMode extends AutoModeBase {
 			driveForwardSetpoint = AutoDistances.kRedBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_LEFT:
-			initialSliderPosition = 2.5;
+			initialSliderPosition = 0;
 			driveForwardSetpoint = AutoDistances.kBlueBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		default:
@@ -233,9 +233,9 @@ public class SidePegAutoMode extends AutoModeBase {
 		
 		DriveSignal neutralZoneSignal = DriveSignal.getNeutralSignal();
 		neutralZoneSignal.leftMotor.setMotionMagic(driveToNeutralZoneSetpoint, mShortGains, 
-				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		neutralZoneSignal.rightMotor.setMotionMagic(driveToNeutralZoneSetpoint, mShortGains, 
-				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		
 		ArrayList<Routine> sequence = new ArrayList<>();
 		
@@ -243,7 +243,7 @@ public class SidePegAutoMode extends AutoModeBase {
 		ArrayList<Routine> parallel = new ArrayList<>();
 		parallel.add(new CANTalonRoutine(backupSignal, true));
 		ArrayList<Routine> spatulaSequence = new ArrayList<>();
-		spatulaSequence.add(new TimeoutRoutine(1));
+//		spatulaSequence.add(new TimeoutRoutine(1));
 		spatulaSequence.add(new SpatulaDownAutocorrectRoutine());
 		parallel.add(new SequentialRoutine(spatulaSequence));
 		sequence.add(new ParallelRoutine(parallel));
@@ -253,11 +253,11 @@ public class SidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 		case RED_LEFT:
 		case BLUE_LEFT:
-			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
+			sequence.add(new EncoderTurnAngleRoutine(-(Constants.kSidePegTurnAngleDegrees - 15)));
 			break;
 		case RED_RIGHT:
 		case BLUE_RIGHT:
-			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
+			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees - 15));
 			break;
 		}
 		
