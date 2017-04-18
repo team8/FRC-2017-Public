@@ -41,6 +41,13 @@
         </fileset>
       </scp>
       <echo>Done deploying paths</echo>
+      <echo>Restarting Robot Code</echo>
+      <sshexec host="${target}"
+        username="${username}"
+        password="${password}"
+        trust="true"
+        failonerror="false"
+        command="${deploy.kill.command}"/>
     </sequential>
   </target>
 <import file="${wpilib.ant.dir}/build.xml"/>
