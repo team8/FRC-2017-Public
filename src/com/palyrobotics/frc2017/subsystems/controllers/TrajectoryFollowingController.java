@@ -24,19 +24,17 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 
 	private SynchronousPID headingPID;
 
-	public TrajectoryFollowingController(Path path, Gains gains, boolean correctUsingGyro, boolean inverted) {
+	public TrajectoryFollowingController(Path path, Gains.TrajectoryGains gains, boolean correctUsingGyro, boolean inverted) {
 		
-		/* unused
 		headingPID = new SynchronousPID(Gains.kSteikTrajectoryTurnkP, 0, Gains.kSteikTrajectoryTurnkD);
 		headingPID.setOutputRange(-0.2, 0.2);
 		headingPID.setSetpoint(0);
-		*/
-		
+
 		// set trajectory gains
-		mLeftFollower.configure(Gains.kSteikTrajectorykP, Gains.kSteikTrajectorykI, Gains.kSteikTrajectorykD,
-				Gains.kSteikTrajectorykV, Gains.kSteikTrajectorykA);
-		mRightFollower.configure(Gains.kSteikTrajectorykP, Gains.kSteikTrajectorykI, Gains.kSteikTrajectorykD,
-				Gains.kSteikTrajectorykV, Gains.kSteikTrajectorykA);
+		mLeftFollower.configure(gains.P, 0, gains.D,
+				gains.V, gains.A);
+		mRightFollower.configure(gains.P, 0, gains.D,
+				gains.V, gains.A);
 
 		// set goals and paths
 		if (path == null) {
@@ -77,13 +75,7 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 		} else {
 			gyroError = ChezyMath.getDifferenceInAngleRadians(Math.toRadians(state.drivePose.heading), mLeftFollower.getHeading());
 			gyroError = Math.toDegrees(gyroError);
-
-			double gyroCorrection = Gains.kSteikTrajectoryTurnkP*gyroError;
-			
-			// prevent fishtailing from overcorrection
-			if (Math.abs(gyroError) > 2) {
-				gyroCorrection = Math.signum(gyroCorrection)*0.01;
-			}
+			double gyroCorrection = headingPID.calculate(gyroError);
 
 			driveSignal.leftMotor.setVoltage((leftPower-gyroCorrection)*12);
 			driveSignal.rightMotor.setVoltage((rightPower+gyroCorrection)*12);
@@ -99,7 +91,7 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 	@Override
 	public Pose getSetpoint() {
 		// TODO: what to return?
-		return null;
+		return new Pose(0,0,0,0,0,0,0,0);
 	}
 
 	@Override

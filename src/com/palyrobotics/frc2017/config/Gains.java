@@ -9,19 +9,17 @@ public class Gains {
 	// Onboard motion profile aka trajectory follower
 
 	public static double kSteikTrajectorykP = 1; //0.7, 0.8, 1.00, 0.05
-	public static double kSteikTrajectorykI = 0; // 0.09*0.7*8*10 is unused
 	public static double kSteikTrajectorykD = 0.2; // 0.1, 0.015
 	public static double kSteikTrajectorykV = 0.077;
 	public static double kSteikTrajectorykA = 0.000;
 	public static double kSteikTrajectoryTurnkP = 0.01;//0.01; //-0.01
 	public static double kSteikTrajectoryTurnkD = 0.0;
-
-	public static final Gains steikTrajectory = new Gains(kSteikTrajectorykP, kSteikTrajectorykI, kSteikTrajectorykD,
-			0, 0, 0);
-
-	public static final double kSteikTrajectoryStraightkP = 0.5;
-	public static final double kSteikTrajectoryStraightkI = 0.0;
-	public static final double kSteikTrajectoryStraightkD = 0.01;
+	public static final Gains.TrajectoryGains kTrajectoryGains = new TrajectoryGains(kSteikTrajectorykP,
+			kSteikTrajectorykD, kSteikTrajectorykV, kSteikTrajectorykA);
+	public static final double kSteikTrajectoryStraightkP = 1;
+	public static final double kSteikTrajectoryStraightkD = 0.02;
+	public static final TrajectoryGains kStraightTrajectoryGains = new TrajectoryGains(kSteikTrajectoryStraightkP,
+			kSteikTrajectoryStraightkD, kSteikTrajectorykV, kSteikTrajectorykA);
 
 	// Drive Distance PID control loop
 	public static final double kSteikDriveStraightTurnkP = -0.06;
@@ -132,6 +130,16 @@ public class Gains {
 	public static final double kDericaTurnMotionMagicCruiseVelocity = 1;
 	public static final double kDericaTurnMotionMagicCruiseAccel = 1;
 
+	public static class TrajectoryGains {
+		public final double P,D,V,A;
+		public TrajectoryGains(double p, double d, double v, double a) {
+			this.P = p;
+			this.D = d;
+			this.V = v;
+			this.A = a;
+		}
+	}
+
 	public final double P,I,D, F, rampRate;
 	public final int izone;
 
@@ -155,22 +163,22 @@ public class Gains {
 	}
 	
 	public static void initNetworkTableGains() {
-		DashboardManager.getInstance().robotTable.putNumber("kP", kSteikTrajectorykP);
-		DashboardManager.getInstance().robotTable.putNumber("kI", kSteikTrajectorykI);
-		DashboardManager.getInstance().robotTable.putNumber("kD", kSteikTrajectorykD);
-		DashboardManager.getInstance().robotTable.putNumber("kV", kSteikTrajectorykV);
-		DashboardManager.getInstance().robotTable.putNumber("kA", kSteikTrajectorykA);
-		DashboardManager.getInstance().robotTable.putNumber("TurnKp", kSteikTrajectoryTurnkP);
-
+		if (DashboardManager.getInstance().pidTuning) {
+			DashboardManager.getInstance().robotTable.putNumber("kP", kSteikTrajectorykP);
+			DashboardManager.getInstance().robotTable.putNumber("kD", kSteikTrajectorykD);
+			DashboardManager.getInstance().robotTable.putNumber("kV", kSteikTrajectorykV);
+			DashboardManager.getInstance().robotTable.putNumber("kA", kSteikTrajectorykA);
+			DashboardManager.getInstance().robotTable.putNumber("TurnKp", kSteikTrajectoryTurnkP);
+		}
 	}
 	
 	public static void updateNetworkTableGains() {
-		kSteikTrajectorykP = DashboardManager.getInstance().robotTable.getNumber("kP", kSteikTrajectorykP);
-		kSteikTrajectorykI = DashboardManager.getInstance().robotTable.getNumber("kI", kSteikTrajectorykI);
-		kSteikTrajectorykD = DashboardManager.getInstance().robotTable.getNumber("kD", kSteikTrajectorykD);
-		kSteikTrajectorykV = DashboardManager.getInstance().robotTable.getNumber("kV", kSteikTrajectorykV);
-		kSteikTrajectorykA = DashboardManager.getInstance().robotTable.getNumber("kA", kSteikTrajectorykA);
-		kSteikTrajectoryTurnkP = DashboardManager.getInstance().robotTable.getNumber("TurnkP", kSteikTrajectoryTurnkP);
-
+		if (DashboardManager.getInstance().pidTuning) {
+			kSteikTrajectorykP = DashboardManager.getInstance().robotTable.getNumber("kP", kSteikTrajectorykP);
+			kSteikTrajectorykD = DashboardManager.getInstance().robotTable.getNumber("kD", kSteikTrajectorykD);
+			kSteikTrajectorykV = DashboardManager.getInstance().robotTable.getNumber("kV", kSteikTrajectorykV);
+			kSteikTrajectorykA = DashboardManager.getInstance().robotTable.getNumber("kA", kSteikTrajectorykA);
+			kSteikTrajectoryTurnkP = DashboardManager.getInstance().robotTable.getNumber("TurnkP", kSteikTrajectoryTurnkP);
+		}
 	}
 }

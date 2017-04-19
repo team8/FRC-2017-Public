@@ -29,9 +29,9 @@ public class SidePegAutoToCenterAutoMode extends AutoModeBase {
 	// Long distance vs short distance
 	private Gains mLongGains, mShortGains;
 
-	private final double pilotWaitTime = 2.5; // time in seconds
+	private final double pilotWaitTime = 1.5; // time in seconds
 	private final double backupDistance = 10;	// distance in inches
-	private final double driveToCenter = 12 * 14;
+	private final double driveToCenter = 12 * 20;
 	
 
 	double initialSliderPosition = 0;

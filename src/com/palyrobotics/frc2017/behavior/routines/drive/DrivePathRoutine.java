@@ -13,7 +13,7 @@ import com.team254.lib.trajectory.Trajectory;
  */
 public class DrivePathRoutine extends Routine {
 	private Path mPath;
-	private Gains mGains;
+	private Gains.TrajectoryGains mGains;
 	private boolean mUseGyro;
 	private boolean mInverted;
 	/**
@@ -21,7 +21,7 @@ public class DrivePathRoutine extends Routine {
 	 * @param path Path to follow
 	 * @param useGyro Whether to correct variations using gyro
 	 */
-	public DrivePathRoutine(Path path, Gains gains, boolean useGyro, boolean inverted) {
+	public DrivePathRoutine(Path path, Gains.TrajectoryGains gains, boolean useGyro, boolean inverted) {
 		this.mPath = path;
 		this.mGains = gains;
 		this.mUseGyro = useGyro;

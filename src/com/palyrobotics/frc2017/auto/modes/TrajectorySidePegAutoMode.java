@@ -37,20 +37,42 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 	private final boolean mUseGyro = false;
 	private boolean mPostInverted;
 	
-	private final Gains mTrajectoryGains, mShortGains;
+	private final Gains mShortGains;
+	private final Gains.TrajectoryGains mTrajectoryGains;
 	private final double backupDistance = 10;	// distance in inches
 	private final double pilotWaitTime = 2;	// time in seconds
 
-	private double initialSliderPosition;
-	private double backupPosition = 2;
-	
+	private double[] sliderPositions;
+
 	private SequentialRoutine mSequentialRoutine;
 	
 	public TrajectorySidePegAutoMode(SideAutoVariant direction, TrajectorySidePostVariant postScore) {
 		AutoPathLoader.loadPaths();
 		mVariant = direction;
+		switch (mVariant) {
+			case BLUE_LEFT:
+				mPath = AutoPathLoader.get("BlueBoiler");
+				sliderPositions = new double[]{0, 2, -1};
+				mPostInverted = true;
+				break;
+			case BLUE_RIGHT:
+				mPath = AutoPathLoader.get("BlueLoading");
+				sliderPositions = new double[]{0, 2, -1};
+				mPostInverted = false;
+				break;
+			case RED_LEFT:
+				mPath = AutoPathLoader.get("RedLoading");
+				sliderPositions = new double[]{0, 2, -1};
+				mPostInverted = true;
+				break;
+			case RED_RIGHT:
+				mPath = AutoPathLoader.get("RedBoiler");
+				sliderPositions = new double[]{0, 2, -1};
+				mPostInverted = false;
+				break;
+		}
 		mPostVariant = postScore;
-		mTrajectoryGains = Gains.steikTrajectory;
+		mTrajectoryGains = Gains.kTrajectoryGains;
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
 	}
 
@@ -59,30 +81,8 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 		ArrayList<Routine> sequence = new ArrayList<>();
 		
 		sequence.add(new DriveSensorResetRoutine());
-		switch (mVariant) {
-		case BLUE_LEFT:
-			mPath = AutoPathLoader.get("BlueBoiler");
-			initialSliderPosition = 0;
-			mPostInverted = true;
-			break;
-		case BLUE_RIGHT:
-			mPath = AutoPathLoader.get("BlueLoading");
-			initialSliderPosition = 0;
-			mPostInverted = false;
-			break;
-		case RED_LEFT:
-			mPath = AutoPathLoader.get("RedLoading");
-			initialSliderPosition = 0;
-			mPostInverted = true;
-			break;
-		case RED_RIGHT:
-			mPath = AutoPathLoader.get("RedBoiler");
-			initialSliderPosition = 0;
-			mPostInverted = false;
-			break;
-		}
 		ArrayList<Routine> parallelSlider = new ArrayList<>();
-		parallelSlider.add(new CustomPositioningSliderRoutine(initialSliderPosition));
+		parallelSlider.add(new CustomPositioningSliderRoutine(sliderPositions[0]));
 		parallelSlider.add(new DrivePathRoutine(mPath, mTrajectoryGains, mUseGyro, false));
 
 		sequence.add(new ParallelRoutine(parallelSlider));
@@ -95,7 +95,7 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 			break;
 		case BACKUP:
 			mPostPath = null;
-			sequence.add(getBackup(backupPosition));
+			sequence.add(getBackup(sliderPositions[1]));
 			break;
 		case NEUTRAL_ZONE:
 			sequence.add(getDrop());
@@ -104,7 +104,7 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 			break;
 		case BOTH:
 			mPostPath = AutoPathLoader.get("RightSideDriveToNeutral");
-			sequence.add(getBackup(backupPosition));
+			sequence.add(getBackup(sliderPositions[1]));
 			sequence.add(getDrop());
 			sequence.add(new DrivePathRoutine(mPostPath, mTrajectoryGains, mUseGyro, mPostInverted));
 			break;
@@ -176,7 +176,6 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return "TrajectorySidePegAuto"+mVariant+mPostVariant;
 	}
 }

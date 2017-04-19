@@ -39,7 +39,12 @@ public class TestAutoMode extends AutoModeBase {
 //		sequence.add(new GyroMotionMagicTurnAngleRoutine(90));
 //		sequence.add(new TimeoutRoutine(1));
 //		sequence.add(new DriveStraightRoutine(75));
-		sequence.add(new CustomPositioningSliderRoutine(0));
+
+		double setpoint = Math.random()*5;
+		if (Math.random() > 0.5) {
+			setpoint*=-1;
+		}
+		sequence.add(new CustomPositioningSliderRoutine(Math.random()*5));
 		return new SequentialRoutine(sequence);
 	}
 

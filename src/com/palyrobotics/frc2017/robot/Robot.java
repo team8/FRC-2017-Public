@@ -113,7 +113,7 @@ public class Robot extends IterativeRobot {
 
 		mLogger.start();
 		mLogger.logRobotThread("Start autonomousInit()");
-		DashboardManager.getInstance().enableCANTable(true);
+		DashboardManager.getInstance().toggleCANTable(true);
 		robotState.gamePeriod = RobotState.GamePeriod.AUTO;
 		mHardwareUpdater.configureTalons(false);
 		mHardwareEnabledLooper.start();
@@ -156,7 +156,7 @@ public class Robot extends IterativeRobot {
 		mHardwareUpdater.configureTalons(false);
 		mHardwareUpdater.updateSensors(robotState);
 		mRoutineManager.reset(commands);
-		DashboardManager.getInstance().enableCANTable(true);
+		DashboardManager.getInstance().toggleCANTable(true);
 		commands.wantedDriveState = Drive.DriveState.CHEZY;	//switch to chezy after auto ends
 		commands = operatorInterface.updateCommands(commands);
 		mSubsystemLooper.start();
@@ -194,7 +194,7 @@ public class Robot extends IterativeRobot {
 		mHardwareEnabledLooper.stop();
 		mHardwareUpdater.configureDriveTalons();
 		mHardwareUpdater.disableTalons();
-		DashboardManager.getInstance().enableCANTable(false);
+		DashboardManager.getInstance().toggleCANTable(false);
 		mLogger.logRobotThread("End disabledInit()");
 		mLogger.cleanup();
 		System.out.println("Log file: "+mLogger.getLogPath());

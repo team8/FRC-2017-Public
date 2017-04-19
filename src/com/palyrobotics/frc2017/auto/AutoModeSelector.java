@@ -1,7 +1,7 @@
 package com.palyrobotics.frc2017.auto;
 
 import com.palyrobotics.frc2017.auto.modes.*;
-import com.palyrobotics.frc2017.auto.modes.DriveStraightCenterPegAutoMode.CenterAutoPostVariant;
+import com.palyrobotics.frc2017.auto.modes.archive.DriveStraightCenterPegAutoMode.CenterAutoPostVariant;
 import com.palyrobotics.frc2017.auto.modes.archive.*;
 import com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode.Alliance;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoPostVariant;

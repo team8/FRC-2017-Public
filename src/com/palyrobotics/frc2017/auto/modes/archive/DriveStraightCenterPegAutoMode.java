@@ -1,4 +1,4 @@
-package com.palyrobotics.frc2017.auto.modes;
+package com.palyrobotics.frc2017.auto.modes.archive;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode;

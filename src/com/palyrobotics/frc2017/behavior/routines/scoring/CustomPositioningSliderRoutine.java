@@ -30,7 +30,7 @@ public class CustomPositioningSliderRoutine extends Routine {
 	private double target;
 	
 	private double startTime;
-	private static final double raiseTime = 1000;
+	private static final double raiseTime = 1700;
 	
 	// Target should be absolute position in inches
 	public CustomPositioningSliderRoutine(double target) {
@@ -67,7 +67,6 @@ public class CustomPositioningSliderRoutine extends Routine {
 			break;
 		case RAISING:
 			if(System.currentTimeMillis() > (raiseTime+startTime)) {
-				System.out.println("Time up");
 				mState = DistancePositioningState.MOVING;
 				break;
 			}
@@ -80,7 +79,6 @@ public class CustomPositioningSliderRoutine extends Routine {
 
 	@Override
 	public Commands cancel(Commands commands) {
-		System.out.println("CUSTOM POSITITIONING SLIDER ROUTINE HAS FINISHED");
 		commands.wantedSliderState = Slider.SliderState.IDLE;
 		commands.robotSetpoints.sliderCustomSetpoint = Optional.empty();
 		try {

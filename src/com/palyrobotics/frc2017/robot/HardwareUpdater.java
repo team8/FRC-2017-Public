@@ -155,6 +155,7 @@ class HardwareUpdater {
 			// Reset and turn on the Talon 
 			slider.reset();
 			slider.clearStickyFaults();
+			slider.setStatusFrameRateMs(CANTalon.StatusFrameRate.General, 10);
 			slider.enable();
 			slider.enableControl();
 			slider.configMaxOutputVoltage(Constants.kSliderMaxVoltage);
@@ -230,6 +231,9 @@ class HardwareUpdater {
 		// Configure master talon feedback devices
 		leftMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		rightMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+
+		leftMasterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 10);
+		rightMasterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 10);
 
 		// Zero encoders
 		leftMasterTalon.setEncPosition(0);

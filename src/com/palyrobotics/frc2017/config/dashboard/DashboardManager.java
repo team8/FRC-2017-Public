@@ -5,8 +5,12 @@ import com.palyrobotics.frc2017.config.Gains;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class DashboardManager {
-	
-	private boolean enableCANTable = true;
+
+	// Usage of cantable or not
+	private boolean enableCANTable = false;
+
+	// Allow motion profile gains to be modified over NT
+	public final boolean pidTuning = false;
 
 	private static DashboardManager instance = new DashboardManager();
 	
@@ -60,22 +64,28 @@ public class DashboardManager {
 	}
 	
 	public void updateCANTable(String string) {
+		if (enableCANTable) {
+			return;
+		}
 		if (canTable != null) {
-			if (canTable == null) {
-				try {
-					this.canTable = NetworkTable.getTable(CAN_TABLE_NAME);
-				}
-				catch (UnsatisfiedLinkError e) {
-				}
-				catch (NoClassDefFoundError e) {}
-			}
-
 			canTable.putString("status", string+"\n");
+		} else {
+			// try to reach it again
+			try {
+				this.canTable = NetworkTable.getTable(CAN_TABLE_NAME);
+			}
+			catch (UnsatisfiedLinkError e) {
+			}
+			catch (NoClassDefFoundError e) {}
 		}
 	}
-	
-	public void enableCANTable(boolean enable) {
-		if (enable) {
+
+	/**
+	 * Start or stop sending cantable data
+	 * @param start true if you want to start sending data
+	 */
+	public void toggleCANTable(boolean start) {
+		if (start) {
 			if (canTable != null) {
 				canTable.putString("start", "true");
 				canTable.putString("end", "false");

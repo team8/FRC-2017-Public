@@ -24,25 +24,36 @@ import java.util.ArrayList;
 public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 	private final Alliance mVariant;
 	private boolean mBackup = true;
-	private Path mPath, mPostPath;
+	private Path mPath;
 	
 	private final boolean mUseGyro = true;
-	private boolean mPostInverted;
-	
-	private final Gains mTrajectoryGains, mShortGains;
+
+	private final Gains mShortGains;
+	private final Gains.TrajectoryGains mTrajectoryGains;
 	private final double backupDistance = 10;	// distance in inches
-	private final double pilotWaitTime = 2;	// time in seconds
-	
-	private double backupPosition = -3;
-	
+	// Store the left/right slider positions
+	private double[] sliderPositions;
+
+	private double[] blueSliderPositions = new double[]{0, -3, 1};
+	private double[] redSliderPositions = new double[]{0, -3, 1};
+
+	private final double pilotWaitTime = 1.5;	// time in seconds
+
 	private SequentialRoutine mSequentialRoutine;
 	
 	public TrajectoryCenterPegAutoMode(Alliance variant, boolean backup) {
 		AutoPathLoader.loadPaths();
 		mVariant = variant;
 		mBackup = backup;
-		mTrajectoryGains = new Gains(Gains.kSteikTrajectoryStraightkP, Gains.kSteikTrajectoryStraightkI,
-				Gains.kSteikTrajectoryStraightkD, 0, 0 ,0);
+		mTrajectoryGains = Gains.kStraightTrajectoryGains;
+		switch (mVariant) {
+			case BLUE:
+				sliderPositions = blueSliderPositions;
+				break;
+			case RED:
+				sliderPositions = redSliderPositions;
+				break;
+		}
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
 	}
 
@@ -60,10 +71,9 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 			break;
 		}
 
-		double initialSliderPosition = (mVariant == Alliance.BLUE) ? 0 : 0;
 		// Drive forward while moving slider to initial position
 		ArrayList<Routine> initialSlide = new ArrayList<>();
-		initialSlide.add(new CustomPositioningSliderRoutine(initialSliderPosition));
+		initialSlide.add(new CustomPositioningSliderRoutine(sliderPositions[0]));
 		initialSlide.add(new DrivePathRoutine(mPath, mTrajectoryGains, mUseGyro, false));
 		sequence.add(new ParallelRoutine(initialSlide));
 
@@ -71,7 +81,9 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 		sequence.add(new DriveSensorResetRoutine());
 	
 		if (mBackup) {
-			sequence.add(getBackup(backupPosition));		// Move slider slightly to the left
+			sequence.add(getBackup(sliderPositions[1]));		// Move slider slightly to the left
+			sequence.add(new TimeoutRoutine(pilotWaitTime));
+			sequence.add(getBackup(sliderPositions[2]));		// Move slider slightly to the left
 			sequence.add(new TimeoutRoutine(pilotWaitTime));
 		}
 		

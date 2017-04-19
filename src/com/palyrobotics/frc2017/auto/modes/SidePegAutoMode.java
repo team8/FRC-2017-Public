@@ -46,17 +46,32 @@ public class SidePegAutoMode extends AutoModeBase {
 	private Gains mLongGains, mShortGains;
 
 	private final double pilotWaitTime = 1.5; // time in seconds
-	private final double backupDistance = 35;	// distance in inches
+	private final double backupDistance = 12;	// distance in inches
+	private final double neutralBackupDistance = 47;
 	private final double neutralZoneDistance = 12 * 20;	// distance in inches
 
-	private double initialSliderPosition = 0;	// slider position in inches
-	private double backupPosition = 0;	// slider position in inches
+	private double[] sliderPositions;
 
 	public SidePegAutoMode(SideAutoVariant direction, SideAutoPostVariant postScore) {
 		mVariant = direction;
 		mPostVariant = postScore;
 		mLongGains = Gains.steikLongDriveMotionMagicGains;
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
+		switch (mVariant) {
+			case RED_LEFT:
+				sliderPositions = new double[]{0, 3};
+				break;
+			case BLUE_LEFT:
+				sliderPositions = new double[]{0, 1};
+				break;
+			case RED_RIGHT:
+				sliderPositions = new double[]{0, 2};
+				break;
+			case BLUE_RIGHT:
+				sliderPositions = new double[]{0, -4};
+				break;
+		}
+
 	}
 
 	@Override
@@ -75,31 +90,32 @@ public class SidePegAutoMode extends AutoModeBase {
 
 		switch (mVariant) {
 		case RED_LEFT:
-			backupPosition = 3;
+			sliderPositions = new double[]{0, 3};
 			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
 			break;
 		case BLUE_LEFT:
-			backupPosition = 1; //-3
+			sliderPositions = new double[]{0, 1};
 			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
 			break;
 		case RED_RIGHT:
-			backupPosition = 2;
+
+			sliderPositions = new double[]{0, 2};
 			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;
 		case BLUE_RIGHT:
-			backupPosition = -4;
+			sliderPositions = new double[]{0, -4};
 			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;
 		}
 		
-		sequence.add(getDriveToAirship());
-		sequence.add(new TimeoutRoutine(pilotWaitTime));	// Wait 2.5s so pilot can pull gear out
+		sequence.add(getDriveToAirship()); // drive to airship
+		sequence.add(new TimeoutRoutine(pilotWaitTime));	// Wait so pilot can pull gear out
 
 		switch (mPostVariant) {
 		case NONE:
 			break;
 		case BACKUP:
-			sequence.add(getBackup(backupPosition));
+			sequence.add(getBackup(sliderPositions[1]));
 			break;
 		case NEUTRAL_ZONE:
 			sequence.add(getDriveToNeutralZone());
@@ -118,20 +134,16 @@ public class SidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 		// loading station side
 		case RED_LEFT:
-			initialSliderPosition = 0;
 			driveForwardSetpoint = AutoDistances.kRedLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_RIGHT:
-			initialSliderPosition = 0;
 			driveForwardSetpoint = AutoDistances.kBlueLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		// boiler side
 		case RED_RIGHT:
-			initialSliderPosition = 0;
 			driveForwardSetpoint = AutoDistances.kRedBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		case BLUE_LEFT:
-			initialSliderPosition = 0;
 			driveForwardSetpoint = AutoDistances.kBlueBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		default:
@@ -147,7 +159,7 @@ public class SidePegAutoMode extends AutoModeBase {
 		Logger.getInstance().logRobotThread("Drive forward", driveForward);
 		ArrayList<Routine> initialSlide = new ArrayList<>();
 		initialSlide.add(new CANTalonRoutine(driveForward, true));
-		initialSlide.add(new CustomPositioningSliderRoutine(initialSliderPosition));
+		initialSlide.add(new CustomPositioningSliderRoutine(sliderPositions[0]));
 		return new ParallelRoutine(initialSlide);
 	}
 	/*
@@ -222,7 +234,7 @@ public class SidePegAutoMode extends AutoModeBase {
 	 * GET NEUTRAL ZONE
 	 */
 	private SequentialRoutine getDriveToNeutralZone() {
-		double driveBackupSetpoint = -(backupDistance + 12) * Constants.kDriveTicksPerInch;
+		double driveBackupSetpoint = -(neutralBackupDistance) * Constants.kDriveTicksPerInch;
 		double driveToNeutralZoneSetpoint = neutralZoneDistance * Constants.kDriveTicksPerInch;
 		
 		DriveSignal backupSignal = DriveSignal.getNeutralSignal();
@@ -287,13 +299,13 @@ public class SidePegAutoMode extends AutoModeBase {
 			name = "SidePeg";
 			break;
 		}
-		name += "SliderInitialMove"+initialSliderPosition;
+		name += "SliderInitialMove"+sliderPositions[0];
 		name += "EncoderTurn";
 		switch (mPostVariant) {
 		case NONE:
 			break;
 		case BACKUP:
-			name += "Backup" + backupPosition;
+			name += "Backup" + sliderPositions[1];
 			break;
 		case NEUTRAL_ZONE:
 			name += "NeutralZone";
