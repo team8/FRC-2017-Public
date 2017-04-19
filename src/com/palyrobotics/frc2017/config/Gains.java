@@ -10,14 +10,14 @@ public class Gains {
 
 	public static double kSteikTrajectorykP = 1; //0.7, 0.8, 1.00, 0.05
 	public static double kSteikTrajectorykD = 0.2; // 0.1, 0.015
-	public static double kSteikTrajectorykV = 0.077;
-	public static double kSteikTrajectorykA = 0.000;
+	public static double kSteikTrajectorykV = 0.069;
+	public static double kSteikTrajectorykA = 0.037;
 	public static double kSteikTrajectoryTurnkP = 0.01;//0.01; //-0.01
 	public static double kSteikTrajectoryTurnkD = 0.0;
 	public static final Gains.TrajectoryGains kTrajectoryGains = new TrajectoryGains(kSteikTrajectorykP,
 			kSteikTrajectorykD, kSteikTrajectorykV, kSteikTrajectorykA);
-	public static final double kSteikTrajectoryStraightkP = 1;
-	public static final double kSteikTrajectoryStraightkD = 0.02;
+	public static final double kSteikTrajectoryStraightkP = 0.38; // 1
+	public static final double kSteikTrajectoryStraightkD = 0.0; // 0.02
 	public static final TrajectoryGains kStraightTrajectoryGains = new TrajectoryGains(kSteikTrajectoryStraightkP,
 			kSteikTrajectoryStraightkD, kSteikTrajectorykV, kSteikTrajectorykA);
 
@@ -45,8 +45,6 @@ public class Gains {
 	// Short distance max speed 45 in/s Max accel 95 in/s^2
 	public static final double kSteikShortDriveMotionMagicCruiseVelocity = 45 * Constants.kDriveSpeedUnitConversion;
 	public static final double kSteikShortDriveMotionMagicMaxAcceleration = 95 * Constants.kDriveSpeedUnitConversion;
-//	public static final double kSteikShortDriveMotionMagicCruiseVelocity = 20 * Constants.kDriveSpeedUnitConversion;
-//	public static final double kSteikShortDriveMotionMagicMaxAcceleration = 40 * Constants.kDriveSpeedUnitConversion;
 	public static final double kSteikShortDriveMotionMagickP = 2.5;
 	public static final double kSteikShortDriveMotionMagickI = 0.01;
 	public static final double kSteikShortDriveMotionMagickD = 250;
@@ -59,8 +57,6 @@ public class Gains {
 	// Long distance more aggressive, 180 in/s, 120 in/s^2 accel
 	public static final double kSteikLongDriveMotionMagicCruiseVelocity = 180 * Constants.kDriveSpeedUnitConversion;
 	public static final double kSteikLongDriveMotionMagicMaxAcceleration = 120 * Constants.kDriveSpeedUnitConversion;
-//	public static final double kSteikLongDriveMotionMagicCruiseVelocity = 36 * Constants.kDriveSpeedUnitConversion;
-//	public static final double kSteikLongDriveMotionMagicMaxAcceleration = 25 * Constants.kDriveSpeedUnitConversion;
 	public static final double kSteikLongDriveMotionMagickP = 4.0;
 	public static final double kSteikLongDriveMotionMagickI = 0.01;
 	public static final double kSteikLongDriveMotionMagickD = 400;

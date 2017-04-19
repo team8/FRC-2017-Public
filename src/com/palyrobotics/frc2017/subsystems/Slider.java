@@ -224,18 +224,13 @@ public class Slider extends Subsystem implements SubsystemLoop {
 //			System.out.println("no slider target");
 			return true;
 		}
-
-		try {
-			if(mRobotState.sliderClosedLoopError != null) {
-				if (!mRobotState.sliderClosedLoopError.isPresent()) {
-					return false;
-				}
+		if(mRobotState.sliderClosedLoopError != null) {
+			if (!mRobotState.sliderClosedLoopError.isPresent()) {
+				return false;
 			}
-		} catch (NullPointerException e) {
-			e.printStackTrace();
+		} else {
 			return false;
 		}
-		System.out.println("SLIDER CLOSED LOOP ERROR: " + mRobotState.sliderClosedLoopError.get());
 
 		return Math.abs(mRobotState.sliderClosedLoopError.get()) < kEncoderTolerance && mRobotState.sliderVelocity == 0;
 	}

@@ -1,6 +1,7 @@
 package com.palyrobotics.frc2017.auto.modes.archive;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
+import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode;
 import com.palyrobotics.frc2017.behavior.ParallelRoutine;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;

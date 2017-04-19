@@ -12,6 +12,7 @@ public abstract class SubsystemRunnable implements Runnable {
             runCrashTracked();
         } catch (Throwable t) {
             CrashTracker.logThrowableCrash(t);
+            System.out.println("Subsystem crash, restarting robot code");
             System.exit(1);
             throw t;
         }

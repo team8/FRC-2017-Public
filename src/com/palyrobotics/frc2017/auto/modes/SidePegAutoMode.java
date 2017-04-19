@@ -48,7 +48,7 @@ public class SidePegAutoMode extends AutoModeBase {
 	private final double pilotWaitTime = 1.5; // time in seconds
 	private final double backupDistance = 12;	// distance in inches
 	private final double neutralBackupDistance = 47;
-	private final double neutralZoneDistance = 12 * 20;	// distance in inches
+	private final double neutralZoneDistance = 12 * 15;	// distance in inches
 
 	private double[] sliderPositions;
 

@@ -54,7 +54,7 @@ public class Robot extends IterativeRobot {
 		DashboardManager.getInstance().robotInit();
 		AndroidConnectionHelper.getInstance().start(AndroidConnectionHelper.StreamState.JSON);
 		System.out.println("Finished starting");
-//		mLogger.setFileName("PreElims");
+		mLogger.setFileName("PracticeMatch");
 		mLogger.start();
 		mLogger.logRobotThread("robotInit() start");
 		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);
@@ -105,7 +105,6 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		System.out.println("Start autonomousInit()");
 		System.out.println("kP: " + Gains.kSteikTrajectorykP);
-		System.out.println("kI: " + Gains.kSteikTrajectorykI);
 		System.out.println("kD: " + Gains.kSteikTrajectorykD);
 		System.out.println("kV: " + Gains.kSteikTrajectorykV);
 		System.out.println("kA: " + Gains.kSteikTrajectorykA);

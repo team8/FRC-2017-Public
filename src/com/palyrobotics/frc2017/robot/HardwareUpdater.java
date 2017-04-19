@@ -155,7 +155,7 @@ class HardwareUpdater {
 			// Reset and turn on the Talon 
 			slider.reset();
 			slider.clearStickyFaults();
-			slider.setStatusFrameRateMs(CANTalon.StatusFrameRate.General, 10);
+			slider.setStatusFrameRateMs(CANTalon.StatusFrameRate.General, 5);
 			slider.enable();
 			slider.enableControl();
 			slider.configMaxOutputVoltage(Constants.kSliderMaxVoltage);
@@ -232,8 +232,8 @@ class HardwareUpdater {
 		leftMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		rightMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 
-		leftMasterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 10);
-		rightMasterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 10);
+		leftMasterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 5);
+		rightMasterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 5);
 
 		// Zero encoders
 		leftMasterTalon.setEncPosition(0);
@@ -310,11 +310,9 @@ class HardwareUpdater {
 			robotState.sliderPotentiometer = HardwareAdapter.SliderHardware.getInstance().sliderPotentiometer.getValue();
 			robotState.sliderVelocity = sliderTalon.getSpeed();
 			if (sliderTalon.getControlMode().isPID()) {
-				System.out.println("SLIDER CONTROL LOOP IS PID");
 				robotState.sliderClosedLoopError = Optional.of(sliderTalon.getClosedLoopError());
 //				robotState.sliderClosedLoopError = Optional.of();
 			} else {
-				System.out.println("SLIDER CONTROL LOOP IS NOT PID");
 				robotState.sliderClosedLoopError = Optional.empty();
 			}
 		}

@@ -38,7 +38,7 @@ public class AutoDistances {
 	// Distances in feet, angles in radians
 	public static double kBackup = -0.8;
 	public static double kRedCenter = 89.0/12;
-	public static double kBlueCenter = 93.0/12;
+	public static double kBlueCenter = 89.0/12;
 	// Blue right loading station
 	public static double kBlueLoadingPegX = 99.5+7;//115.0; // 79.5
 	public static double kBlueLoadingPegY = 53.25+30;//70.0; // 66, 70, 73
