@@ -195,7 +195,7 @@ public class SidePegAutoMode extends AutoModeBase {
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		
 		Logger.getInstance().logRobotThread("Drive to airship", driveToAirship);
-		return new CANTalonRoutine(driveToAirship, true);
+		return new CANTalonRoutine(driveToAirship, true, 4);
 	}
 	/*
 	 * GET BACKUP

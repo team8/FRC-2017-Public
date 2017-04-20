@@ -8,6 +8,7 @@ import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
+import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.archive.SubsystemLooper;
 import com.palyrobotics.frc2017.util.logger.Logger;
@@ -54,7 +55,7 @@ public class Robot extends IterativeRobot {
 		DashboardManager.getInstance().robotInit();
 		AndroidConnectionHelper.getInstance().start();
 		System.out.println("Finished starting");
-//		mLogger.setFileName("PracticeMatch");
+		mLogger.setFileName("Quals1");
 		mLogger.start();
 		mLogger.logRobotThread("robotInit() start");
 		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);
@@ -63,11 +64,10 @@ public class Robot extends IterativeRobot {
 		mLogger.logRobotThread("Alliance station: "+DriverStation.getInstance().getLocation());
 		try {
 			DriverStation.reportWarning("Auto is "+AutoModeSelector.getInstance().getAutoMode().toString(), false);
-//			DriverStation.reportWarning((AndroidConnectionHelper.getInstance().isServerStarted()) ? 
-//					"Nexus streaming": "Nexus not streaming", false);
-			mLogger.logRobotThread((AndroidConnectionHelper.getInstance().isServerStarted()) ? 
+			mLogger.logRobotThread((AndroidConnectionHelper.getInstance().isServerStarted()) ?
 					"Nexus streaming": "Nexus not streaming");
 			mLogger.logRobotThread("Auto", AutoModeSelector.getInstance().getAutoMode().toString());
+			DashboardManager.getInstance().publishKVPair(new DashboardValue("automodestring", AutoModeSelector.getInstance().getAutoMode().toString()));
 		} catch (NullPointerException e) {
 			mLogger.logRobotThread("Auto: "+e.getMessage());
 		}
@@ -78,7 +78,6 @@ public class Robot extends IterativeRobot {
 				System.exit(1);
 			}
 			mSubsystemLooper.register(mDrive);
-//			mSubsystemLooper.register(mFlippers);
 			mSubsystemLooper.register(mSlider);
 			mSubsystemLooper.register(mSpatula);
 			mSubsystemLooper.register(mIntake);
@@ -104,11 +103,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		System.out.println("Start autonomousInit()");
-		System.out.println("kP: " + Gains.kSteikTrajectorykP);
-		System.out.println("kD: " + Gains.kSteikTrajectorykD);
-		System.out.println("kV: " + Gains.kSteikTrajectorykV);
-		System.out.println("kA: " + Gains.kSteikTrajectorykA);
-		System.out.println("Turn kP: " + Gains.kSteikTrajectoryTurnkP);
 
 		mLogger.start();
 		mLogger.logRobotThread("Start autonomousInit()");

@@ -1,4 +1,4 @@
-package com.palyrobotics.frc2017.auto.modes.archive;
+package com.palyrobotics.frc2017.auto.modes;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode;
@@ -37,27 +37,37 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 	private Gains mLongGains, mShortGains;
 
 	private final double pilotWaitTime = 1.5; // time in seconds
-	private final double backupDistance = 10; // distance in inches
+	private final double backupDistance = 12; // distance in inches
 	private double overshootDistance = 0;
 	private double bonusDistance = 30; // extra space
 
-	double initialSliderPosition = 0;
-	double backupPosition = 0;
-	boolean isRightTarget;
+	private double[] sliderPositions = new double[2];
 
-	public VisionSidePegAutoMode(SidePegAutoMode.SideAutoVariant direction, boolean rightTarget,
+	public VisionSidePegAutoMode(SidePegAutoMode.SideAutoVariant direction,
 								 boolean backup) {
 		mVariant = direction;
-		isRightTarget = rightTarget;
 		mBackup = backup;
 		mLongGains = Gains.steikLongDriveMotionMagicGains;
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
-		
-		if (isRightTarget) {
-			initialSliderPosition = -7;
-		} else {
-			initialSliderPosition = -7;
+		sliderPositions = new double[2];
+		sliderPositions[0] = -7;
+		switch (mVariant) {
+			// loading station
+			case RED_LOADING:
+				sliderPositions[1] = 2;
+				break;
+			case BLUE_LOADING:
+				sliderPositions[1] = 2;
+				break;
+			// boiler side
+			case RED_BOILER:
+				sliderPositions[1] = 0;
+				break;
+			case BLUE_BOILER:
+				sliderPositions[1] = 1;
+				break;
 		}
+
 	}
 
 	@Override
@@ -89,20 +99,16 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 		// loading station
 		case RED_LOADING:
-			backupPosition = 2;
 			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
 			break;
 		case BLUE_LOADING:
-			backupPosition = 2;
 			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;
 		// boiler side
 		case RED_BOILER:
-			backupPosition = 0;
 			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;
 		case BLUE_BOILER:
-			backupPosition = 1;
 			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
 			break;
 		}
@@ -111,7 +117,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 		sequence.add(getFirstAttempt());
 		sequence.add(new TimeoutRoutine(pilotWaitTime));	// Wait so pilot can pull gear out
 		if (mBackup) {
-			sequence.add(getBackup(backupPosition));
+			sequence.add(getBackup(sliderPositions[1]));
 		}
 
 		mSequentialRoutine = new SequentialRoutine(sequence);
@@ -152,7 +158,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 		Logger.getInstance().logRobotThread("Drive forward", driveForward);
 		ArrayList<Routine> initialSlide = new ArrayList<>();
 		initialSlide.add(new CANTalonRoutine(driveForward, true));
-		initialSlide.add(new CustomPositioningSliderRoutine(initialSliderPosition));
+		initialSlide.add(new CustomPositioningSliderRoutine(sliderPositions[0]));
 		return new ParallelRoutine(initialSlide);
 	}
 	/*
@@ -188,7 +194,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		
 		Logger.getInstance().logRobotThread("Drive to airship", driveToAirship);
-		return new CANTalonRoutine(driveToAirship, true);
+		return new CANTalonRoutine(driveToAirship, true, 5);
 	}
 	
 	private Routine getFirstAttempt() {
@@ -259,10 +265,10 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 			name += "SidePeg";
 			break;
 		}
-		name += "SliderInitialMove"+initialSliderPosition;
+		name += "SliderInitialMove"+sliderPositions[0];
 		name += "EncoderTurn";
 		if (mBackup) {
-			name += "Backup"+backupPosition;
+			name += "Backup"+sliderPositions[1];
 		} else {
 			name += "NotBackup";
 		}

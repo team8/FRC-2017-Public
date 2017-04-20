@@ -1,9 +1,11 @@
 package com.palyrobotics.frc2017.behavior;
 
+import com.ctre.CANTalon;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.subsystems.controllers.CANTalonDriveController;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
@@ -18,6 +20,28 @@ import static org.junit.Assert.*;
  * Created by Nihar on 2/16/17.
  */
 public class CANTalonRoutineTest {
+	@Test
+	public void timeoutTest() throws Exception {
+		Drive.getInstance().start();
+
+		Commands commands = new Commands();
+		DriveSignal mSignal = DriveSignal.getNeutralSignal();
+		CANTalonRoutine routine = new CANTalonRoutine(mSignal, false, 2);
+		routine.start();
+		Robot.getRobotState().leftSetpoint = 0;
+		Robot.getRobotState().rightSetpoint = 0;
+		Robot.getRobotState().leftControlMode = CANTalon.TalonControlMode.PercentVbus;
+		Robot.getRobotState().rightControlMode = CANTalon.TalonControlMode.PercentVbus;
+		double startTime = System.currentTimeMillis();
+		while (!routine.finished()) {
+			routine.update(commands);
+			Drive.getInstance().update(commands, Robot.getRobotState());
+			Thread.sleep(10);
+			System.out.println("routine update");
+		}
+		System.out.println("Done! " + (System.currentTimeMillis()-startTime));
+	}
+
 	@Test
 	public void basicTest() throws Exception {
 		// Construct arbitrary offboard position loop drive signal

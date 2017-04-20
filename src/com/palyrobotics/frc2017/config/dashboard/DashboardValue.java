@@ -13,6 +13,11 @@ public class DashboardValue {
 		this.key = key;
 		value = "NO_ELEMENT";
 	}
+
+	public DashboardValue(String key, String initialValue) {
+		this.key = key;
+		this.value = initialValue;
+	}
 	
 	public void updateValue(Object val) {
 		this.value = val.toString();

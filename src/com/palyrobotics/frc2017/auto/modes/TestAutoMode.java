@@ -46,6 +46,10 @@ public class TestAutoMode extends AutoModeBase {
 		}
 		sequence.add(new CustomPositioningSliderRoutine(Math.random()*5));
 
+		DriveSignal signal = DriveSignal.getNeutralSignal();
+		signal.leftMotor.setPercentVBus(0.2);
+		signal.rightMotor.setPercentVBus(0.2);
+//		sequence.add(new CANTalonRoutine(signal, false, 3));
 //		sequence.add(new CustomPositioningSliderRoutine(-7));
 //		sequence.add(new VisionSliderRoutine());
 		return new SequentialRoutine(sequence);

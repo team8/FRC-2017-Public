@@ -21,10 +21,9 @@ public class AutoModeSelector {
 	private enum AutoIndices {
 		DO_NOTHING(0), BASELINE(1),
 		CENTER_PEG(2), SIDE_PEG(3), 
-		VISION_CENTER_PEG(4), VISION_SIDE_PEG(5), 
-		DRIVE_STRAIGHT_BASELINE(6), DRIVE_STRAIGHT_CENTER_PEG(7), DRIVE_STRAIGHT_SIDE_PEG(8),
-		TRAJECTORY_CENTER(9), TRAJECTORY_SIDE(10),
-		TEST(11), TEST_TRAJECTORY(12);
+		VISION_CENTER_PEG(4), VISION_SIDE_PEG(5),
+		TRAJECTORY_CENTER(6), TRAJECTORY_SIDE(7),
+		TEST(8), TEST_TRAJECTORY(9);
 		private final int id;
 		AutoIndices(int id) {this.id = id;}
 		public int get() {return id;}
@@ -57,21 +56,18 @@ public class AutoModeSelector {
   /*1*/ registerAutonomous(new BaseLineAutoMode(Alliance.RED));
 
   /*2*/ registerAutonomous(new CenterPegAutoMode(Alliance.RED, // Alliance Color
-		  										 true)); // Backup boolean
+				true)); // Backup boolean
 		// red left/ blue right = loading station, red right/blue left = boiler
   /*3*/	registerAutonomous(new SidePegAutoMode(SideAutoVariant.RED_LOADING, // Alliance color and side
-											   SideAutoPostVariant.BACKUP)); // Should backup?
+				SideAutoPostVariant.BACKUP)); // Should backup?
   /*4*/ registerAutonomous(new VisionCenterPegAutoMode(Alliance.BLUE, false, true)); // alliance, seeking right vision target?, backup?
   /*5*/ registerAutonomous(new VisionSidePegAutoMode(SideAutoVariant.RED_LOADING, // Field position
-		  										false, true)); // seeking right vision target?, backup?
-  /*6*/ registerAutonomous(new DriveStraightBaseLineAutoMode(Alliance.RED));
-  /*7*/ registerAutonomous(new DriveStraightCenterPegAutoMode(Alliance.BLUE, CenterAutoPostVariant.BACKUP));
-  /*8*/ registerAutonomous(new DriveStraightSidePegAutoMode(SideAutoVariant.RED_LOADING, SideAutoPostVariant.BACKUP));
-		
-  /*9*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.RED, true));
-  /*10*/registerAutonomous(new TrajectorySidePegAutoMode(SideAutoVariant.BLUE_LOADING, TrajectorySidePostVariant.BACKUP));
-  /*11*/registerAutonomous(new TestAutoMode());
-  /*12*/registerAutonomous(new TestTrajectoryAutoMode());
+						true)); // seeking right vision target?, backup?
+
+  /*6*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.RED, true));
+  /*7*/registerAutonomous(new TrajectorySidePegAutoMode(SideAutoVariant.BLUE_LOADING, TrajectorySidePostVariant.BACKUP));
+  /*8*/registerAutonomous(new TestAutoMode());
+  /*9*/registerAutonomous(new TestTrajectoryAutoMode());
 	}
 
 	/**

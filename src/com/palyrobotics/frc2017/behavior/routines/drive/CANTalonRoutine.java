@@ -20,7 +20,7 @@ public class CANTalonRoutine extends Routine {
 	private final DriveSignal mSignal;
 	
 	private double timeout;
-	
+	private double startTime;
 	
 	public CANTalonRoutine(DriveSignal controller, boolean relativeSetpoint) {
 		this.mSignal = controller;
@@ -32,7 +32,7 @@ public class CANTalonRoutine extends Routine {
 	  * Setpoint is relative when you want it to be updated on start
 	  * For position and motion magic only
 	  * 
-	  * Timeout is in MILLIseconds
+	  * Timeout is in seconds
 	  */
 	public CANTalonRoutine(DriveSignal controller, boolean relativeSetpoint, double timeout) {
 		this.mSignal = controller;
@@ -43,7 +43,7 @@ public class CANTalonRoutine extends Routine {
 	@Override
 	public void start() {
 		
-		timeout += System.currentTimeMillis();
+		startTime = System.currentTimeMillis();
 		
 		if (relativeSetpoint) {
 			if (mSignal.leftMotor.getControlMode() == CANTalon.TalonControlMode.MotionMagic) {
@@ -108,7 +108,7 @@ public class CANTalonRoutine extends Routine {
 		}
 		if (!drive.hasController() || (drive.getController().getClass() == CANTalonDriveController.class && drive.controllerOnTarget())) {
 		}
-		return !drive.hasController() || System.currentTimeMillis() > this.timeout || (drive.getController().getClass() == CANTalonDriveController.class && drive.controllerOnTarget());
+		return !drive.hasController() || System.currentTimeMillis() > this.timeout+startTime || (drive.getController().getClass() == CANTalonDriveController.class && drive.controllerOnTarget());
 	}
 
 	@Override
