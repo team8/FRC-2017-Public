@@ -1,6 +1,5 @@
 package com.palyrobotics.frc2017.auto.modes;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
@@ -50,22 +49,22 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 		AutoPathLoader.loadPaths();
 		mVariant = direction;
 		switch (mVariant) {
-			case BLUE_LEFT:
+			case BLUE_BOILER:
 				mPath = AutoPathLoader.get("BlueBoiler");
 				sliderPositions = new double[]{0, 2, -1};
 				mPostInverted = true;
 				break;
-			case BLUE_RIGHT:
+			case BLUE_LOADING:
 				mPath = AutoPathLoader.get("BlueLoading");
 				sliderPositions = new double[]{0, 2, -1};
 				mPostInverted = false;
 				break;
-			case RED_LEFT:
+			case RED_LOADING:
 				mPath = AutoPathLoader.get("RedLoading");
 				sliderPositions = new double[]{0, 2, -1};
 				mPostInverted = true;
 				break;
-			case RED_RIGHT:
+			case RED_BOILER:
 				mPath = AutoPathLoader.get("RedBoiler");
 				sliderPositions = new double[]{0, 2, -1};
 				mPostInverted = false;

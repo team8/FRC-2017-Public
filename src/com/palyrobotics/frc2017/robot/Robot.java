@@ -54,7 +54,7 @@ public class Robot extends IterativeRobot {
 		DashboardManager.getInstance().robotInit();
 		AndroidConnectionHelper.getInstance().start();
 		System.out.println("Finished starting");
-		mLogger.setFileName("PracticeMatch");
+//		mLogger.setFileName("PracticeMatch");
 		mLogger.start();
 		mLogger.logRobotThread("robotInit() start");
 		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);
@@ -142,6 +142,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 //		logPeriodic();
 //		System.out.println(robotState.sliderEncoder);
+		mLogger.logRobotThread(AndroidConnectionHelper.getInstance().getXDist());
 		commands = mRoutineManager.update(commands);
 	}
 

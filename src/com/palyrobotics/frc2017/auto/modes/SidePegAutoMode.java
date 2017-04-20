@@ -24,10 +24,10 @@ import java.util.ArrayList;
 public class SidePegAutoMode extends AutoModeBase {
 	// Represents the peg we are going for
 	public enum SideAutoVariant {
-		RED_RIGHT, 	// Boiler
-		BLUE_RIGHT,	// Loading station
-		RED_LEFT, 	// Loading station
-		BLUE_LEFT	// Boiler
+		RED_BOILER, 	// Boiler
+		BLUE_LOADING,	// Loading station
+		RED_LOADING, 	// Loading station
+		BLUE_BOILER    // Boiler
 	}
 	// Represents post score action
 	public enum SideAutoPostVariant {
@@ -58,16 +58,16 @@ public class SidePegAutoMode extends AutoModeBase {
 		mLongGains = Gains.steikLongDriveMotionMagicGains;
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
 		switch (mVariant) {
-			case RED_LEFT:
+			case RED_LOADING:
 				sliderPositions = new double[]{0, 3};
 				break;
-			case BLUE_LEFT:
+			case BLUE_BOILER:
 				sliderPositions = new double[]{0, 1};
 				break;
-			case RED_RIGHT:
+			case RED_BOILER:
 				sliderPositions = new double[]{0, 2};
 				break;
-			case BLUE_RIGHT:
+			case BLUE_LOADING:
 				sliderPositions = new double[]{0, -4};
 				break;
 		}
@@ -89,20 +89,20 @@ public class SidePegAutoMode extends AutoModeBase {
 		sequence.add(getDriveForward());
 
 		switch (mVariant) {
-		case RED_LEFT:
+		case RED_LOADING:
 			sliderPositions = new double[]{0, 3};
 			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
 			break;
-		case BLUE_LEFT:
+		case BLUE_BOILER:
 			sliderPositions = new double[]{0, 1};
 			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
 			break;
-		case RED_RIGHT:
+		case RED_BOILER:
 
 			sliderPositions = new double[]{0, 2};
 			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;
-		case BLUE_RIGHT:
+		case BLUE_LOADING:
 			sliderPositions = new double[]{0, -4};
 			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;
@@ -133,17 +133,17 @@ public class SidePegAutoMode extends AutoModeBase {
 		double driveForwardSetpoint;
 		switch (mVariant) {
 		// loading station side
-		case RED_LEFT:
+		case RED_LOADING:
 			driveForwardSetpoint = AutoDistances.kRedLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
-		case BLUE_RIGHT:
+		case BLUE_LOADING:
 			driveForwardSetpoint = AutoDistances.kBlueLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		// boiler side
-		case RED_RIGHT:
+		case RED_BOILER:
 			driveForwardSetpoint = AutoDistances.kRedBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
-		case BLUE_LEFT:
+		case BLUE_BOILER:
 			driveForwardSetpoint = AutoDistances.kBlueBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		default:
@@ -170,17 +170,17 @@ public class SidePegAutoMode extends AutoModeBase {
 		double driveToAirshipSetpoint = 0;
 		switch (mVariant) {
 		// loading station side
-		case RED_LEFT:
+		case RED_LOADING:
 			driveToAirshipSetpoint = AutoDistances.kRedLoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
-		case BLUE_RIGHT:
+		case BLUE_LOADING:
 			driveToAirshipSetpoint = AutoDistances.kBlueLoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 			// boiler side
-		case RED_RIGHT:
+		case RED_BOILER:
 			driveToAirshipSetpoint = AutoDistances.kRedBoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
-		case BLUE_LEFT:
+		case BLUE_BOILER:
 			driveToAirshipSetpoint = AutoDistances.kBlueBoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		default:
@@ -263,12 +263,12 @@ public class SidePegAutoMode extends AutoModeBase {
 		// Turn towards neutral zone
 		// Intentional switch-case falling
 		switch (mVariant) {
-		case RED_LEFT:
-		case BLUE_LEFT:
+		case RED_LOADING:
+		case BLUE_BOILER:
 			sequence.add(new EncoderTurnAngleRoutine(-(Constants.kSidePegTurnAngleDegrees - 15)));
 			break;
-		case RED_RIGHT:
-		case BLUE_RIGHT:
+		case RED_BOILER:
+		case BLUE_LOADING:
 			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees - 15));
 			break;
 		}
@@ -283,16 +283,16 @@ public class SidePegAutoMode extends AutoModeBase {
 	public String toString() {
 		String name;
 		switch (mVariant) {
-		case RED_LEFT:
+		case RED_LOADING:
 			name = "RedLeftSidePeg";
 			break;
-		case RED_RIGHT:
+		case RED_BOILER:
 			name = "RedRightSidePeg";
 			break;
-		case BLUE_LEFT:
+		case BLUE_BOILER:
 			name = "BlueLeftSidePeg";
 			break;
-		case BLUE_RIGHT:
+		case BLUE_LOADING:
 			name = "BlueRightSidePeg";
 			break;
 		default:

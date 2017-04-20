@@ -36,7 +36,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 	// Long distance vs short distance
 	private Gains mLongGains, mShortGains;
 
-	private final double pilotWaitTime = 2.25; // time in seconds
+	private final double pilotWaitTime = 1.5; // time in seconds
 	private final double backupDistance = 10; // distance in inches
 	private double overshootDistance = 0;
 	private double bonusDistance = 30; // extra space
@@ -88,20 +88,20 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 		// NOTE: switch case falling, split by lefts vs rights
 		switch (mVariant) {
 		// loading station
-		case RED_LEFT:
+		case RED_LOADING:
 			backupPosition = 2;
 			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
 			break;
-		case BLUE_RIGHT:
+		case BLUE_LOADING:
 			backupPosition = 2;
 			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;
 		// boiler side
-		case RED_RIGHT:
+		case RED_BOILER:
 			backupPosition = 0;
 			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;
-		case BLUE_LEFT:
+		case BLUE_BOILER:
 			backupPosition = 1;
 			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
 			break;
@@ -125,17 +125,17 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 		double driveForwardSetpoint;
 		switch (mVariant) {
 		// loading station side
-		case RED_LEFT:
+		case RED_LOADING:
 			driveForwardSetpoint = AutoDistances.kRedLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
-		case BLUE_RIGHT:
+		case BLUE_LOADING:
 			driveForwardSetpoint = AutoDistances.kBlueLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 			// boiler side
-		case RED_RIGHT:
+		case RED_BOILER:
 			driveForwardSetpoint = AutoDistances.kRedBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
-		case BLUE_LEFT:
+		case BLUE_BOILER:
 			driveForwardSetpoint = AutoDistances.kBlueBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		default:
@@ -163,17 +163,17 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 		double driveToAirshipSetpoint = 0;
 		switch (mVariant) {
 		// loading station side
-		case RED_LEFT:
+		case RED_LOADING:
 			driveToAirshipSetpoint = AutoDistances.k254LoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
-		case BLUE_RIGHT:
+		case BLUE_LOADING:
 			driveToAirshipSetpoint = AutoDistances.k254LoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 			// boiler side
-		case RED_RIGHT:
+		case RED_BOILER:
 			driveToAirshipSetpoint = AutoDistances.k254BoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
-		case BLUE_LEFT:
+		case BLUE_BOILER:
 			driveToAirshipSetpoint = AutoDistances.k254BoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
 			break;
 		default:
@@ -243,16 +243,16 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 		String name;
 		name = "Vision";
 		switch (mVariant) {
-		case RED_LEFT:
+		case RED_LOADING:
 			name += "RedLeftSidePeg";
 			break;
-		case RED_RIGHT:
+		case RED_BOILER:
 			name += "RedRightSidePeg";
 			break;
-		case BLUE_LEFT:
+		case BLUE_BOILER:
 			name += "BlueLeftSidePeg";
 			break;
-		case BLUE_RIGHT:
+		case BLUE_LOADING:
 			name += "BlueRightSidePeg";
 			break;
 		default:

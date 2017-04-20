@@ -55,19 +55,19 @@ public class DriveStraightSidePegAutoMode extends AutoModeBase {
 
 		// NOTE: switch case falling, split by lefts vs rights
 		switch (mVariant) {
-		case RED_LEFT:
+		case RED_LOADING:
 			backupPosition = 3;
 			sequence.add(new GyroMotionMagicTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
 			break;
-		case BLUE_LEFT:
+		case BLUE_BOILER:
 			backupPosition = 1; //-3
 			sequence.add(new GyroMotionMagicTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
 			break;
-		case RED_RIGHT:
+		case RED_BOILER:
 			backupPosition = 2;
 			sequence.add(new GyroMotionMagicTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;
-		case BLUE_RIGHT:
+		case BLUE_LOADING:
 			backupPosition = -4;
 			sequence.add(new GyroMotionMagicTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;
@@ -97,20 +97,20 @@ public class DriveStraightSidePegAutoMode extends AutoModeBase {
 		double driveForwardSetpoint;
 		switch (mVariant) {
 		// loading station side
-		case RED_LEFT:
+		case RED_LOADING:
 			initialSliderPosition = 0;
 			driveForwardSetpoint = AutoDistances.kRedLoadingStationForwardDistanceInches;
 			break;
-		case BLUE_RIGHT:
+		case BLUE_LOADING:
 			initialSliderPosition = -1.5;
 			driveForwardSetpoint = AutoDistances.kBlueLoadingStationForwardDistanceInches;
 			break;
 		// boiler side
-		case RED_RIGHT:
+		case RED_BOILER:
 			initialSliderPosition = 0;
 			driveForwardSetpoint = AutoDistances.kRedBoilerForwardDistanceInches;
 			break;
-		case BLUE_LEFT:
+		case BLUE_BOILER:
 			initialSliderPosition = 2.5;
 			driveForwardSetpoint = AutoDistances.kBlueBoilerForwardDistanceInches;
 			break;
@@ -133,17 +133,17 @@ public class DriveStraightSidePegAutoMode extends AutoModeBase {
 		double driveToAirshipSetpoint = 0;
 		switch (mVariant) {
 		// loading station side
-		case RED_LEFT:
+		case RED_LOADING:
 			driveToAirshipSetpoint = AutoDistances.kRedLoadingStationAirshipDistanceInches;
 			break;
-		case BLUE_RIGHT:
+		case BLUE_LOADING:
 			driveToAirshipSetpoint = AutoDistances.kBlueLoadingStationAirshipDistanceInches;
 			break;
 		// boiler side
-		case RED_RIGHT:
+		case RED_BOILER:
 			driveToAirshipSetpoint = AutoDistances.kRedBoilerAirshipDistanceInches;
 			break;
-		case BLUE_LEFT:
+		case BLUE_BOILER:
 			driveToAirshipSetpoint = AutoDistances.kBlueBoilerAirshipDistanceInches;
 			break;
 		default:
@@ -197,12 +197,12 @@ public class DriveStraightSidePegAutoMode extends AutoModeBase {
 		// Turn towards neutral zone
 		// Intentional switch-case falling
 		switch (mVariant) {
-		case RED_LEFT:
-		case BLUE_LEFT:
+		case RED_LOADING:
+		case BLUE_BOILER:
 			sequence.add(new GyroMotionMagicTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;
-		case RED_RIGHT:
-		case BLUE_RIGHT:
+		case RED_BOILER:
+		case BLUE_LOADING:
 			sequence.add(new GyroMotionMagicTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
 			break;
 		}
@@ -217,16 +217,16 @@ public class DriveStraightSidePegAutoMode extends AutoModeBase {
 	public String toString() {
 		String name;
 		switch (mVariant) {
-		case RED_LEFT:
+		case RED_LOADING:
 			name = "RedLeftDriveStraingtSidePeg";
 			break;
-		case RED_RIGHT:
+		case RED_BOILER:
 			name = "RedRightDriveStraightSidePeg";
 			break;
-		case BLUE_LEFT:
+		case BLUE_BOILER:
 			name = "BlueLeftDriveStraightSidePeg";
 			break;
-		case BLUE_RIGHT:
+		case BLUE_LOADING:
 			name = "BlueRightDriveStraightSidePeg";
 			break;
 		default:

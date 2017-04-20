@@ -59,17 +59,17 @@ public class AutoModeSelector {
   /*2*/ registerAutonomous(new CenterPegAutoMode(Alliance.RED, // Alliance Color
 		  										 true)); // Backup boolean
 		// red left/ blue right = loading station, red right/blue left = boiler
-  /*3*/	registerAutonomous(new SidePegAutoMode(SideAutoVariant.RED_LEFT, // Alliance color and side
-											   SideAutoPostVariant.NEUTRAL_ZONE)); // Should backup?
+  /*3*/	registerAutonomous(new SidePegAutoMode(SideAutoVariant.RED_LOADING, // Alliance color and side
+											   SideAutoPostVariant.BACKUP)); // Should backup?
   /*4*/ registerAutonomous(new VisionCenterPegAutoMode(Alliance.BLUE, false, true)); // alliance, seeking right vision target?, backup?
-  /*5*/ registerAutonomous(new VisionSidePegAutoMode(SideAutoVariant.BLUE_LEFT, // Field position
+  /*5*/ registerAutonomous(new VisionSidePegAutoMode(SideAutoVariant.RED_LOADING, // Field position
 		  										false, true)); // seeking right vision target?, backup?
   /*6*/ registerAutonomous(new DriveStraightBaseLineAutoMode(Alliance.RED));
   /*7*/ registerAutonomous(new DriveStraightCenterPegAutoMode(Alliance.BLUE, CenterAutoPostVariant.BACKUP));
-  /*8*/ registerAutonomous(new DriveStraightSidePegAutoMode(SideAutoVariant.RED_LEFT, SideAutoPostVariant.BACKUP));
+  /*8*/ registerAutonomous(new DriveStraightSidePegAutoMode(SideAutoVariant.RED_LOADING, SideAutoPostVariant.BACKUP));
 		
   /*9*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.RED, true));
-  /*10*/registerAutonomous(new TrajectorySidePegAutoMode(SideAutoVariant.BLUE_RIGHT, TrajectorySidePostVariant.NEUTRAL_ZONE));
+  /*10*/registerAutonomous(new TrajectorySidePegAutoMode(SideAutoVariant.BLUE_LOADING, TrajectorySidePostVariant.BACKUP));
   /*11*/registerAutonomous(new TestAutoMode());
   /*12*/registerAutonomous(new TestTrajectoryAutoMode());
 	}
