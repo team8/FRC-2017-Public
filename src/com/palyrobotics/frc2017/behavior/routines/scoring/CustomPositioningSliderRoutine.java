@@ -21,7 +21,8 @@ import com.palyrobotics.frc2017.util.Subsystem;
 public class CustomPositioningSliderRoutine extends Routine {
 	private enum DistancePositioningState {
 		RAISING,
-		MOVING
+		MOVING,
+		WAITING
 	}
 	private DistancePositioningState mState = DistancePositioningState.RAISING;
 	// Use to make sure routine ran at least once before "finished"
@@ -65,7 +66,10 @@ public class CustomPositioningSliderRoutine extends Routine {
 //				e.printStackTrace();
 			}
 			break;
-		case RAISING:
+		case WAITING:
+
+			break;
+			case RAISING:
 			if(System.currentTimeMillis() > (raiseTime+startTime)) {
 				mState = DistancePositioningState.MOVING;
 				break;
@@ -98,7 +102,7 @@ public class CustomPositioningSliderRoutine extends Routine {
 		}
 		System.out.println("Slider on target: "+slider.onTarget());
 		return updated && mState==DistancePositioningState.MOVING &&
-				(System.currentTimeMillis() - startTime > 400) && (robotState.sliderVelocity == 0) && slider.onTarget();
+				(System.currentTimeMillis() - startTime > 1000) && (robotState.sliderVelocity == 0) && slider.onTarget();
 	}
 
 	@Override

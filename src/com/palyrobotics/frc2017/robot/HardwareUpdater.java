@@ -310,7 +310,11 @@ class HardwareUpdater {
 			robotState.sliderPotentiometer = HardwareAdapter.SliderHardware.getInstance().sliderPotentiometer.getValue();
 			robotState.sliderVelocity = sliderTalon.getSpeed();
 			if (sliderTalon.getControlMode().isPID()) {
-				robotState.sliderClosedLoopError = Optional.of(sliderTalon.getClosedLoopError());
+				if (sliderTalon.getSetpoint() == mSlider.getOutput().getSetpoint()) {
+					robotState.sliderClosedLoopError = Optional.of(sliderTalon.getClosedLoopError());
+				} else {
+					robotState.sliderClosedLoopError = Optional.empty();
+				}
 //				robotState.sliderClosedLoopError = Optional.of();
 			} else {
 				robotState.sliderClosedLoopError = Optional.empty();
@@ -340,6 +344,9 @@ class HardwareUpdater {
 //		HardwareAdapter.getInstance().getFlippers().leftSolenoid.set(mFlippers.getFlipperSignal().leftFlipper);
 //		HardwareAdapter.getInstance().getFlippers().rightSolenoid.set(mFlippers.getFlipperSignal().rightFlipper);
 //		// SLIDER
+		System.out.println(mSlider.getOutput().toString());
+		System.out.println(HardwareAdapter.getInstance().getSlider().sliderTalon.get());
+		System.out.println(HardwareAdapter.getInstance().getSlider().sliderTalon.getControlMode());
 		updateCANTalonSRX(HardwareAdapter.getInstance().getSlider().sliderTalon, mSlider.getOutput());
 		// SPATULA
 		HardwareAdapter.getInstance().getSpatula().spatulaSolenoid.set(mSpatula.getOutput());

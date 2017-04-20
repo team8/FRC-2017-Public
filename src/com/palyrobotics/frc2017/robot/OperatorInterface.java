@@ -94,14 +94,14 @@ public class OperatorInterface {
 		} else if (mSliderStick.getRawButton(4)) {
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.LEFT;
 			if (sliderLeft.twice()) {
-				newCommands.addWantedRoutine(new PositioningSliderRoutine());
+				newCommands.addWantedRoutine(new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.LEFT));
 			} else {
 				newCommands.addWantedRoutine(new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.LEFT));
 			}
 		} else if (mSliderStick.getRawButton(5)) {
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.RIGHT;
 			if (sliderRight.twice()) {
-				newCommands.addWantedRoutine(new PositioningSliderRoutine());
+				newCommands.addWantedRoutine(new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.RIGHT));
 			} else {
 				newCommands.addWantedRoutine(new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.RIGHT));
 			}

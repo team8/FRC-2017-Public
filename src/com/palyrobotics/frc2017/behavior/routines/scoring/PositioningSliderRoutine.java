@@ -10,7 +10,7 @@ import com.palyrobotics.frc2017.util.Subsystem;
 /**
  * Moves the slider to a setpoint
  * Slider target needs to be set from elsewhere
- * deprecated, use AutocorrectPositioning
+ * @deprecated, use AutocorrectPositioning
  * NOTE: When unit testing, set Robot.RobotState appropriately
  * @author Prashanti
  */
@@ -31,6 +31,7 @@ public class PositioningSliderRoutine extends Routine {
 	public Commands update(Commands commands) {
 		if (mAllowed) {
 			commands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
+
 		} else {
 			commands.wantedSliderState = Slider.SliderState.IDLE;
 		}

@@ -172,7 +172,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 				}
 				mTarget = SliderTarget.CUSTOM;
 				//problem  below
-				System.out.println("Sent custom output");
+				System.out.println("setpt"+commands.robotSetpoints.sliderCustomSetpoint.get());
 				mOutput.setPosition(commands.robotSetpoints.sliderCustomSetpoint.get(), mEncoderGains);
 				break;
 		}		
@@ -207,20 +207,19 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	 * @return if the control loop is on target
 	 */
 	private boolean onTargetEncoderPositioning() {
-//		System.out.println(mRobotState.sliderVelocity);
-		System.out.println(mTarget);
+		if (mState == SliderState.IDLE) {
+			return false;
+		}
 		if (mTarget == SliderTarget.DONE) {
 			return true;
 		}
-		if(mRobotState.sliderClosedLoopError != null) {
-			if (!mRobotState.sliderClosedLoopError.isPresent()) {
-				return false;
-			}
-		} else {
+		if(mRobotState.sliderClosedLoopError == null) {
 			return false;
 		}
-		System.out.println("Closed loop error:" +mRobotState.sliderClosedLoopError.get());
-
+		if (!mRobotState.sliderClosedLoopError.isPresent()) {
+			return false;
+		}
+		System.out.println(mState+""+mTarget+""+mRobotState.sliderClosedLoopError.get());
 		return Math.abs(mRobotState.sliderClosedLoopError.get()) < kEncoderTolerance && mRobotState.sliderVelocity == 0;
 	}
 	
@@ -231,7 +230,11 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		if (onTargetEncoderPositioning()) {
 			mState = SliderState.IDLE;
 			mTarget = SliderTarget.DONE;
-		} else {
+		} else if (mTarget == SliderTarget.NONE) {
+			return;
+		}
+		else {
+			System.out.println("automatic setpoint"+mEncoderTargetPositions.get(mTarget));
 			mOutput.setPosition(mEncoderTargetPositions.get(mTarget), mEncoderGains);
 		}
 	}

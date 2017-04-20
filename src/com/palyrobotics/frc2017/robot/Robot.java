@@ -205,6 +205,9 @@ public class Robot extends IterativeRobot {
 //				+"Right enc: "+robotState.drivePose.rightEnc);
 //		Gains.updateNetworkTableGains();
 //		System.out.println("Gyro: "+robotState.drivePose.heading);
+//		if (robotState.sliderClosedLoopError.isPresent()) {
+//			System.out.println("Slider closed" + robotState.sliderClosedLoopError.get());
+//		}
 	}
 
 	// Call during tele and auto periodic

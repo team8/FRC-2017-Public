@@ -11,6 +11,7 @@ import com.palyrobotics.frc2017.behavior.routines.SpatulaDownAutocorrectRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
+import com.palyrobotics.frc2017.behavior.routines.scoring.VisionSliderRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
@@ -44,15 +45,15 @@ public class TestAutoMode extends AutoModeBase {
 		if (Math.random() > 0.5) {
 			setpoint*=-1;
 		}
-		sequence.add(new CustomPositioningSliderRoutine(setpoint));
-		sequence.add(new CustomPositioningSliderRoutine(setpoint-1));
+//		sequence.add(new CustomPositioningSliderRoutine(setpoint));
+//		sequence.add(new CustomPositioningSliderRoutine(setpoint-1));
 
 		DriveSignal signal = DriveSignal.getNeutralSignal();
 		signal.leftMotor.setPercentVBus(0.2);
 		signal.rightMotor.setPercentVBus(0.2);
 //		sequence.add(new CANTalonRoutine(signal, false, 3));
-//		sequence.add(new CustomPositioningSliderRoutine(-7));
-//		sequence.add(new VisionSliderRoutine());
+		sequence.add(new CustomPositioningSliderRoutine(-7));
+		sequence.add(new VisionSliderRoutine());
 		return new SequentialRoutine(sequence);
 	}
 
