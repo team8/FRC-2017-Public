@@ -2,6 +2,7 @@ package com.palyrobotics.frc2017.behavior.routines.scoring;
 
 import java.util.Optional;
 
+import com.palyrobotics.frc2017.behavior.ParallelRoutine;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Constants;
@@ -101,6 +102,10 @@ public class CustomPositioningSliderRoutine extends Routine {
 			return false;
 		}
 		System.out.println("Slider on target: "+slider.onTarget());
+		// Give up after 1.5 seconds
+		if (System.currentTimeMillis()-startTime > 1500) {
+			return true;
+		}
 		return updated && mState==DistancePositioningState.MOVING &&
 				(System.currentTimeMillis() - startTime > 1000) && (robotState.sliderVelocity == 0) && slider.onTarget();
 	}
