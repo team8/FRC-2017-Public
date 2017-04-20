@@ -39,7 +39,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 	private final double pilotWaitTime = 1.5; // time in seconds
 	private final double backupDistance = 12; // distance in inches
 	private double overshootDistance = 0;
-	private double bonusDistance = 30; // extra space
+	private double bonusDistance = 20; // extra space
 
 	private double[] sliderPositions = new double[2];
 

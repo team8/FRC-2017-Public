@@ -44,7 +44,8 @@ public class TestAutoMode extends AutoModeBase {
 		if (Math.random() > 0.5) {
 			setpoint*=-1;
 		}
-		sequence.add(new CustomPositioningSliderRoutine(Math.random()*5));
+		sequence.add(new CustomPositioningSliderRoutine(setpoint));
+		sequence.add(new CustomPositioningSliderRoutine(setpoint-1));
 
 		DriveSignal signal = DriveSignal.getNeutralSignal();
 		signal.leftMotor.setPercentVBus(0.2);

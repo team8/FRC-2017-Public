@@ -96,9 +96,9 @@ public class CustomPositioningSliderRoutine extends Routine {
 		if(!HardwareAdapter.getInstance().getSlider().sliderTalon.getControlMode().isPID()) {
 			return false;
 		}
-
+		System.out.println("Slider on target: "+slider.onTarget());
 		return updated && mState==DistancePositioningState.MOVING &&
-				(System.currentTimeMillis() - startTime > 200) && (robotState.sliderVelocity == 0) && slider.onTarget();
+				(System.currentTimeMillis() - startTime > 400) && (robotState.sliderVelocity == 0) && slider.onTarget();
 	}
 
 	@Override

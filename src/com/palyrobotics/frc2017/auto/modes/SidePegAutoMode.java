@@ -62,7 +62,7 @@ public class SidePegAutoMode extends AutoModeBase {
 				sliderPositions = new double[]{0, 3};
 				break;
 			case BLUE_BOILER:
-				sliderPositions = new double[]{0, 1};
+				sliderPositions = new double[]{0, 3};
 				break;
 			case RED_BOILER:
 				sliderPositions = new double[]{0, 2};

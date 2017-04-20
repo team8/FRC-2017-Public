@@ -45,6 +45,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	public enum SliderTarget {
 		NONE,
 		CUSTOM,
+		DONE,
 		LEFT,
 		CENTER,
 		RIGHT
@@ -169,21 +170,10 @@ public class Slider extends Subsystem implements SubsystemLoop {
 				} else {
 					mTarget = SliderTarget.CUSTOM;
 				}
-				if (onTargetEncoderPositioning()) {
-					mState = SliderState.IDLE;
-					mTarget = SliderTarget.NONE;
-					System.out.println("on target, clearing");
-				} else {
-					mTarget = SliderTarget.CUSTOM;
-					//problem  below
-					System.out.println("SLIDER CUSTOM SETPOINT: " + commands.robotSetpoints.sliderCustomSetpoint.get());
-					mOutput.setPosition(commands.robotSetpoints.sliderCustomSetpoint.get(), mEncoderGains);
-					try {
-						Thread.sleep(75);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
+				mTarget = SliderTarget.CUSTOM;
+				//problem  below
+				System.out.println("Sent custom output");
+				mOutput.setPosition(commands.robotSetpoints.sliderCustomSetpoint.get(), mEncoderGains);
 				break;
 		}		
 	}
@@ -201,7 +191,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	 */
 	private boolean onTargetPotentiometerPositioning() {
 		if(mTarget == SliderTarget.NONE) {
-			return true;
+			return false;
 		}
 		boolean output = true;
 		try {
@@ -217,11 +207,9 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	 * @return if the control loop is on target
 	 */
 	private boolean onTargetEncoderPositioning() {
-//		System.out.println(mRobotState.sliderClosedLoopError.isPresent());
 //		System.out.println(mRobotState.sliderVelocity);
-
-		if (mTarget == SliderTarget.NONE) {
-//			System.out.println("no slider target");
+		System.out.println(mTarget);
+		if (mTarget == SliderTarget.DONE) {
 			return true;
 		}
 		if(mRobotState.sliderClosedLoopError != null) {
@@ -231,6 +219,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		} else {
 			return false;
 		}
+		System.out.println("Closed loop error:" +mRobotState.sliderClosedLoopError.get());
 
 		return Math.abs(mRobotState.sliderClosedLoopError.get()) < kEncoderTolerance && mRobotState.sliderVelocity == 0;
 	}
@@ -241,7 +230,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	private void setSetpointsEncoder() {
 		if (onTargetEncoderPositioning()) {
 			mState = SliderState.IDLE;
-			mTarget = SliderTarget.NONE;
+			mTarget = SliderTarget.DONE;
 		} else {
 			mOutput.setPosition(mEncoderTargetPositions.get(mTarget), mEncoderGains);
 		}
@@ -281,7 +270,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 	}
 	
 	public boolean onTarget() {
-		return (onTargetEncoderPositioning() || onTargetPotentiometerPositioning());
+		return (onTargetEncoderPositioning());
 	}
 	
 	/**

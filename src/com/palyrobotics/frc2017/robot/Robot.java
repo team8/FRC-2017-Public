@@ -55,7 +55,7 @@ public class Robot extends IterativeRobot {
 		DashboardManager.getInstance().robotInit();
 		AndroidConnectionHelper.getInstance().start();
 		System.out.println("Finished starting");
-		mLogger.setFileName("Quals1");
+		mLogger.setFileName("PreQual2");
 		mLogger.start();
 		mLogger.logRobotThread("robotInit() start");
 		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);
@@ -203,8 +203,10 @@ public class Robot extends IterativeRobot {
 //		System.out.println("Gyro: "+robotState.drivePose.heading);
 //		System.out.println("Left enc: " + robotState.drivePose.leftEnc +"\n"
 //				+"Right enc: "+robotState.drivePose.rightEnc);
-		Gains.updateNetworkTableGains();
+//		Gains.updateNetworkTableGains();
+//		System.out.println("Gyro: "+robotState.drivePose.heading);
 	}
+
 	// Call during tele and auto periodic
 	private void logPeriodic() {
 		mLogger.logRobotThread("Match time", DriverStation.getInstance().getMatchTime());

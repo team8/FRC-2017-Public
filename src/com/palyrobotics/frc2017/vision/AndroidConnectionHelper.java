@@ -435,11 +435,11 @@ public class AndroidConnectionHelper implements Runnable{
 
 	public double getXDist(){
 		if(!m_visionRunning) {
-			System.out.println("Error in AndroidConnectionHelper.getXDist(), " +
-					"no connection to vision app, returning default/last valid value");
+//			System.out.println("Error in AndroidConnectionHelper.getXDist(), " +
+//					"no connection to vision app, returning default/last valid value");
 		} else if(!m_androidState.equals("STREAMING")){
-			System.out.println("Warning in AndroidConnectionHelper.getXDist(), " +
-					"not streaming, android state is "+m_androidState+", returning last valid x_distance");
+//			System.out.println("Warning in AndroidConnectionHelper.getXDist(), " +
+//					"not streaming, android state is "+m_androidState+", returning last valid x_distance");
 		}
 		return m_x_dist;
 	}
