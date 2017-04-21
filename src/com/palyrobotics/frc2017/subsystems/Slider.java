@@ -172,7 +172,6 @@ public class Slider extends Subsystem implements SubsystemLoop {
 				}
 				mTarget = SliderTarget.CUSTOM;
 				//problem  below
-				System.out.println("setpt"+commands.robotSetpoints.sliderCustomSetpoint.get());
 				mOutput.setPosition(commands.robotSetpoints.sliderCustomSetpoint.get(), mEncoderGains);
 				break;
 		}		
@@ -216,11 +215,12 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		if(mRobotState.sliderClosedLoopError == null) {
 			return false;
 		}
-		if (!mRobotState.sliderClosedLoopError.isPresent()) {
+		if (mRobotState.sliderClosedLoopError.isPresent()) {
+//			System.out.println(mState+""+mTarget+""+mRobotState.sliderClosedLoopError.get());
+			return Math.abs(mRobotState.sliderClosedLoopError.get()) < kEncoderTolerance && mRobotState.sliderVelocity == 0;
+		} else {
 			return false;
 		}
-		System.out.println(mState+""+mTarget+""+mRobotState.sliderClosedLoopError.get());
-		return Math.abs(mRobotState.sliderClosedLoopError.get()) < kEncoderTolerance && mRobotState.sliderVelocity == 0;
 	}
 	
 	/**

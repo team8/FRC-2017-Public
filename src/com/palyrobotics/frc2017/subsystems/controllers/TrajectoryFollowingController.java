@@ -10,6 +10,7 @@ import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.util.Pose;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.palyrobotics.frc2017.util.archive.team254.trajectory.LegacyTrajectoryFollower;
+import com.palyrobotics.frc2017.util.logger.Logger;
 import com.team254.lib.trajectory.Path;
 
 /**
@@ -76,9 +77,10 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 			gyroError = ChezyMath.getDifferenceInAngleRadians(Math.toRadians(state.drivePose.heading), mLeftFollower.getHeading());
 			gyroError = Math.toDegrees(gyroError);
 			double gyroCorrection = headingPID.calculate(gyroError);
-
-			driveSignal.leftMotor.setVoltage((leftPower-gyroCorrection)*12);
-			driveSignal.rightMotor.setVoltage((rightPower+gyroCorrection)*12);
+			System.out.println("Gyro correction: "+gyroCorrection);
+			Logger.getInstance().logSubsystemThread(gyroCorrection);
+			driveSignal.leftMotor.setVoltage((leftPower+gyroCorrection)*12);
+			driveSignal.rightMotor.setVoltage((rightPower-gyroCorrection)*12);
 		}
 		
 		DashboardManager.getInstance().updateCANTable(mLeftFollower.getCanTableString() + ", " + mRightFollower.getCanTableString() + ", " + gyroError);

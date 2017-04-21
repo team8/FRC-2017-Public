@@ -98,7 +98,6 @@ public class SidePegAutoMode extends AutoModeBase {
 			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
 			break;
 		case RED_BOILER:
-
 			sliderPositions = new double[]{0, 2};
 			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
 			break;

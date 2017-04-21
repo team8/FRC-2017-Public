@@ -26,11 +26,11 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 	private boolean mBackup = true;
 	private Path mPath;
 	
-	private final boolean mUseGyro = true;
+	private final boolean mUseGyro = false;
 
 	private final Gains mShortGains;
 	private final Gains.TrajectoryGains mTrajectoryGains;
-	private final double backupDistance = 10;	// distance in inches
+	private final double backupDistance = 15;	// distance in inches
 	// Store the left/right slider positions
 	private double[] sliderPositions;
 

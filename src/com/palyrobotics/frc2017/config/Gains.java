@@ -12,8 +12,8 @@ public class Gains {
 	public static double kSteikTrajectorykD = 0.2; // 0.1, 0.015
 	public static double kSteikTrajectorykV = 0.069;
 	public static double kSteikTrajectorykA = 0.037;
-	public static double kSteikTrajectoryTurnkP = 0.01;//0.01; //-0.01
-	public static double kSteikTrajectoryTurnkD = 0.0;
+	public static double kSteikTrajectoryTurnkP = 0.02;//0.01; //-0.01
+	public static double kSteikTrajectoryTurnkD = 0.002;
 	public static final Gains.TrajectoryGains kTrajectoryGains = new TrajectoryGains(kSteikTrajectorykP,
 			kSteikTrajectorykD, kSteikTrajectorykV, kSteikTrajectorykA);
 	public static final double kSteikTrajectoryStraightkP = 0.38; // 1

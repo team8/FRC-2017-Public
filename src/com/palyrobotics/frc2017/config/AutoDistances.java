@@ -21,24 +21,24 @@ public class AutoDistances {
 	public static double k254BoilerAirshipDistanceInches = 73; // 81.5, 73
 	// Blue right loading station
 	public static double kBlueLoadingStationForwardDistanceInches = 75; // 80, 75
-	public static double kBlueLoadingStationAirshipDistanceInches = 69; // 66, 70, 73
+	public static double kBlueLoadingStationAirshipDistanceInches = 73; // 66, 70, 73
 	// Red left loading station
 	public static double kRedLoadingStationForwardDistanceInches = 75; // 80, 75
-	public static double kRedLoadingStationAirshipDistanceInches = 69; // 71.5
+	public static double kRedLoadingStationAirshipDistanceInches = 73; // 71.5, 73
 	// Blue left boiler
 	public static double kBlueBoilerForwardDistanceInches = 75; // 80, 75
-	public static double kBlueBoilerAirshipDistanceInches = 75; // 73, 72
+	public static double kBlueBoilerAirshipDistanceInches = 78; // 73, 72, 78
 	// Red right boiler
 	public static double kRedBoilerForwardDistanceInches = 75; // 80, 75
-	public static double kRedBoilerAirshipDistanceInches = 75; // 73, 72
+	public static double kRedBoilerAirshipDistanceInches = 78; // 73, 72
 
 	/* TRAJECTORY TUNING */
 	// robot distance appears to go 4 inches more, relative to the back of the robot
 
 	// Distances in feet, angles in radians
 	public static double kBackup = -0.8;
-	public static double kRedCenter = 89.0/12;
-	public static double kBlueCenter = 89.0/12;
+	public static double kRedCenter = 103.0/12;
+	public static double kBlueCenter = 103.0/12;
 	// Blue right loading station
 	public static double kBlueLoadingPegX = 99.5+7;//115.0; // 79.5
 	public static double kBlueLoadingPegY = 53.25+30;//70.0; // 66, 70, 73

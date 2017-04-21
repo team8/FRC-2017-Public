@@ -70,8 +70,8 @@ public class Constants extends ConstantsBase {
 
 	// Aegir: 2199 RIGHT  |  3499 LEFT
 	// Vali: 2032 RIGHT | 3310 LEFT
-	public static final double kPotentiometerRightPos = 2027; // subtracted 5 each
-	public static final double kPotentiometerLeftPos = 3305;
+	public static final double kPotentiometerRightPos = 2077; // subtracted 5 each
+	public static final double kPotentiometerLeftPos = 3355;
 	public static final double kPotentiometerCenterPos = (kPotentiometerRightPos + kPotentiometerLeftPos) / 2;
 	
 	// Tolerances

@@ -344,9 +344,9 @@ class HardwareUpdater {
 //		HardwareAdapter.getInstance().getFlippers().leftSolenoid.set(mFlippers.getFlipperSignal().leftFlipper);
 //		HardwareAdapter.getInstance().getFlippers().rightSolenoid.set(mFlippers.getFlipperSignal().rightFlipper);
 //		// SLIDER
-		System.out.println(mSlider.getOutput().toString());
-		System.out.println(HardwareAdapter.getInstance().getSlider().sliderTalon.get());
-		System.out.println(HardwareAdapter.getInstance().getSlider().sliderTalon.getControlMode());
+//		System.out.println(mSlider.getOutput().toString());
+//		System.out.println("Talon setpt:"+HardwareAdapter.getInstance().getSlider().sliderTalon.getSetpoint());
+//		System.out.println("Talon setpt:"+HardwareAdapter.getInstance().getSlider().sliderTalon.getControlMode());
 		updateCANTalonSRX(HardwareAdapter.getInstance().getSlider().sliderTalon, mSlider.getOutput());
 		// SPATULA
 		HardwareAdapter.getInstance().getSpatula().spatulaSolenoid.set(mSpatula.getOutput());
