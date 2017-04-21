@@ -26,7 +26,7 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 	private boolean mBackup = true;
 	private Path mPath;
 	
-	private final boolean mUseGyro = false;
+	private final boolean mUseGyro = true;
 
 	private final Gains mShortGains;
 	private final Gains.TrajectoryGains mTrajectoryGains;
@@ -34,8 +34,8 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 	// Store the left/right slider positions
 	private double[] sliderPositions;
 
-	private double[] blueSliderPositions = new double[]{0, -3, 1};
-	private double[] redSliderPositions = new double[]{0, -3, 1};
+	private double[] blueSliderPositions = new double[]{2.5, 0, 4.5};
+	private double[] redSliderPositions = new double[]{0, 2.5, -3.5};
 
 	private final double pilotWaitTime = 1.5;	// time in seconds
 
@@ -108,9 +108,9 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 
 		// drive forward same distance as backup
-		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint, mShortGains,
+		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint+2*Constants.kDriveTicksPerInch, mShortGains,
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint, mShortGains,
+		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint+2*Constants.kDriveTicksPerInch, mShortGains,
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		
 		// Create a routine that drives back, then moves the slider while moving back forward
@@ -122,7 +122,7 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 		slideSequence.add(new CustomPositioningSliderRoutine(sliderPosition));
 		parallelSliding.add(new SequentialRoutine(slideSequence));
 		sequence.add(new ParallelRoutine(parallelSliding));
-		sequence.add(new CANTalonRoutine(driveReturn, true));
+		sequence.add(new CANTalonRoutine(driveReturn, true, 1));
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
 		return new SequentialRoutine(sequence);

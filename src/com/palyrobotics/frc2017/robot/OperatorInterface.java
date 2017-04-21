@@ -90,21 +90,13 @@ public class OperatorInterface {
 			newCommands.addWantedRoutine(new ManualControlSliderRoutine());
 		} else if (mSliderStick.getRawButton(3)) {	// preferred thumb position
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.CENTER;
-			newCommands.addWantedRoutine(new PositioningSliderRoutine());
+			newCommands.addWantedRoutine(new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.CENTER));
 		} else if (mSliderStick.getRawButton(4)) {
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.LEFT;
-			if (sliderLeft.twice()) {
-				newCommands.addWantedRoutine(new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.LEFT));
-			} else {
-				newCommands.addWantedRoutine(new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.LEFT));
-			}
+			newCommands.addWantedRoutine(new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.LEFT));
 		} else if (mSliderStick.getRawButton(5)) {
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.RIGHT;
-			if (sliderRight.twice()) {
-				newCommands.addWantedRoutine(new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.RIGHT));
-			} else {
-				newCommands.addWantedRoutine(new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.RIGHT));
-			}
+			newCommands.addWantedRoutine(new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.RIGHT));
 		} else if (Slider.getInstance().getSliderState() == Slider.SliderState.IDLE) {
 			newCommands.addWantedRoutine(new ManualControlSliderRoutine());
 		}
@@ -141,8 +133,6 @@ public class OperatorInterface {
 		} else {
 			newCommands.wantedClimberState = Climber.ClimberState.IDLE;
 		}
-		// Left Stick trigger cancels current routine
-		newCommands.cancelCurrentRoutines = mDriveStick.getTrigger();
 
 //		Logger.getInstance().logRobotThread("Drive stick", newCommands.leftStickInput);
 //		Logger.getInstance().logRobotThread("Turn stick", newCommands.rightStickInput);

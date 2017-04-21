@@ -59,16 +59,16 @@ public class SidePegAutoMode extends AutoModeBase {
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
 		switch (mVariant) {
 			case RED_LOADING:
-				sliderPositions = new double[]{0, 3};
+				sliderPositions = new double[]{0, -3};
 				break;
 			case BLUE_BOILER:
-				sliderPositions = new double[]{0, 3};
+				sliderPositions = new double[]{0, -3};
 				break;
 			case RED_BOILER:
-				sliderPositions = new double[]{0, 2};
+				sliderPositions = new double[]{0, -3};
 				break;
 			case BLUE_LOADING:
-				sliderPositions = new double[]{0, -4};
+				sliderPositions = new double[]{0, -3};
 				break;
 		}
 
@@ -194,7 +194,7 @@ public class SidePegAutoMode extends AutoModeBase {
 				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
 		
 		Logger.getInstance().logRobotThread("Drive to airship", driveToAirship);
-		return new CANTalonRoutine(driveToAirship, true, 4);
+		return new CANTalonRoutine(driveToAirship, true, 2);
 	}
 	/*
 	 * GET BACKUP
@@ -210,9 +210,9 @@ public class SidePegAutoMode extends AutoModeBase {
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 
 		// drive forward same distance as backup
-		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint+3*Constants.kDriveTicksPerInch, mShortGains, 
+		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint+2*Constants.kDriveTicksPerInch, mShortGains,
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint+3*Constants.kDriveTicksPerInch, mShortGains, 
+		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint+2*Constants.kDriveTicksPerInch, mShortGains,
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		
 		// Create a routine that drives back, then moves the slider while moving back forward
@@ -224,7 +224,7 @@ public class SidePegAutoMode extends AutoModeBase {
 		slideSequence.add(new CustomPositioningSliderRoutine(sliderPosition));
 		parallelSliding.add(new SequentialRoutine(slideSequence));
 		sequence.add(new ParallelRoutine(parallelSliding));
-		sequence.add(new CANTalonRoutine(driveReturn, true));
+		sequence.add(new CANTalonRoutine(driveReturn, true,1));
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
 		return new SequentialRoutine(sequence);

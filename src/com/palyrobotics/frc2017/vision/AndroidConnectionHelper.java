@@ -410,7 +410,6 @@ public class AndroidConnectionHelper implements Runnable{
 			String state = (String) json.get("state");
 			if(!(state == null) && !state.equals("")){	// Handle based on state
 				synchronized (m_android_lock) {
-					this.m_x_dist = ((Number) json.get("x_displacement")).doubleValue();
 					if (state.equals("STREAMING")) {
 						// Get image data
 						Number data_x = ((Number) json.get("x_displacement"));

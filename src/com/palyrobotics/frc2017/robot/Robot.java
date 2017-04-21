@@ -56,7 +56,7 @@ public class Robot extends IterativeRobot {
 		DashboardManager.getInstance().robotInit();
 		AndroidConnectionHelper.getInstance().start();
 		System.out.println("Finished starting");
-		mLogger.setFileName("PreQual5");
+		mLogger.setFileName("PostCMP");
 		mLogger.start();
 		mLogger.logRobotThread("robotInit() start");
 		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);
@@ -109,8 +109,8 @@ public class Robot extends IterativeRobot {
 		mLogger.logRobotThread("Start autonomousInit()");
 		DashboardManager.getInstance().toggleCANTable(true);
 		robotState.gamePeriod = RobotState.GamePeriod.AUTO;
-		mHardwareUpdater.configureTalons(false);
 		mHardwareEnabledLooper.start();
+		mHardwareUpdater.configureTalons(false);
 		// Wait for talons to update
 		try {
 			System.out.println("Sleeping thread for 200 ms");
@@ -119,6 +119,7 @@ public class Robot extends IterativeRobot {
 
 		}
 		mHardwareUpdater.updateSensors(robotState);
+		mRoutineManager.reset(commands);
 		// Start control loops
 		mSubsystemLooper.start();
 

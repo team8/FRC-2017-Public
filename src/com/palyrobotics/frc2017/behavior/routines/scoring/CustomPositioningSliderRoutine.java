@@ -97,7 +97,6 @@ public class CustomPositioningSliderRoutine extends Routine {
 		if(!HardwareAdapter.getInstance().getSlider().sliderTalon.getControlMode().isPID()) {
 			return false;
 		}
-		System.out.println("Slider on target: "+slider.onTarget());
 		// Give up after 1.5 seconds
 		if (System.currentTimeMillis()-startTime > 1500) {
 			return true;

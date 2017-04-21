@@ -21,6 +21,7 @@ public class SpatulaDownAutocorrectRoutine extends Routine {
 	@Override
 	public void start() {
 		mStartTime = System.currentTimeMillis();
+		mState = (Math.abs(Robot.getRobotState().sliderEncoder) < 40) ? AutocorrectState.FLIPPING : AutocorrectState.CENTERING;
 	}
 
 	@Override
@@ -33,8 +34,6 @@ public class SpatulaDownAutocorrectRoutine extends Routine {
 			commands.wantedSliderState = Slider.SliderState.AUTOMATIC_POSITIONING;
 			if (System.currentTimeMillis()-mStartTime > 300 && Robot.getRobotState().sliderVelocity == 0) {
 				mState = AutocorrectState.FLIPPING;
-				System.out.println("I AM FLIPPING");
-
 				break;
 			}
 			break;

@@ -28,7 +28,7 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 	public TrajectoryFollowingController(Path path, Gains.TrajectoryGains gains, boolean correctUsingGyro, boolean inverted) {
 		
 		headingPID = new SynchronousPID(Gains.kSteikTrajectoryTurnkP, 0, Gains.kSteikTrajectoryTurnkD);
-		headingPID.setOutputRange(-0.2, 0.2);
+		headingPID.setOutputRange(-0.15, 0.15);
 		headingPID.setSetpoint(0);
 
 		// set trajectory gains
