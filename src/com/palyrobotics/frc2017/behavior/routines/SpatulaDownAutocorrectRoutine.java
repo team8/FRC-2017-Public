@@ -56,7 +56,6 @@ public class SpatulaDownAutocorrectRoutine extends Routine {
 	public Commands cancel(Commands commands) {
 		commands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.NONE;
 		commands.wantedSliderState = Slider.SliderState.IDLE;
-		commands.wantedSpatulaState = Spatula.SpatulaState.UP;
 		commands.wantedIntakeState = Intake.IntakeState.IDLE;
 		try {
 			slider.run(commands, this);

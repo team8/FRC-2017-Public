@@ -33,7 +33,7 @@ public class AutoModeSelector {
 	 * comment for which auto mode the selectedIndex refers to
 	 */
 
-	int selectedIndex = AutoIndices.TRAJECTORY_CENTER.get();
+	int selectedIndex = AutoIndices.TEST.get();
 
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
@@ -58,13 +58,13 @@ public class AutoModeSelector {
   /*2*/ registerAutonomous(new CenterPegAutoMode(Alliance.BLUE, // Alliance Color
 				true)); // Backup boolean
 		// red left/ blue right = loading station, red right/blue left = boiler
-  /*3*/	registerAutonomous(new SidePegAutoMode(SideAutoVariant.RED_BOILER, // Alliance color and side
-				SideAutoPostVariant.BACKUP)); // Should backup?
+  /*3*/	registerAutonomous(new SidePegAutoMode(SideAutoVariant.BLUE_LOADING, // Alliance color and side
+				SideAutoPostVariant.NEUTRAL_ZONE)); // Should backup?
   /*4*/ registerAutonomous(new VisionCenterPegAutoMode(Alliance.BLUE, false, true)); // alliance, seeking right vision target?, backup?
   /*5*/ registerAutonomous(new VisionSidePegAutoMode(SideAutoVariant.RED_LOADING, // Field position
 						true)); // seeking right vision target?, backup?
 
-  /*6*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.BLUE, true));
+  /*6*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.BLUE, false));
   /*7*/registerAutonomous(new TrajectorySidePegAutoMode(SideAutoVariant.BLUE_LOADING, TrajectorySidePostVariant.BACKUP));
   /*8*/registerAutonomous(new TestAutoMode());
   /*9*/registerAutonomous(new TestTrajectoryAutoMode());
