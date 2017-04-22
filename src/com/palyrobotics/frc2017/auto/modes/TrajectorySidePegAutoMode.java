@@ -33,13 +33,13 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 	private final TrajectorySidePostVariant mPostVariant;
 	private Path mPath, mPostPath;
 	
-	private final boolean mUseGyro = false;
+	private final boolean mUseGyro = true;
 	private boolean mPostInverted;
 	
 	private final Gains mShortGains;
 	private final Gains.TrajectoryGains mTrajectoryGains;
-	private final double backupDistance = 10;	// distance in inches
-	private final double pilotWaitTime = 2;	// time in seconds
+	private final double backupDistance = 15;	// distance in inches
+	private final double pilotWaitTime = 1.5;	// time in seconds
 
 	private double[] sliderPositions;
 
@@ -51,22 +51,22 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 			case BLUE_BOILER:
 				mPath = AutoPathLoader.get("BlueBoiler");
-				sliderPositions = new double[]{0, 2, -1};
+				sliderPositions = new double[]{0, 3, -3};
 				mPostInverted = true;
 				break;
 			case BLUE_LOADING:
 				mPath = AutoPathLoader.get("BlueLoading");
-				sliderPositions = new double[]{0, 2, -1};
+				sliderPositions = new double[]{0, 3, -3};
 				mPostInverted = false;
 				break;
 			case RED_LOADING:
 				mPath = AutoPathLoader.get("RedLoading");
-				sliderPositions = new double[]{0, 2, -1};
+				sliderPositions = new double[]{0, 3, -3};
 				mPostInverted = true;
 				break;
 			case RED_BOILER:
 				mPath = AutoPathLoader.get("RedBoiler");
-				sliderPositions = new double[]{0, 2, -1};
+				sliderPositions = new double[]{0, 3, -3};
 				mPostInverted = false;
 				break;
 		}
@@ -95,6 +95,7 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 		case BACKUP:
 			mPostPath = null;
 			sequence.add(getBackup(sliderPositions[1]));
+			sequence.add(getBackup(sliderPositions[2]));
 			break;
 		case NEUTRAL_ZONE:
 			sequence.add(getDrop());
@@ -125,9 +126,9 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 
 		// drive forward same distance as backup
-		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint+3*Constants.kDriveTicksPerInch, mShortGains, 
+		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint+2*Constants.kDriveTicksPerInch, mShortGains,
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint+3*Constants.kDriveTicksPerInch, mShortGains, 
+		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint+2*Constants.kDriveTicksPerInch, mShortGains,
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		
 		// Create a routine that drives back, then moves the slider while moving back forward
@@ -139,7 +140,7 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 		slideSequence.add(new CustomPositioningSliderRoutine(sliderPosition));
 		parallelSliding.add(new SequentialRoutine(slideSequence));
 		sequence.add(new ParallelRoutine(parallelSliding));
-		sequence.add(new CANTalonRoutine(driveReturn, true));
+		sequence.add(new CANTalonRoutine(driveReturn, true, 1));
 		sequence.add(new TimeoutRoutine(pilotWaitTime));
 		
 		return new SequentialRoutine(sequence);

@@ -28,7 +28,7 @@ public class Main {
 	// 180, 120 in/s
 	private static final double kLongVel = 60.0/12;
 	private static final double kLongAccel = 60.0/12;
-	public static double kTurnAngle = Math.PI/3;
+	public static double kTurnAngle = Math.PI/3;//+(9*Math.PI/180);
 
 	// Forward distance needs to go 110-30 minimum
 

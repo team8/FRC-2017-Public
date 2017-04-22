@@ -36,20 +36,24 @@ public class AutoDistances {
 	// robot distance appears to go 4 inches more, relative to the back of the robot
 
 	// Distances in feet, angles in radians
+
+	// Calibration data
+	// For x = 128, y = 126
+	// setpoint x = 103, setpoint y = 64.5
 	public static double kBackup = -0.8;
 	public static double kRedCenter = 103.0/12;
 	public static double kBlueCenter = 103.0/12;
 	// Blue right loading station
-	public static double kBlueLoadingPegX = 99.5+7;//115.0; // 79.5
-	public static double kBlueLoadingPegY = 53.25+30;//70.0; // 66, 70, 73
+	public static double kBlueLoadingPegX = 104.5;// 104.5
+	public static double kBlueLoadingPegY = 68.5;// 67.5
 	// Red left loading station
-	public static double kRedLoadingPegX = 102+10;//115.0; // 79
-	public static double kRedLoadingPegY = 53.5;//63.22; // 66, 70, 73
+	public static double kRedLoadingPegX = 104;// 104
+	public static double kRedLoadingPegY = 67.5;// 66.5
 	// Blue left boiler
-	public static double kBlueBoilerPegX = 100;//100; // 79.5, 82.5
-	public static double kBlueBoilerPegY = 63;//82; // 73,
+	public static double kBlueBoilerPegX = 105; // 105
+	public static double kBlueBoilerPegY = 66.5; // 65.5
 	// Red right boiler
 	// should be positive
-	public static double kRedBoilerPegX=101;//100;
-	public static double kRedBoilerPegY=62;//82;
+	public static double kRedBoilerPegX = 104;// 104
+	public static double kRedBoilerPegY = 64.5; // 63.5
 }

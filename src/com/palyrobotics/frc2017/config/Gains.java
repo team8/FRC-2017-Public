@@ -8,18 +8,22 @@ public class Gains {
 	 */
 	// Onboard motion profile aka trajectory follower
 
-	public static double kSteikTrajectorykP = 1; //0.7, 0.8, 1.00, 0.05
-	public static double kSteikTrajectorykD = 0.2; // 0.1, 0.015
+	public static double kSteikTrajectorykP = 0.38; //0.7, 0.8, 1.00, 0.05
+	public static double kSteikTrajectorykD = 0.0; // 0.1, 0.015
 	public static double kSteikTrajectorykV = 0.069;
 	public static double kSteikTrajectorykA = 0.037;
-	public static double kSteikTrajectoryTurnkP = 0.027;//0.01; //-0.01
-	public static double kSteikTrajectoryTurnkD = 0.01;
+	public static double kSteikTrajectoryTurnkP = 0.02;//0.01; //-0.01
+	public static double kSteikTrajectoryTurnkD = 0.02;
 	public static final Gains.TrajectoryGains kTrajectoryGains = new TrajectoryGains(kSteikTrajectorykP,
-			kSteikTrajectorykD, kSteikTrajectorykV, kSteikTrajectorykA);
+			kSteikTrajectorykD, kSteikTrajectorykV, kSteikTrajectorykA, kSteikTrajectoryTurnkP,
+			kSteikTrajectoryTurnkD);
 	public static final double kSteikTrajectoryStraightkP = 0.38; // 1
 	public static final double kSteikTrajectoryStraightkD = 0.0; // 0.02
+	public static double kSteikTrajectoryStraightTurnkP = 0.027;//0.01; //-0.01
+	public static double kSteikTrajectoryStraightTurnkD = 0.01;
 	public static final TrajectoryGains kStraightTrajectoryGains = new TrajectoryGains(kSteikTrajectoryStraightkP,
-			kSteikTrajectoryStraightkD, kSteikTrajectorykV, kSteikTrajectorykA);
+			kSteikTrajectoryStraightkD, kSteikTrajectorykV, kSteikTrajectorykA,
+			kSteikTrajectoryStraightTurnkP, kSteikTrajectoryStraightTurnkD);
 
 	// Drive Distance PID control loop
 	public static final double kSteikDriveStraightTurnkP = -0.06;
@@ -127,12 +131,14 @@ public class Gains {
 	public static final double kDericaTurnMotionMagicCruiseAccel = 1;
 
 	public static class TrajectoryGains {
-		public final double P,D,V,A;
-		public TrajectoryGains(double p, double d, double v, double a) {
+		public final double P,D,V,A, turnP, turnD;
+		public TrajectoryGains(double p, double d, double v, double a, double turnP, double turnD) {
 			this.P = p;
 			this.D = d;
 			this.V = v;
 			this.A = a;
+			this.turnP = turnP;
+			this.turnD = turnD;
 		}
 	}
 
