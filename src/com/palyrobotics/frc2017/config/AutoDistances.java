@@ -51,7 +51,7 @@ public class AutoDistances {
 	public static double kRedLoadingPegY = 67.5;// 66.5
 	// Blue left boiler
 	public static double kBlueBoilerPegX = 105; // 105
-	public static double kBlueBoilerPegY = 66.5; // 65.5
+	public static double kBlueBoilerPegY = 67.5; // 65.5
 	// Red right boiler
 	// should be positive
 	public static double kRedBoilerPegX = 104;// 104

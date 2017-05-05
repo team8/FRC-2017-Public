@@ -33,7 +33,7 @@ public class AutoModeSelector {
 	 * comment for which auto mode the selectedIndex refers to
 	 */
 
-	int selectedIndex = AutoIndices.TRAJECTORY_CENTER.get();
+	int selectedIndex = AutoIndices.TRAJECTORY_SIDE.get();
 
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
@@ -65,7 +65,7 @@ public class AutoModeSelector {
 						true)); // seeking right vision target?, backup?
 
   /*6*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.BLUE, true));
-  /*7*/registerAutonomous(new TrajectorySidePegAutoMode(SideAutoVariant.RED_LOADING, TrajectorySidePostVariant.BACKUP));
+  /*7*/registerAutonomous(new TrajectorySidePegAutoMode(SideAutoVariant.BLUE_BOILER, TrajectorySidePostVariant.BACKUP));
   /*8*/registerAutonomous(new TestAutoMode());
   /*9*/registerAutonomous(new TestTrajectoryAutoMode());
 	}

@@ -51,7 +51,7 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 			case BLUE_BOILER:
 				mPath = AutoPathLoader.get("BlueBoiler");
-				sliderPositions = new double[]{0, 3, -3};
+				sliderPositions = new double[]{-1, 2.5, 5};
 				mPostInverted = true;
 				break;
 			case BLUE_LOADING:

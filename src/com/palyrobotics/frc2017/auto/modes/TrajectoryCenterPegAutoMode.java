@@ -37,7 +37,7 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 	private double[] blueSliderPositions = new double[]{2.5, 0, 4.5};
 	private double[] redSliderPositions = new double[]{0, 2.5, -3.5};
 
-	private final double pilotWaitTime = 1.5;	// time in seconds
+	private final double pilotWaitTime = 2.5;	// time in seconds before first backup
 
 	private SequentialRoutine mSequentialRoutine;
 	
@@ -82,7 +82,7 @@ public class TrajectoryCenterPegAutoMode extends AutoModeBase {
 	
 		if (mBackup) {
 			sequence.add(getBackup(sliderPositions[1]));		// Move slider slightly to the left
-			sequence.add(new TimeoutRoutine(pilotWaitTime));
+			sequence.add(new TimeoutRoutine(1.5));
 			sequence.add(getBackup(sliderPositions[2]));		// Move slider slightly to the left
 			sequence.add(new TimeoutRoutine(pilotWaitTime));
 		}
