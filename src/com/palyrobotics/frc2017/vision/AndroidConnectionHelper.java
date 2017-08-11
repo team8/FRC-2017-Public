@@ -103,7 +103,7 @@ public class AndroidConnectionHelper implements Runnable{
 	private boolean m_running = false;
 	private boolean mTesting = false;
 
-	private double m_x_dist = 0;
+	private double m_x_dist = 0, m_y_dist = 0;
 	private String m_androidState = "NONE";
 	private Object m_android_lock = new Object();
 
@@ -412,17 +412,20 @@ public class AndroidConnectionHelper implements Runnable{
 				synchronized (m_android_lock) {
 					if (state.equals("STREAMING")) {
 						// Get image data
-						Number data_x = ((Number) json.get("x_displacement"));
-						if (data_x != null) {
+						Number
+							data_x = (Number)json.get("x_displacement"),
+							data_z = (Number)json.get("y_displacement");
+						if (data_x != null)
 							this.m_x_dist = data_x.doubleValue();
-						}
+						if (data_z != null)
+							this.m_y_dist = data_z.doubleValue();
 					}
 					m_androidState = state;
 				}
 			}
 		}
 	}
-	
+
 	public void setFlash(boolean isFlashOn){
 		String out;
 		if(!mTesting){
