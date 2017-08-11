@@ -3,7 +3,7 @@ package com.palyrobotics.frc2017.behavior.routines;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.robot.HardwareAdapter;
-import com.palyrobotics.frc2017.util.Subsystem;
+import com.palyrobotics.frc2017.subsystems.Subsystem;
 
 /**
  * Created by EricLiu on 4/17/17.

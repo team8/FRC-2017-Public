@@ -1,9 +1,8 @@
 package com.palyrobotics.frc2017.behavior;
 
 import com.palyrobotics.frc2017.config.Commands;
-import com.palyrobotics.frc2017.util.Subsystem;
-import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.subsystems.Intake;
+import com.palyrobotics.frc2017.subsystems.Subsystem;
 
 /**
  * Created by Nihar on 1/22/17.

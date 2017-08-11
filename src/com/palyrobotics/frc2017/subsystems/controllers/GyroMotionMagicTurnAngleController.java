@@ -71,7 +71,6 @@ public class GyroMotionMagicTurnAngleController implements DriveController {
 		mRightTarget = mCachedPose.rightEnc + (error * kInchesPerDegree * kTicksPerInch);
 		mLeftOutput.setMotionMagic(mLeftTarget, mGains, mCruiseVel, mMaxAccel);
 		mRightOutput.setMotionMagic(mRightTarget, mGains, mCruiseVel, mMaxAccel);
-
 		return new DriveSignal(mLeftOutput, mRightOutput);
 	}
 

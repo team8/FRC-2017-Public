@@ -1,8 +1,8 @@
 package com.palyrobotics.frc2017.util.archive.team254.trajectory;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class TestTrajectoryFollower {
 

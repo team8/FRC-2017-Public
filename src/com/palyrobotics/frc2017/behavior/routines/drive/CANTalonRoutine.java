@@ -3,12 +3,13 @@ package com.palyrobotics.frc2017.behavior.routines.drive;
 import com.ctre.CANTalon;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
+import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.subsystems.Drive;
+import com.palyrobotics.frc2017.subsystems.Subsystem;
 import com.palyrobotics.frc2017.subsystems.controllers.CANTalonDriveController;
-import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
-import com.palyrobotics.frc2017.util.Subsystem;
 
 /**
  * Created by Nihar on 2/12/17.
@@ -21,11 +22,13 @@ public class CANTalonRoutine extends Routine {
 	
 	private double timeout;
 	private double startTime;
+	private static RobotState robotState;
 	
 	public CANTalonRoutine(DriveSignal controller, boolean relativeSetpoint) {
 		this.mSignal = controller;
 		this.timeout = 1 << 30;
 		this.relativeSetpoint = relativeSetpoint;
+		this.robotState = Robot.getRobotState();
 	}
 
 	/*
@@ -38,6 +41,7 @@ public class CANTalonRoutine extends Routine {
 		this.mSignal = controller;
 		this.relativeSetpoint = relativeSetpoint;
 		this.timeout = timeout * 1000;
+		this.robotState = Robot.getRobotState();
 	}
 
 	@Override
@@ -47,20 +51,27 @@ public class CANTalonRoutine extends Routine {
 		
 		if (relativeSetpoint) {
 			if (mSignal.leftMotor.getControlMode() == CANTalon.TalonControlMode.MotionMagic) {
+
+
+				System.out.println(mSignal.leftMotor.getSetpoint());
+				System.out.println(robotState.drivePose.leftEnc);
+				System.out.println(mSignal.leftMotor.gains);
+				System.out.println(mSignal.leftMotor.cruiseVel);
+				System.out.println(mSignal.leftMotor.accel);
 				mSignal.leftMotor.setMotionMagic(mSignal.leftMotor.getSetpoint()+
-								Robot.getRobotState().drivePose.leftEnc,
+								robotState.drivePose.leftEnc,
 						mSignal.leftMotor.gains,
 						mSignal.leftMotor.cruiseVel, mSignal.leftMotor.accel);
 				mSignal.rightMotor.setMotionMagic(mSignal.rightMotor.getSetpoint()+
-								Robot.getRobotState().drivePose.rightEnc,
+								robotState.drivePose.rightEnc,
 						mSignal.rightMotor.gains,
 						mSignal.rightMotor.cruiseVel, mSignal.rightMotor.accel);
 			}
 			else if (mSignal.leftMotor.getControlMode() == CANTalon.TalonControlMode.Position) {
 				mSignal.leftMotor.setPosition(mSignal.leftMotor.getSetpoint()+
-						Robot.getRobotState().drivePose.leftEnc, mSignal.leftMotor.gains);
+						robotState.drivePose.leftEnc, mSignal.leftMotor.gains);
 				mSignal.rightMotor.setPosition(mSignal.rightMotor.getSetpoint()+
-						Robot.getRobotState().drivePose.rightEnc, mSignal.rightMotor.gains);
+						robotState.drivePose.rightEnc, mSignal.rightMotor.gains);
 				
 
 			}
@@ -73,8 +84,11 @@ public class CANTalonRoutine extends Routine {
 	public Commands update(Commands commands) {
 		Commands output = commands.copy();
 		output.wantedDriveState = Drive.DriveState.OFF_BOARD_CONTROLLER;
+		DashboardManager.getInstance().updateCANTable(((CANTalonDriveController)drive.getController()).getCanTableString());
 		return output;
 	}
+
+
 
 	@Override
 	public Commands cancel(Commands commands) {

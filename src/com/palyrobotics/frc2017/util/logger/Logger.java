@@ -3,13 +3,12 @@ package com.palyrobotics.frc2017.util.logger;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.Date;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**

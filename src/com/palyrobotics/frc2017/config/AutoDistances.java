@@ -6,6 +6,8 @@ package com.palyrobotics.frc2017.config;
 public class AutoDistances {
 	/* PLEB AUTO */
 
+	public static double kVisionDistanceInches = 30;
+
 	// Base line
 	public static double k254BaseLineDistanceInches = 93.3;
 	public static double kRedBaseLineDistanceInches = 110;
@@ -33,27 +35,45 @@ public class AutoDistances {
 	public static double kRedBoilerAirshipDistanceInches = 78; // 73, 72
 
 	/* TRAJECTORY TUNING */
-	// robot distance appears to go 4 inches more, relative to the back of the robot
 
-	// Distances in feet, angles in radians
+	// Distances in inches, angles in radians
 
 	// Calibration data
-	// For x = 128, y = 126
-	// setpoint x = 103, setpoint y = 64.5
 	public static double kBackup = -0.8;
-	public static double kRedCenter = 103.0/12;
-	public static double kBlueCenter = 103.0/12;
+	public static double kRedCenterPeg = 111.0;
+	public static double kRedCenterPegOffsetX = 3.5;
+	public static double kRedCenterPegOffsetY = 4.0;
+
+	public static double kBlueCenterPeg = 111.0;
+	public static double kBlueCenterPegOffsetX = 3.5;
+	public static double kBlueCenterPegOffsetY = 3.0;
+
 	// Blue right loading station
-	public static double kBlueLoadingPegX = 104.5;// 104.5
-	public static double kBlueLoadingPegY = 68.5;// 67.5
+	public static double kBlueLoadingPegX = 130.0;
+	public static double kBlueLoadingPegY = 90.5;
+	//Positive increases the magnitude of each dimension
+	public static double kBlueLoadingPegOffsetX = (-2.0-0.75);
+	public static double kBlueLoadingPegOffsetY = (11.0+0.75);
+
 	// Red left loading station
-	public static double kRedLoadingPegX = 104;// 104
-	public static double kRedLoadingPegY = 67.5;// 66.5
+	public static double kRedLoadingPegX = 132.0;
+	public static double kRedLoadingPegY = 92.0;
+	//Positive increases the magnitude of each dimension
+	public static double kRedLoadingPegOffsetX = -1.0;
+	public static double kRedLoadingPegOffsetY = 6.5;
+
 	// Blue left boiler
-	public static double kBlueBoilerPegX = 105; // 105
-	public static double kBlueBoilerPegY = 67.5; // 65.5
+	public static double kBlueBoilerPegX = (125.5);
+	public static double kBlueBoilerPegY = (94.0);
+	//Positive increases the magnitude of each dimension
+	public static double kBlueBoilerPegOffsetX = -1.67;
+	public static double kBlueBoilerPegOffsetY = 6.75;
+
 	// Red right boiler
 	// should be positive
-	public static double kRedBoilerPegX = 104;// 104
-	public static double kRedBoilerPegY = 64.5; // 63.5
+	public static double kRedBoilerPegX = 127.0;
+	public static double kRedBoilerPegY = 91.0;
+	//Positive increases the magnitude of each dimension
+	public static double kRedBoilerPegOffsetX = -2.0;
+	public static double kRedBoilerPegOffsetY = 11.0;
 }

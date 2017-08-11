@@ -1,9 +1,8 @@
 package com.palyrobotics.frc2017.subsystems;
 
-import org.junit.Test;
-
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
+import org.junit.Test;
 
 /**
  * Tests instantion of all subsystems.
@@ -20,7 +19,6 @@ public class SubsystemUpdateTest {
 		
 		Drive.getInstance().update(c, r);
 		Climber.getInstance().update(c, r);
-		Flippers.getInstance().update(c, r);
 		Spatula.getInstance().update(c, r);
 		Slider.getInstance().update(c, r);
 		Spatula.getInstance().update(c, r);

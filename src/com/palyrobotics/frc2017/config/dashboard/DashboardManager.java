@@ -1,13 +1,12 @@
 package com.palyrobotics.frc2017.config.dashboard;
 
 import com.palyrobotics.frc2017.config.Gains;
-
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class DashboardManager {
 
 	// Usage of cantable or not
-	private boolean enableCANTable = false;
+	private boolean enableCANTable = true;
 
 	// Allow motion profile gains to be modified over NT
 	public final boolean pidTuning = false;
@@ -64,7 +63,7 @@ public class DashboardManager {
 	}
 	
 	public void updateCANTable(String string) {
-		if (enableCANTable) {
+		if (!enableCANTable) {
 			return;
 		}
 		if (canTable != null) {

@@ -2,72 +2,132 @@ package com.palyrobotics.frc2017.auto.modes;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoPostVariant;
+import com.palyrobotics.frc2017.auto.AutoPathLoader;
+import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
 import com.palyrobotics.frc2017.behavior.ParallelRoutine;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
-import com.palyrobotics.frc2017.behavior.routines.drive.*;
+import com.palyrobotics.frc2017.behavior.routines.drive.DrivePathRoutine;
+import com.palyrobotics.frc2017.behavior.routines.drive.DriveSensorResetRoutine;
 import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
+import com.palyrobotics.frc2017.behavior.routines.scoring.VisionDriveForwardRoutine;
 import com.palyrobotics.frc2017.behavior.routines.scoring.VisionSliderRoutine;
-import com.palyrobotics.frc2017.config.AutoDistances;
-import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
-import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.palyrobotics.frc2017.util.logger.Logger;
 import com.palyrobotics.frc2017.vision.CommandExecutor;
 import com.palyrobotics.frc2017.vision.VisionManager;
+import com.palyrobotics.frc2017.vision.AndroidConnectionHelper;
+import com.team254.lib.trajectory.Path;
 
 import java.util.ArrayList;
 
 /**
- * Created by Nihar on 2/11/17.
- * Goes for side peg autonomous
- * Can set initial slider position and a backup slider position (absolute, 
- * not relative to the vision point)
+ * Side peg autonomous using motion profiles
+ * @author Eric Liu
  */
 public class VisionSidePegAutoMode extends AutoModeBase {
+	private final SideAutoVariant mVariant;
+	private Path mPath;
 
-	// Store configuration on construction
-	private final SidePegAutoMode.SideAutoVariant mVariant;
-	private final boolean mBackup;
-	
+	private final boolean mUseGyro = false;
+	private boolean mAndroidConnected = true;
+
+	private final Gains.TrajectoryGains mTrajectoryGains;
+
 	private Routine mSequentialRoutine;
 
-	// Long distance vs short distance
-	private Gains mLongGains, mShortGains;
-
-	private final double pilotWaitTime = 1.5; // time in seconds
-	private final double backupDistance = 12; // distance in inches
-	private double overshootDistance = 0;
-	private double bonusDistance = 20; // extra space
-
-	private double[] sliderPositions = new double[2];
-
-	public VisionSidePegAutoMode(SidePegAutoMode.SideAutoVariant direction,
-								 boolean backup) {
+	public VisionSidePegAutoMode(SideAutoVariant direction) {
+		AutoPathLoader.loadPaths();
 		mVariant = direction;
-		mBackup = backup;
-		mLongGains = Gains.steikLongDriveMotionMagicGains;
-		mShortGains = Gains.steikShortDriveMotionMagicGains;
-		sliderPositions = new double[2];
-		sliderPositions[0] = -7;
 		switch (mVariant) {
-			// loading station
-			case RED_LOADING:
-				sliderPositions[1] = 2;
+			case BLUE_BOILER:
+				mPath = AutoPathLoader.get("BlueBoilerVision");
+				mTrajectoryGains = Gains.kRightTurnTrajectoryGains;
 				break;
 			case BLUE_LOADING:
-				sliderPositions[1] = 2;
+				mPath = AutoPathLoader.get("BlueLoadingVision");
+				mTrajectoryGains = Gains.kLeftTurnTrajectoryGains;
 				break;
-			// boiler side
+			case RED_LOADING:
+				mPath = AutoPathLoader.get("RedLoadingVision");
+				mTrajectoryGains = Gains.kRightTurnTrajectoryGains;
+				break;
 			case RED_BOILER:
-				sliderPositions[1] = 0;
+				mPath = AutoPathLoader.get("RedBoilerVision");
+				mTrajectoryGains = Gains.kLeftTurnTrajectoryGains;
 				break;
-			case BLUE_BOILER:
-				sliderPositions[1] = 1;
+			default:
+				mPath = null;
+				mTrajectoryGains = null;
+				System.err.println("In default case");
 				break;
 		}
+	}
 
+	@Override
+	public void prestart() {
+		if (!VisionManager.getInstance().isServerStarted() || !VisionManager.getInstance().isNexusConnected()) {
+			System.out.println("Vision server not started!");
+			Logger.getInstance().logRobotThread("Vision server not detected, fallback to default side peg");
+
+			mAndroidConnected = false;
+
+			//Use non-vision paths if no android connection
+			switch (mVariant) {
+				case BLUE_BOILER:
+					mPath = AutoPathLoader.get("BlueBoiler");
+					break;
+				case BLUE_LOADING:
+					mPath = AutoPathLoader.get("BlueLoading");
+					break;
+				case RED_LOADING:
+					mPath = AutoPathLoader.get("RedLoading");
+					break;
+				case RED_BOILER:
+					mPath = AutoPathLoader.get("RedBoiler");
+					break;
+			}
+		}
+
+		ArrayList<Routine> sequence = new ArrayList<>();
+
+		sequence.add(new DriveSensorResetRoutine());
+		ArrayList<Routine> parallelSlider = new ArrayList<>();
+
+		//Slider all the way to the left if android connected, centered if not.
+		if(mAndroidConnected) {
+			// move the slider all the way to the left
+			parallelSlider.add(new CustomPositioningSliderRoutine(-7));
+		} else {
+			//move the slider to the center
+			parallelSlider.add(new CustomPositioningSliderRoutine(0));
+		}
+
+		//The motion profile
+		parallelSlider.add(new DrivePathRoutine(mPath, mTrajectoryGains, mUseGyro, false));
+
+		//Add the combined motion profile and slider movement to the sequence
+		sequence.add(new ParallelRoutine(parallelSlider));
+
+		//If android connected, go for vision
+		if(mAndroidConnected) {
+			sequence.add(new TimeoutRoutine(1.5));
+			sequence.add(getFirstAttempt());
+		}
+
+		sequence.add(new DriveSensorResetRoutine());
+
+		mSequentialRoutine = new SequentialRoutine(sequence);
+	}
+
+	private Routine getFirstAttempt() {
+		ArrayList<Routine> scoreSequence = new ArrayList<Routine>();
+
+		scoreSequence.add(new VisionSliderRoutine());
+		scoreSequence.add(new VisionDriveForwardRoutine(1.0));
+
+		return new ParallelRoutine(scoreSequence);
 	}
 
 	@Override
@@ -76,202 +136,7 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 	}
 
 	@Override
-	public void prestart() {
-		if(VisionManager.getInstance().isServerStarted()){
-			System.out.println("Failed to find vision server, revert auto");
-		}
-		System.out.println("Starting "+this.toString()+" Auto Mode");
-		Logger.getInstance().logRobotThread("Starting "+this.toString()+" Auto Mode");
-
-		if (!VisionManager.getInstance().isServerStarted() || !CommandExecutor.isNexusConnected()) {
-			System.out.println("Vision server not started!");
-			Logger.getInstance().logRobotThread("Vision server not detected, fallback to default side peg");
-			SidePegAutoMode backup = new SidePegAutoMode(mVariant, SideAutoPostVariant.BACKUP);
-			backup.prestart();
-			mSequentialRoutine = backup.getRoutine();
-			return;
-		}
-		ArrayList<Routine> sequence = new ArrayList<>();
-
-		sequence.add(getDriveForward());
-
-		// NOTE: switch case falling, split by lefts vs rights
-		switch (mVariant) {
-		// loading station
-		case RED_LOADING:
-			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
-			break;
-		case BLUE_LOADING:
-			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
-			break;
-		// boiler side
-		case RED_BOILER:
-			sequence.add(new EncoderTurnAngleRoutine(-Constants.kSidePegTurnAngleDegrees));
-			break;
-		case BLUE_BOILER:
-			sequence.add(new EncoderTurnAngleRoutine(Constants.kSidePegTurnAngleDegrees));
-			break;
-		}
-		
-		sequence.add(getDriveToAirship());
-		sequence.add(getFirstAttempt());
-		sequence.add(new TimeoutRoutine(pilotWaitTime));	// Wait so pilot can pull gear out
-		if (mBackup) {
-			sequence.add(getBackup(sliderPositions[1]));
-		}
-
-		mSequentialRoutine = new SequentialRoutine(sequence);
-	}
-	/*
-	 * DRIVE FORWARD
-	 */
-	private Routine getDriveForward() {
-		DriveSignal driveForward = DriveSignal.getNeutralSignal();
-		// For Red Left = Blue Right, Red Right = Blue Left
-		double driveForwardSetpoint;
-		switch (mVariant) {
-		// loading station side
-		case RED_LOADING:
-			driveForwardSetpoint = AutoDistances.kRedLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
-			break;
-		case BLUE_LOADING:
-			driveForwardSetpoint = AutoDistances.kBlueLoadingStationForwardDistanceInches * Constants.kDriveTicksPerInch;
-			break;
-			// boiler side
-		case RED_BOILER:
-			driveForwardSetpoint = AutoDistances.kRedBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
-			break;
-		case BLUE_BOILER:
-			driveForwardSetpoint = AutoDistances.kBlueBoilerForwardDistanceInches * Constants.kDriveTicksPerInch;
-			break;
-		default:
-			System.err.println("What in tarnation no side peg distance");
-			driveForwardSetpoint = 0;
-			break;
-		}
-		driveForwardSetpoint += overshootDistance;
-		driveForward.leftMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
-				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
-		driveForward.rightMotor.setMotionMagic(driveForwardSetpoint, mLongGains,
-				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
-		
-		Logger.getInstance().logRobotThread("Drive forward", driveForward);
-		ArrayList<Routine> initialSlide = new ArrayList<>();
-		initialSlide.add(new CANTalonRoutine(driveForward, true));
-		initialSlide.add(new CustomPositioningSliderRoutine(sliderPositions[0]));
-		return new ParallelRoutine(initialSlide);
-	}
-	/*
-	 * GET AIRSHIP
-	 */
-	private CANTalonRoutine getDriveToAirship() {
-		DriveSignal driveToAirship = DriveSignal.getNeutralSignal();
-		double driveToAirshipSetpoint = 0;
-		switch (mVariant) {
-		// loading station side
-		case RED_LOADING:
-			driveToAirshipSetpoint = AutoDistances.k254LoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
-			break;
-		case BLUE_LOADING:
-			driveToAirshipSetpoint = AutoDistances.k254LoadingStationAirshipDistanceInches * Constants.kDriveTicksPerInch;
-			break;
-			// boiler side
-		case RED_BOILER:
-			driveToAirshipSetpoint = AutoDistances.k254BoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
-			break;
-		case BLUE_BOILER:
-			driveToAirshipSetpoint = AutoDistances.k254BoilerAirshipDistanceInches * Constants.kDriveTicksPerInch;
-			break;
-		default:
-			System.err.println("What in tarnation no side peg airship distance");
-			driveToAirshipSetpoint = 0;
-			break;
-		}
-		driveToAirshipSetpoint -= bonusDistance*Constants.kDriveTicksPerInch;
-		driveToAirship.leftMotor.setMotionMagic(driveToAirshipSetpoint, mLongGains,
-				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
-		driveToAirship.rightMotor.setMotionMagic(driveToAirshipSetpoint, mLongGains,
-				Gains.kSteikLongDriveMotionMagicCruiseVelocity, Gains.kSteikLongDriveMotionMagicMaxAcceleration);
-		
-		Logger.getInstance().logRobotThread("Drive to airship", driveToAirship);
-		return new CANTalonRoutine(driveToAirship, true, 5);
-	}
-	
-	private Routine getFirstAttempt() {
-		double scoreSetpoint = bonusDistance*Constants.kDriveTicksPerInch;
-		scoreSetpoint += 2;
-		DriveSignal driveScore = DriveSignal.getNeutralSignal();
-		driveScore.leftMotor.setMotionMagic(scoreSetpoint, mShortGains,
-				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		driveScore.rightMotor.setMotionMagic(scoreSetpoint, mShortGains,
-				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		ArrayList<Routine> scoreSequence = new ArrayList<>();
-		scoreSequence.add(new VisionSliderRoutine());
-		scoreSequence.add(new CANTalonRoutine(driveScore, true));
-		return new SequentialRoutine(scoreSequence);
-	}
-	/*
-	 * GET BACKUP
-	 */
-	private Routine getBackup(double sliderPosition) {
-		DriveSignal driveBackup = DriveSignal.getNeutralSignal();
-		DriveSignal driveReturn = DriveSignal.getNeutralSignal();
-
-		double driveBackupSetpoint = -backupDistance * Constants.kDriveTicksPerInch;
-		driveBackup.leftMotor.setMotionMagic(driveBackupSetpoint, mShortGains, 
-				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		driveBackup.rightMotor.setMotionMagic(driveBackupSetpoint, mShortGains, 
-				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-
-		// drive forward same distance as backup
-		driveReturn.leftMotor.setMotionMagic(-driveBackupSetpoint+3*Constants.kDriveTicksPerInch, mShortGains, 
-				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		driveReturn.rightMotor.setMotionMagic(-driveBackupSetpoint+3*Constants.kDriveTicksPerInch, mShortGains, 
-				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
-		
-		// Create a routine that drives back, then moves the slider while moving back forward
-		ArrayList<Routine> sequence = new ArrayList<>();
-		ArrayList<Routine> parallelSliding = new ArrayList<>();
-		parallelSliding.add(new CANTalonRoutine(driveBackup, true));
-		ArrayList<Routine> slideSequence = new ArrayList<>();
-		slideSequence.add(new TimeoutRoutine(0.5));
-		slideSequence.add(new CustomPositioningSliderRoutine(sliderPosition));
-		parallelSliding.add(new SequentialRoutine(slideSequence));
-		sequence.add(new ParallelRoutine(parallelSliding));
-		sequence.add(new CANTalonRoutine(driveReturn, true, 2));
-		sequence.add(new TimeoutRoutine(pilotWaitTime));
-		
-		return new SequentialRoutine(sequence);
-	}
-
-	@Override
 	public String toString() {
-		String name;
-		name = "Vision";
-		switch (mVariant) {
-		case RED_LOADING:
-			name += "RedLeftSidePeg";
-			break;
-		case RED_BOILER:
-			name += "RedRightSidePeg";
-			break;
-		case BLUE_BOILER:
-			name += "BlueLeftSidePeg";
-			break;
-		case BLUE_LOADING:
-			name += "BlueRightSidePeg";
-			break;
-		default:
-			name += "SidePeg";
-			break;
-		}
-		name += "SliderInitialMove"+sliderPositions[0];
-		name += "EncoderTurn";
-		if (mBackup) {
-			name += "Backup"+sliderPositions[1];
-		} else {
-			name += "NotBackup";
-		}
-		return name;
+		return "VisionTrajectorySidePegAuto " + mVariant;
 	}
 }

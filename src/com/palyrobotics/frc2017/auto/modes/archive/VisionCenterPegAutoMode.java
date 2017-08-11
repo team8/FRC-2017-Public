@@ -7,8 +7,6 @@ import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
-import com.palyrobotics.frc2017.behavior.routines.scoring.VisionSliderRoutine;
-import com.palyrobotics.frc2017.config.AutoDistances;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
@@ -61,6 +59,7 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 			mSequentialRoutine = fallback.getRoutine();
 			return;
 		}
+		/**
 		// Construct sequence of routines to run
 		ArrayList<Routine> sequence = new ArrayList<>();
 		// Straight drive distance to the center peg
@@ -98,6 +97,8 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 
 		mSequentialRoutine = new SequentialRoutine(sequence);
 		System.out.println(log);
+		 */
+
 	}
 	@Override
 	public String toString() {

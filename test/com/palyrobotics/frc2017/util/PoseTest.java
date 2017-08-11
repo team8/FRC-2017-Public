@@ -2,10 +2,10 @@ package com.palyrobotics.frc2017.util;
 
 import org.junit.Test;
 
+import java.util.Optional;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
-
-import java.util.Optional;
 
 public class PoseTest {
 	

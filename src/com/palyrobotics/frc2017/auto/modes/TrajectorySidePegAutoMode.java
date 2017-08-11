@@ -1,7 +1,5 @@
 package com.palyrobotics.frc2017.auto.modes;
 
-import java.util.ArrayList;
-
 import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.auto.AutoPathLoader;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
@@ -11,12 +9,17 @@ import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.SpatulaDownAutocorrectRoutine;
 import com.palyrobotics.frc2017.behavior.routines.SpatulaUpRoutine;
 import com.palyrobotics.frc2017.behavior.routines.TimeoutRoutine;
-import com.palyrobotics.frc2017.behavior.routines.drive.*;
+import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
+import com.palyrobotics.frc2017.behavior.routines.drive.DrivePathRoutine;
+import com.palyrobotics.frc2017.behavior.routines.drive.DriveSensorResetRoutine;
+import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
 import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.team254.lib.trajectory.Path;
+
+import java.util.ArrayList;
 
 /**
  * Side peg autonomous using motion profiles
@@ -33,7 +36,7 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 	private final TrajectorySidePostVariant mPostVariant;
 	private Path mPath, mPostPath;
 	
-	private final boolean mUseGyro = true;
+	private final boolean mUseGyro = false;
 	private boolean mPostInverted;
 	
 	private final Gains mShortGains;
@@ -51,27 +54,36 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 		switch (mVariant) {
 			case BLUE_BOILER:
 				mPath = AutoPathLoader.get("BlueBoiler");
+				mTrajectoryGains = Gains.kRightTurnTrajectoryGains;
 				sliderPositions = new double[]{-1, 2.5, 5};
 				mPostInverted = true;
 				break;
 			case BLUE_LOADING:
 				mPath = AutoPathLoader.get("BlueLoading");
+				mTrajectoryGains = Gains.kLeftTurnTrajectoryGains;
 				sliderPositions = new double[]{0, 3, -3};
 				mPostInverted = false;
 				break;
 			case RED_LOADING:
 				mPath = AutoPathLoader.get("RedLoading");
+				mTrajectoryGains = Gains.kRightTurnTrajectoryGains;
 				sliderPositions = new double[]{0, 3, -3};
 				mPostInverted = true;
 				break;
 			case RED_BOILER:
 				mPath = AutoPathLoader.get("RedBoiler");
+				mTrajectoryGains = Gains.kLeftTurnTrajectoryGains;
 				sliderPositions = new double[]{0, 3, -3};
 				mPostInverted = false;
 				break;
+			default:
+				mPath = null;
+				mTrajectoryGains = null;
+				sliderPositions = null;
+				System.err.println("In default case");
+				break;
 		}
 		mPostVariant = postScore;
-		mTrajectoryGains = Gains.kTrajectoryGains;
 		mShortGains = Gains.steikShortDriveMotionMagicGains;
 	}
 

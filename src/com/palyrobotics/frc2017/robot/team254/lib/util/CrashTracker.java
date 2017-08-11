@@ -1,6 +1,8 @@
 package com.palyrobotics.frc2017.robot.team254.lib.util;
 
-import java.io.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.UUID;
 

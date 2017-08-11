@@ -70,15 +70,34 @@ public class Constants extends ConstantsBase {
 	public static double kSliderTicksPerInch = 900;
 	public static double kSliderRevolutionsPerInch = 0.218099;
 
+	public static final double kRobotWidthInches = 40.0;
+	public static final double kRobotLengthInches = 31.0;
+
+	public static final double kRobotBlueLeftEdgeOffset = 6.0;
+	public static final double kRobotBlueRightEdgeOffset = 6.0;
+
+	public static final double kRobotRedLeftEdgeOffset = 6.0;
+	public static final double kRobotRedRightEdgeOffset = 6.5;
+
+	public static final double kRobotRotCenterLengthOffset = 4.0;
+
+	public static final double kDriveForwardBufferInches = 1.0;
+
+	public static final double kMaxVisionXOffset = 10.0;
+	public static final double kMinVisionZ = 0.0;
+	public static final double kMaxVisionZ = 40.0;
+
 	// Aegir: 2199 RIGHT  |  3499 LEFT
 	// Vali: 2032 RIGHT | 3310 LEFT
-	public static final double kPotentiometerRightPos = 2077; // subtracted 5 each
-	public static final double kPotentiometerLeftPos = 3355;
+	public static final double kPotentiometerRightPos = 2042;//2077; // subtracted 5 each
+	public static final double kPotentiometerLeftPos = 3332;//3355;
 	public static final double kPotentiometerCenterPos = (kPotentiometerRightPos + kPotentiometerLeftPos) / 2;
 	
 	// Tolerances
 	public static double kAcceptableDrivePositionError = 15;
 	public static double kAcceptableDriveVelocityError = 5;
+	public static double kAcceptableShortDrivePositionError = 1;
+	public static double kAcceptableShortDriveVelocityError = 3;
 	public static double kAcceptableTurnAngleError = 1; // 0.5
 	public static double kAcceptableSliderPositionError;
 	public static double kAcceptableGyroZeroError = 3;

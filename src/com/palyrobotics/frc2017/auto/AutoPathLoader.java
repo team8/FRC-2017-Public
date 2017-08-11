@@ -15,30 +15,38 @@ import java.util.Hashtable;
  */
 public class AutoPathLoader {
 	// Make sure these match up!
-	public final static String[] kPathNames = { "Backup",
+	public final static String[] kPathNames = {
 			"Baseline",
 			"BlueBoiler",
+			"BlueBoilerVision",
 			"BlueCenter",
+			"BlueCenterVision",
 			"BlueLoading",
+			"BlueLoadingVision",
 			"RedBoiler",
+			"RedBoilerVision",
 			"RedCenter",
+			"RedCenterVision",
 			"RedLoading",
-			"CenterGoToNeutral",	// right side
-			"RightSideDriveToNeutral",	// right side
-			"LeftSideDriveToNeutral",
-			"RedBoilerAirship"
+			"RedLoadingVision",
 	};
-	public final static String[] kPathDescriptions = { "Backup", "Baseline",
+
+	public final static String[] kPathDescriptions = {
+			"Baseline",
 			"Blue boiler",
+			"Blue boiler vision",
 			"Blue center",
+			"Blue center vision",
 			"Blue loading",
+			"Blue loading vision",
 			"Red boiler",
+			"Red boiler vision",
 			"Red center",
+			"Red center vision",
 			"Red loading",
-			"Go to neutral zone from center peg",
-			"Go to neutral zone from right side peg",
-			"Go to neutral zone from left side peg"
+			"Red loading vision",
 	};
+
 	static Hashtable paths_ = null;
 
 	public static void loadPaths() {

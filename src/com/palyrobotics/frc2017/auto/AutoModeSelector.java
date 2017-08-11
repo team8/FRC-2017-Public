@@ -1,13 +1,13 @@
 package com.palyrobotics.frc2017.auto;
 
 import com.palyrobotics.frc2017.auto.modes.*;
-import com.palyrobotics.frc2017.auto.modes.archive.DriveStraightCenterPegAutoMode.CenterAutoPostVariant;
-import com.palyrobotics.frc2017.auto.modes.archive.*;
-import com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode.Alliance;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoPostVariant;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
 import com.palyrobotics.frc2017.auto.modes.TrajectorySidePegAutoMode.TrajectorySidePostVariant;
-
+import com.palyrobotics.frc2017.auto.modes.archive.BaseLineAutoMode;
+import com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode;
+import com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode.Alliance;
+import com.palyrobotics.frc2017.auto.modes.archive.DoNothingAutoMode;
 import org.json.simple.JSONArray;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class AutoModeSelector {
 	 * comment for which auto mode the selectedIndex refers to
 	 */
 
-	int selectedIndex = AutoIndices.TRAJECTORY_SIDE.get();
+	int selectedIndex = AutoIndices.VISION_SIDE_PEG.get();
 
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
@@ -60,12 +60,11 @@ public class AutoModeSelector {
 		// red left/ blue right = loading station, red right/blue left = boiler
   /*3*/	registerAutonomous(new SidePegAutoMode(SideAutoVariant.BLUE_LOADING, // Alliance color and side
 				SideAutoPostVariant.BACKUP)); // Should backup?
-  /*4*/ registerAutonomous(new VisionCenterPegAutoMode(Alliance.BLUE, false, true)); // alliance, seeking right vision target?, backup?
-  /*5*/ registerAutonomous(new VisionSidePegAutoMode(SideAutoVariant.RED_LOADING, // Field position
-						true)); // seeking right vision target?, backup?
+  /*4*/ registerAutonomous(new VisionCenterPegAutoMode(VisionCenterPegAutoMode.CenterPegAutoVariant.BLUE)); //alliance
+  /*5*/ registerAutonomous(new VisionSidePegAutoMode(SideAutoVariant.BLUE_LOADING)); // alliance, boiler/loading
 
   /*6*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.BLUE, true));
-  /*7*/registerAutonomous(new TrajectorySidePegAutoMode(SideAutoVariant.BLUE_BOILER, TrajectorySidePostVariant.BACKUP));
+  /*7*/registerAutonomous(new TrajectorySidePegAutoMode(SideAutoVariant.BLUE_LOADING, TrajectorySidePostVariant.BACKUP));
   /*8*/registerAutonomous(new TestAutoMode());
   /*9*/registerAutonomous(new TestTrajectoryAutoMode());
 	}

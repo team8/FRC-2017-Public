@@ -6,12 +6,7 @@
 package com.team254.lib.trajectory;
 
 import com.team254.lib.util.ChezyMath;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import static org.junit.Assert.assertTrue;
 

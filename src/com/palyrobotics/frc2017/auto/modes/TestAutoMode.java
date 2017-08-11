@@ -1,24 +1,17 @@
 package com.palyrobotics.frc2017.auto.modes;
 
-import java.util.ArrayList;
-
 import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.behavior.ParallelRoutine;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
-import com.palyrobotics.frc2017.behavior.TimedRoutine;
-import com.palyrobotics.frc2017.behavior.routines.SliderSensorResetRoutine;
 import com.palyrobotics.frc2017.behavior.routines.SpatulaDownAutocorrectRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
-import com.palyrobotics.frc2017.behavior.routines.scoring.AutocorrectPositioningSliderRoutine;
-import com.palyrobotics.frc2017.behavior.routines.scoring.CustomPositioningSliderRoutine;
-import com.palyrobotics.frc2017.behavior.routines.scoring.ManualControlSliderRoutine;
-import com.palyrobotics.frc2017.behavior.routines.scoring.VisionSliderRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
-import com.palyrobotics.frc2017.subsystems.Slider;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
+
+import java.util.ArrayList;
 
 /**
  * Created by Nihar on 1/11/17.
@@ -45,20 +38,28 @@ public class TestAutoMode extends AutoModeBase {
 //		sequence.add(new TimeoutRoutine(1));
 //		sequence.add(new DriveStraightRoutine(75));
 
-		double setpoint = Math.random()*5;
-		if (Math.random() > 0.5) {
-			setpoint*=-1;
-		}
-		sequence.add(new CustomPositioningSliderRoutine(setpoint));
+//		double setpoint = Math.random()*5;
+//		if (Math.random() > 0.5) {
+//			setpoint*=-1;
+//		}
+//		sequence.add(new CustomPositioningSliderRoutine(0));
 //		sequence.add(new CustomPositioningSliderRoutine(setpoint-1));
 
 		DriveSignal signal = DriveSignal.getNeutralSignal();
-		signal.leftMotor.setPercentVBus(0.2);
-		signal.rightMotor.setPercentVBus(0.2);
-//		sequence.add(new CANTalonRoutine(signal, false, 3));
+		
+		double dist = 24;
+		
+		signal.leftMotor.setMotionMagic(dist*Constants.kDriveTicksPerInch, Gains.steikShortDriveMotionMagicGains,
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		
+		signal.rightMotor.setMotionMagic(dist*Constants.kDriveTicksPerInch, Gains.steikShortDriveMotionMagicGains,
+				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+		
+		sequence.add(new CANTalonRoutine(signal, true, 100000));
+		
 //		sequence.add(new TimedRoutine(1, new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.CENTER)));
-		sequence.add(new CustomPositioningSliderRoutine(-7));
 //		sequence.add(new VisionSliderRoutine());
+		
 		return new SequentialRoutine(sequence);
 	}
 

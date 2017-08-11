@@ -1,7 +1,6 @@
 package com.palyrobotics.frc2017.auto.modes.archive;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
-import com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.routines.drive.DriveStraightRoutine;
 import com.palyrobotics.frc2017.config.AutoDistances;

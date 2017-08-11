@@ -1,17 +1,14 @@
 package com.palyrobotics.frc2017.robot;
 
-import com.palyrobotics.frc2017.behavior.routines.scoring.ManualControlSliderRoutine;
+import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.routines.scoring.AutocorrectPositioningSliderRoutine;
-import com.palyrobotics.frc2017.behavior.routines.scoring.PositioningSliderRoutine;
+import com.palyrobotics.frc2017.behavior.routines.scoring.ManualControlSliderRoutine;
+import com.palyrobotics.frc2017.behavior.routines.scoring.VisionSliderRoutine;
+import com.palyrobotics.frc2017.config.Commands;
+import com.palyrobotics.frc2017.config.Commands.JoystickInput;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.DoubleClickTimer;
-import com.palyrobotics.frc2017.util.logger.Logger;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
-
-import com.palyrobotics.frc2017.behavior.Routine;
-import com.palyrobotics.frc2017.config.Commands;
-import com.palyrobotics.frc2017.config.Commands.*;
 
 /**
  * Used to produce Commands {@link Commands} from human input
@@ -69,22 +66,25 @@ public class OperatorInterface {
 		newCommands.sliderStickInput = new JoystickInput(mSliderStick.getX(), mSliderStick.getY(), mSliderStick.getTrigger());
 		newCommands.climberStickInput = new JoystickInput(mClimberStick.getX(), mClimberStick.getY(), mClimberStick.getTrigger());
 
-		// Flippers
-		//TODO figure out flipper controls
-		// Left Flipper
-//		if (mSliderStick.getRawButton(1)) {
-//			newCommands.wantedFlipperSignal.leftFlipper = DoubleSolenoid.Value.kForward;
-//		} else if (mSliderStick.getRawButton(1)) {
-//			newCommands.wantedFlipperSignal.leftFlipper = DoubleSolenoid.Value.kReverse;
-//		}
-		//Right Flipper
-//		if (mSliderStick.getRawButton(1)) {
-//			newCommands.wantedFlipperSignal.rightFlipper = DoubleSolenoid.Value.kForward;
-//		} else if (mSliderStick.getRawButton(1)) {
-//			newCommands.wantedFlipperSignal.rightFlipper = DoubleSolenoid.Value.kReverse;
-//		}
-
 		// Slider
+		if (mTurnStick.getRawButton(6)){
+			newCommands.wantedSliderState = Slider.SliderState.MANUAL;
+			newCommands.sliderStickInput.x = 1;
+		} else if (mTurnStick.getRawButton(4)){
+			newCommands.wantedSliderState = Slider.SliderState.MANUAL;
+			newCommands.sliderStickInput.x = 0.5;
+		} else if (mTurnStick.getRawButton(5)){
+			newCommands.wantedSliderState = Slider.SliderState.MANUAL;
+			newCommands.sliderStickInput.x = -1;
+		} else if (mTurnStick.getRawButton(3)){
+			newCommands.wantedSliderState = Slider.SliderState.MANUAL;
+			newCommands.sliderStickInput.x = -0.5;
+		} else if (mTurnStick.getRawButton(2)) {
+			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.NONE;
+			newCommands.addWantedRoutine(new VisionSliderRoutine());
+		}
+		
+		// could be changed to else if, depending on what overriding is wanted
 		if (mSliderStick.getRawButton(2)) {	// opposite of preferred thumb position
 			newCommands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.NONE;
 			newCommands.addWantedRoutine(new ManualControlSliderRoutine());
@@ -100,7 +100,8 @@ public class OperatorInterface {
 		} else if (Slider.getInstance().getSliderState() == Slider.SliderState.IDLE) {
 			newCommands.addWantedRoutine(new ManualControlSliderRoutine());
 		}
-
+		
+		
 		// Spatula
 		if (mSliderStick.getRawButton(8)) {
 			newCommands.wantedSpatulaState = Spatula.SpatulaState.DOWN;
@@ -132,12 +133,14 @@ public class OperatorInterface {
 			newCommands.climberStickInput.y = -0.8;
 		}
 
-	// Climber joystick may be set in a virtual sense
+		// Climber joystick may be set in a virtual sense
 		if (newCommands.climberStickInput.y <= 0.02) {
 			newCommands.wantedClimberState = Climber.ClimberState.MANUAL;
 		} else {
 			newCommands.wantedClimberState = Climber.ClimberState.IDLE;
 		}
+		
+		
 
 //		Logger.getInstance().logRobotThread("Drive stick", newCommands.leftStickInput);
 //		Logger.getInstance().logRobotThread("Turn stick", newCommands.rightStickInput);

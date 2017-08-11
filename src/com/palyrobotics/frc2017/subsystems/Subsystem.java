@@ -1,10 +1,9 @@
-package com.palyrobotics.frc2017.util;
+package com.palyrobotics.frc2017.subsystems;
 
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
-import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
 
-public abstract class Subsystem implements SubsystemLoop {
+public abstract class Subsystem {
 	private String mName;
 
 	public Subsystem(String name) {
@@ -22,4 +21,16 @@ public abstract class Subsystem implements SubsystemLoop {
 		return mName;
 	}
 //	public abstract void reloadConstants();
+	public void start() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void stop() {
+		// TODO Auto-generated method stub
+		
+	}
+	public String getStatus() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

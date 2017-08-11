@@ -1,7 +1,5 @@
 package com.team254.lib.trajectory;
 
-import com.team254.lib.trajectory.Trajectory.Segment;
-
 /**
  * Base class for an autonomous path.
  * 

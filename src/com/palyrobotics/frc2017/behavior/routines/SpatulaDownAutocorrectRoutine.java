@@ -6,7 +6,7 @@ import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.subsystems.Intake;
 import com.palyrobotics.frc2017.subsystems.Slider;
 import com.palyrobotics.frc2017.subsystems.Spatula;
-import com.palyrobotics.frc2017.util.Subsystem;
+import com.palyrobotics.frc2017.subsystems.Subsystem;
 
 public class SpatulaDownAutocorrectRoutine extends Routine {
 	private enum AutocorrectState {
@@ -42,13 +42,7 @@ public class SpatulaDownAutocorrectRoutine extends Routine {
 			commands.wantedIntakeState = Intake.IntakeState.EXPEL;
 			break;
 		}
-		
-		try {
-			slider.run(commands, this);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		return commands;
+			return commands;
 	}
 
 	@Override
@@ -56,11 +50,6 @@ public class SpatulaDownAutocorrectRoutine extends Routine {
 		commands.robotSetpoints.sliderSetpoint = Slider.SliderTarget.NONE;
 		commands.wantedSliderState = Slider.SliderState.IDLE;
 		commands.wantedIntakeState = Intake.IntakeState.IDLE;
-		try {
-			slider.run(commands, this);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
 		return commands;
 	}
 

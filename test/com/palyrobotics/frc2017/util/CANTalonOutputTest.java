@@ -5,8 +5,8 @@ import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.*;
 
 /**
  * Created by Nihar on 2/3/17.

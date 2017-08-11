@@ -22,6 +22,12 @@ public class Pose {
 
 	public Optional<Double> leftError;
 	public Optional<Double> rightError;
+	
+	public Optional<Double> leftMotionMagicPos = Optional.empty();
+	public Optional<Double> rightMotionMagicPos = Optional.empty();
+	public Optional<Double> leftMotionMagicVel = Optional.empty();
+	public Optional<Double> rightMotionMagicVel = Optional.empty();
+
 
 	public Pose() {
 		this.leftEnc = 0; this.leftEncVelocity = 0; this.leftSpeed = 0;
@@ -39,10 +45,10 @@ public class Pose {
 		this.rightEnc = rightEnc;
 		this.rightEncVelocity = rightEncVelocity;
 		this.rightSpeed = rightSpeed;
-		this.leftError = Optional.of(leftError);
-		this.rightError = Optional.of(rightError);
 		this.heading = heading;
 		this.headingVelocity = headingVelocity;
+		this.leftError = Optional.of(leftError);
+		this.rightError = Optional.of(rightError);
 	}
 	public Pose(double leftEnc, double leftEncVelocity, double leftSpeed,
 				double rightEnc, double rightEncVelocity, double rightSpeed,
@@ -72,6 +78,11 @@ public class Pose {
 		copy.rightSpeed = this.rightSpeed;
 		copy.leftError = (this.leftError.isPresent()) ? Optional.of(this.leftError.get()) : Optional.empty();
 		copy.rightError = (this.rightError.isPresent()) ? Optional.of(this.rightError.get()) : Optional.empty();
+		copy.leftMotionMagicPos = (this.leftMotionMagicPos.isPresent()) ? Optional.of(this.leftMotionMagicPos.get()) : Optional.empty();
+		copy.rightMotionMagicPos = (this.rightMotionMagicPos.isPresent()) ? Optional.of(this.rightMotionMagicPos.get()) : Optional.empty();
+		copy.leftMotionMagicVel = (this.leftMotionMagicVel.isPresent()) ? Optional.of(this.leftMotionMagicVel.get()) : Optional.empty();
+		copy.rightMotionMagicVel = (this.rightMotionMagicVel.isPresent()) ? Optional.of(this.rightMotionMagicVel.get()) : Optional.empty();
+
 		return copy;
 	}
 	
@@ -85,6 +96,10 @@ public class Pose {
 				this.leftError.equals(other.leftError) &&
 				this.rightError.equals(other.rightError) &&
 				this.heading == other.heading &&
-				this.headingVelocity == other.headingVelocity;
+				this.headingVelocity == other.headingVelocity &&
+				this.leftMotionMagicPos == other.leftMotionMagicPos &&
+				this.rightMotionMagicPos == other.rightMotionMagicPos &&
+				this.leftMotionMagicVel == other.leftMotionMagicVel &&
+				this.rightMotionMagicVel == other.rightMotionMagicVel;
 	}
 }

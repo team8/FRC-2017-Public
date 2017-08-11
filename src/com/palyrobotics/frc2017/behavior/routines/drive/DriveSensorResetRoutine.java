@@ -4,8 +4,7 @@ import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.robot.HardwareAdapter;
-import com.palyrobotics.frc2017.robot.team254.lib.util.ConstantsBase;
-import com.palyrobotics.frc2017.util.Subsystem;
+import com.palyrobotics.frc2017.subsystems.Subsystem;
 
 /**
  * Created by EricLiu on 4/13/17.
