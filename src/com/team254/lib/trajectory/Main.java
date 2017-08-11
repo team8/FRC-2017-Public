@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import static com.palyrobotics.frc2017.config.AutoDistances.*;
+import static com.palyrobotics.frc2017.config.Constants.*;
 
 /**
  * @author Jared341
@@ -20,7 +21,7 @@ public class Main {
 	private static final double kMaxVel = 180.0/12;
 	private static final double kMaxAcc = 120.0/12;
 	private static final double kMaxJerk = 50.0;
-	private static final double kDt = 0.01;
+	private static final double kDt = 0.02;
 
 	// Values pulled from gains
 	private static final double kShortVel = Gains.kSteikShortDriveMotionMagicCruiseVelocity/(Constants.kDriveSpeedUnitConversion*12);
@@ -71,10 +72,41 @@ public class Main {
 			// Description of this auto mode path.
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-//			p.addWaypoint(new WaypointSequence.Waypoint(50.0/12, 0, 0));
 			p.addWaypoint(new WaypointSequence.Waypoint(
-					kRedLoadingPegX/12.0,
-					-kRedLoadingPegY/12.0, -kTurnAngle));
+					(kRedLoadingPegX - (0.5*kRobotLengthInches + kRobotRotCenterLengthOffset)*Math.cos(kTurnAngle) - 0.5*kRobotLengthInches + kRobotRotCenterLengthOffset + kRedLoadingPegOffsetX)/12.0,
+					-((kRedLoadingPegY - (0.5*kRobotLengthInches + kRobotRotCenterLengthOffset)*Math.sin(kTurnAngle) - 0.5*kRobotWidthInches + kRobotRedLeftEdgeOffset + kRedLoadingPegOffsetY)/12.0), -kTurnAngle));
+
+			Path path = PathGenerator.makePath(p, config,
+					kWheelbaseWidth, path_name);
+
+			// Outputs to the directory supplied as the first argument.
+			TextFileSerializer js = new TextFileSerializer();
+			String serialized = js.serialize(path);
+//			System.out.print(serialized);
+			String fullpath = joinPath(directory, path_name + ".txt");
+			if (!writeFile(fullpath, serialized)) {
+				System.err.println(fullpath + " could not be written!!!!");
+				System.exit(1);
+			} else {
+				System.out.println("Wrote " + fullpath);
+			}
+		}
+
+		{
+			config.dt = kDt;
+			config.max_acc = kLongAccel;
+			config.max_jerk = 50.0;
+			config.max_vel = kLongVel;
+			// Path name must be a valid Java class name.
+			final String path_name = "RedLoadingVision";
+			// turn right
+
+			// Description of this auto mode path.
+			WaypointSequence p = new WaypointSequence(10);
+			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
+			p.addWaypoint(new WaypointSequence.Waypoint((kRedLoadingPegX - (kVisionDistanceInches + kRobotRotCenterLengthOffset)*Math.cos(kTurnAngle) - 0.5*kRobotLengthInches + kRobotRotCenterLengthOffset + kRedLoadingPegOffsetX)/12.0,
+					-(kRedLoadingPegY - (kVisionDistanceInches + kRobotRotCenterLengthOffset)*Math.sin(kTurnAngle) - 0.5*kRobotWidthInches + kRobotRedLeftEdgeOffset + kRedLoadingPegOffsetY)/12.0, -kTurnAngle));
+
 
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);
@@ -98,26 +130,22 @@ public class Main {
 			config.max_jerk = 50.0;
 			config.max_vel = kLongVel;
 			// Path name must be a valid Java class name.
-			final String path_name = "CenterGoToNeutral";
-			// turn right
-	
-			// Description of this auto mode path.
-			WaypointSequence p = new WaypointSequence(10);
+			final String path_name = "RedBoiler";
 
-		    p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-		    p.addWaypoint(getWaypoint(8, -6, Math.PI/3));
-		    p.addWaypoint(getWaypoint(10, -3,0));
-		    p.addWaypoint(getWaypoint(10, 10, 0));
-//		    p.addWaypoint(getWaypoint(6,17, 0));
-//			p.addWaypoint(new WaypointSequence.Waypoint(7, 15, 0));
-	
+			// Description of this auto mode path.
+			// turn left
+			WaypointSequence p = new WaypointSequence(10);
+			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
+			p.addWaypoint(new WaypointSequence.Waypoint((kRedBoilerPegX - (0.5*kRobotLengthInches + kRobotRotCenterLengthOffset)*Math.cos(kTurnAngle) - 0.5*kRobotLengthInches + kRobotRotCenterLengthOffset + kRedBoilerPegOffsetX)/12.0,
+					(kRedBoilerPegY - (0.5*kRobotLengthInches + kRobotRotCenterLengthOffset)*Math.sin(kTurnAngle) - 0.5*kRobotWidthInches + kRobotRedRightEdgeOffset + kRedBoilerPegOffsetY)/12.0, kTurnAngle));
+
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);
-	
+
 			// Outputs to the directory supplied as the first argument.
 			TextFileSerializer js = new TextFileSerializer();
 			String serialized = js.serialize(path);
-	//		System.out.print(serialized);
+			//System.out.print(serialized);
 			String fullpath = joinPath(directory, path_name + ".txt");
 			if (!writeFile(fullpath, serialized)) {
 				System.err.println(fullpath + " could not be written!!!!");
@@ -126,22 +154,21 @@ public class Main {
 				System.out.println("Wrote " + fullpath);
 			}
 		}
-
+		
 		{
 			config.dt = kDt;
 			config.max_acc = kLongAccel;
 			config.max_jerk = 50.0;
 			config.max_vel = kLongVel;
 			// Path name must be a valid Java class name.
-			final String path_name = "RedBoiler";
+			final String path_name = "RedBoilerVision";
 
 			// Description of this auto mode path.
 			// turn left
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint(
-					kRedBoilerPegX/12.0,
-					kRedBoilerPegY/12.0, kTurnAngle));
+			p.addWaypoint(new WaypointSequence.Waypoint((kRedBoilerPegX - (kVisionDistanceInches + kRobotRotCenterLengthOffset)*Math.cos(kTurnAngle) - 0.5*kRobotLengthInches + kRobotRotCenterLengthOffset + kRedBoilerPegOffsetX)/12.0,
+					(kRedBoilerPegY - (kVisionDistanceInches + kRobotRotCenterLengthOffset)*Math.sin(kTurnAngle) - 0.5*kRobotWidthInches - kRobotRedRightEdgeOffset + kRedBoilerPegOffsetY)/12.0, kTurnAngle));
 
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);
@@ -171,7 +198,37 @@ public class Main {
 			// Description of this auto mode path.
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint(kRedCenter, 0, 0));
+			p.addWaypoint(new WaypointSequence.Waypoint((kRedCenterPeg - kRobotLengthInches + kRedCenterPegOffsetX)/12.0, kRedCenterPegOffsetY/12.0, 0));
+
+			Path path = PathGenerator.makePath(p, config,
+					kWheelbaseWidth, path_name);
+
+			// Outputs to the directory supplied as the first argument.
+			TextFileSerializer js = new TextFileSerializer();
+			String serialized = js.serialize(path);
+			//System.out.print(serialized);
+			String fullpath = joinPath(directory, path_name + ".txt");
+			if (!writeFile(fullpath, serialized)) {
+				System.err.println(fullpath + " could not be written!!!!1");
+				System.exit(1);
+			} else {
+				System.out.println("Wrote " + fullpath);
+			}
+		}
+		
+		{
+			config.dt = kDt;
+			config.max_acc = kLongAccel;
+			config.max_jerk = 50.0;
+			config.max_vel = kLongVel;
+			// Path name must be a valid Java class name.
+			final String path_name = "RedCenterVision";
+
+			// Description of this auto mode path.
+			WaypointSequence p = new WaypointSequence(10);
+			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
+			p.addWaypoint(new WaypointSequence.Waypoint((kRedCenterPeg - 0.5*kRobotLengthInches - kVisionDistanceInches + kRedCenterPegOffsetX)/12.0,
+					kRedCenterPegOffsetY/12.0, 0));
 
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);
@@ -203,8 +260,8 @@ public class Main {
 			// turn left
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint(kBlueLoadingPegX/12.0,
-					kBlueLoadingPegY/12.0, kTurnAngle));
+			p.addWaypoint(new WaypointSequence.Waypoint((kBlueLoadingPegX - 0.5*kRobotLengthInches - (0.5*kRobotLengthInches + kRobotRotCenterLengthOffset)*Math.cos(kTurnAngle) + kRobotRotCenterLengthOffset + kBlueLoadingPegOffsetX)/12.0,
+					(kBlueLoadingPegY - 0.5*kRobotWidthInches - (0.5*kRobotLengthInches + kRobotRotCenterLengthOffset)*Math.sin(kTurnAngle) + kRobotBlueRightEdgeOffset + kBlueLoadingPegOffsetY)/12.0, kTurnAngle));
 
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);
@@ -226,6 +283,36 @@ public class Main {
 			config.dt = kDt;
 			config.max_acc = kLongAccel;
 			config.max_jerk = 50.0;
+			config.max_vel = kLongAccel;
+			// Path name must be a valid Java class name.
+			final String path_name = "BlueLoadingVision";
+			// Description of this auto mode path.
+			// turn left
+			WaypointSequence p = new WaypointSequence(10);
+			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
+			p.addWaypoint(new WaypointSequence.Waypoint((kBlueLoadingPegX - 0.5*kRobotLengthInches - (kVisionDistanceInches + kRobotRotCenterLengthOffset)*Math.cos(kTurnAngle) + kRobotRotCenterLengthOffset + kBlueLoadingPegOffsetX)/12.0,
+					(kBlueLoadingPegY - 0.5*kRobotWidthInches - (kVisionDistanceInches + kRobotRotCenterLengthOffset)*Math.sin(kTurnAngle) + kRobotBlueRightEdgeOffset + kBlueLoadingPegOffsetY)/12.0, kTurnAngle));
+
+			Path path = PathGenerator.makePath(p, config,
+					kWheelbaseWidth, path_name);
+
+			// Outputs to the directory supplied as the first argument.
+			TextFileSerializer js = new TextFileSerializer();
+			String serialized = js.serialize(path);
+//			System.out.print(serialized);
+			String fullpath = joinPath(directory, path_name + ".txt");
+			if (!writeFile(fullpath, serialized)) {
+				System.err.println(fullpath + " could not be written!!!!");
+				System.exit(1);
+			} else {
+				System.out.println("Wrote " + fullpath);
+			}
+		}
+		
+		{
+			config.dt = kDt;
+			config.max_acc = kLongAccel;
+			config.max_jerk = 50.0;
 			config.max_vel = kLongVel;
 			// Path name must be a valid Java class name.
 			final String path_name = "BlueBoiler";
@@ -234,8 +321,39 @@ public class Main {
 			// turn right
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint(kBlueBoilerPegX/12.0,
-					-kBlueBoilerPegY/12.0, -kTurnAngle));
+			p.addWaypoint(new WaypointSequence.Waypoint((kBlueBoilerPegX - 0.5*kRobotLengthInches - (0.5*kRobotLengthInches + kRobotRotCenterLengthOffset)*Math.cos(kTurnAngle) + kRobotRotCenterLengthOffset + kBlueBoilerPegOffsetX)/12.0,
+					-(kBlueBoilerPegY - 0.5*kRobotWidthInches - (0.5*kRobotLengthInches + kRobotRotCenterLengthOffset)*Math.sin(kTurnAngle) + kRobotBlueLeftEdgeOffset + kBlueBoilerPegOffsetY)/12.0, -kTurnAngle));
+
+			Path path = PathGenerator.makePath(p, config,
+					kWheelbaseWidth, path_name);
+
+			// Outputs to the directory supplied as the first argument.
+			TextFileSerializer js = new TextFileSerializer();
+			String serialized = js.serialize(path);
+			//System.out.print(serialized);
+			String fullpath = joinPath(directory, path_name + ".txt");
+			if (!writeFile(fullpath, serialized)) {
+				System.err.println(fullpath + " could not be written!!!!");
+				System.exit(1);
+			} else {
+				System.out.println("Wrote " + fullpath);
+			}
+		}
+
+		{
+			config.dt = kDt;
+			config.max_acc = kLongAccel;
+			config.max_jerk = 50.0;
+			config.max_vel = kLongVel;
+			// Path name must be a valid Java class name.
+			final String path_name = "BlueBoilerVision";
+
+			// Description of this auto mode path.
+			// turn right
+			WaypointSequence p = new WaypointSequence(10);
+			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
+			p.addWaypoint(new WaypointSequence.Waypoint((kBlueBoilerPegX - 0.5*kRobotLengthInches - (kVisionDistanceInches + kRobotRotCenterLengthOffset)*Math.cos(kTurnAngle) + kRobotRotCenterLengthOffset + kBlueBoilerPegOffsetX)/12.0,
+					-(kBlueBoilerPegY - 0.5*kRobotWidthInches - (kVisionDistanceInches + kRobotRotCenterLengthOffset)*Math.sin(kTurnAngle) + kRobotBlueLeftEdgeOffset + kBlueBoilerPegOffsetY)/12.0, -kTurnAngle));
 
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);
@@ -256,16 +374,46 @@ public class Main {
 
 		{
 			config.dt = kDt;
-			config.max_acc = kLongAccel;
+			config.max_acc = 5;//kLongAccel;
 			config.max_jerk = 50.0;
-			config.max_vel = kLongVel;
+			config.max_vel = 5;//kLongVel;
 			// Path name must be a valid Java class name.
 			final String path_name = "BlueCenter";
 
 			// Description of this auto mode path.
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint(kBlueCenter, 0, 0));
+			p.addWaypoint(new WaypointSequence.Waypoint((kBlueCenterPeg - kRobotLengthInches + kBlueCenterPegOffsetX)/12.0, kBlueCenterPegOffsetY/12.0, 0));
+
+			Path path = PathGenerator.makePath(p, config,
+					kWheelbaseWidth, path_name);
+
+			// Outputs to the directory supplied as the first argument.
+			TextFileSerializer js = new TextFileSerializer();
+			String serialized = js.serialize(path);
+			//System.out.print(serialized);
+			String fullpath = joinPath(directory, path_name + ".txt");
+			if (!writeFile(fullpath, serialized)) {
+				System.err.println(fullpath + " could not be written!!!!1");
+				System.exit(1);
+			} else {
+				System.out.println("Wrote " + fullpath);
+			}
+		}
+
+		{
+			config.dt = kDt;
+			config.max_acc = kLongAccel;
+			config.max_jerk = 50.0;
+			config.max_vel = kLongVel;
+			// Path name must be a valid Java class name.
+			final String path_name = "BlueCenterVision";
+
+			// Description of this auto mode path.
+			WaypointSequence p = new WaypointSequence(10);
+			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
+			p.addWaypoint(new WaypointSequence.Waypoint((kBlueCenterPeg - 0.5*kRobotLengthInches - kVisionDistanceInches + kBlueCenterPegOffsetX)/12.0,
+					kBlueCenterPegOffsetY/12.0, 0));
 
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);
@@ -286,67 +434,6 @@ public class Main {
 		/*
 			OTHER PATHS
 		 */
-
-		{
-			config.dt = kDt;
-			config.max_acc = kLongAccel;
-			config.max_jerk = 50.0;
-			config.max_vel = kLongVel;
-			// Path name must be a valid Java class name.
-			final String path_name = "RightSideDriveToNeutral";
-
-			// Description of this auto mode path.
-			WaypointSequence p = new WaypointSequence(10);
-			p.addWaypoint(new WaypointSequence.Waypoint(0,0,0));
-			p.addWaypoint(new WaypointSequence.Waypoint(6,-8,-Math.PI/3));
-			p.addWaypoint(new WaypointSequence.Waypoint(8,-14,-Math.PI/2));
-			Path path = PathGenerator.makePath(p, config,
-					kWheelbaseWidth, path_name);
-
-			// Outputs to the directory supplied as the first argument.
-			TextFileSerializer js = new TextFileSerializer();
-			String serialized = js.serialize(path);
-			//System.out.print(serialized);
-			String fullpath = joinPath(directory, path_name + ".txt");
-			if (!writeFile(fullpath, serialized)) {
-				System.err.println(fullpath + " could not be written!!!!1");
-				System.exit(1);
-			} else {
-				System.out.println("Wrote " + fullpath);
-			}
-		}
-
-		{
-			config.dt = kDt;
-			config.max_acc = kLongAccel;
-			config.max_jerk = 50.0;
-			config.max_vel = kLongVel;
-			// Path name must be a valid Java class name.
-			final String path_name = "LeftSideDriveToNeutral";
-
-			// Description of this auto mode path.
-			WaypointSequence p = new WaypointSequence(10);
-			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0+Math.PI/3));
-//			p.addWaypoint(new WaypointSequence.Waypoint(-50*Math.sin(Math.PI/6), 50*Math.cos(Math.PI/6), 0));
-//			p.addWaypoint(new WaypointSequence.Waypoint(20/12, 20/12, 5*Math.PI/12));
-			p.addWaypoint(new WaypointSequence.Waypoint(100/12, 40/12, Math.PI/3-Math.PI/3));
-			p.addWaypoint(new WaypointSequence.Waypoint(200/12, 40/12, Math.PI/3-Math.PI/3));
-			Path path = PathGenerator.makePath(p, config,
-					kWheelbaseWidth, path_name);
-
-			// Outputs to the directory supplied as the first argument.
-			TextFileSerializer js = new TextFileSerializer();
-			String serialized = js.serialize(path);
-			//System.out.print(serialized);
-			String fullpath = joinPath(directory, path_name + ".txt");
-			if (!writeFile(fullpath, serialized)) {
-				System.err.println(fullpath + " could not be written!!!!1");
-				System.exit(1);
-			} else {
-				System.out.println("Wrote " + fullpath);
-			}
-		}
-
 		{
 			config.dt = kDt;
 			config.max_acc = kLongAccel;

@@ -1,7 +1,5 @@
 package com.palyrobotics.frc2017.auto.modes.archive;
 
-import java.util.ArrayList;
-
 import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.behavior.ParallelRoutine;
 import com.palyrobotics.frc2017.behavior.Routine;
@@ -16,6 +14,8 @@ import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.palyrobotics.frc2017.util.logger.Logger;
+
+import java.util.ArrayList;
 
 import static com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
 

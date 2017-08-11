@@ -5,10 +5,7 @@ import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
-import com.palyrobotics.frc2017.robot.HardwareAdapter;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
-import com.palyrobotics.frc2017.util.Subsystem;
-import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
 
 /**
  * Subsystem that represents the climber
@@ -16,7 +13,7 @@ import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
  * Uses current draw to detect when starting and stopping climb
  * @author Ailyn Tong, Robbie Selwyn
  */
-public class Climber extends Subsystem implements SubsystemLoop {
+public class Climber extends Subsystem{
 	private static Climber instance = new Climber();
 	public static Climber getInstance() {
 		return instance;

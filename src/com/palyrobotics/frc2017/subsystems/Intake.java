@@ -3,15 +3,13 @@ package com.palyrobotics.frc2017.subsystems;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.RobotState;
-import com.palyrobotics.frc2017.util.Subsystem;
-import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
 
 /**
  * STEIK INTAKE
  * @author Ailyn Tong
  *
  */
-public class Intake extends Subsystem implements SubsystemLoop {
+public class Intake extends Subsystem {
 	private static Intake instance = new Intake();
 	public static Intake getInstance() {
 		return instance;

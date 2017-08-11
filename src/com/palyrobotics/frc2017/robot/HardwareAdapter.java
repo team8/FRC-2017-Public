@@ -4,8 +4,6 @@ import com.ctre.CANTalon;
 import com.kauailabs.navx.frc.AHRS;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
-import com.palyrobotics.frc2017.robot.team254.lib.util.ADXRS453_Gyro;
-
 import edu.wpi.first.wpilibj.*;
 /**
  * Represents all hardware components of the robot.

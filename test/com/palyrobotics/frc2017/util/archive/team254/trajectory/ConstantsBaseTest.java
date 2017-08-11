@@ -1,21 +1,17 @@
 package com.palyrobotics.frc2017.util.archive.team254.trajectory;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import com.palyrobotics.frc2017.robot.team254.lib.util.ConstantsBase;
+import com.palyrobotics.frc2017.robot.team254.lib.util.ConstantsBase.Constant;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
-import org.junit.Test;
-
-import com.palyrobotics.frc2017.robot.team254.lib.util.ConstantsBase;
-import com.palyrobotics.frc2017.robot.team254.lib.util.ConstantsBase.Constant;
+import static org.junit.Assert.*;
 
 public class ConstantsBaseTest {
 

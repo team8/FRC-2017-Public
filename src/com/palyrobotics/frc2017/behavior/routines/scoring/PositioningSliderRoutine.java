@@ -5,7 +5,7 @@ import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.subsystems.Slider;
 import com.palyrobotics.frc2017.subsystems.Spatula;
 import com.palyrobotics.frc2017.subsystems.Spatula.SpatulaState;
-import com.palyrobotics.frc2017.util.Subsystem;
+import com.palyrobotics.frc2017.subsystems.Subsystem;
 
 /**
  * Moves the slider to a setpoint
@@ -35,23 +35,12 @@ public class PositioningSliderRoutine extends Routine {
 		} else {
 			commands.wantedSliderState = Slider.SliderState.IDLE;
 		}
-		try {
-			slider.run(commands, this);
-		} catch (IllegalAccessException e) {
-			System.err.println("Slider position routine rejected!");
-			e.printStackTrace();
-		}
 		return commands;
 	}
 
 	@Override
 	public Commands cancel(Commands commands) {
 		commands.wantedSliderState = Slider.SliderState.IDLE;
-		try {
-			slider.run(commands, this);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
 		return commands;
 	}
 

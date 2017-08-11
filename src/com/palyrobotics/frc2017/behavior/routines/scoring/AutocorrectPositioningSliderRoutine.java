@@ -3,10 +3,10 @@ package com.palyrobotics.frc2017.behavior.routines.scoring;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.subsystems.Slider;
-import com.palyrobotics.frc2017.subsystems.Spatula;
 import com.palyrobotics.frc2017.subsystems.Slider.SliderState;
+import com.palyrobotics.frc2017.subsystems.Spatula;
 import com.palyrobotics.frc2017.subsystems.Spatula.SpatulaState;
-import com.palyrobotics.frc2017.util.Subsystem;
+import com.palyrobotics.frc2017.subsystems.Subsystem;
 
 /** 
  * Autocorrects -> only tells the slider to move once safe (spatula up)
@@ -61,23 +61,12 @@ public class AutocorrectPositioningSliderRoutine extends Routine {
 			commands.wantedSliderState = Slider.SliderState.WAITING;
 			break;
 		}
-		
-		try {
-			slider.run(commands, this);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
 		return commands;
 	}
 
 	@Override
 	public Commands cancel(Commands commands) {
 		commands.wantedSliderState = SliderState.IDLE;
-		try {
-			slider.run(commands, this);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
 		return commands;
 	}
 

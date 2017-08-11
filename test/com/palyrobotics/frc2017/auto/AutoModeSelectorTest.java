@@ -3,14 +3,13 @@ package com.palyrobotics.frc2017.auto;
 import com.palyrobotics.frc2017.auto.modes.archive.BaseLineAutoMode;
 import com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode;
 import com.palyrobotics.frc2017.auto.modes.archive.DoNothingAutoMode;
+import com.palyrobotics.frc2017.config.Constants;
 import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 
-import com.palyrobotics.frc2017.config.Constants;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 /**
  * Created by Nihar on 1/22/17.

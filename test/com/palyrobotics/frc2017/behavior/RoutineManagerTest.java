@@ -1,19 +1,18 @@
 package com.palyrobotics.frc2017.behavior;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-
-import java.util.ArrayList;
-
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.subsystems.Climber;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.subsystems.Intake;
-import com.palyrobotics.frc2017.util.Subsystem;
-
+import com.palyrobotics.frc2017.subsystems.Subsystem;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import java.util.ArrayList;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 /**
  * Created by Nihar on 1/22/17.

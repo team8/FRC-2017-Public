@@ -1,7 +1,5 @@
 package com.palyrobotics.frc2017.util.logger;
 
-import java.sql.Time;
-
 /**
  * Created by Nihar on 3/13/17.
  * Stores a String with the timestamp on construction

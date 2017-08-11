@@ -2,8 +2,6 @@ package com.palyrobotics.frc2017.subsystems;
 
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
-import com.palyrobotics.frc2017.util.Subsystem;
-import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
 
 /**
  * STEIK CLIMBER
@@ -11,7 +9,7 @@ import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
  * Consists of a motor that winches up the robot to climb at the end of the match.
  * The winch/climber is controlled by a  CANSD540
  */
-public class SimpleClimber extends Subsystem implements SubsystemLoop {
+public class SimpleClimber extends Subsystem{
 	private static SimpleClimber instance = new SimpleClimber();
 	public static SimpleClimber getInstance() {
 		return instance;

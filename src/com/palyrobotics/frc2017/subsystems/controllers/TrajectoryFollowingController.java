@@ -71,16 +71,16 @@ public class TrajectoryFollowingController implements Drive.DriveController {
 		double gyroError = 0;
 
 		if (!mGyroCorrection) {
-			driveSignal.leftMotor.setPercentVBus(leftPower);
-			driveSignal.rightMotor.setPercentVBus(rightPower);
+			driveSignal.leftMotor.setVoltage(leftPower*12.0);
+			driveSignal.rightMotor.setVoltage(rightPower*12.0);
 		} else {
 			gyroError = ChezyMath.getDifferenceInAngleRadians(Math.toRadians(state.drivePose.heading), mLeftFollower.getHeading());
 			gyroError = Math.toDegrees(gyroError);
 			double gyroCorrection = headingPID.calculate(gyroError);
 			System.out.println("Gyro correction: "+gyroCorrection);
 			Logger.getInstance().logSubsystemThread(gyroCorrection);
-			driveSignal.leftMotor.setVoltage((leftPower+gyroCorrection)*12);
-			driveSignal.rightMotor.setVoltage((rightPower-gyroCorrection)*12);
+			driveSignal.leftMotor.setVoltage((leftPower+gyroCorrection)*12.0);
+			driveSignal.rightMotor.setVoltage((rightPower-gyroCorrection)*12.0);
 		}
 		
 		DashboardManager.getInstance().updateCANTable(mLeftFollower.getCanTableString() + ", " + mRightFollower.getCanTableString() + ", " + gyroError);

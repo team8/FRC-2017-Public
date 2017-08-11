@@ -8,22 +8,51 @@ public class Gains {
 	 */
 	// Onboard motion profile aka trajectory follower
 
-	public static double kSteikTrajectorykP = 0.38; //0.7, 0.8, 1.00, 0.05
-	public static double kSteikTrajectorykD = 0.0; // 0.1, 0.015
-	public static double kSteikTrajectorykV = 0.069;
-	public static double kSteikTrajectorykA = 0.037;
-	public static double kSteikTrajectoryTurnkP = 0.02;//0.01; //-0.01
-	public static double kSteikTrajectoryTurnkD = 0.02;
-	public static final Gains.TrajectoryGains kTrajectoryGains = new TrajectoryGains(kSteikTrajectorykP,
-			kSteikTrajectorykD, kSteikTrajectorykV, kSteikTrajectorykA, kSteikTrajectoryTurnkP,
-			kSteikTrajectoryTurnkD);
-	public static final double kSteikTrajectoryStraightkP = 0.38; // 1
-	public static final double kSteikTrajectoryStraightkD = 0.0; // 0.02
+	/**
+	 * Smooth, good error
+	 * 0.38
+	 * 0
+	 * 0.077
+	 * 0.033
+	 * 0.02
+	 * 0.02
+	 */
+
+
+	public static double kSteikTrajectorykV = 0.077;//0.077;//0.069;
+	public static double kSteikTrajectorykA = 0.033;//0.037;
+
+	public static double kSteikLeftTurnTrajectorykP = 0.88;//0.40;//0.38;
+	public static double kSteikLeftTurnTrajectorykD = 0.01946;//0.0155;//0.01;//0.01;
+	public static double kSteikLeftTurnTrajectoryTurnkP = 0.02;//0.01; //-0.01
+	public static double kSteikLeftTurnTrajectoryTurnkD = 0.02;
+
+	public static final Gains.TrajectoryGains kLeftTurnTrajectoryGains = new TrajectoryGains(kSteikLeftTurnTrajectorykP,
+			kSteikLeftTurnTrajectorykD, kSteikTrajectorykV, kSteikTrajectorykA, kSteikLeftTurnTrajectoryTurnkP,
+			kSteikLeftTurnTrajectoryTurnkD);
+
+	public static final double kSteikTrajectoryStraightkP = 1.15; // 1
+	public static final double kSteikTrajectoryStraightkD = 0.021;//0.0097077;//0.025; // 0.02
 	public static double kSteikTrajectoryStraightTurnkP = 0.027;//0.01; //-0.01
 	public static double kSteikTrajectoryStraightTurnkD = 0.01;
+
+//	public static final double kSteikTrajectoryStraightkP = 1.5; // 1
+//	public static final double kSteikTrajectoryStraightkD = 0.0;//0.0534;//0.0537;//0.02525;//0.025; // 0.02
+//	public static double kSteikTrajectoryStraightTurnkP = 0.027;//0.01; //-0.01
+//	public static double kSteikTrajectoryStraightTurnkD = 0.01;
+
 	public static final TrajectoryGains kStraightTrajectoryGains = new TrajectoryGains(kSteikTrajectoryStraightkP,
 			kSteikTrajectoryStraightkD, kSteikTrajectorykV, kSteikTrajectorykA,
 			kSteikTrajectoryStraightTurnkP, kSteikTrajectoryStraightTurnkD);
+
+	public static double kSteikRightTurnTrajectorykP = 0.88;	//0.40;//0.38//0.42;
+	public static double kSteikRightTurnTrajectorykD = 0.02;	//0.01;//0.01//0.0155;
+	public static double kSteikRightTurnTrajectoryTurnkP = 0.02;	//0.01; //-0.01/0.02
+	public static double kSteikRightTurnTrajectoryTurnkD = 0.02;	//0.02;
+
+	public static final Gains.TrajectoryGains kRightTurnTrajectoryGains = new TrajectoryGains(kSteikRightTurnTrajectorykP,
+			kSteikRightTurnTrajectorykD, kSteikTrajectorykV, kSteikTrajectorykA, kSteikRightTurnTrajectoryTurnkP,
+			kSteikRightTurnTrajectoryTurnkD);
 
 	// Drive Distance PID control loop
 	public static final double kSteikDriveStraightTurnkP = -0.06;
@@ -47,13 +76,13 @@ public class Gains {
 
 	// Drive Motion Magic offboard control loop
 	// Short distance max speed 45 in/s Max accel 95 in/s^2
-	public static final double kSteikShortDriveMotionMagicCruiseVelocity = 45 * Constants.kDriveSpeedUnitConversion;
-	public static final double kSteikShortDriveMotionMagicMaxAcceleration = 95 * Constants.kDriveSpeedUnitConversion;
-	public static final double kSteikShortDriveMotionMagickP = 2.5;
-	public static final double kSteikShortDriveMotionMagickI = 0.01;
-	public static final double kSteikShortDriveMotionMagickD = 250;
-	public static final double kSteikShortDriveMotionMagickF = 2;
-	public static final int kSteikShortDriveMotionMagickIzone = 50;
+	public static final double kSteikShortDriveMotionMagicCruiseVelocity = 60 * Constants.kDriveSpeedUnitConversion;
+	public static final double kSteikShortDriveMotionMagicMaxAcceleration = 100 * Constants.kDriveSpeedUnitConversion;//72 * Constants.kDriveSpeedUnitConversion;
+	public static final double kSteikShortDriveMotionMagickP = 2.40; //2.5
+	public static final double kSteikShortDriveMotionMagickI = 0.00040; //0.01
+	public static final double kSteikShortDriveMotionMagickD = 275;//360; //250
+	public static final double kSteikShortDriveMotionMagickF = 2.075;
+	public static final int kSteikShortDriveMotionMagickIzone = 150;
 	public static final double kSteikShortDriveMotionMagickRampRate = 0.0;
 	public static final Gains steikShortDriveMotionMagicGains = new Gains(kSteikShortDriveMotionMagickP, kSteikShortDriveMotionMagickI, kSteikShortDriveMotionMagickD,
 			kSteikShortDriveMotionMagickF, kSteikShortDriveMotionMagickIzone, kSteikShortDriveMotionMagickRampRate);
@@ -166,21 +195,13 @@ public class Gains {
 	
 	public static void initNetworkTableGains() {
 		if (DashboardManager.getInstance().pidTuning) {
-			DashboardManager.getInstance().robotTable.putNumber("kP", kSteikTrajectorykP);
-			DashboardManager.getInstance().robotTable.putNumber("kD", kSteikTrajectorykD);
-			DashboardManager.getInstance().robotTable.putNumber("kV", kSteikTrajectorykV);
-			DashboardManager.getInstance().robotTable.putNumber("kA", kSteikTrajectorykA);
-			DashboardManager.getInstance().robotTable.putNumber("TurnKp", kSteikTrajectoryTurnkP);
+			System.out.println("Dashboard tuning currently removed");
 		}
 	}
 	
 	public static void updateNetworkTableGains() {
 		if (DashboardManager.getInstance().pidTuning) {
-			kSteikTrajectorykP = DashboardManager.getInstance().robotTable.getNumber("kP", kSteikTrajectorykP);
-			kSteikTrajectorykD = DashboardManager.getInstance().robotTable.getNumber("kD", kSteikTrajectorykD);
-			kSteikTrajectorykV = DashboardManager.getInstance().robotTable.getNumber("kV", kSteikTrajectorykV);
-			kSteikTrajectorykA = DashboardManager.getInstance().robotTable.getNumber("kA", kSteikTrajectorykA);
-			kSteikTrajectoryTurnkP = DashboardManager.getInstance().robotTable.getNumber("TurnkP", kSteikTrajectoryTurnkP);
+			System.out.println("Dashboard tuning currently removed");
 		}
 	}
 }

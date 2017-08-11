@@ -2,7 +2,8 @@ package com.palyrobotics.frc2017.behavior.routines;
 
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
-import com.palyrobotics.frc2017.util.Subsystem;
+import com.palyrobotics.frc2017.subsystems.Subsystem;
+import com.palyrobotics.frc2017.vision.AndroidConnectionHelper;
 
 public class TimeoutRoutine extends Routine {
     double timeout;
@@ -24,7 +25,10 @@ public class TimeoutRoutine extends Routine {
 
     @Override
     public Commands update(Commands commands) {
-    	return commands;
+        System.out.println("Waiting X Dist: " + AndroidConnectionHelper.getInstance().getXDist());
+        System.out.println("Waiting Z DIst: " + AndroidConnectionHelper.getInstance().getZDist());
+
+        return commands;
     }
 
     @Override

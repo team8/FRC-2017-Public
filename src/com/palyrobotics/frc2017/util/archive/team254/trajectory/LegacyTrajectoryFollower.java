@@ -24,6 +24,7 @@ public class LegacyTrajectoryFollower {
     public String name;
     
     private double last_calc_velocity_error;
+    private double last_pos_;
     
     private String canTableString;
 
@@ -41,6 +42,7 @@ public class LegacyTrajectoryFollower {
 
     public void reset() {
         last_error_ = 0.0;
+        last_pos_ = 0.0;
         current_segment = 0;
     }
 
@@ -55,28 +57,35 @@ public class LegacyTrajectoryFollower {
             double error = segment.pos - distance_so_far;
             
             double calc_velocity_error;
-            double speed = Math.abs((error - last_error_)) / segment.dt;
-            double speed_tolerance = 1.0;
-            
-            if (speed < speed_tolerance) calc_velocity_error = last_calc_velocity_error;
-            else calc_velocity_error = ((error - last_error_)) / segment.dt - segment.vel;
+            double speed;
+
+            if(this.name.equals("left")) {
+                speed = (Robot.getRobotState().drivePose.leftSpeed/(12.0*Constants.kDriveSpeedUnitConversion));
+            } else if(this.name.equals("right")) {
+                speed = (Robot.getRobotState().drivePose.rightSpeed/(12.0*Constants.kDriveSpeedUnitConversion));
+            } else {
+                speed = 0.0;
+                System.err.println("Wrong name?");
+            }
+
+            calc_velocity_error = speed - segment.vel;
 
             double output = kp_ * error + kd_ * calc_velocity_error + kv_ * segment.vel + ka_ * segment.acc;
-
             setCanTableString(new double[] {
             		output,
             		segment.pos,
             		segment.vel,
             		segment.acc,
             		distance_so_far,
-            		(Robot.getRobotState().drivePose.leftSpeed/(12.0*Constants.kDriveSpeedUnitConversion)),
-//            		((error - last_error_)) / segment.dt,
+                    last_pos_,
+                    speed,
             		error,
-            		segment.vel-(Robot.getRobotState().drivePose.leftSpeed/(12.0*Constants.kDriveSpeedUnitConversion))
-//            		((error - last_error_)) / segment.dt - segment.vel
+                    (distance_so_far - last_pos_)/segment.dt - segment.vel,
+                    calc_velocity_error
             });
             
             last_error_ = error;
+            last_pos_ = distance_so_far;
             last_calc_velocity_error = calc_velocity_error;
             
             current_heading = segment.heading;

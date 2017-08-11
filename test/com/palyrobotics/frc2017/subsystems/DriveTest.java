@@ -1,14 +1,14 @@
 package com.palyrobotics.frc2017.subsystems;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import org.junit.Test;
-
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
+import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 
 /**
  * Created by Nihar on 1/22/17.

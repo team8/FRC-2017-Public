@@ -1,7 +1,6 @@
 package com.palyrobotics.frc2017.util.archive.team254.controllers.team254;
 
 import com.palyrobotics.frc2017.robot.team254.lib.util.Controller;
-
 import edu.wpi.first.wpilibj.Timer;
 
 public class TimedOpenLoopController extends Controller {

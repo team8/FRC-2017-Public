@@ -6,17 +6,10 @@
 package com.team254.lib.trajectory;
 
 import com.team254.lib.trajectory.Trajectory.Segment;
-
-import static com.team254.lib.trajectory.TrajectoryGeneratorTest.test;
-
 import com.team254.lib.util.ChezyMath;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Art Kalb

@@ -4,9 +4,6 @@ import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
-import com.palyrobotics.frc2017.util.Subsystem;
-import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
-
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /**
@@ -15,7 +12,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
  * Represents a "spatula" that stores gears and allows for passive scoring
  * Controlled by one DoubleSolenoid which toggles between UP and DOWN
  */
-public class Spatula extends Subsystem implements SubsystemLoop {
+public class Spatula extends Subsystem{
 	private static Spatula instance = new Spatula();
 	private SpatulaState mState = SpatulaState.UP;
 	public static Spatula getInstance() {

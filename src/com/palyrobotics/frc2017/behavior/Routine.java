@@ -2,7 +2,6 @@ package com.palyrobotics.frc2017.behavior;
 
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.subsystems.*;
-import com.palyrobotics.frc2017.util.Subsystem;
 
 
 /**
@@ -18,7 +17,6 @@ public abstract class Routine {
      * {@link LegacyDrive#controllerOnTarget()}
      */
     protected final Drive drive = Drive.getInstance();
-    protected final Flippers flippers = Flippers.getInstance();
     protected final Slider slider = Slider.getInstance();
     protected final Spatula spatula = Spatula.getInstance();
     protected final Intake intake = Intake.getInstance();

@@ -1,7 +1,7 @@
 package com.palyrobotics.frc2017.behavior;
 
 import com.palyrobotics.frc2017.config.Commands;
-import com.palyrobotics.frc2017.util.Subsystem;
+import com.palyrobotics.frc2017.subsystems.Subsystem;
 
 import java.util.ArrayList;
 import java.util.Arrays;

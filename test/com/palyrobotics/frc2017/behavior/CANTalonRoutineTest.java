@@ -14,7 +14,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 /**
  * Created by Nihar on 2/16/17.

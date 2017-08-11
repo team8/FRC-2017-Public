@@ -3,7 +3,9 @@ package com.palyrobotics.frc2017.subsystems.controllers;
 import com.ctre.CANTalon;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
+import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Pose;
@@ -18,6 +20,8 @@ public class CANTalonDriveController implements Drive.DriveController {
 	private final DriveSignal mSignal;
 
 	private RobotState mCachedState = null;
+	
+    private String canTableString;
 
 	/**
 	 * Constructs a drive controller to store a signal <br />
@@ -31,6 +35,22 @@ public class CANTalonDriveController implements Drive.DriveController {
 	@Override
 	public DriveSignal update(RobotState state) {
 		mCachedState = state;
+		
+		Pose drivePose = Robot.getRobotState().drivePose;
+		
+		setCanTableString(new double[] {
+				(drivePose.leftMotionMagicPos.isPresent()) ? drivePose.leftMotionMagicPos.get() : 0,
+				(drivePose.leftMotionMagicVel.isPresent()) ? drivePose.leftMotionMagicVel.get() : 0,
+				drivePose.leftEnc,
+				drivePose.leftSpeed,
+				mSignal.leftMotor.getSetpoint() - drivePose.leftEnc,
+				(drivePose.rightMotionMagicPos.isPresent()) ? drivePose.rightMotionMagicPos.get() : 0,
+				(drivePose.rightMotionMagicVel.isPresent()) ? drivePose.rightMotionMagicVel.get() : 0,
+				drivePose.rightEnc,
+				drivePose.rightSpeed,
+				mSignal.rightMotor.getSetpoint() - drivePose.rightEnc,
+		});
+
 		return this.mSignal;
 	}
 
@@ -69,8 +89,13 @@ public class CANTalonDriveController implements Drive.DriveController {
 		if (mCachedState == null) {
 			return false;
 		}
-		double positionTolerance = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kAcceptableDrivePositionError : Constants.kAcceptableDrivePositionError;
-		double velocityTolerance = (Constants.kRobotName == Constants.RobotName.DERICA) ? Constants2016.kAcceptableDriveVelocityError : Constants.kAcceptableDriveVelocityError;
+		double positionTolerance = (Constants.kRobotName == Constants.RobotName.DERICA) ?
+				Constants2016.kAcceptableDrivePositionError : (mSignal.leftMotor.gains.equals(Gains.steikShortDriveMotionMagicGains)) ?
+				Constants.kAcceptableShortDrivePositionError : Constants.kAcceptableDrivePositionError;
+		double velocityTolerance = (Constants.kRobotName == Constants.RobotName.DERICA) ?
+				Constants2016.kAcceptableDriveVelocityError : (mSignal.leftMotor.gains.equals(Gains.steikShortDriveMotionMagicGains)) ?
+				Constants.kAcceptableShortDriveVelocityError : Constants.kAcceptableDriveVelocityError;
+
 		// Motion magic is not PID so ignore whether talon closed loop error is around
 		if (mSignal.leftMotor.getControlMode() == CANTalon.TalonControlMode.MotionMagic) {
 			return (Math.abs(mCachedState.drivePose.leftEnc - mSignal.leftMotor.getSetpoint()) < positionTolerance) &&
@@ -86,5 +111,17 @@ public class CANTalonDriveController implements Drive.DriveController {
 				(Math.abs(mCachedState.drivePose.rightError.get()) < positionTolerance && 
 				Math.abs(mCachedState.drivePose.leftSpeed) < velocityTolerance &&
 				Math.abs(mCachedState.drivePose.rightSpeed) < velocityTolerance);
+	}
+	
+	private void setCanTableString(double[] a) {
+		canTableString = "";
+		for(int i = 0; i < a.length-1; i++) {
+			canTableString = canTableString + Double.toString(a[i]) + ", ";
+		}
+		canTableString = canTableString + Double.toString(a[a.length-1]);
+	}
+
+	public String getCanTableString() {
+		return this.canTableString;
 	}
 }

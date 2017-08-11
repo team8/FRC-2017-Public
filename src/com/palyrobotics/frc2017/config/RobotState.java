@@ -1,9 +1,9 @@
 package com.palyrobotics.frc2017.config;
 
-import java.util.Optional;
-
 import com.ctre.CANTalon.TalonControlMode;
 import com.palyrobotics.frc2017.util.Pose;
+
+import java.util.Optional;
 
 /**
  * Holds all hardware input, such as sensors. <br />

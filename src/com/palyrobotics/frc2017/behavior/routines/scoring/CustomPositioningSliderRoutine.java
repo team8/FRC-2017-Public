@@ -1,18 +1,16 @@
 package com.palyrobotics.frc2017.behavior.routines.scoring;
 
-import java.util.Optional;
-
-import com.palyrobotics.frc2017.behavior.ParallelRoutine;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.robot.HardwareAdapter;
 import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.subsystems.Slider;
 import com.palyrobotics.frc2017.subsystems.Spatula;
 import com.palyrobotics.frc2017.subsystems.Spatula.SpatulaState;
-import com.palyrobotics.frc2017.util.Subsystem; 
+import com.palyrobotics.frc2017.subsystems.Subsystem;
+
+import java.util.Optional;
 
 /**
  * Moves the slider to a setpoint
@@ -32,7 +30,7 @@ public class CustomPositioningSliderRoutine extends Routine {
 	
 	private double startTime;
 	private static final double raiseTime = 1700;
-	
+
 	// Target should be absolute position in inches
 	public CustomPositioningSliderRoutine(double target) {
 		this.target = target;
@@ -56,24 +54,17 @@ public class CustomPositioningSliderRoutine extends Routine {
 		commands.robotSetpoints.sliderCustomSetpoint = Optional.of(target * Constants.kSliderRevolutionsPerInch);
 		updated = true;
 		switch(mState) {
-		case MOVING:
-			commands.wantedSliderState = Slider.SliderState.CUSTOM_POSITIONING;
-			try {
-				slider.run(commands, this);
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-			}
-			break;
-			case RAISING:
-			if(System.currentTimeMillis() > (raiseTime+startTime)) {
-				mState = DistancePositioningState.MOVING;
+			case MOVING:
+				commands.wantedSliderState = Slider.SliderState.CUSTOM_POSITIONING;
 				break;
-			}
-			commands.wantedSpatulaState = Spatula.SpatulaState.UP;
-			commands.wantedSliderState = Slider.SliderState.WAITING;
-			break;
+			case RAISING:
+				if(System.currentTimeMillis() > (raiseTime+startTime)) {
+					mState = DistancePositioningState.MOVING;
+					break;
+				}
+				commands.wantedSpatulaState = Spatula.SpatulaState.UP;
+				commands.wantedSliderState = Slider.SliderState.WAITING;
+				break;
 		}
 		return commands;
 	}
@@ -82,17 +73,11 @@ public class CustomPositioningSliderRoutine extends Routine {
 	public Commands cancel(Commands commands) {
 		commands.wantedSliderState = Slider.SliderState.IDLE;
 		commands.robotSetpoints.sliderCustomSetpoint = Optional.empty();
-		try {
-			slider.run(commands, this);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
 		return commands;
 	}
 
 	@Override
 	public boolean finished() {
-		RobotState robotState = Robot.getRobotState();
 
 		if(!HardwareAdapter.getInstance().getSlider().sliderTalon.getControlMode().isPID()) {
 			return false;
@@ -102,7 +87,7 @@ public class CustomPositioningSliderRoutine extends Routine {
 			return true;
 		}
 		return updated && mState==DistancePositioningState.MOVING &&
-				(System.currentTimeMillis() - startTime > 1000) && (robotState.sliderVelocity == 0) && slider.onTarget();
+				(System.currentTimeMillis() - startTime > 1000) && (Robot.getRobotState().sliderVelocity == 0) && slider.onTarget();
 	}
 
 	@Override

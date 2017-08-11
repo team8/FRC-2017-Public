@@ -2,10 +2,8 @@ package com.palyrobotics.frc2017.behavior.routines.drive;
 
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
-import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.subsystems.Drive;
-import com.palyrobotics.frc2017.subsystems.controllers.CANTalonDriveController;
-import com.palyrobotics.frc2017.util.Subsystem;
+import com.palyrobotics.frc2017.subsystems.Subsystem;
 
 public class GyroMotionMagicTurnAngleRoutine extends Routine {
 	private double mAngle;

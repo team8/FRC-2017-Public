@@ -3,7 +3,7 @@ package com.palyrobotics.frc2017.behavior.routines;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.subsystems.Spatula;
-import com.palyrobotics.frc2017.util.Subsystem;
+import com.palyrobotics.frc2017.subsystems.Subsystem;
 
 public class SpatulaUpRoutine extends Routine {
 	private double mStartTime = 0;

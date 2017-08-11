@@ -4,19 +4,12 @@ import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
 import com.kauailabs.navx.frc.AHRS;
 import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.config.Constants2016;
-import com.palyrobotics.frc2017.config.RobotState;
-import com.palyrobotics.frc2017.robot.team254.lib.util.ADXRS453_Gyro;
-import com.palyrobotics.frc2017.robot.team254.lib.util.Loop;
 import com.palyrobotics.frc2017.config.Constants.RobotName;
-import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
+import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.robot.team254.lib.util.Loop;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.logger.Logger;
-
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.GyroBase;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 import java.util.Optional;
 
@@ -31,10 +24,11 @@ class HardwareUpdater {
 		return new HardwareEnabledLoop();
 	}
 	
+	
 	public class HardwareSensorLoop implements Loop {
 		@Override
 		public void update() {
-			updateSensors(Robot.getRobotState());
+			updateSensors(mRobot.getRobotState());
 		}
 
 		@Override
@@ -52,7 +46,7 @@ class HardwareUpdater {
 		}
 		@Override
 		public void update() {
-			updateSubsystems();
+			updateHardware();
 		}
 
 		@Override
@@ -65,24 +59,25 @@ class HardwareUpdater {
 	}
 	
 	// Subsystem references
+	
 	private Drive mDrive;
-	private Flippers mFlippers;
 	private Slider mSlider;
 	private Spatula mSpatula;
 	private Intake mIntake;
 	private Climber mClimber;
+	private Robot mRobot;
 
 	/**
 	 * Hardware Updater for Steik
 	 */
-	HardwareUpdater(Drive drive, Flippers flippers, Slider slider, Spatula spatula, Intake intake, Climber climber)
+	HardwareUpdater(Robot robot, Drive drive, Slider slider, Spatula spatula, Intake intake, Climber climber)
 			throws Exception {
 		if (Constants.kRobotName != Constants.RobotName.STEIK) {
 			System.out.println("Incompatible robot name and hardware!");
 			throw new Exception();
 		}
+		this.mRobot = robot;
 		this.mDrive = drive;
-		this.mFlippers = flippers;
 		this.mSlider = slider;
 		this.mSpatula = spatula;
 		this.mIntake = intake;
@@ -234,7 +229,13 @@ class HardwareUpdater {
 
 		leftMasterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 5);
 		rightMasterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 5);
+		
+		leftMasterTalon.SetVelocityMeasurementPeriod(CANTalon.VelocityMeasurementPeriod.Period_50Ms);
+		rightMasterTalon.SetVelocityMeasurementPeriod(CANTalon.VelocityMeasurementPeriod.Period_50Ms);
 
+		leftMasterTalon.SetVelocityMeasurementWindow(16);
+		rightMasterTalon.SetVelocityMeasurementWindow(16);
+		
 		// Zero encoders
 		leftMasterTalon.setEncPosition(0);
 		rightMasterTalon.setEncPosition(0);
@@ -292,12 +293,31 @@ class HardwareUpdater {
 		robotState.drivePose.rightEnc = rightMasterTalon.getPosition();
 		robotState.drivePose.rightEncVelocity = rightMasterTalon.getEncVelocity();
 		robotState.drivePose.rightSpeed = rightMasterTalon.getSpeed();
-		if (leftMasterTalon.getControlMode().isPID()) {
+		
+		if (leftMasterTalon.getControlMode() == TalonControlMode.MotionMagic) {
+			robotState.drivePose.leftMotionMagicPos = Optional.of(leftMasterTalon.getMotionMagicActTrajPosition());
+			robotState.drivePose.leftMotionMagicVel = Optional.of(leftMasterTalon.getMotionMagicActTrajVelocity());
+		}
+		else {
+			robotState.drivePose.leftMotionMagicPos = Optional.empty();
+			robotState.drivePose.leftMotionMagicVel = Optional.empty();
+		}
+		
+		if (rightMasterTalon.getControlMode() == TalonControlMode.MotionMagic) {
+			robotState.drivePose.rightMotionMagicPos = Optional.of(rightMasterTalon.getMotionMagicActTrajPosition());
+			robotState.drivePose.rightMotionMagicVel = Optional.of(rightMasterTalon.getMotionMagicActTrajVelocity());
+		}
+		else {
+			robotState.drivePose.rightMotionMagicPos = Optional.empty();
+			robotState.drivePose.rightMotionMagicVel = Optional.empty();
+		}
+		
+		if (leftMasterTalon.getControlMode().isPID() || leftMasterTalon.getControlMode() == TalonControlMode.MotionMagic) {
 			robotState.drivePose.leftError = Optional.of(leftMasterTalon.getError());
 		} else {
 			robotState.drivePose.leftError = Optional.empty();
 		}
-		if (rightMasterTalon.getControlMode().isPID()) {
+		if (rightMasterTalon.getControlMode().isPID() || rightMasterTalon.getControlMode() == TalonControlMode.MotionMagic) {
 			robotState.drivePose.rightError = Optional.of(rightMasterTalon.getError());
 		} else {
 			robotState.drivePose.rightError = Optional.empty();
@@ -329,9 +349,9 @@ class HardwareUpdater {
 	}
 
 	/**
-	 * Sets the output from all subsystems for the respective hardware
+	 * Updates the hardware to run with output values of subsystems
 	 */
-	void updateSubsystems() {
+	void updateHardware() {
 		// On Derica only update the drivetrain
 		if (Constants.kRobotName == Constants.RobotName.STEIK) {
 			updateSteikSubsystems();

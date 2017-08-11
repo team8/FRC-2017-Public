@@ -1,9 +1,5 @@
 package com.palyrobotics.frc2017.subsystems;
 
-import java.util.HashMap;
-import java.util.Optional;
-
-import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
@@ -11,15 +7,15 @@ import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
-import com.palyrobotics.frc2017.util.Subsystem;
-import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
+import java.util.HashMap;
+import java.util.Optional;
 
 /**
  * Created by Nihar on 1/28/17.
  * @author Prashanti
  * Controls the slider subsystem,
  */
-public class Slider extends Subsystem implements SubsystemLoop {
+public class Slider extends Subsystem{
 	private static Slider instance = new Slider();
 	public static Slider getInstance() {
 		return instance;
@@ -116,23 +112,10 @@ public class Slider extends Subsystem implements SubsystemLoop {
 		sliderDist.updateValue(robotState.sliderPosition);
 		DashboardManager.getInstance().publishKVPair(sliderPotentiometer);
 		DashboardManager.getInstance().publishKVPair(sliderDist);
-	}
-	
-	/**
-	 * Takes in new set of commands, must be called by a routine!
-	 * @param commands the commands
-	 * @param master the object calling the method
-	 * @throws IllegalAccessException if master not a routine
-	 */
-	public void run(Commands commands,  Object master) throws IllegalAccessException {
-		//Throws an exception if called by an object that isn't a routine
-		if(!(master instanceof Routine)) {
-			throw new IllegalAccessException();
-		}
 		
 		mState = commands.wantedSliderState;
-		
 		switch(mState) {
+
 			case IDLE:
 				mTarget = SliderTarget.NONE;
 				mOutput.setPercentVBus(0);
@@ -172,6 +155,7 @@ public class Slider extends Subsystem implements SubsystemLoop {
 				break;
 		}		
 	}
+	
 	
 	/**
 	 * Encapsulate to use in both run and update methods

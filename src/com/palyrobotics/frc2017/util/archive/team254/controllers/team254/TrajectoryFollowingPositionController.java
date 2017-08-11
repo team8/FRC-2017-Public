@@ -1,7 +1,7 @@
 package com.palyrobotics.frc2017.util.archive.team254.controllers.team254;
 
-import com.palyrobotics.frc2017.util.archive.team254.trajectory.TrajectoryFollower;
 import com.palyrobotics.frc2017.robot.team254.lib.util.Controller;
+import com.palyrobotics.frc2017.util.archive.team254.trajectory.TrajectoryFollower;
 
 public class TrajectoryFollowingPositionController extends Controller {
     TrajectoryFollower m_follower;

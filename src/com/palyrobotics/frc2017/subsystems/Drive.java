@@ -1,30 +1,23 @@
 package com.palyrobotics.frc2017.subsystems;
 
 import com.palyrobotics.frc2017.config.Commands;
+import com.palyrobotics.frc2017.config.Constants;
+import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
-import com.palyrobotics.frc2017.subsystems.controllers.CANTalonDriveController;
-import com.palyrobotics.frc2017.subsystems.controllers.DriveStraightController;
-import com.palyrobotics.frc2017.subsystems.controllers.EncoderTurnAngleController;
-import com.palyrobotics.frc2017.subsystems.controllers.TrajectoryFollowingController;
-import com.palyrobotics.frc2017.subsystems.controllers.GyroMotionMagicTurnAngleController;
-import com.palyrobotics.frc2017.util.*;
-import com.palyrobotics.frc2017.subsystems.controllers.BangBangTurnAngleController;
-import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.config.Gains;
+import com.palyrobotics.frc2017.subsystems.controllers.*;
+import com.palyrobotics.frc2017.util.Pose;
 import com.palyrobotics.frc2017.util.archive.CheesyDriveHelper;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
-import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
 import com.team254.lib.trajectory.Path;
-import com.team254.lib.trajectory.Trajectory;
 
 /**
  * Represents the drivetrain
  * Uses controllers or cheesydrivehelper/proportionaldrivehelper to calculate DriveSignal
  * @author Nihar
  */
-public class Drive extends Subsystem implements SubsystemLoop {
+public class Drive extends Subsystem {
 	private static Drive instance = new Drive();
 	public static Drive getInstance() {
 		return instance;

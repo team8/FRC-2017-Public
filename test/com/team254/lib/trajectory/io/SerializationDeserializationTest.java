@@ -5,20 +5,12 @@
  */
 package com.team254.lib.trajectory.io;
 
-import com.team254.lib.trajectory.WaypointSequence;
+import com.team254.lib.trajectory.*;
 import com.team254.lib.trajectory.WaypointSequence.Waypoint;
-import com.team254.lib.trajectory.PathGenerator;
-import com.team254.lib.trajectory.Trajectory;
-import com.team254.lib.trajectory.TrajectoryGenerator;
-import com.team254.lib.trajectory.io.JavaSerializer;
-import com.team254.lib.trajectory.Path;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author jarussell

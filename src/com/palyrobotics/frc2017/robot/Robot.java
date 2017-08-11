@@ -9,7 +9,6 @@ import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
 import com.palyrobotics.frc2017.subsystems.*;
-import com.palyrobotics.frc2017.util.archive.SubsystemLooper;
 import com.palyrobotics.frc2017.util.logger.Logger;
 import com.palyrobotics.frc2017.vision.VisionData;
 import com.palyrobotics.frc2017.vision.VisionManager;
@@ -28,18 +27,16 @@ public class Robot extends IterativeRobot {
 	// Single instance to be passed around
 	private static Commands commands = new Commands();
 	public static Commands getCommands() {return commands;}
+	
 
 	private OperatorInterface operatorInterface = OperatorInterface.getInstance();
 	// Instantiate separate thread controls
-	private SubsystemLooper mSubsystemLooper = new SubsystemLooper();
+	//private SubsystemLooper mSubsystemLooper = new SubsystemLooper();
 	// Instantiate hardware updaters
-	private Looper mHardwareEnabledLooper = new Looper();
-	private Looper mHardwareSensorLooper = new Looper();
 	private RoutineManager mRoutineManager = new RoutineManager();
 
 	// Subsystem controllers
 	private Drive mDrive = Drive.getInstance();
-	private Flippers mFlippers = Flippers.getInstance();
 	private Slider mSlider = Slider.getInstance();
 	private Spatula mSpatula = Spatula.getInstance();
 	private Intake mIntake = Intake.getInstance();
@@ -55,7 +52,7 @@ public class Robot extends IterativeRobot {
 		DashboardManager.getInstance().robotInit();
 		VisionManager.getInstance().start(Constants.kAndroidConnectionUpdateRate, false);
 		System.out.println("Finished starting");
-		mLogger.setFileName("SF");
+		mLogger.setFileName("8/20 testing");
 		mLogger.start();
 		mLogger.logRobotThread("robotInit() start");
 		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);
@@ -73,27 +70,20 @@ public class Robot extends IterativeRobot {
 		}
 		if (Constants.kRobotName == Constants.RobotName.STEIK) {
 			try {
-				mHardwareUpdater = new HardwareUpdater(mDrive, mFlippers, mSlider, mSpatula, mIntake, mClimber);
+				mHardwareUpdater = new HardwareUpdater(this, mDrive, mSlider, mSpatula, mIntake, mClimber);
 			} catch (Exception e) {
 				System.exit(1);
 			}
-			mSubsystemLooper.register(mDrive);
-			mSubsystemLooper.register(mSlider);
-			mSubsystemLooper.register(mSpatula);
-			mSubsystemLooper.register(mIntake);
-			mSubsystemLooper.register(mClimber);
+
 		} else {
 			try {
 				mHardwareUpdater = new HardwareUpdater(mDrive);
 			} catch (Exception e) {
 				System.exit(1);
 			}
-			mSubsystemLooper.register(mDrive);
 		}
-		mHardwareSensorLooper.register(mHardwareUpdater.getHardwareSensorLoop());
-		mHardwareEnabledLooper.register(mHardwareUpdater.getHardwareEnabledLoop());
+
 		mHardwareUpdater.initHardware();
-		mHardwareSensorLooper.start();
 		System.out.println("Auto: "+AutoModeSelector.getInstance().getAutoMode().toString());
 //		VisionManager.getInstance().StartVisionApp();
 		System.out.println("End robotInit()");
@@ -108,7 +98,6 @@ public class Robot extends IterativeRobot {
 		mLogger.logRobotThread("Start autonomousInit()");
 		DashboardManager.getInstance().toggleCANTable(true);
 		robotState.gamePeriod = RobotState.GamePeriod.AUTO;
-		mHardwareEnabledLooper.start();
 		mHardwareUpdater.configureTalons(false);
 		// Wait for talons to update
 		try {
@@ -117,10 +106,11 @@ public class Robot extends IterativeRobot {
 		} catch (InterruptedException e) {
 
 		}
+
 		mHardwareUpdater.updateSensors(robotState);
 		mRoutineManager.reset(commands);
-		// Start control loops
-		mSubsystemLooper.start();
+
+		startSubsystems();
 
 		// Get the selected auto mode
 		AutoModeBase mode = AutoModeSelector.getInstance().getAutoMode();
@@ -143,22 +133,25 @@ public class Robot extends IterativeRobot {
 //		System.out.println(robotState.sliderEncoder);
 		mLogger.logRobotThread("Nexus xdist: "+ VisionData.getXData());
 		commands = mRoutineManager.update(commands);
+		mHardwareUpdater.updateSensors(robotState);
+		updateSubsystems();
+		mHardwareUpdater.updateHardware();
 	}
 
 	@Override
 	public void teleopInit() {
 		System.out.println("Start teleopInit()");
-		mHardwareEnabledLooper.start();
 		mLogger.start();
 		mLogger.logRobotThread("Start teleopInit()");
 		robotState.gamePeriod = RobotState.GamePeriod.TELEOP;
 		mHardwareUpdater.configureTalons(false);
 		mHardwareUpdater.updateSensors(robotState);
+		mHardwareUpdater.updateHardware();
 		mRoutineManager.reset(commands);
 		DashboardManager.getInstance().toggleCANTable(true);
 		commands.wantedDriveState = Drive.DriveState.CHEZY;	//switch to chezy after auto ends
 		commands = operatorInterface.updateCommands(commands);
-		mSubsystemLooper.start();
+		startSubsystems();
 		mLogger.logRobotThread("End teleopInit()");
 		System.out.println("End teleopInit()");
 	}
@@ -168,9 +161,14 @@ public class Robot extends IterativeRobot {
 		// Update RobotState
 		// Gets joystick commands
 		// Updates commands based on routines
-//		mLogger.logRobotThread("Teleop Commands: ", commands);
-//		logPeriodic();
+		mLogger.logRobotThread("Teleop Commands: ", commands);
+		logPeriodic();
+
 		commands = mRoutineManager.update(operatorInterface.updateCommands(commands));
+		mHardwareUpdater.updateSensors(robotState);
+		updateSubsystems();
+		mHardwareUpdater.updateHardware();
+		
 		//Update the hardware
 	}
 
@@ -185,12 +183,10 @@ public class Robot extends IterativeRobot {
 		
 		commands = new Commands();
 		
-		// Stop control loops
-		mSubsystemLooper.stop();
+		stopSubsystems();
 
 		// Stop controllers
 		mDrive.setNeutral();
-		mHardwareEnabledLooper.stop();
 		mHardwareUpdater.configureDriveTalons();
 		mHardwareUpdater.disableTalons();
 		DashboardManager.getInstance().toggleCANTable(false);
@@ -235,5 +231,29 @@ public class Robot extends IterativeRobot {
 		}
 		if (DriverStation.getInstance().isBrownedOut()) mLogger.logRobotThread("Browned out");
 		if (!DriverStation.getInstance().isNewControlData()) mLogger.logRobotThread("Didn't receive new control packet!");
+	}
+
+	private void startSubsystems() {
+		mDrive.start();
+		mSlider.start();
+		mSpatula.start();
+		mIntake.start();
+		mClimber.start();
+	}
+
+	private void updateSubsystems() {
+		mDrive.update(commands, robotState);
+		mSlider.update(commands, robotState);
+		mSpatula.update(commands, robotState);
+		mIntake.update(commands, robotState);
+		mClimber.update(commands, robotState);
+	}
+
+	private void stopSubsystems() {
+		mDrive.stop();
+		mSlider.stop();
+		mSpatula.stop();
+		mIntake.stop();
+		mClimber.stop();
 	}
 }
