@@ -103,7 +103,7 @@ public class AndroidConnectionHelper implements Runnable{
 	private boolean m_running = false;
 	private boolean mTesting = false;
 
-	private double m_x_dist = 0, m_y_dist = 0;
+	private double m_x_dist = 0, m_z_dist = 0;
 	private String m_androidState = "NONE";
 	private Object m_android_lock = new Object();
 
@@ -414,11 +414,11 @@ public class AndroidConnectionHelper implements Runnable{
 						// Get image data
 						Number
 							data_x = (Number)json.get("x_displacement"),
-							data_z = (Number)json.get("y_displacement");
+							data_z = (Number)json.get("z_displacement");
 						if (data_x != null)
 							this.m_x_dist = data_x.doubleValue();
 						if (data_z != null)
-							this.m_y_dist = data_z.doubleValue();
+							this.m_z_dist = data_z.doubleValue();
 					}
 					m_androidState = state;
 				}
