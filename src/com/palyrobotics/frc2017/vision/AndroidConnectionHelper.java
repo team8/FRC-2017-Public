@@ -445,6 +445,11 @@ public class AndroidConnectionHelper implements Runnable{
 		}
 		return m_x_dist;
 	}
+	
+	public double getZDist() {
+		return m_z_dist;
+	}
+	
 	public boolean isNexusConnected(){
 		boolean hasDevice = false;
 		String[] outp = RuntimeExecutor.getInstance().exec("adb devices").split("\\n");

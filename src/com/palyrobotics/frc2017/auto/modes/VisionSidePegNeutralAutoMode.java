@@ -144,8 +144,11 @@ public class VisionSidePegNeutralAutoMode extends AutoModeBase {
 	}
 	
 	private Routine getFirstAttempt() {
-		double scoreSetpoint = bonusDistance*Constants.kDriveTicksPerInch;
-		scoreSetpoint += 2;
+//		double scoreSetpoint = bonusDistance*Constants.kDriveTicksPerInch;
+//		scoreSetpoint += 2;
+		
+		double scoreSetpoint = AndroidConnectionHelper.getInstance().getZDist() * Constants.kDriveTicksPerInch;
+		
 		DriveSignal driveScore = DriveSignal.getNeutralSignal();
 		driveScore.leftMotor.setMotionMagic(scoreSetpoint, mShortGains,
 				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
