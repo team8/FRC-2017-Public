@@ -8,10 +8,10 @@ public class Gains {
 	 */
 	// Onboard motion profile aka trajectory follower
 
-	public static double kSteikTrajectorykP = 0.38; //0.7, 0.8, 1.00, 0.05
+	public static double kSteikTrajectorykP = 0;//0.38; //0.7, 0.8, 1.00, 0.05
 	public static double kSteikTrajectorykD = 0.0; // 0.1, 0.015
-	public static double kSteikTrajectorykV = 0.069;
-	public static double kSteikTrajectorykA = 0.037;
+	public static double kSteikTrajectorykV = 0.075;//0.069;
+	public static double kSteikTrajectorykA = 0.03;//0.037;
 	public static double kSteikTrajectoryTurnkP = 0.02;//0.01; //-0.01
 	public static double kSteikTrajectoryTurnkD = 0.02;
 	public static final Gains.TrajectoryGains kTrajectoryGains = new TrajectoryGains(kSteikTrajectorykP,

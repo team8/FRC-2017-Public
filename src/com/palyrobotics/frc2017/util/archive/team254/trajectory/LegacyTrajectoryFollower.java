@@ -17,6 +17,7 @@ public class LegacyTrajectoryFollower {
     private double kv_;
     private double ka_;
     private double last_error_;
+    private double last_pos_;
 
     private double current_heading = 0;
     private int current_segment;
@@ -41,6 +42,7 @@ public class LegacyTrajectoryFollower {
 
     public void reset() {
         last_error_ = 0.0;
+        last_pos_ = 0.0;
         current_segment = 0;
     }
 
@@ -61,6 +63,8 @@ public class LegacyTrajectoryFollower {
             if (speed < speed_tolerance) calc_velocity_error = last_calc_velocity_error;
             else calc_velocity_error = ((error - last_error_)) / segment.dt - segment.vel;
 
+            System.out.println("pos: " + distance_so_far);
+            
             double output = kp_ * error + kd_ * calc_velocity_error + kv_ * segment.vel + ka_ * segment.acc;
 
             setCanTableString(new double[] {
@@ -69,14 +73,17 @@ public class LegacyTrajectoryFollower {
             		segment.vel,
             		segment.acc,
             		distance_so_far,
-            		(Robot.getRobotState().drivePose.leftSpeed/(12.0*Constants.kDriveSpeedUnitConversion)),
+//            		(Robot.getRobotState().drivePose.leftSpeed/(12.0*Constants.kDriveSpeedUnitConversion)),
 //            		((error - last_error_)) / segment.dt,
+            		(distance_so_far - last_pos_)/segment.dt,
             		error,
-            		segment.vel-(Robot.getRobotState().drivePose.leftSpeed/(12.0*Constants.kDriveSpeedUnitConversion))
+//            		segment.vel-(Robot.getRobotState().drivePose.leftSpeed/(12.0*Constants.kDriveSpeedUnitConversion))
 //            		((error - last_error_)) / segment.dt - segment.vel
+            		(distance_so_far - last_pos_)/segment.dt - segment.vel
             });
             
             last_error_ = error;
+            last_pos_ = distance_so_far;
             last_calc_velocity_error = calc_velocity_error;
             
             current_heading = segment.heading;

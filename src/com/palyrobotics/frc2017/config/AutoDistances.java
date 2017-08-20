@@ -44,8 +44,8 @@ public class AutoDistances {
 	public static double kRedCenter = 103.0/12;
 	public static double kBlueCenter = 103.0/12;
 	// Blue right loading station
-	public static double kBlueLoadingPegX = 104.5;// 104.5
-	public static double kBlueLoadingPegY = 68.5;// 67.5
+	public static double kBlueLoadingPegX = 113;//104.5;// 104.5
+	public static double kBlueLoadingPegY = 55;//68.5;// 67.5
 	// Red left loading station
 	public static double kRedLoadingPegX = 104;// 104
 	public static double kRedLoadingPegY = 67.5;// 66.5

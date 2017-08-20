@@ -241,6 +241,9 @@ class HardwareUpdater {
 		leftMasterTalon.setPosition(0);
 		rightMasterTalon.setPosition(0);
 
+		leftMasterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 5);
+		rightMasterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 5);
+		
 		// Reverse right side
 		rightMasterTalon.reverseOutput(true);
 		rightMasterTalon.setInverted(true);

@@ -33,7 +33,7 @@ public class TrajectorySidePegAutoMode extends AutoModeBase {
 	private final TrajectorySidePostVariant mPostVariant;
 	private Path mPath, mPostPath;
 	
-	private final boolean mUseGyro = true;
+	private final boolean mUseGyro = false;
 	private boolean mPostInverted;
 	
 	private final Gains mShortGains;
