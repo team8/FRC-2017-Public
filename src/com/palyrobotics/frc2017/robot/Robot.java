@@ -1,19 +1,17 @@
 package com.palyrobotics.frc2017.robot;
 
-import com.ctre.CANTalon;
 import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.auto.AutoModeSelector;
 import com.palyrobotics.frc2017.behavior.RoutineManager;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.archive.SubsystemLooper;
 import com.palyrobotics.frc2017.util.logger.Logger;
-import com.palyrobotics.frc2017.vision.AndroidConnectionHelper;
+import com.palyrobotics.frc2017.vision.VisionManager;
 import com.palyrobotics.frc2017.robot.team254.lib.util.Looper;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -54,7 +52,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		System.out.println("Start robotInit() for "+Constants.kRobotName.toString());
 		DashboardManager.getInstance().robotInit();
-		AndroidConnectionHelper.getInstance().start();
+		VisionManager.getInstance().start();
 		System.out.println("Finished starting");
 		mLogger.setFileName("SF");
 		mLogger.start();
@@ -65,7 +63,7 @@ public class Robot extends IterativeRobot {
 		mLogger.logRobotThread("Alliance station: "+DriverStation.getInstance().getLocation());
 		try {
 			DriverStation.reportWarning("Auto is "+AutoModeSelector.getInstance().getAutoMode().toString(), false);
-			mLogger.logRobotThread((AndroidConnectionHelper.getInstance().isServerStarted()) ?
+			mLogger.logRobotThread((VisionManager.getInstance().isServerStarted()) ?
 					"Nexus streaming": "Nexus not streaming");
 			mLogger.logRobotThread("Auto", AutoModeSelector.getInstance().getAutoMode().toString());
 			DashboardManager.getInstance().publishKVPair(new DashboardValue("automodestring", AutoModeSelector.getInstance().getAutoMode().toString()));
@@ -96,7 +94,7 @@ public class Robot extends IterativeRobot {
 		mHardwareUpdater.initHardware();
 		mHardwareSensorLooper.start();
 		System.out.println("Auto: "+AutoModeSelector.getInstance().getAutoMode().toString());
-//		AndroidConnectionHelper.getInstance().StartVisionApp();
+//		VisionManager.getInstance().StartVisionApp();
 		System.out.println("End robotInit()");
 		mLogger.logRobotThread("End robotInit()");
 	}
@@ -142,7 +140,7 @@ public class Robot extends IterativeRobot {
 //		System.out.println("Talon mode:"+HardwareAdapter.getInstance().getSlider().sliderTalon.getControlMode());
 		//		logPeriodic();
 //		System.out.println(robotState.sliderEncoder);
-		mLogger.logRobotThread("Nexus xdist: "+AndroidConnectionHelper.getInstance().getXDist());
+		mLogger.logRobotThread("Nexus xdist: "+ VisionManager.getInstance().getXDist());
 		commands = mRoutineManager.update(commands);
 	}
 

@@ -11,7 +11,7 @@ import com.palyrobotics.frc2017.subsystems.Spatula;
 import com.palyrobotics.frc2017.subsystems.Slider.SliderState;
 import com.palyrobotics.frc2017.subsystems.Slider.SliderTarget;
 import com.palyrobotics.frc2017.util.Subsystem;
-import com.palyrobotics.frc2017.vision.AndroidConnectionHelper;
+import com.palyrobotics.frc2017.vision.VisionManager;
 
 public class VisionSliderRoutine extends Routine {
 	private double startTime = 0;
@@ -34,7 +34,7 @@ public class VisionSliderRoutine extends Routine {
 	public Commands update(Commands commands) {
 		commands.robotSetpoints.sliderSetpoint = SliderTarget.CUSTOM;
 		commands.wantedSpatulaState = Spatula.SpatulaState.UP;
-		double visionSetpoint = AndroidConnectionHelper.getInstance().getXDist();
+		double visionSetpoint = VisionManager.getInstance().getXDist();
 		// out of range of motion, probably false positive, might be on left side
 		if (visionSetpoint >= 1.5) {
 			visionSetpoint = -7;

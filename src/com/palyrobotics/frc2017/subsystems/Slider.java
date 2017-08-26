@@ -10,13 +10,9 @@ import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
-import com.palyrobotics.frc2017.robot.HardwareAdapter;
-import com.palyrobotics.frc2017.robot.team254.lib.util.CrashTracker;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Subsystem;
 import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
-import com.palyrobotics.frc2017.util.logger.Logger;
-import com.palyrobotics.frc2017.vision.AndroidConnectionHelper;
 
 /**
  * Created by Nihar on 1/28/17.

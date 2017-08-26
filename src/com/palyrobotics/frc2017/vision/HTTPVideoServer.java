@@ -2,8 +2,6 @@ package com.palyrobotics.frc2017.vision;
 
 import com.palyrobotics.frc2017.config.Constants;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -16,44 +14,44 @@ import java.net.SocketException;
  * 	<ul>
  * 		<li>Instance and State variables:
  * 			<ul>
- * 				<li>{@link MJPEGServerSocket#m_MJPEGServerState}: Current state of socket connection (private)</li>
+ * 				<li>{@link HTTPVideoServer#m_MJPEGServerState}: Current state of socket connection (private)</li>
  * 				<li><b>See:</b>{@link MJPEGServerState}</li>
  * 			</ul>
  * 		</li>
  * 		<li>Utility variables:
  * 			<ul>
- * 				<li>{@link MJPEGServerSocket#m_secondsAlive}: Private count of seconds the program has run for</li>
- * 				<li>{@link MJPEGServerSocket#m_stateAliveTime}: Private count of seconds the state has run for</li>
- * 				<li>{@link MJPEGServerSocket#m_port}: Port that the ServerSocket listens on (private)</li>
- * 				<li>{@link MJPEGServerSocket#m_running}: Private boolean representing whether the thread is running</li>
- * 				<li>{@link MJPEGServerSocket#m_server}: Server Socket object that listens for android client and receives data (private)</li>
+ * 				<li>{@link HTTPVideoServer#m_secondsAlive}: Private count of seconds the program has run for</li>
+ * 				<li>{@link HTTPVideoServer#m_stateAliveTime}: Private count of seconds the state has run for</li>
+ * 				<li>{@link HTTPVideoServer#m_port}: Port that the ServerSocket listens on (private)</li>
+ * 				<li>{@link HTTPVideoServer#m_running}: Private boolean representing whether the thread is running</li>
+ * 				<li>{@link HTTPVideoServer#m_server}: Server Socket object that listens for android client and receives data (private)</li>
  * 			</ul>
  * 		</li>
  * 	</ul>
  *
  * <h1><b>Accessors and Mutators</b></h1>
  * 	<ul>
- * 		<li>{@link AndroidConnectionHelper#getInstance()}</li>
- * 		<li>{@link MJPEGServerSocket#SetState(MJPEGServerState)}</li>
+ * 		<li>{@link VisionManager#getInstance()}</li>
+ * 		<li>{@link HTTPVideoServer#SetState(MJPEGServerState)}</li>
  * 	</ul>
  *
  * <h1><b>External Access Functions</b>
  * 	<br><BLOCKQUOTE>For using as a wrapper for RIOdroid</BLOCKQUOTE></h1>
  * 	<ul>
- * 		<li>{@link MJPEGServerSocket#start()}</li>
+ * 		<li>{@link HTTPVideoServer#start()}</li>
  * 	</ul>
  *
  * 	<h1><b>Internal Functions</b>
  * 	 <br><BLOCKQUOTE>Paired with external access functions. These compute the actual function for the external access</BLOCKQUOTE></h1>
  * 	 <ul>
- * 	     <li>{@link MJPEGServerSocket#AcceptConnection()}</li>
+ * 	     <li>{@link HTTPVideoServer#AcceptConnection()}</li>
  * 	 </ul>
  *
  * @see MJPEGServerState
  * @author Alvin
  *
  */
-public class MJPEGServerSocket implements Runnable{
+public class HTTPVideoServer implements Runnable{
 
 	/**
 	 * State of connection between the roboRIO and nexus
@@ -87,10 +85,10 @@ public class MJPEGServerSocket implements Runnable{
 	private String m_boundary = "team8robotics";
 
 	/**
-	 * Creates a DataServerThread instance
+	 * Creates a NexusDataServer instance
 	 * Cannot be called outside as a Singleton
 	 */
-	public MJPEGServerSocket(int port, String path){
+	public HTTPVideoServer(int port, String path){
 		m_port = port;
 
 //		try {
@@ -121,22 +119,22 @@ public class MJPEGServerSocket implements Runnable{
 	 * (DEBUG) Logs the Socket state
 	 */
 	private void logSocketState(){
-		System.out.println("Debug: DataServerThread AndroidServerState - "+ m_MJPEGServerState);
+		System.out.println("Debug: NexusDataServer AndroidServerState - "+ m_MJPEGServerState);
 	}
 
 	/**
-	 * Starts the DataServerThread thread
+	 * Starts the NexusDataServer thread
 	 * <br>Created server socket opens on given port
 	 */
 	public void start(){
 
 		if(!m_MJPEGServerState.equals(MJPEGServerState.PREINIT)){ // This should never happen
-			System.out.println("Error: in DataServerThread.start(), " +
+			System.out.println("Error: in NexusDataServer.start(), " +
 					"socket is already initialized");
 		}
 
 		if(m_running){  // This should never happen
-			System.out.println("Error: in DataServerThread.start(), " +
+			System.out.println("Error: in NexusDataServer.start(), " +
 					"thread is already running");
 		}
 
@@ -165,7 +163,7 @@ public class MJPEGServerSocket implements Runnable{
 //		System.out.println("Connected to image socket on port: "+m_client.getPort());
 
 		if(m_client == null){
-//			System.out.println("Warning: in MJPEGServerSocket.handle(), " +
+//			System.out.println("Warning: in HTTPVideoServer.handle(), " +
 //					"socket not connected");
 			return;
 		}
@@ -218,7 +216,7 @@ public class MJPEGServerSocket implements Runnable{
 //			output.flush();
 			
 		} catch (SocketException e) {
-//			System.out.println("Error: in MJPEGServerSocket.handle(), " +
+//			System.out.println("Error: in HTTPVideoServer.handle(), " +
 //					"socket connection broken");
 //			m_client.close();
 //			this.SetConnectionState(SocketConnectionState.CLOSED);
@@ -282,7 +280,7 @@ public class MJPEGServerSocket implements Runnable{
 
 			writer.flush();
 		} catch (SocketException e) {
-//			System.out.println("Error: in MJPEGServerSocket.WriteImage(), " +
+//			System.out.println("Error: in HTTPVideoServer.WriteImage(), " +
 //					"socket connection broken");
 //			m_client.close();
 //			this.SetConnectionState(SocketConnectionState.CLOSED);
@@ -309,7 +307,7 @@ public class MJPEGServerSocket implements Runnable{
 	 */
 	private MJPEGServerState AcceptConnection(){
 		if(m_socketConnectionState.equals(SocketConnectionState.ALIVE)){
-			System.out.println("Error in VisionServerThread.AcceptConnection(), " +
+			System.out.println("Error in VideoManager.AcceptConnection(), " +
 					"Socket connection is already Alive");
 			return MJPEGServerState.RECEIVING;
 		}
@@ -346,7 +344,7 @@ public class MJPEGServerSocket implements Runnable{
 			switch (m_MJPEGServerState){
 
 				case PREINIT:   // This should never happen
-					System.out.println("Error: in DataServerThread.run(), " +
+					System.out.println("Error: in NexusDataServer.run(), " +
 							"thread running on preinit state");
 					break;
 

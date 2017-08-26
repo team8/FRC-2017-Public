@@ -16,20 +16,20 @@ import org.json.simple.parser.JSONParser;
  * 	<ul>
  * 		<li>Instance and State variables:
  * 			<ul>
- * 				<li>{@link AndroidConnectionHelper#s_instance}: Private instance of this class (Singleton)</li>
- * 				<li>{@link AndroidConnectionHelper#m_connectionState}: Current state of connection (private)</li>
- * 				<li>{@link AndroidConnectionHelper#m_streamState}: Current state of streaming</li>
+ * 				<li>{@link VisionManager#s_instance}: Private instance of this class (Singleton)</li>
+ * 				<li>{@link VisionManager#m_connectionState}: Current state of connection (private)</li>
+ * 				<li>{@link VisionManager#m_streamState}: Current state of streaming</li>
  * 				<li><b>See:</b>{@link ConnectionState}</li>
  * 			</ul>
  * 		</li>
  * 		<li>Utility variables:
  * 			<ul>
- * 				<li>{@link AndroidConnectionHelper#m_secondsAlive}: Private count of seconds the program has run for</li>
- * 				<li>{@link AndroidConnectionHelper#m_stateAliveTime}: Private count of seconds the state has run for</li>
- * 				<li>{@link AndroidConnectionHelper#m_adbServerCreated}: Private boolean representing existence an adb server</li>
- * 				<li>{@link AndroidConnectionHelper#m_visionRunning}: Private boolean representing whether vision program is currently running</li>
- * 				<li>{@link AndroidConnectionHelper#m_running}: Private boolean representing whether the thread is running</li>
- * 				<li>{@link AndroidConnectionHelper#mTesting}: Private boolean representing whether program is testing on a pc with
+ * 				<li>{@link VisionManager#m_secondsAlive}: Private count of seconds the program has run for</li>
+ * 				<li>{@link VisionManager#m_stateAliveTime}: Private count of seconds the state has run for</li>
+ * 				<li>{@link VisionManager#m_adbServerCreated}: Private boolean representing existence an adb server</li>
+ * 				<li>{@link VisionManager#m_visionRunning}: Private boolean representing whether vision program is currently running</li>
+ * 				<li>{@link VisionManager#m_running}: Private boolean representing whether the thread is running</li>
+ * 				<li>{@link VisionManager#mTesting}: Private boolean representing whether program is testing on a pc with
  * 																adb installed and included in the path	</li>
  * 			</ul>
  * 		</li>
@@ -37,24 +37,24 @@ import org.json.simple.parser.JSONParser;
  *
  * <h1><b>Accessors and Mutators</b></h1>
  * 	<ul>
- * 		<li>{@link AndroidConnectionHelper#getInstance()}</li>
- * 		<li>{@link AndroidConnectionHelper#SetState(ConnectionState)}</li>
- * 		<li>{@link AndroidConnectionHelper#SetStreamState(StreamState)}</li>
+ * 		<li>{@link VisionManager#getInstance()}</li>
+ * 		<li>{@link VisionManager#SetState(ConnectionState)}</li>
+ * 		<li>{@link VisionManager#SetStreamState(StreamState)}</li>
  * 	</ul>
  *
  * <h1><b>External Access Functions</b>
  * 	<br><BLOCKQUOTE>For using as a wrapper for RIOdroid</BLOCKQUOTE></h1>
  * 	<ul>
- * 		<li>{@link AndroidConnectionHelper#start()}</li>
- * 		<li>{@link AndroidConnectionHelper#StartVisionApp()}</li>
+ * 		<li>{@link VisionManager#start()}</li>
+ * 		<li>{@link VisionManager#StartVisionApp()}</li>
  * 	</ul>
  *
  * 	<h1><b>Internal Functions</b>
  * 	 <br><BLOCKQUOTE>Paired with external access functions. These compute the actual function for the external access</BLOCKQUOTE></h1>
  * 	 <ul>
- * 	     <li>{@link AndroidConnectionHelper#InitializeServer()}</li>
- * 	     <li>{@link AndroidConnectionHelper#VisionInit()}</li>
- * 	     <li>{@link AndroidConnectionHelper#StreamVision()}</li>
+ * 	     <li>{@link VisionManager#InitializeServer()}</li>
+ * 	     <li>{@link VisionManager#VisionInit()}</li>
+ * 	     <li>{@link VisionManager#StreamVision()}</li>
  * 	 </ul>
  *
  * @see ConnectionState
@@ -62,7 +62,7 @@ import org.json.simple.parser.JSONParser;
  * @author Alvin
  *
  */
-public class AndroidConnectionHelper implements Runnable{
+public class VisionManager implements Runnable{
 
 	/**
 	 * State of connection between the roboRIO and nexus
@@ -91,7 +91,7 @@ public class AndroidConnectionHelper implements Runnable{
 	}
 
 	// Instance and state variables
-	private static AndroidConnectionHelper s_instance;
+	private static VisionManager s_instance;
 	private ConnectionState m_connectionState = ConnectionState.PREINIT;
 	private StreamState m_streamState = StreamState.IDLE;
 
@@ -109,17 +109,17 @@ public class AndroidConnectionHelper implements Runnable{
 
 
 	/**
-	 * Creates an AndroidConnectionHelper instance
+	 * Creates an VisionManager instance
 	 * Cannot be called outside as a Singleton
 	 */
-	private AndroidConnectionHelper(){}
+	private VisionManager(){}
 
 	/**
 	 * @return The instance of the ACH
 	 */
-	public static AndroidConnectionHelper getInstance(){
+	public static VisionManager getInstance(){
 		if(s_instance == null){
-			s_instance = new AndroidConnectionHelper();
+			s_instance = new VisionManager();
 		}
 		return s_instance;
 	}
@@ -138,7 +138,7 @@ public class AndroidConnectionHelper implements Runnable{
 	 */
 	private void SetStreamState(StreamState state){
 		if(m_streamState.equals(state)){
-			System.out.println("Warning: in AndroidConnectionHelper.SetStreamState(), "
+			System.out.println("Warning: in VisionManager.SetStreamState(), "
 					+ "no chane to write state");
 		}else{
 			m_streamState = state;
@@ -146,26 +146,26 @@ public class AndroidConnectionHelper implements Runnable{
 	}
 
 	/**
-	 * Starts the AndroidConnectionHelper thread
+	 * Starts the VisionManager thread
 	 */
 	public void start(){
 		this.start(false);
 	}
 
 	/**
-	 * Starts the AndroidConnectionHelper thread
+	 * Starts the VisionManager thread
 	 * <br>(accounts for running program for testing)
 	 * @param isTesting
 	 */
 	public void start(boolean isTesting){
 
 		if(m_connectionState != ConnectionState.PREINIT) {    // This should never happen
-			System.out.println("Error: in AndroidConnectionHelper.start(), "
+			System.out.println("Error: in VisionManager.start(), "
 					+ "connection is already initialized");
 		}
 
 		if(m_running){	// This should never happen
-			System.out.println("Error: in AndroidConnectionHelper.start(), "
+			System.out.println("Error: in VisionManager.start(), "
 					+ "thread is already running");
 		}
 
@@ -175,8 +175,8 @@ public class AndroidConnectionHelper implements Runnable{
 		m_streamState = StreamState.JSON;
 		this.mTesting = isTesting;
 
-		System.out.println("Starting Thread: AndroidConnectionHelper ");
-		(new Thread(this, "AndroidConnectionHelper")).start();
+		System.out.println("Starting Thread: VisionManager ");
+		(new Thread(this, "VisionManager")).start();
 
 	}
 
@@ -187,7 +187,7 @@ public class AndroidConnectionHelper implements Runnable{
 	private ConnectionState InitializeServer() {
 
 		if(!this.isNexusConnected()){
-//			System.out.println("Error: in AndroidConnectionHelper.InitializeServer(), " +
+//			System.out.println("Error: in VisionManager.InitializeServer(), " +
 //					"nexus is not connected");
 			return this.m_connectionState;
 		}
@@ -230,8 +230,8 @@ public class AndroidConnectionHelper implements Runnable{
 				RIOdroid.executeCommand("adb reverse tcp:" +
 						Constants.kAndroidVisionSocketPort + " tcp:" +
 						Constants.kAndroidVisionSocketPort);
-				System.out.println("Starting VisionServerThread");
-				VisionServerThread.getInstance().start(mTesting);
+				System.out.println("Starting VideoManager");
+				VideoManager.getInstance().start(mTesting);
 			} else {
 				RuntimeExecutor.getInstance().init();
 
@@ -239,13 +239,13 @@ public class AndroidConnectionHelper implements Runnable{
 				RuntimeExecutor.getInstance().exec("adb reverse tcp:" +
 						Constants.kAndroidVisionSocketPort + " tcp:" +
 						Constants.kAndroidVisionSocketPort);
-				System.out.println("Starting VisionServerThread");
-				VisionServerThread.getInstance().start(mTesting);
+				System.out.println("Starting VideoManager");
+				VideoManager.getInstance().start(mTesting);
 			}
 
 			connected = true;
 		} catch (Exception e) {
-			System.out.println("Error: in AndroidConnectionHelper.InitializeServer(), "
+			System.out.println("Error: in VisionManager.InitializeServer(), "
 					+ "could not connect.\n" + e.getStackTrace());
 		}
 
@@ -260,7 +260,7 @@ public class AndroidConnectionHelper implements Runnable{
 
 //		// Let it retry connection for 10 seconds, then give in
 //		if (m_secondsAlive - m_stateAliveTime > 10 && !connected) {
-//			System.out.println("Error: in AndroidConnectionHelper.InitializeServer(), "
+//			System.out.println("Error: in VisionManager.InitializeServer(), "
 //					+ "connection timed out");
 //		}
 
@@ -271,13 +271,13 @@ public class AndroidConnectionHelper implements Runnable{
 	 */
 	public void StartVisionApp(){
 //		if(!m_adbServerCreated){    // No abd server, can't start app
-//			System.out.println("Warning: on call AndroidConnectionHelper.StartVisionApp(), " +
+//			System.out.println("Warning: on call VisionManager.StartVisionApp(), " +
 //					"adb server not started, abandoning app startup");
 ////			return;
 //		}
 
 		if(m_visionRunning){	// This should never happen, but easily can due to outside calling
-			System.out.println("Warning: On call AndroidConnectionHelper.StartVisionApp(), "
+			System.out.println("Warning: On call VisionManager.StartVisionApp(), "
 					+ "vision app already running (or function has been called before)");
 		}else{
 			if(m_connectionState.equals(ConnectionState.STARTING_SERVER)){
@@ -297,7 +297,7 @@ public class AndroidConnectionHelper implements Runnable{
 				}
 
 			}else if(!m_connectionState.equals(ConnectionState.IDLE)){
-				System.out.println("Error: in AndroidConnectionHelper.StartVisionApp(), "
+				System.out.println("Error: in VisionManager.StartVisionApp(), "
 						+ "connection not in a state to start app");
 			}
 
@@ -326,7 +326,7 @@ public class AndroidConnectionHelper implements Runnable{
 
 			connected = true;
 		}catch (Exception e) {
-			System.out.println("Error: in AndroidConnectionHelper.VisionInit(), "
+			System.out.println("Error: in VisionManager.VisionInit(), "
 					+ "could not connect.\n" + e.getStackTrace());
 		}
 
@@ -345,13 +345,13 @@ public class AndroidConnectionHelper implements Runnable{
 	 */
 	private ConnectionState StreamVision(){
 		if(!m_visionRunning){	// This should never happen
-			System.out.println("Error: in AndroidConnectionHelper.StreamVision(), "
+			System.out.println("Error: in VisionManager.StreamVision(), "
 					+ "vision program i not running (or has not been initialized inside this program)");
 		}
 
 		switch (m_streamState){
 			case IDLE:
-				System.out.println("Error: in AndroidConnectionHelper.StreamVision(), "
+				System.out.println("Error: in VisionManager.StreamVision(), "
 						+ "streaming in IDLE state, nothing streaming");
 				break;
 			case JSON:
@@ -434,10 +434,10 @@ public class AndroidConnectionHelper implements Runnable{
 
 	public double getXDist(){
 		if(!m_visionRunning) {
-//			System.out.println("Error in AndroidConnectionHelper.getXDist(), " +
+//			System.out.println("Error in VisionManager.getXDist(), " +
 //					"no connection to vision app, returning default/last valid value");
 		} else if(!m_androidState.equals("STREAMING")){
-//			System.out.println("Warning in AndroidConnectionHelper.getXDist(), " +
+//			System.out.println("Warning in VisionManager.getXDist(), " +
 //					"not streaming, android state is "+m_androidState+", returning last valid x_distance");
 		}
 		return m_x_dist;
@@ -481,7 +481,7 @@ public class AndroidConnectionHelper implements Runnable{
 			switch(m_connectionState){
 
 				case PREINIT:	// Shouldn't happen, but can due to error
-					System.out.println("Error: in AndroidConnectionHelper.run(), "
+					System.out.println("Error: in VisionManager.run(), "
 							+ "thread running on preinit state");
 					break;
 

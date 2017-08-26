@@ -2,12 +2,7 @@ package com.palyrobotics.frc2017.vision;
 
 import com.palyrobotics.frc2017.config.Constants;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
 
 /**
  * Supplies wrapper methods for using adb to control the Android
@@ -16,43 +11,43 @@ import java.net.SocketException;
  * 	<ul>
  * 		<li>Instance and State variables:
  * 			<ul>
- * 				<li>{@link VisionServerThread#s_instance}: Private instance of this class (Singleton)</li>
- * 				<li>{@link VisionServerThread#m_visionServerState}: Current state of socket connection (private)</li>
+ * 				<li>{@link VideoManager#s_instance}: Private instance of this class (Singleton)</li>
+ * 				<li>{@link VideoManager#m_visionServerState}: Current state of socket connection (private)</li>
  * 				<li><b>See:</b>{@link VisionServerState}</li>
  * 			</ul>
  * 		</li>
  * 		<li>Utility variables:
  * 			<ul>
- * 				<li>{@link VisionServerThread#m_secondsAlive}: Private count of seconds the program has run for</li>
- * 				<li>{@link VisionServerThread#m_stateAliveTime}: Private count of seconds the state has run for</li>
- * 				<li>{@link VisionServerThread#m_running}: Private boolean representing whether the thread is running</li>
+ * 				<li>{@link VideoManager#m_secondsAlive}: Private count of seconds the program has run for</li>
+ * 				<li>{@link VideoManager#m_stateAliveTime}: Private count of seconds the state has run for</li>
+ * 				<li>{@link VideoManager#m_running}: Private boolean representing whether the thread is running</li>
  * 			</ul>
  * 		</li>
  * 	</ul>
  *
  * <h1><b>Accessors and Mutators</b></h1>
  * 	<ul>
- * 		<li>{@link AndroidConnectionHelper#getInstance()}</li>
- * 		<li>{@link VisionServerThread#SetState(VisionServerState)}</li>
+ * 		<li>{@link VisionManager#getInstance()}</li>
+ * 		<li>{@link VideoManager#SetState(VisionServerState)}</li>
  * 	</ul>
  *
  * <h1><b>External Access Functions</b>
  * 	<br><BLOCKQUOTE>For using as a wrapper for RIOdroid</BLOCKQUOTE></h1>
  * 	<ul>
- * 		<li>{@link VisionServerThread#start(boolean)}</li>
+ * 		<li>{@link VideoManager#start(boolean)}</li>
  * 	</ul>
  *
  * 	<h1><b>Internal Functions</b>
  * 	 <br><BLOCKQUOTE>Paired with external access functions. These compute the actual function for the external access</BLOCKQUOTE></h1>
  * 	 <ul>
- * 	     <li>{@link VisionServerThread#InitializeConnections()}</li>
+ * 	     <li>{@link VideoManager#InitializeConnections()}</li>
  * 	 </ul>
  *
  * @see VisionServerState
  * @author Alvin
  *
  */
-public class VisionServerThread implements Runnable{
+public class VideoManager implements Runnable{
 
 	/**
 	 * State of connection between the roboRIO and nexus
@@ -67,7 +62,7 @@ public class VisionServerThread implements Runnable{
 	}
 
 	// Instance and state variables
-	private static VisionServerThread s_instance;
+	private static VideoManager s_instance;
 	private VisionServerState m_visionServerState = VisionServerState.PREINIT;
 
 	// Utility variables
@@ -76,21 +71,21 @@ public class VisionServerThread implements Runnable{
 	private boolean m_running = false;
 	private boolean m_testing = false;
 	private String m_defaultJPEGPath;
-	private AndroidServerSocket m_androidServer;
-	private MJPEGServerSocket m_mjpegServer;
+	private NexusVideoServer m_androidServer;
+	private HTTPVideoServer m_mjpegServer;
 
 	/**
-	 * Creates a VisionServerThread instance
+	 * Creates a VideoManager instance
 	 * Cannot be called outside as a Singleton
 	 */
-	private VisionServerThread(){}
+	private VideoManager(){}
 
 	/**
 	 * @return The instance of the BST
 	 */
-	public static VisionServerThread getInstance(){
+	public static VideoManager getInstance(){
 		if(s_instance == null){
-			s_instance = new VisionServerThread();
+			s_instance = new VideoManager();
 		}
 		return s_instance;
 	}
@@ -107,22 +102,22 @@ public class VisionServerThread implements Runnable{
 	 * (DEBUG) Logs the Socket state
 	 */
 	private void logSocketState(){
-		System.out.println("Debug: VisionServerThread AndroidServerState - "+ m_visionServerState);
+		System.out.println("Debug: VideoManager AndroidServerState - "+ m_visionServerState);
 	}
 
 	/**
-	 * Starts the VisionServerThread thread
+	 * Starts the VideoManager thread
 	 * <br>Created server socket opens on given port
 	 */
 	public void start(boolean testing){
 
 		if(!m_visionServerState.equals(VisionServerState.PREINIT)){ // This should never happen
-			System.out.println("Error: in VisionServerThread.start(), " +
+			System.out.println("Error: in VideoManager.start(), " +
 					"socket is already initialized");
 		}
 
 		if(m_running){  // This should never happen
-			System.out.println("Error: in VisionServerThread.start(), " +
+			System.out.println("Error: in VideoManager.start(), " +
 					"thread is already running");
 		}
 
@@ -137,13 +132,13 @@ public class VisionServerThread implements Runnable{
 		this.SetState(VisionServerState.INITIALIZE_SOCKETS);
 		m_running = true;
 
-		System.out.println("Starting Thread: VisionServerThread");
-		(new Thread(this, "VisionServerThread")).start();
+		System.out.println("Starting Thread: VideoManager");
+		(new Thread(this, "VideoManager")).start();
 	}
 
 	private VisionServerState InitializeConnections() {
-		m_androidServer = new AndroidServerSocket(m_testing, Constants.kAndroidVisionSocketPort);
-		m_mjpegServer = new MJPEGServerSocket(Constants.kMJPEGServerSocketPort, m_defaultJPEGPath);
+		m_androidServer = new NexusVideoServer(m_testing, Constants.kAndroidVisionSocketPort);
+		m_mjpegServer = new HTTPVideoServer(Constants.kMJPEGServerSocketPort, m_defaultJPEGPath);
 
 		m_androidServer.start();
 		m_mjpegServer.start();
@@ -176,7 +171,7 @@ public class VisionServerThread implements Runnable{
 			switch (m_visionServerState){
 
 				case PREINIT:   // This should never happen
-					System.out.println("Error: in VisionServerThread.run(), " +
+					System.out.println("Error: in VideoManager.run(), " +
 							"thread running on preinit state");
 					break;
 

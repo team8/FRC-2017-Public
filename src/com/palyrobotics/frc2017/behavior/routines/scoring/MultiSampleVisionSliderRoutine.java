@@ -6,7 +6,7 @@ import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.subsystems.Slider;
 import com.palyrobotics.frc2017.subsystems.Spatula;
 import com.palyrobotics.frc2017.util.Subsystem;
-import com.palyrobotics.frc2017.vision.AndroidConnectionHelper;
+import com.palyrobotics.frc2017.vision.VisionManager;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -44,7 +44,7 @@ public class MultiSampleVisionSliderRoutine extends Routine {
 					newState = false;
 				}
 				if (Robot.getRobotState().sliderVelocity==0 && System.currentTimeMillis()-startTime > 200) {
-					visionSetpoints[0] = AndroidConnectionHelper.getInstance().getXDist();
+					visionSetpoints[0] = VisionManager.getInstance().getXDist();
 					mState = SamplingState.CENTER;
 					newState = true;
 				}
@@ -57,7 +57,7 @@ public class MultiSampleVisionSliderRoutine extends Routine {
 					newState = false;
 				}
 				if (Robot.getRobotState().sliderVelocity==0 && System.currentTimeMillis()-startTime > 200) {					mState = SamplingState.RIGHT;
-					visionSetpoints[1] = AndroidConnectionHelper.getInstance().getXDist();
+					visionSetpoints[1] = VisionManager.getInstance().getXDist();
 					mState = SamplingState.RIGHT;
 					newState = true;
 				}
@@ -70,7 +70,7 @@ public class MultiSampleVisionSliderRoutine extends Routine {
 					newState = false;
 				}
 				if (Robot.getRobotState().sliderVelocity==0 && System.currentTimeMillis()-startTime > 200) {					mState = SamplingState.SCORE;
-					visionSetpoints[2] = AndroidConnectionHelper.getInstance().getXDist();
+					visionSetpoints[2] = VisionManager.getInstance().getXDist();
 					mState = SamplingState.SCORE;
 					newState = true;
 				}

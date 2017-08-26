@@ -16,44 +16,44 @@ import java.util.zip.GZIPOutputStream;
  * 	<ul>
  * 		<li>Instance and State variables:
  * 			<ul>
- * 				<li>{@link AndroidServerSocket#m_androidServerState}: Current state of socket connection (private)</li>
+ * 				<li>{@link NexusVideoServer#m_androidServerState}: Current state of socket connection (private)</li>
  * 				<li><b>See:</b>{@link AndroidServerState}</li>
  * 			</ul>
  * 		</li>
  * 		<li>Utility variables:
  * 			<ul>
- * 				<li>{@link AndroidServerSocket#m_secondsAlive}: Private count of seconds the program has run for</li>
- * 				<li>{@link AndroidServerSocket#m_stateAliveTime}: Private count of seconds the state has run for</li>
- * 				<li>{@link AndroidServerSocket#m_port}: Port that the ServerSocket listens on (private)</li>
- * 				<li>{@link AndroidServerSocket#m_running}: Private boolean representing whether the thread is running</li>
- * 				<li>{@link AndroidServerSocket#m_server}: Server Socket object that listens for android client and receives data (private)</li>
+ * 				<li>{@link NexusVideoServer#m_secondsAlive}: Private count of seconds the program has run for</li>
+ * 				<li>{@link NexusVideoServer#m_stateAliveTime}: Private count of seconds the state has run for</li>
+ * 				<li>{@link NexusVideoServer#m_port}: Port that the ServerSocket listens on (private)</li>
+ * 				<li>{@link NexusVideoServer#m_running}: Private boolean representing whether the thread is running</li>
+ * 				<li>{@link NexusVideoServer#m_server}: Server Socket object that listens for android client and receives data (private)</li>
  * 			</ul>
  * 		</li>
  * 	</ul>
  *
  * <h1><b>Accessors and Mutators</b></h1>
  * 	<ul>
- * 		<li>{@link AndroidConnectionHelper#getInstance()}</li>
- * 		<li>{@link AndroidServerSocket#SetState(AndroidServerState)}</li>
+ * 		<li>{@link VisionManager#getInstance()}</li>
+ * 		<li>{@link NexusVideoServer#SetState(AndroidServerState)}</li>
  * 	</ul>
  *
  * <h1><b>External Access Functions</b>
  * 	<br><BLOCKQUOTE>For using as a wrapper for RIOdroid</BLOCKQUOTE></h1>
  * 	<ul>
- * 		<li>{@link AndroidServerSocket#start()}</li>
+ * 		<li>{@link NexusVideoServer#start()}</li>
  * 	</ul>
  *
  * 	<h1><b>Internal Functions</b>
  * 	 <br><BLOCKQUOTE>Paired with external access functions. These compute the actual function for the external access</BLOCKQUOTE></h1>
  * 	 <ul>
- * 	     <li>{@link AndroidServerSocket#AcceptConnection()}</li>
+ * 	     <li>{@link NexusVideoServer#AcceptConnection()}</li>
  * 	 </ul>
  *
  * @see AndroidServerState
  * @author Alvin
  *
  */
-public class AndroidServerSocket implements Runnable{
+public class NexusVideoServer implements Runnable{
 
 	/**
 	 * State of connection between the roboRIO and nexus
@@ -88,10 +88,10 @@ public class AndroidServerSocket implements Runnable{
 	private Object lock = new Object();
 
 	/**
-	 * Creates a AndroidServerSocket instance
+	 * Creates a NexusVideoServer instance
 	 * Cannot be called outside as a Singleton
 	 */
-	public AndroidServerSocket(boolean testing, int port){
+	public NexusVideoServer(boolean testing, int port){
 		m_testing = testing;
 		m_port = port;
 	}
@@ -112,21 +112,21 @@ public class AndroidServerSocket implements Runnable{
 	 * (DEBUG) Logs the Socket state
 	 */
 	private void logSocketState(){
-		System.out.println("Debug: AndroidServerSocket AndroidServerState - "+ m_androidServerState);
+		System.out.println("Debug: NexusVideoServer AndroidServerState - "+ m_androidServerState);
 	}
 
 	/**
-	 * Starts the AndroidServerSocket thread
+	 * Starts the NexusVideoServer thread
 	 * <br>Created server socket opens on given port
 	 */
 	public void start(){
 		if(!m_androidServerState.equals(AndroidServerState.PREINIT)){ // This should never happen
-			System.out.println("Error: in AndroidServerSocket.start(), " +
+			System.out.println("Error: in NexusVideoServer.start(), " +
 					"socket is already initialized");
 		}
 
 		if(m_running){  // This should never happen
-			System.out.println("Error: in AndroidServerSocket.start(), " +
+			System.out.println("Error: in NexusVideoServer.start(), " +
 					"thread is already running");
 		}
 
@@ -140,8 +140,8 @@ public class AndroidServerSocket implements Runnable{
 		this.SetState(AndroidServerState.CONNECTING);
 		m_running = true;
 
-		System.out.println("Starting Thread: AndroidServerSocket on port "+m_port);
-		(new Thread(this, "AndroidServerSocket")).start();
+		System.out.println("Starting Thread: NexusVideoServer on port "+m_port);
+		(new Thread(this, "NexusVideoServer")).start();
 	}
 
 	private byte[] readBytes(){
@@ -150,7 +150,7 @@ public class AndroidServerSocket implements Runnable{
 		}
 
 		if(m_socketConnectionState.equals(SocketConnectionState.CLOSED)){
-//			System.out.println("Error: in AndroidServerSocket.readBytes(), " +
+//			System.out.println("Error: in NexusVideoServer.readBytes(), " +
 //					"socket is closed");
 			return null;
 		}
@@ -169,7 +169,7 @@ public class AndroidServerSocket implements Runnable{
 //			return compressGZIP(data);
 			return data;
 		} catch (SocketException e) {
-			System.out.println("Error VisionServerThread.readBytes(), " +
+			System.out.println("Error VideoManager.readBytes(), " +
 					"Broken connection, attempting to reconnect: " + e.getStackTrace().toString());
 			this.SetConnectionState(SocketConnectionState.CLOSED);
 			return null;
@@ -231,7 +231,7 @@ public class AndroidServerSocket implements Runnable{
 	 */
 	private AndroidServerState AcceptConnection(){
 		if(m_socketConnectionState.equals(SocketConnectionState.ALIVE)){
-			System.out.println("Error in VisionServerThread.AcceptConnection(), " +
+			System.out.println("Error in VideoManager.AcceptConnection(), " +
 					"Socket connection is already Alive");
 			return AndroidServerState.RECEIVING;
 		}
@@ -260,7 +260,7 @@ public class AndroidServerSocket implements Runnable{
 			switch (m_androidServerState){
 
 				case PREINIT:   // This should never happen
-					System.out.println("Error: in AndroidServerSocket.run(), " +
+					System.out.println("Error: in NexusVideoServer.run(), " +
 							"thread running on preinit state");
 					break;
 

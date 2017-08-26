@@ -15,49 +15,49 @@ import com.palyrobotics.frc2017.config.Constants;
  * 	<ul>
  * 		<li>Instance and State variables:
  * 			<ul>
- * 				<li>{@link DataServerThread#s_instance}: Private instance of this class (Singleton)</li>
- * 				<li>{@link DataServerThread#m_socketState}: Current state of socket connection (private)</li>
+ * 				<li>{@link NexusDataServer#s_instance}: Private instance of this class (Singleton)</li>
+ * 				<li>{@link NexusDataServer#m_socketState}: Current state of socket connection (private)</li>
  * 				<li><b>See:</b>{@link SocketState}</li>
  * 			</ul>
  * 		</li>
  * 		<li>Utility variables:
  * 			<ul>
- * 				<li>{@link DataServerThread#m_secondsAlive}: Private count of seconds the program has run for</li>
- * 				<li>{@link DataServerThread#m_stateAliveTime}: Private count of seconds the state has run for</li>
- * 				<li>{@link DataServerThread#m_port}: Port that the ServerSocket listens on (private)</li>
- * 				<li>{@link DataServerThread#m_running}: Private boolean representing whether the thread is running</li>
- * 				<li>{@link DataServerThread#m_awaitingOutput}: Private boolean representing whether the thread is waiting to output data</li>
- * 				<li>{@link DataServerThread#m_server}: Server Socket object that listens for android client and receives data (private)</li>
- * 				<li>{@link DataServerThread#mOutput}: Stores output from the client (private)</li>
+ * 				<li>{@link NexusDataServer#m_secondsAlive}: Private count of seconds the program has run for</li>
+ * 				<li>{@link NexusDataServer#m_stateAliveTime}: Private count of seconds the state has run for</li>
+ * 				<li>{@link NexusDataServer#m_port}: Port that the ServerSocket listens on (private)</li>
+ * 				<li>{@link NexusDataServer#m_running}: Private boolean representing whether the thread is running</li>
+ * 				<li>{@link NexusDataServer#m_awaitingOutput}: Private boolean representing whether the thread is waiting to output data</li>
+ * 				<li>{@link NexusDataServer#m_server}: Server Socket object that listens for android client and receives data (private)</li>
+ * 				<li>{@link NexusDataServer#mOutput}: Stores output from the client (private)</li>
  * 			</ul>
  * 		</li>
  * 	</ul>
  *
  * <h1><b>Accessors and Mutators</b></h1>
  * 	<ul>
- * 		<li>{@link AndroidConnectionHelper#getInstance()}</li>
- * 		<li>{@link DataServerThread#SetState(SocketState)}</li>
+ * 		<li>{@link VisionManager#getInstance()}</li>
+ * 		<li>{@link NexusDataServer#SetState(SocketState)}</li>
  * 	</ul>
  *
  * <h1><b>External Access Functions</b>
  * 	<br><BLOCKQUOTE>For using as a wrapper for RIOdroid</BLOCKQUOTE></h1>
  * 	<ul>
- * 		<li>{@link DataServerThread#start(int)}</li>
- * 		<li>{@link DataServerThread#AwaitClient()}</li>
- * 		<li>{@link DataServerThread#AwaitOutput()} </li>
+ * 		<li>{@link NexusDataServer#start(int)}</li>
+ * 		<li>{@link NexusDataServer#AwaitClient()}</li>
+ * 		<li>{@link NexusDataServer#AwaitOutput()} </li>
  * 	</ul>
  *
  * 	<h1><b>Internal Functions</b>
  * 	 <br><BLOCKQUOTE>Paired with external access functions. These compute the actual function for the external access</BLOCKQUOTE></h1>
  * 	 <ul>
- * 	     <li>{@link DataServerThread#AcceptConnection()}</li>
+ * 	     <li>{@link NexusDataServer#AcceptConnection()}</li>
  * 	 </ul>
  *
  * @see SocketState
  * @author Alvin
  *
  */
-public class DataServerThread implements Runnable{
+public class NexusDataServer implements Runnable{
 
 	/**
 	 * State of connection between the roboRIO and nexus
@@ -74,7 +74,7 @@ public class DataServerThread implements Runnable{
     }
 
     // Instance and state variables
-    private static DataServerThread s_instance;
+    private static NexusDataServer s_instance;
     private SocketState m_socketState = SocketState.PREINIT;
 
     // Utility variables
@@ -88,17 +88,17 @@ public class DataServerThread implements Runnable{
     private String mOutput = "";
 
 	/**
-	 * Creates a DataServerThread instance
+	 * Creates a NexusDataServer instance
 	 * Cannot be called outside as a Singleton
 	 */
-	private DataServerThread(){}
+	private NexusDataServer(){}
 
 	/**
 	 * @return The instance of the BST
 	 */
-    public static DataServerThread getInstance(){
+    public static NexusDataServer getInstance(){
         if(s_instance == null){
-            s_instance = new DataServerThread();
+            s_instance = new NexusDataServer();
         }
         return s_instance;
     }
@@ -115,23 +115,23 @@ public class DataServerThread implements Runnable{
 	 * (DEBUG) Logs the Socket state
 	 */
 	private void logSocketState(){
-        System.out.println("Debug: DataServerThread AndroidServerState - "+m_socketState);
+        System.out.println("Debug: NexusDataServer AndroidServerState - "+m_socketState);
     }
 
 	/**
-	 * Starts the DataServerThread thread
+	 * Starts the NexusDataServer thread
 	 * <br>Created server socket opens on given port
 	 * @param port Port to start Server on
 	 */
 	public void start(int port){
 
         if(!m_socketState.equals(SocketState.PREINIT)){ // This should never happen
-            System.out.println("Error: in DataServerThread.start(), " +
+            System.out.println("Error: in NexusDataServer.start(), " +
                     "socket is already initialized");
         }
 
         if(m_running){  // This should never happen
-            System.out.println("Error: in DataServerThread.start(), " +
+            System.out.println("Error: in NexusDataServer.start(), " +
                     "thread is already running");
         }
 
@@ -146,8 +146,8 @@ public class DataServerThread implements Runnable{
         this.SetState(SocketState.IDLE);
         m_running = true;
 
-        System.out.println("Starting Thread: DataServerThread on port "+port);
-        (new Thread(this, "DataServerThread")).start();
+        System.out.println("Starting Thread: NexusDataServer on port "+port);
+        (new Thread(this, "NexusDataServer")).start();
     }
 
 	/**
@@ -155,14 +155,14 @@ public class DataServerThread implements Runnable{
 	 */
 	public void AwaitClient() {
         if(!m_socketState.equals(SocketState.IDLE)){
-            System.out.println("Error: in DataServerThread.AwaitClient(), " +
+            System.out.println("Error: in NexusDataServer.AwaitClient(), " +
                     "thread is not in idle state, cannot await for client");
            this.logSocketState();
             return;
         }
 
         if(m_awaitingOutput){
-            System.out.println("Error: in DataServerThread.AwaitClient(), " +
+            System.out.println("Error: in NexusDataServer.AwaitClient(), " +
                     "already awaiting output, cannot await another client");
             return;
         }
@@ -188,7 +188,7 @@ public class DataServerThread implements Runnable{
 	public String AwaitOutput() {
         String outp = null;
         if(!m_awaitingOutput){
-            System.out.println("Error in DataServerThread.AwaitOutput(), " +
+            System.out.println("Error in NexusDataServer.AwaitOutput(), " +
                     "thread is not awaiting an output");
             return null;
         }
@@ -196,7 +196,7 @@ public class DataServerThread implements Runnable{
         while(m_awaitingOutput){
             switch(m_socketState){
                 case IDLE:
-                    System.out.println("Error in DataServerThread.AwaitOutput(), " +
+                    System.out.println("Error in NexusDataServer.AwaitOutput(), " +
                             "thread is in idle state, not awaiting an output");
                     return null;
 
@@ -260,7 +260,7 @@ public class DataServerThread implements Runnable{
             switch (m_socketState){
 
                 case PREINIT:   // This should never happen
-                    System.out.println("Error: in DataServerThread.run(), " +
+                    System.out.println("Error: in NexusDataServer.run(), " +
                             "thread running on preinit state");
                     break;
 

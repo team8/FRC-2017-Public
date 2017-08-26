@@ -1,20 +1,13 @@
 package com.palyrobotics.frc2017.vision;
 
-import com.palyrobotics.frc2017.config.Constants;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import java.rmi.UnexpectedException;
-
 /**
  * Created by Alvin on 2/15/2017.
  */
 public class AndroidComputerTest {
 
 	public static void main(String[] args) throws InterruptedException {
-		AndroidConnectionHelper.getInstance().start(true);
-//		AndroidConnectionHelper.getInstance().StartVisionApp();
+		VisionManager.getInstance().start(true);
+//		VisionManager.getInstance().StartVisionApp();
 //		String inp = RuntimeExecutor.getInstance().exec("adb devices");
 //		String[] lines = inp.split("\\n");
 //		boolean hasDevice = false;
@@ -25,8 +18,8 @@ public class AndroidComputerTest {
 //		System.out.println(hasDevice);
 
 		while(true){
-			if (AndroidConnectionHelper.getInstance().isAppStarted()) {
-				System.out.println(AndroidConnectionHelper.getInstance().getXDist());
+			if (VisionManager.getInstance().isAppStarted()) {
+				System.out.println(VisionManager.getInstance().getXDist());
 			}
 			Thread.sleep(500);
 		}
