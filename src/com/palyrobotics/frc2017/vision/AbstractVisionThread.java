@@ -1,6 +1,8 @@
 package com.palyrobotics.frc2017.vision;
 
 /**
+ * Base class for vision threads
+ *
  * @author Quintin Dwight
  */
 public abstract class AbstractVisionThread implements Runnable {
@@ -18,6 +20,9 @@ public abstract class AbstractVisionThread implements Runnable {
         this.k_threadName = k_threadName;
     }
 
+    /**
+     * Starts the thread
+     */
     public void start() {
 
         if (m_isRunning) {
@@ -32,6 +37,9 @@ public abstract class AbstractVisionThread implements Runnable {
         new Thread(this).start();
     }
 
+    /**
+     * Called by {@link #start} after it has been verified that the thread can run
+     */
     protected abstract void init();
 
     @Override
@@ -50,13 +58,27 @@ public abstract class AbstractVisionThread implements Runnable {
         }
     }
 
+    /**
+     * Called by {@link #run} every time the thread updates
+     */
     protected abstract void update();
 
+    /**
+     * Handles destroying the thread
+     */
     protected void destroy() {
 
         m_isRunning = false;
         tearDown();
     }
 
+    protected void log(String message) {
+
+        System.out.println("[" + k_threadName + "] " + message);
+    }
+
+    /**
+     * Called by {@link #destroy} whenever the thread should stop running
+     */
     protected abstract void tearDown();
 }

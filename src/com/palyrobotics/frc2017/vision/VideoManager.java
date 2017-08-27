@@ -5,47 +5,9 @@ import com.palyrobotics.frc2017.config.Constants;
 import java.io.*;
 
 /**
- * Supplies wrapper methods for using adb to control the Android
+ * Starts {@link HTTPVideoServer} and {@link NexusVideoServer}
  *
- * <h1><b>Fields</b></h1>
- * 	<ul>
- * 		<li>Instance and State variables:
- * 			<ul>
- * 				<li>{@link VideoManager#s_instance}: Private instance of this class (Singleton)</li>
- * 				<li>{@link VideoManager#m_visionServerState}: Current state of socket connection (private)</li>
- * 				<li><b>See:</b>{@link VisionServerState}</li>
- * 			</ul>
- * 		</li>
- * 		<li>Utility variables:
- * 			<ul>
- * 				<li>{@link VideoManager#m_secondsAlive}: Private count of seconds the program has run for</li>
- * 				<li>{@link VideoManager#m_stateAliveTime}: Private count of seconds the state has run for</li>
- * 				<li>{@link VideoManager#m_running}: Private boolean representing whether the thread is running</li>
- * 			</ul>
- * 		</li>
- * 	</ul>
- *
- * <h1><b>Accessors and Mutators</b></h1>
- * 	<ul>
- * 		<li>{@link VisionManager#getInstance()}</li>
- * 		<li>{@link VideoManager#SetState(VisionServerState)}</li>
- * 	</ul>
- *
- * <h1><b>External Access Functions</b>
- * 	<br><BLOCKQUOTE>For using as a wrapper for RIOdroid</BLOCKQUOTE></h1>
- * 	<ul>
- * 		<li>{@link VideoManager#start(boolean)}</li>
- * 	</ul>
- *
- * 	<h1><b>Internal Functions</b>
- * 	 <br><BLOCKQUOTE>Paired with external access functions. These compute the actual function for the external access</BLOCKQUOTE></h1>
- * 	 <ul>
- * 	     <li>{@link VideoManager#InitializeConnections()}</li>
- * 	 </ul>
- *
- * @see VisionServerState
- * @author Alvin
- *
+ * @author Quintin
  */
 public class VideoManager implements Runnable{
 
@@ -138,7 +100,7 @@ public class VideoManager implements Runnable{
 
 	private VisionServerState InitializeConnections() {
 		m_androidServer = new NexusVideoServer(m_testing, Constants.kAndroidVisionSocketPort);
-		m_mjpegServer = new HTTPVideoServer(Constants.kMJPEGServerSocketPort, m_defaultJPEGPath);
+		m_mjpegServer = new HTTPVideoServer(Constants.kMJPEGServerSocketPort);
 
 		m_androidServer.start();
 		m_mjpegServer.start();
@@ -152,7 +114,7 @@ public class VideoManager implements Runnable{
 
 		// Write Image to JPEG stream
 		try {
-			m_mjpegServer.handle(data);
+			m_mjpegServer.writeImageToServer(data);
 
 		} catch (IOException e) {
 			e.printStackTrace();
