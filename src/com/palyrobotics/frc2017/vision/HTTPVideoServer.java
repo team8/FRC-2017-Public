@@ -6,6 +6,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.file.Files;
 
 /**
  * Sends video from the robot to the dashboard
@@ -14,6 +15,8 @@ import java.net.SocketException;
  */
 public class HTTPVideoServer extends AbstractVisionThread {
 
+	private final String k_defaultImagePath = "/home/lvuser/mjpg/frame.jpg", k_defaultImagePathTesting = "FRC-2017-Private/test/com/palyrobotics/frc2017/vision/frame.jpg";
+
 	/**
 	 * State of connection between the rio and the javascript client
 	 */
@@ -21,37 +24,42 @@ public class HTTPVideoServer extends AbstractVisionThread {
 		PRE_INIT, SENDING
 	}
 
-
 	// Instance and state variables
 	private HTTPServerState m_httpServerState = HTTPServerState.PRE_INIT;
+	public static HTTPVideoServer s_instance;
 
-	// Utility variables
+	/**
+	 * Gets the singleton for this class from a static context.
+	 * If the instance is null, create a new one
+	 * @return The singleton
+	 */
+	public static HTTPVideoServer getInstance()
+	{
+		if (s_instance == null)
+			s_instance = new HTTPVideoServer(Constants.kMJPEGServerSocketPort, false);
+		return s_instance;
+	}
+
 	private final int k_port;
 	private byte[] m_defaultImage;
 	private ServerSocket m_server;
 	private Socket m_client;
-	private String m_boundary = "team8robotics";
 
-	/**
-	 * Creates a NexusDataServer instance
-	 * Cannot be called outside as a Singleton
-	 */
-	public HTTPVideoServer(final int k_port) {
+	public HTTPVideoServer(final int k_port, final boolean k_testing) {
 
 		super(Constants.kAndroidDataSocketUpdateRate, "HTTPVideoServer");
 
 		this.k_port = k_port;
 
-//		try {
-//			BufferedImage img = ImageIO.read(new File(path));
-//			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//			ImageIO.write(img, "JPEG", baos);
-//			baos.close();
-//
-//			m_defaultImage = baos.toByteArray();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		final String k_imagePath = k_testing ? k_defaultImagePathTesting : k_defaultImagePath;
+
+		// Try to read the default image file
+		try {
+			final File imageFile = new File(k_imagePath);
+			m_defaultImage = Files.readAllBytes(imageFile.toPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
