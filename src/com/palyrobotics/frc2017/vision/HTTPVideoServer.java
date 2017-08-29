@@ -36,7 +36,7 @@ public class HTTPVideoServer extends AbstractVisionThread {
 	public static HTTPVideoServer getInstance()
 	{
 		if (s_instance == null)
-			s_instance = new HTTPVideoServer(Constants.kMJPEGServerSocketPort, false);
+			s_instance = new HTTPVideoServer(false, Constants.kMJPEGServerSocketPort);
 		return s_instance;
 	}
 
@@ -45,7 +45,13 @@ public class HTTPVideoServer extends AbstractVisionThread {
 	private ServerSocket m_server;
 	private Socket m_client;
 
-	public HTTPVideoServer(final int k_port, final boolean k_testing) {
+	/**
+	 * Creates an HTTP Video Server
+	 *
+	 * @param k_testing Whether or not we are testing
+	 * @param k_port The port to open the connection to the dashboard
+	 */
+	public HTTPVideoServer(final boolean k_testing, final int k_port) {
 
 		super(Constants.kAndroidDataSocketUpdateRate, "HTTPVideoServer");
 
@@ -93,9 +99,9 @@ public class HTTPVideoServer extends AbstractVisionThread {
 
 
 	/**
-	 * Writes the image to the output stream for the client.
+	 * Writes the image given in a byte array to the output stream for the javascript client to read and display on the dashboard.
 	 *
-	 * @throws IOException
+	 * @throws IOException Thrown by socket
 	 */
 	public void writeImageToServer(byte[] data) throws IOException {
 
@@ -130,7 +136,7 @@ public class HTTPVideoServer extends AbstractVisionThread {
 			// Output stream that we send the response to
 			output = new PrintStream(m_client.getOutputStream());
 
-			// Prepare the content to send.
+			// Prepare the content to send
 			if (null == route) {
 				writeServerError(output);
 				return;
@@ -150,9 +156,7 @@ public class HTTPVideoServer extends AbstractVisionThread {
 			output.write(data);
 			output.flush();
 			
-		} catch (SocketException e) {
-			e.printStackTrace();
-		} catch (NullPointerException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 			if (output != null)
