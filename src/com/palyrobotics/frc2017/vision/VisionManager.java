@@ -231,7 +231,7 @@ public class VisionManager implements Runnable{
 						Constants.kAndroidVisionSocketPort + " tcp:" +
 						Constants.kAndroidVisionSocketPort);
 				System.out.println("Starting VideoManager");
-				VideoManager.getInstance().start(mTesting);
+				//VideoManager.getInstance().start();
 			} else {
 				RuntimeExecutor.getInstance().init();
 
@@ -240,7 +240,7 @@ public class VisionManager implements Runnable{
 						Constants.kAndroidVisionSocketPort + " tcp:" +
 						Constants.kAndroidVisionSocketPort);
 				System.out.println("Starting VideoManager");
-				VideoManager.getInstance().start(mTesting);
+				//VideoManager.getInstance().start(mTesting);
 			}
 
 			connected = true;

@@ -7,23 +7,24 @@ package com.palyrobotics.frc2017.vision;
  */
 public abstract class AbstractVisionThread implements Runnable {
 
-    protected double m_timeAlive;
-    protected final int k_updateRate;
+    protected double m_timeAlive = 0.0d;
+    protected int m_updateRate;
     protected final String k_threadName;
-    protected boolean m_isRunning;
+    protected boolean m_isRunning = false;
 
     public double getTimeAlive() { return m_timeAlive; }
     public boolean isRunning() { return m_isRunning; }
 
-    protected AbstractVisionThread(final int k_updateRate, final String k_threadName) {
-        this.k_updateRate = k_updateRate;
+    protected AbstractVisionThread(final String k_threadName) {
         this.k_threadName = k_threadName;
     }
 
     /**
      * Starts the thread
      */
-    public void start() {
+    public void start(final int k_updateRate) {
+
+        m_updateRate = k_updateRate;
 
         if (m_isRunning) {
             System.out.println("[Error] Thread " + k_threadName + " is already running! Aborting...");
@@ -50,8 +51,8 @@ public abstract class AbstractVisionThread implements Runnable {
             update();
 
             try {
-                Thread.sleep(k_updateRate);
-                m_timeAlive += k_updateRate / 1000.0;
+                Thread.sleep(m_updateRate);
+                m_timeAlive += m_updateRate / 1000.0;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -72,6 +73,11 @@ public abstract class AbstractVisionThread implements Runnable {
         tearDown();
     }
 
+    /**
+     * Temporary log function
+     *
+     * @param message Log message
+     */
     protected void log(String message) {
 
         System.out.println("[" + k_threadName + "] " + message);
