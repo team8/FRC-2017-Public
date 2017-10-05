@@ -28,6 +28,10 @@ public class VisionDataUnit<T> {
         defaultValue = value;
     }
 
+    public T getDefaultValue() {
+        return defaultValue;
+    }
+
     public void setToDefault() {
 
         value = defaultValue;

@@ -7,7 +7,8 @@ import org.spectrum3847.RIOdroid.RIOdroid;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.util.logger.Logger;
 
-public class JSONDataReceiver extends DataServerThread{
+public class JSONDataReceiver {
+
 	public enum ConnectionState{
 		PREINIT, STARTING_SERVER, IDLE, START_VISION_APP, STREAMING;
 	}
