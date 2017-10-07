@@ -44,7 +44,8 @@ public class Climber extends Subsystem{
 		IDLE,
 		MANUAL,
 		WAITING_FOR_ROPE,
-		CLIMBING_ENCODER_DISTANCE
+		CLIMBING_ENCODER_DISTANCE,
+		AUTOMATIC_CLIMBING
 	}
 
 	private ClimberState mState;
@@ -72,7 +73,6 @@ public class Climber extends Subsystem{
 	@Override
 	public void update(Commands commands, RobotState robotState) {
 		boolean isNewState = !(mState == commands.wantedClimberState);
-		
 		// Sets mState
 		switch (commands.wantedClimberState) {
 		case IDLE:
@@ -117,6 +117,8 @@ public class Climber extends Subsystem{
 		case CLIMBING_ENCODER_DISTANCE:	//unused
 			// Should never occur because never set by OI
 			break;
+		case AUTOMATIC_CLIMBING:
+			mState = ClimberState.AUTOMATIC_CLIMBING;
 		}
 		// Calculates output
 		switch (mState) {
@@ -134,6 +136,9 @@ public class Climber extends Subsystem{
 			if (isNewState) {
 				mOutput.setPosition(kEncoderTicksToTop, mGains);
 			}
+			break;
+		case AUTOMATIC_CLIMBING:
+			mOutput.setVoltage(6);
 			break;
 		}
 		
