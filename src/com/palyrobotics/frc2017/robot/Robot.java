@@ -3,6 +3,7 @@ package com.palyrobotics.frc2017.robot;
 import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.auto.AutoModeSelector;
 import com.palyrobotics.frc2017.behavior.RoutineManager;
+import com.palyrobotics.frc2017.behavior.routines.AutomaticClimberRoutine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.RobotState;
@@ -46,6 +47,9 @@ public class Robot extends IterativeRobot {
 	// Hardware Updater
 	private HardwareUpdater mHardwareUpdater;
 	
+	private double mStartTime;
+	private boolean startedClimberRoutine = false;
+
 	@Override
 	public void robotInit() {
 		System.out.println("Start robotInit() for "+Constants.kRobotName.toString());
@@ -148,6 +152,8 @@ public class Robot extends IterativeRobot {
 		mHardwareUpdater.updateSensors(robotState);
 		mHardwareUpdater.updateHardware();
 		mRoutineManager.reset(commands);
+		mStartTime = System.currentTimeMillis();
+//		mRoutineManager.addNewRoutine(new AutomaticClimberRoutine());
 		DashboardManager.getInstance().toggleCANTable(true);
 		commands.wantedDriveState = Drive.DriveState.CHEZY;	//switch to chezy after auto ends
 		commands = operatorInterface.updateCommands(commands);
@@ -163,7 +169,11 @@ public class Robot extends IterativeRobot {
 		// Updates commands based on routines
 		mLogger.logRobotThread("Teleop Commands: ", commands);
 		logPeriodic();
-
+		
+		if(System.currentTimeMillis() - mStartTime >= 105000 && !startedClimberRoutine) {
+			mRoutineManager.addNewRoutine(new AutomaticClimberRoutine());
+			startedClimberRoutine = true;
+		}
 		commands = mRoutineManager.update(operatorInterface.updateCommands(commands));
 		mHardwareUpdater.updateSensors(robotState);
 		updateSubsystems();

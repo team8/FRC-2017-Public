@@ -127,17 +127,15 @@ public class OperatorInterface {
 			newCommands.climberStickInput.y = -0.8;
 		} else if (mDriveStick.getRawButton(8) || mDriveStick.getRawButton(10) || mDriveStick.getRawButton(12)) { // 8, 10, 12
 			newCommands.climberStickInput.y = -0.8;
-		} else if (mTurnStick.getRawButton(7) || mDriveStick.getRawButton(9) || mDriveStick.getRawButton(11)) { // 7, 9, 11
-			newCommands.climberStickInput.y = -0.8;
 		} else if (mTurnStick.getRawButton(8) || mDriveStick.getRawButton(10) || mDriveStick.getRawButton(12)) { // 8, 10, 12
 			newCommands.climberStickInput.y = -0.8;
 		}
 
 		// Climber joystick may be set in a virtual sense
-		if (newCommands.climberStickInput.y <= 0.02) {
-			newCommands.wantedClimberState = Climber.ClimberState.MANUAL;
-		} else {
+		if (Math.abs(newCommands.climberStickInput.y) <= 0.02) {
 			newCommands.wantedClimberState = Climber.ClimberState.IDLE;
+		} else {
+			newCommands.wantedClimberState = Climber.ClimberState.MANUAL;
 		}
 		
 		
