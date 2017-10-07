@@ -52,45 +52,28 @@
     <orderEntry type="module-library">
       <library name="networktables">
         <CLASSES>
-          <root url="file://$networktables$" />
+          <root url="jar://$USER_HOME$/wpilib/java/current/lib/NetworkTables.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="file://$networktables$" />
-        </SOURCES>
+        <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library name="opencv">
         <CLASSES>
-          <root url="file://$opencv.sources$" />
+          <root url="jar://$USER_HOME$/wpilib/java/current/lib/opencv.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="file://$opencv.sources$" />
-        </SOURCES>
+        <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library name="cscore">
         <CLASSES>
-          <root url="file://$cscore$" />
+          <root url="jar://$USER_HOME$/wpilib/java/current/lib/cscore.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="file://$cscore$" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="wpilib">
-        <CLASSES>
-          <root url="file://$wpilib$" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="file://$wpilib$" />
-        </SOURCES>
+        <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
@@ -151,5 +134,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="WPILib" level="project" />
   </component>
 </module>

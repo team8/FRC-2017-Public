@@ -7,9 +7,7 @@ package com.team254.lib.trajectory;
 
 import com.team254.lib.trajectory.Trajectory.Segment;
 
-import static com.team254.lib.trajectory.TrajectoryGeneratorTest.test;
-
-import com.team254.lib.util.ChezyMath;
+import com.team254.lib.util.util.ChezyMath;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

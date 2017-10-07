@@ -5,7 +5,7 @@
  */
 package com.team254.lib.trajectory;
 
-import com.team254.lib.util.ChezyMath;
+import com.team254.lib.util.util.ChezyMath;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
