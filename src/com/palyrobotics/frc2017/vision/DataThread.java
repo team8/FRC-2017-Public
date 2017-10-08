@@ -8,26 +8,26 @@ import org.json.simple.parser.ParseException;
 import org.spectrum3847.RIOdroid.RIOdroid;
 
 
-public class DataServerThread extends AbstractVisionThread {
+public class DataThread extends AbstractVisionThread {
 
 	public enum ConnectionState {
 		PRE_INIT, STARTING_SERVER, IDLE, START_VISION_APP, STREAMING
 	}
 
-    protected DataServerThread() {
+    protected DataThread() {
 		super("DataServerThread");
 	}
 
-    private static DataServerThread s_instance;
+    private static DataThread s_instance;
 
     private double m_x_dist;
 
     private ConnectionState m_connectionState;
 
-    public static DataServerThread getInstance() {
+    public static DataThread getInstance() {
 
         if (s_instance == null)
-            s_instance = new DataServerThread();
+            s_instance = new DataThread();
         
         return s_instance;
     }
@@ -69,7 +69,7 @@ public class DataServerThread extends AbstractVisionThread {
 		}
 	}
 
-	private DataServerThread.ConnectionState InitializeServer() {
+	private DataThread.ConnectionState InitializeServer() {
 
 		if(!this.isNexusConnected()){
 //			System.out.println("Error: in JSONDataReceiver.InitializeServer(), " +
@@ -149,63 +149,6 @@ public class DataServerThread extends AbstractVisionThread {
 //					+ "connection timed out");
 //		}
 
-	}
-
-	/**
-	 * Sends command to boot up the vision app
-	 * @return The state after execution
-	 */
-	private DataServerThread.ConnectionState VisionInit(){
-		boolean connected = false;
-		try {
-			// Starts app through adb shell, and stores the returned console message (for debugging)
-			String outp = null;
-			if(!this.mTesting) {
-				outp = RIOdroid.executeCommand(
-						"adb shell am start -n " + Constants.kPackageName + "/" +
-								Constants.kPackageName + "." + Constants.kActivityName);
-			}else{
-				outp = RuntimeExecutor.getInstance().exec(
-						"adb shell am start -n " + Constants.kPackageName + "/" +
-								Constants.kPackageName + "." + Constants.kActivityName);
-			}
-
-			connected = true;
-		}catch (Exception e) {
-			System.out.println("Error: in JSONDataReceiver.VisionInit(), "
-					+ "could not connect.\n" + e.getStackTrace());
-		}
-
-		if(connected) {     // App started successfully
-			m_visionRunning = true;
-			System.out.println("Starting Vision Stream");
-			return JSONDataReceiver.ConnectionState.STREAMING;
-		} else {            // Failed to start app
-			return m_connectionState;
-		}
-	}
-
-	/**
-	 * Streams in the vision data
-	 * @return The state after execution
-	 */
-	private DataServerThread.ConnectionState StreamVision(){
-		if(!m_visionRunning){	// This should never happen
-			System.out.println("Error: in JSONDataReceiver.StreamVision(), "
-					+ "vision program i not running (or has not been initialized inside this program)");
-		}
-
-		switch (m_streamState){
-			case IDLE:
-				System.out.println("Error: in JSONDataReceiver.StreamVision(), "
-						+ "streaming in IDLE state, nothing streaming");
-				break;
-			case JSON:
-				this.extractData(this.StreamJSON());
-				break;
-		}
-
-		return m_connectionState;
 	}
 
 	/**
