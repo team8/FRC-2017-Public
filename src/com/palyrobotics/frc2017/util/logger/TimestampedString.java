@@ -1,31 +1,41 @@
 package com.palyrobotics.frc2017.util.logger;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
+import com.palyrobotics.frc2017.config.Constants;
+
 /**
  * Created by Nihar on 3/13/17.
  * Stores a String with the timestamp on construction
  * Allows data structures to sort the strings by timestamp
  * And then retrieve the String
  * Also automatically adds a newline to the end
+ * 
+ * Updated by Joseph 10/24/2017
+ * Replaced system time with zonedTime using external time zone constant
+ * Still stored as UTC
  */
 public class TimestampedString implements Comparable<TimestampedString> {
 	private String mString;
-	private long mTime;
+	private ZonedDateTime mTime;
 
 	public TimestampedString(String string) {
 		mString = string;
-		mTime = System.currentTimeMillis();
+		mTime = ZonedDateTime.now(ZoneId.of("Z"));
 	}
 
-	public long getTimestamp() {
+	public ZonedDateTime getTimestamp() {
 		return mTime;
 	}
 
 	/**
-	 * Converts the millisecond timestamp to seconds
-	 * @return
+	 * Outputs time as local time format 
+	 * @return Time in requisite format
 	 */
 	public String getTimestampedString() {
-		return (mTime/1000)+": "+mString+"\n";
+		return (mTime.withZoneSameInstant(LoggerConstants.tZone).format(DateTimeFormatter.ISO_LOCAL_TIME))+": "+mString+"\n";
 	}
 
 	@Override
@@ -35,6 +45,6 @@ public class TimestampedString implements Comparable<TimestampedString> {
 
 	@Override
 	public int compareTo(TimestampedString o) {
-		return Long.compare(this.getTimestamp(), o.getTimestamp());
+		return mTime.compareTo(o.getTimestamp());
 	}
 }
