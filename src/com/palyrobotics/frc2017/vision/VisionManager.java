@@ -222,26 +222,27 @@ public class VisionManager implements Runnable{
 		boolean connected = false;
 
 		try {
-			// Initializes RIOdroid usb and RIOadb adb daemon
-			if (!this.mTesting) {
-				RIOdroid.init();
-
-				// Forward the port and start the server socket for vision
-				RIOdroid.executeCommand("adb reverse tcp:" +
-						Constants.kAndroidVisionSocketPort + " tcp:" +
-						Constants.kAndroidVisionSocketPort);
-				System.out.println("Starting VideoManager");
-				//VideoManager.getInstance().start();
-			} else {
-				RuntimeExecutor.getInstance().init();
-
-				// Forward the port and start the server socket for vision
-				RuntimeExecutor.getInstance().exec("adb reverse tcp:" +
-						Constants.kAndroidVisionSocketPort + " tcp:" +
-						Constants.kAndroidVisionSocketPort);
-				System.out.println("Starting VideoManager");
-				//VideoManager.getInstance().start(mTesting);
-			}
+			CommandExecutor.adbServerInit();
+//			// Initializes RIOdroid usb and RIOadb adb daemon
+//			if (!this.mTesting) {
+//				RIOdroid.init();
+//
+//				// Forward the port and start the server socket for vision
+//				RIOdroid.executeCommand("adb reverse tcp:" +
+//						Constants.kAndroidVisionSocketPort + " tcp:" +
+//						Constants.kAndroidVisionSocketPort);
+//				System.out.println("Starting VideoManager");
+//				//VideoManager.getInstance().start();
+//			} else {
+//				RuntimeExecutor.getInstance().init();
+//
+//				// Forward the port and start the server socket for vision
+//				RuntimeExecutor.getInstance().exec("adb reverse tcp:" +
+//						Constants.kAndroidVisionSocketPort + " tcp:" +
+//						Constants.kAndroidVisionSocketPort);
+//				System.out.println("Starting VideoManager");
+//				//VideoManager.getInstance().start(mTesting);
+//			}
 
 			connected = true;
 		} catch (Exception e) {
@@ -313,16 +314,16 @@ public class VisionManager implements Runnable{
 		boolean connected = false;
 		try {
 			// Starts app through adb shell, and stores the returned console message (for debugging)
-			String outp = null;
-			if(!this.mTesting) {
-				outp = RIOdroid.executeCommand(
-						"adb shell am start -n " + Constants.kPackageName + "/" +
-								Constants.kPackageName + "." + Constants.kActivityName);
-			}else{
-				outp = RuntimeExecutor.getInstance().exec(
-						"adb shell am start -n " + Constants.kPackageName + "/" +
-								Constants.kPackageName + "." + Constants.kActivityName);
-			}
+			String outp = CommandExecutor.visionInit();
+//			if(!this.mTesting) {
+//				outp = RIOdroid.executeCommand(
+//						"adb shell am start -n " + Constants.kPackageName + "/" +
+//								Constants.kPackageName + "." + Constants.kActivityName);
+//			}else{
+//				outp = RuntimeExecutor.getInstance().exec(
+//						"adb shell am start -n " + Constants.kPackageName + "/" +
+//								Constants.kPackageName + "." + Constants.kActivityName);
+//			}
 
 			connected = true;
 		}catch (Exception e) {
@@ -367,16 +368,16 @@ public class VisionManager implements Runnable{
 	 * data written to it
 	 */
 	private JSONObject StreamJSON(){
-		String raw_data;
+		String raw_data = CommandExecutor.exec();
 
 		// Read the JSON file which stores the vision data
-		if(!this.mTesting){
-			raw_data = RIOdroid.executeCommand("adb shell run-as "+Constants.kPackageName+" cat /data/data/"+ Constants.kPackageName
-					+ "/files/data.json");
-		}else{
-			raw_data = RuntimeExecutor.getInstance().exec("adb shell run-as "+Constants.kPackageName+" cat /data/data/"+ Constants.kPackageName
-					+ "/files/data.json");
-		}
+//		if(!this.mTesting){
+//			raw_data = RIOdroid.executeCommand("adb shell run-as "+Constants.kPackageName+" cat /data/data/"+ Constants.kPackageName
+//					+ "/files/data.json");
+//		}else{
+//			raw_data = RuntimeExecutor.getInstance().exec("adb shell run-as "+Constants.kPackageName+" cat /data/data/"+ Constants.kPackageName
+//					+ "/files/data.json");
+//		}
 
 		return parseJSON(raw_data);
 	}
@@ -424,12 +425,12 @@ public class VisionManager implements Runnable{
 	}
 	
 	public void setFlash(boolean isFlashOn){
-		String out;
-		if(!mTesting){
-			out = RIOdroid.executeCommand("adb shell am broadcast -a "+Constants.kPackageName+".GET_DATA --es type flash --ez isFlash "+isFlashOn);
-		}else{
-			out = RuntimeExecutor.getInstance().exec("adb shell am broadcast -a "+Constants.kPackageName+".GET_DATA --es type flash --ez isFlash "+isFlashOn);
-		}
+		String out = CommandExecutor.toggleFlash();;
+//		if(!mTesting){
+//			out = RIOdroid.executeCommand("adb shell am broadcast -a "+Constants.kPackageName+".GET_DATA --es type flash --ez isFlash "+isFlashOn);
+//		}else{
+//			out = RuntimeExecutor.getInstance().exec("adb shell am broadcast -a "+Constants.kPackageName+".GET_DATA --es type flash --ez isFlash "+isFlashOn);
+//		}
 	}
 
 	public double getXDist(){
