@@ -22,7 +22,7 @@ interface CommandExecutor{
 		 }
 	 }
 	 
-	 static void adbServerInit() {
+	 static void addServerInit() {
 		// Initializes RIOdroid usb and RIOadb adb daemon
 					if (!isTesting) {
 						RIOdroid.init();

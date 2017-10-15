@@ -222,7 +222,7 @@ public class VisionManager implements Runnable{
 		boolean connected = false;
 
 		try {
-			CommandExecutor.adbServerInit();
+			CommandExecutor.addServerInit();
 //			// Initializes RIOdroid usb and RIOadb adb daemon
 //			if (!this.mTesting) {
 //				RIOdroid.init();
