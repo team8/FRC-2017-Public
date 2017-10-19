@@ -60,6 +60,15 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
         setServerState(ServerState.ATTEMPTING_CONNECTION);
     }
 
+    protected ServerState checkConnection() {
+    	final boolean connected = m_client.isConnected();
+    	
+    	if(!connected) {
+    		log("Lost connection to socket");
+    	}
+    	
+    	return connected ? ServerState.OPEN : ServerState.ATTEMPTING_CONNECTION; 
+    }
     /**
      * Sets the state of the server
      *
@@ -92,14 +101,15 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
     protected void update()
     {
         switch (m_serverState){
-
             case PRE_INIT:
                 log("Thread is not initialized while in update.");
                 break;
-
             case ATTEMPTING_CONNECTION:
                 setServerState(acceptConnection());
                 break;
+			case OPEN:
+				setServerState(checkConnection());
+				break;
         }
     }
 }

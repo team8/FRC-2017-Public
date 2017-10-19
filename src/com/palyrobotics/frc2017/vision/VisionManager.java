@@ -368,7 +368,7 @@ public class VisionManager implements Runnable{
 	 * data written to it
 	 */
 	private JSONObject StreamJSON(){
-		String raw_data = CommandExecutor.exec();
+		String raw_data = CommandExecutor.getJSONPrintOut();
 
 		// Read the JSON file which stores the vision data
 //		if(!this.mTesting){

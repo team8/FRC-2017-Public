@@ -1,19 +1,15 @@
 package com.palyrobotics.frc2017.vision;
 
-import java.util.ArrayList;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.palyrobotics.frc2017.vision.ReceiverSelector.VisionReceiverType;
-import com.palyrobotics.frc2017.vision.util.VisionDataUnit;
 
 public class DataThread extends AbstractVisionThread {
 
 
 	ReceiverSelector mReceiverSelector;
-	ArrayList<VisionDataUnit> mData;
 
 	protected DataThread() {
 		super("DataServerThread");
@@ -40,8 +36,23 @@ public class DataThread extends AbstractVisionThread {
 	@Override
 	protected void update() {
 		String raw_data = mReceiverSelector.getReciever().extractData();
-		JSONObject data = parseJSON(raw_data);
-
+		JSONObject json = parseJSON(raw_data);
+		if(json != null){
+			String state = (String) json.get("state");
+			if(!(state == null) && !state.equals("")){	// Handle based on state
+				if (state.equals("STREAMING")) {
+					// Get image data
+					Number data_x = ((Number) json.get("x_displacement"));
+					Number data_z = ((Number) json.get("z_displacement"));
+					if (data_x != null) {
+						VisionData.setXData(data_x.doubleValue());
+					}
+					if(data_z != null) {
+						VisionData.setZData(data_z.doubleValue());
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -67,28 +78,10 @@ public class DataThread extends AbstractVisionThread {
 		return json;
 	}
 
-	private void extractData(JSONObject json){
-		// Compute based on app state (given in the data)
-		if(json != null){
-			String state = (String) json.get("state");
-			if(!(state == null) && !state.equals("")){	// Handle based on state
-				if (state.equals("STREAMING")) {
-					// Get image data
-					Number data_x = ((Number) json.get("x_displacement"));
-					if (data_x != null) {
-						this.m_x_dist = data_x.doubleValue();
-					}
-				}
-				m_androidState = state;
-			}
-		}
-	}
-
 	@Override
 	protected void tearDown() {
 
 	}
-
 
 
 }

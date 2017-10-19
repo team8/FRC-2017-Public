@@ -1,16 +1,16 @@
 package com.palyrobotics.frc2017.vision;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
-import java.util.ArrayList;
 
 import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.vision.util.VisionDataUnit;
 
 public class SocketReceiver extends AbstractVisionServer implements VisionReceiverBase{
 	ServerSocket mServerSocket;
 
-	protected SocketReceiver(String k_threadName) {
+	public SocketReceiver() {
 		super("Socket Reciever");
 		// TODO Auto-generated constructor stub
 	}
@@ -31,8 +31,19 @@ public class SocketReceiver extends AbstractVisionServer implements VisionReceiv
 
 	@Override
 	public String extractData() {
-		return null;
+		String data = "";
+		try {
+			String line;
+			BufferedReader mReader = new BufferedReader(new InputStreamReader(m_client.getInputStream()));
+			while((line = mReader.readLine()) != null) {
+				data += line + "\n";
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+		return data;
 	}
+	
 
 	@Override
 	protected void tearDown() {

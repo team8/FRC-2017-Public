@@ -57,7 +57,7 @@ interface CommandExecutor{
 	 }
 	 
 	 //first version that seemed to be used
-	 static String exec(){
+	 static String getJSONPrintOut(){
 		 if(!isTesting){
 				return RIOdroid.executeCommand("adb shell run-as "+Constants.kPackageName+
 						" cat /data/data/"+ Constants.kPackageName + "/files/data.json");
