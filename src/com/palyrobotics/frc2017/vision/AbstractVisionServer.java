@@ -10,7 +10,6 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
         PRE_INIT, ATTEMPTING_CONNECTION, OPEN
     }
 
-    protected boolean m_testing = false;
     protected int m_port = 0;
     protected ServerSocket m_server;
     protected Socket m_client;
@@ -33,11 +32,10 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
      * @param k_testing Whether or not we are testing
      * @param k_port The port to connect the server to
      */
-    public void start(final int k_updateRate, final boolean k_testing, final int k_port)
+    public void start(final int k_updateRate, final int k_port)
     {
         super.start(k_updateRate);
 
-        m_testing = k_testing;
         m_port = k_port;
     }
 

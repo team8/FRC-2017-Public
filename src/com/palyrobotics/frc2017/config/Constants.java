@@ -14,6 +14,8 @@ public class Constants extends ConstantsBase {
 	// Android app information
 	public static String kPackageName = "com.frc8.team8vision";
 	public static String kActivityName = "MainActivity";
+	public static String kVisionDataFileName = "data.json";
+	public static String kVisionVideoFileName = "video.json";
 	public static int kAndroidConnectionUpdateRate = 5;	// Update rate in milliseconds
 	public static int kAndroidDataSocketUpdateRate = 100;
 	public static int kAndroidVisionSocketUpdateRate = 10;

@@ -26,8 +26,6 @@ public class HTTPVideoServer extends AbstractVisionServer {
 		return s_instance;
 	}
 
-	private final String k_defaultImagePath = "/home/lvuser/mjpg/frame.jpg", k_defaultImagePathTesting = "FRC-2017-Private/test/com/palyrobotics/frc2017/vision/frame.jpg";
-
 	private byte[] m_defaultImage;
 
 	private HTTPVideoServer() {
@@ -39,16 +37,6 @@ public class HTTPVideoServer extends AbstractVisionServer {
 	public void init(){
 
 		super.init();
-
-		final String k_imagePath = m_testing ? k_defaultImagePathTesting : k_defaultImagePath;
-
-		// Try to read the default image file
-		try {
-			final File imageFile = new File(k_imagePath);
-			m_defaultImage = Files.readAllBytes(imageFile.toPath());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -104,7 +92,7 @@ public class HTTPVideoServer extends AbstractVisionServer {
 			output.println();
 			output.write(data);
 			output.flush();
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -134,20 +122,24 @@ public class HTTPVideoServer extends AbstractVisionServer {
 
 		switch (m_serverState) {
 
-			case OPEN:
-				// Make sure queue has something in it
-				if (AndroidVideoServer.s_frameQueue.size() > 0) {
-					// Get next frame
-					byte[] frame = AndroidVideoServer.s_frameQueue.remove();
-					try {
-						writeImageToServer(frame);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				} else {
-					log("Frame queue is empty!");
+		case OPEN:
+			// Make sure queue has something in it
+			if (AndroidVideoServer.s_frameQueue.size() > 0) {
+				// Get next frame
+				byte[] frame = AndroidVideoServer.s_frameQueue.remove();
+				try {
+					writeImageToServer(frame);
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-				break;
+			} else {
+				log("Frame queue is empty!");
+			}
+			break;
+		case ATTEMPTING_CONNECTION:
+			break;
+		case PRE_INIT:
+			break;
 		}
 	}
 

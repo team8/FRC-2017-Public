@@ -4,7 +4,7 @@ import org.spectrum3847.RIOdroid.RIOdroid;
 
 import com.palyrobotics.frc2017.config.Constants;
 
-interface CommandExecutor{
+public class CommandExecutor{
 	//these should probably be set as something else to start with?
 	 static boolean isTesting = false;
 	 static boolean isFlashOn = false;
@@ -57,13 +57,13 @@ interface CommandExecutor{
 	 }
 	 
 	 //first version that seemed to be used
-	 static String getJSONPrintOut(){
+	 static String catFile(String fileName){
 		 if(!isTesting){
 				return RIOdroid.executeCommand("adb shell run-as "+Constants.kPackageName+
-						" cat /data/data/"+ Constants.kPackageName + "/files/data.json");
+						" cat /data/data/"+ Constants.kPackageName + "/files/" + fileName);
 			}else{
 				return RuntimeExecutor.getInstance().exec("adb shell run-as "+Constants.kPackageName+
-						" cat /data/data/"+ Constants.kPackageName + "/files/data.json");
+						" cat /data/data/"+ Constants.kPackageName + "/files/" + fileName);
 			}
 	 }
 	 

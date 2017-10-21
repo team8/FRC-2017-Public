@@ -35,5 +35,7 @@ public interface VisionReceiverBase {
     }
 
     public abstract String extractData();
-
+    
+    public abstract byte[] extractDataBytes();
+    
 }

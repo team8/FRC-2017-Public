@@ -1,5 +1,7 @@
 package com.palyrobotics.frc2017.vision;
 
+import com.palyrobotics.frc2017.vision.AbstractVisionServer.ServerState;
+
 /**
  * Base class for vision threads
  *
@@ -7,11 +9,17 @@ package com.palyrobotics.frc2017.vision;
  */
 public abstract class AbstractVisionThread implements Runnable {
 
+    public enum ThreadState {
+        PRE_INIT, ATTEMPTING_CONNECTION, OPEN
+    }
+    
     protected double m_timeAlive = 0.0d;
     protected int m_updateRate;
     protected final String k_threadName;
     protected boolean m_isRunning = false;
+    protected ThreadState m_threadState = ThreadState.PRE_INIT;
 
+    
     public double getTimeAlive() { return m_timeAlive; }
     public boolean isRunning() { return m_isRunning; }
 

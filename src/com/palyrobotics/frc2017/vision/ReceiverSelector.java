@@ -3,7 +3,17 @@ package com.palyrobotics.frc2017.vision;
 import java.util.HashMap;
 
 public class ReceiverSelector {
-
+	
+	String fileName;
+	int port;
+	int updateRate;
+	
+	public ReceiverSelector(String fileName, int port, int updateRate) {
+		this.fileName = fileName;
+		this.port = port;
+		this.updateRate = updateRate;
+	}
+	
     public enum VisionReceiverType {
         JSON, SOCKET
     }
@@ -24,10 +34,12 @@ public class ReceiverSelector {
         if(!receiver_map.containsKey(type)){
             switch (type){
                 case JSON:
-                    receiver_map.put(type, new JSONReceiver());
+                    receiver_map.put(type, new JSONReceiver(fileName));
                     break;
                 case SOCKET:
-                    receiver_map.put(type, new SocketReceiver());
+                	SocketReceiver socketReceiver = new SocketReceiver();
+                    receiver_map.put(type, socketReceiver);
+                    socketReceiver.start(updateRate, port);
                     break;
             }
         }

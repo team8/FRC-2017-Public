@@ -62,48 +62,32 @@ import org.json.simple.parser.JSONParser;
  * @author Alvin
  *
  */
-public class VisionManager implements Runnable{
+public class VisionManager extends AbstractVisionThread {
 
 	/**
 	 * State of connection between the roboRIO and nexus
 	 *
 	 * <ul>
-	 *     <li>{@link ConnectionState#PREINIT}</li>
+	 *     <li>{@link ConnectionState#PRE_INIT}</li>
 	 *     <li>{@link ConnectionState#STARTING_SERVER}</li>
 	 *     <li>{@link ConnectionState#IDLE}</li>
 	 *     <li>{@link ConnectionState#START_VISION_APP}</li>
 	 * </ul>
 	 */
 	public enum ConnectionState{
-		PREINIT, STARTING_SERVER, IDLE, START_VISION_APP, STREAMING;
+		PRE_INIT, STARTING_SERVER, IDLE, START_VISION_APP, STREAMING;
 	}
 
-	/**
-	 * State of streaming data from Nexus
-	 *
-	 * <ul>
-	 *     <li>{@link StreamState#IDLE}</li>
-	 *     <li>{@link StreamState#JSON}</li>
-	 * </ul>
-	 */
-	public enum StreamState{
-		IDLE, JSON
-	}
 
 	// Instance and state variables
 	private static VisionManager s_instance;
-	private ConnectionState m_connectionState = ConnectionState.PREINIT;
-	private StreamState m_streamState = StreamState.IDLE;
+	private ConnectionState m_connectionState = ConnectionState.PRE_INIT;
 
 	// Utility variables
-	private double m_secondsAlive = 0;
-	private double m_stateAliveTime = 0;
 	private boolean m_adbServerCreated = false;
 	private boolean m_visionRunning = false;
-	private boolean m_running = false;
 	private boolean mTesting = false;
 
-	private double m_x_dist = 0;
 	private String m_androidState = "NONE";
 	private Object m_android_lock = new Object();
 
@@ -112,11 +96,14 @@ public class VisionManager implements Runnable{
 	 * Creates an VisionManager instance
 	 * Cannot be called outside as a Singleton
 	 */
-	private VisionManager(){}
+	private VisionManager(){
+		super("Vision Manager");
+	}
 
 	/**
 	 * @return The instance of the ACH
 	 */
+
 	public static VisionManager getInstance(){
 		if(s_instance == null){
 			s_instance = new VisionManager();
@@ -133,51 +120,21 @@ public class VisionManager implements Runnable{
 	}
 
 	/**
-	 * Sets the state of streaming between the Nexus
-	 * @param state State to switch to
-	 */
-	private void SetStreamState(StreamState state){
-		if(m_streamState.equals(state)){
-			System.out.println("Warning: in VisionManager.SetStreamState(), "
-					+ "no chane to write state");
-		}else{
-			m_streamState = state;
-		}
-	}
-
-	/**
-	 * Starts the VisionManager thread
-	 */
-	public void start(){
-		this.start(false);
-	}
-
-	/**
 	 * Starts the VisionManager thread
 	 * <br>(accounts for running program for testing)
 	 * @param isTesting
 	 */
-	public void start(boolean isTesting){
+	@Override
+	public void init() {
+		DataThread.getInstance().start(Constants.kAndroidDataSocketUpdateRate);
 
-		if(m_connectionState != ConnectionState.PREINIT) {    // This should never happen
+		if(m_connectionState != ConnectionState.PRE_INIT) {    // This should never happen
 			System.out.println("Error: in VisionManager.start(), "
 					+ "connection is already initialized");
 		}
 
-		if(m_running){	// This should never happen
-			System.out.println("Error: in VisionManager.start(), "
-					+ "thread is already running");
-		}
-
 		// Initialize Thread Variables
 		this.SetState(ConnectionState.STARTING_SERVER);
-		m_running = true;
-		m_streamState = StreamState.JSON;
-		this.mTesting = isTesting;
-
-		System.out.println("Starting Thread: VisionManager ");
-		(new Thread(this, "VisionManager")).start();
-
 	}
 
 	/**
@@ -187,8 +144,8 @@ public class VisionManager implements Runnable{
 	private ConnectionState InitializeServer() {
 
 		if(!this.isNexusConnected()){
-//			System.out.println("Error: in VisionManager.InitializeServer(), " +
-//					"nexus is not connected");
+			//			System.out.println("Error: in VisionManager.InitializeServer(), " +
+			//					"nexus is not connected");
 			return this.m_connectionState;
 		}
 
@@ -223,26 +180,26 @@ public class VisionManager implements Runnable{
 
 		try {
 			CommandExecutor.addServerInit();
-//			// Initializes RIOdroid usb and RIOadb adb daemon
-//			if (!this.mTesting) {
-//				RIOdroid.init();
-//
-//				// Forward the port and start the server socket for vision
-//				RIOdroid.executeCommand("adb reverse tcp:" +
-//						Constants.kAndroidVisionSocketPort + " tcp:" +
-//						Constants.kAndroidVisionSocketPort);
-//				System.out.println("Starting VideoManager");
-//				//VideoManager.getInstance().start();
-//			} else {
-//				RuntimeExecutor.getInstance().init();
-//
-//				// Forward the port and start the server socket for vision
-//				RuntimeExecutor.getInstance().exec("adb reverse tcp:" +
-//						Constants.kAndroidVisionSocketPort + " tcp:" +
-//						Constants.kAndroidVisionSocketPort);
-//				System.out.println("Starting VideoManager");
-//				//VideoManager.getInstance().start(mTesting);
-//			}
+			//			// Initializes RIOdroid usb and RIOadb adb daemon
+			//			if (!this.mTesting) {
+			//				RIOdroid.init();
+			//
+			//				// Forward the port and start the server socket for vision
+			//				RIOdroid.executeCommand("adb reverse tcp:" +
+			//						Constants.kAndroidVisionSocketPort + " tcp:" +
+			//						Constants.kAndroidVisionSocketPort);
+			//				System.out.println("Starting VideoManager");
+			//				//VideoManager.getInstance().start();
+			//			} else {
+			//				RuntimeExecutor.getInstance().init();
+			//
+			//				// Forward the port and start the server socket for vision
+			//				RuntimeExecutor.getInstance().exec("adb reverse tcp:" +
+			//						Constants.kAndroidVisionSocketPort + " tcp:" +
+			//						Constants.kAndroidVisionSocketPort);
+			//				System.out.println("Starting VideoManager");
+			//				//VideoManager.getInstance().start(mTesting);
+			//			}
 
 			connected = true;
 		} catch (Exception e) {
@@ -259,11 +216,11 @@ public class VisionManager implements Runnable{
 			Logger.getInstance().logRobotThread("Failed to start adb server");
 		}
 
-//		// Let it retry connection for 10 seconds, then give in
-//		if (m_secondsAlive - m_stateAliveTime > 10 && !connected) {
-//			System.out.println("Error: in VisionManager.InitializeServer(), "
-//					+ "connection timed out");
-//		}
+		//		// Let it retry connection for 10 seconds, then give in
+		//		if (m_secondsAlive - m_stateAliveTime > 10 && !connected) {
+		//			System.out.println("Error: in VisionManager.InitializeServer(), "
+		//					+ "connection timed out");
+		//		}
 
 	}
 
@@ -271,11 +228,11 @@ public class VisionManager implements Runnable{
 	 * Starts up the vision app
 	 */
 	public void StartVisionApp(){
-//		if(!m_adbServerCreated){    // No abd server, can't start app
-//			System.out.println("Warning: on call VisionManager.StartVisionApp(), " +
-//					"adb server not started, abandoning app startup");
-////			return;
-//		}
+		//		if(!m_adbServerCreated){    // No abd server, can't start app
+		//			System.out.println("Warning: on call VisionManager.StartVisionApp(), " +
+		//					"adb server not started, abandoning app startup");
+		////			return;
+		//		}
 
 		if(m_visionRunning){	// This should never happen, but easily can due to outside calling
 			System.out.println("Warning: On call VisionManager.StartVisionApp(), "
@@ -313,22 +270,12 @@ public class VisionManager implements Runnable{
 	private ConnectionState VisionInit(){
 		boolean connected = false;
 		try {
-			// Starts app through adb shell, and stores the returned console message (for debugging)
 			String outp = CommandExecutor.visionInit();
-//			if(!this.mTesting) {
-//				outp = RIOdroid.executeCommand(
-//						"adb shell am start -n " + Constants.kPackageName + "/" +
-//								Constants.kPackageName + "." + Constants.kActivityName);
-//			}else{
-//				outp = RuntimeExecutor.getInstance().exec(
-//						"adb shell am start -n " + Constants.kPackageName + "/" +
-//								Constants.kPackageName + "." + Constants.kActivityName);
-//			}
 
 			connected = true;
-		}catch (Exception e) {
-			System.out.println("Error: in VisionManager.VisionInit(), "
-					+ "could not connect.\n" + e.getStackTrace());
+		} catch (Exception e) {
+			log("Could not connect in initialization.");
+			e.printStackTrace();
 		}
 
 		if(connected) {     // App started successfully
@@ -340,109 +287,11 @@ public class VisionManager implements Runnable{
 		}
 	}
 
-	/**
-	 * Streams in the vision data
-	 * @return The state after execution
-	 */
-	private ConnectionState StreamVision(){
-		if(!m_visionRunning){	// This should never happen
-			System.out.println("Error: in VisionManager.StreamVision(), "
-					+ "vision program i not running (or has not been initialized inside this program)");
-		}
+	public void setFlash(boolean isFlashOn) {
 
-		switch (m_streamState){
-			case IDLE:
-				System.out.println("Error: in VisionManager.StreamVision(), "
-						+ "streaming in IDLE state, nothing streaming");
-				break;
-			case JSON:
-				this.extractData(this.StreamJSON());
-				break;
-		}
-
-		return m_connectionState;
+		String out = CommandExecutor.toggleFlash();
 	}
 
-	/**
-	 * Streams vision data via pulling a JSON file with
-	 * data written to it
-	 */
-	private JSONObject StreamJSON(){
-		String raw_data = CommandExecutor.getJSONPrintOut();
-
-		// Read the JSON file which stores the vision data
-//		if(!this.mTesting){
-//			raw_data = RIOdroid.executeCommand("adb shell run-as "+Constants.kPackageName+" cat /data/data/"+ Constants.kPackageName
-//					+ "/files/data.json");
-//		}else{
-//			raw_data = RuntimeExecutor.getInstance().exec("adb shell run-as "+Constants.kPackageName+" cat /data/data/"+ Constants.kPackageName
-//					+ "/files/data.json");
-//		}
-
-		return parseJSON(raw_data);
-	}
-
-	/**
-	 * Computes parsing of streamed data (for now just prints to console)
-	 * @param raw_data Raw JSON formatted data (String)
-	 */
-	private JSONObject parseJSON(String raw_data){
-		if(raw_data == null  || raw_data.equals("") || raw_data.equals("error: no devices/emulators found")){
-			return null;
-		}
-
-		// Create JSONObject from the raw String data
-		JSONObject json = null;
-
-		try {
-			JSONParser parser = new JSONParser();
-			json = (JSONObject) parser.parse(raw_data);
-		} catch (ParseException e) {
-			// This is spammy
-//			e.printStackTrace();
-		}
-
-		return json;
-	}
-
-	private void extractData(JSONObject json){
-		// Compute based on app state (given in the data)
-		if(json != null){
-			String state = (String) json.get("state");
-			if(!(state == null) && !state.equals("")){	// Handle based on state
-				synchronized (m_android_lock) {
-					if (state.equals("STREAMING")) {
-						// Get image data
-						Number data_x = ((Number) json.get("x_displacement"));
-						if (data_x != null) {
-							this.m_x_dist = data_x.doubleValue();
-						}
-					}
-					m_androidState = state;
-				}
-			}
-		}
-	}
-	
-	public void setFlash(boolean isFlashOn){
-		String out = CommandExecutor.toggleFlash();;
-//		if(!mTesting){
-//			out = RIOdroid.executeCommand("adb shell am broadcast -a "+Constants.kPackageName+".GET_DATA --es type flash --ez isFlash "+isFlashOn);
-//		}else{
-//			out = RuntimeExecutor.getInstance().exec("adb shell am broadcast -a "+Constants.kPackageName+".GET_DATA --es type flash --ez isFlash "+isFlashOn);
-//		}
-	}
-
-	public double getXDist(){
-		if(!m_visionRunning) {
-//			System.out.println("Error in VisionManager.getXDist(), " +
-//					"no connection to vision app, returning default/last valid value");
-		} else if(!m_androidState.equals("STREAMING")){
-//			System.out.println("Warning in VisionManager.getXDist(), " +
-//					"not streaming, android state is "+m_androidState+", returning last valid x_distance");
-		}
-		return m_x_dist;
-	}
 	public boolean isNexusConnected(){
 		boolean hasDevice = false;
 		String[] outp = RuntimeExecutor.getInstance().exec("adb devices").split("\\n");
@@ -454,7 +303,8 @@ public class VisionManager implements Runnable{
 	}
 
 	public boolean isAppStarted(){
-		JSONObject json = this.StreamJSON();
+		String data = DataThread.getInstance().mReceiverSelector.getReciever().extractData();
+		JSONObject json = DataThread.getInstance().parseJSON(data);
 
 		if (json != null) {
 			String state = (String) json.get("state");
@@ -477,44 +327,41 @@ public class VisionManager implements Runnable{
 	 */
 	@Override
 	public void run() {
-		while(m_running){
-			ConnectionState initState = m_connectionState;
-			switch(m_connectionState){
 
-				case PREINIT:	// Shouldn't happen, but can due to error
-					System.out.println("Error: in VisionManager.run(), "
-							+ "thread running on preinit state");
-					break;
+		switch(m_connectionState){
 
-				case STARTING_SERVER:	// Triggered by start(), should be called externally
-					this.SetState(this.InitializeServer());
-					break;
+		case PRE_INIT:	// Shouldn't happen, but can due to error
+			System.out.println("Error: in VisionManager.run(), "
+					+ "thread running on preinit state");
+			break;
 
-				case START_VISION_APP:	// Triggered by StartVisionApp(), should be called externally
-					this.SetState(this.VisionInit());
-					break;
+		case STARTING_SERVER:	// Triggered by start(), should be called externally
+			this.SetState(this.InitializeServer());
+			break;
 
-				case STREAMING:
-					this.SetState(this.StreamVision());
-					break;
+		case START_VISION_APP:	// Triggered by StartVisionApp(), should be called externally
+			this.SetState(this.VisionInit());
+			break;
 
-				case IDLE:
-					break;
-			}
+		case STREAMING:
+			this.SetState(this.StreamVision());
+			break;
 
-			// Reset state start time if state changed
-			if (!initState.equals(m_connectionState)) {
-				m_stateAliveTime = m_secondsAlive;
-			}
-
-			// Handle thread sleeping, sleep for set constant update delay
-			try {
-				Thread.sleep(Constants.kAndroidConnectionUpdateRate);
-				m_secondsAlive += Constants.kAndroidConnectionUpdateRate/1000.0;
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+		case IDLE:
+			break;
 		}
+	}
+
+	@Override
+	protected void update() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void tearDown() {
+		// TODO Auto-generated method stub
+
 	}
 
 }
