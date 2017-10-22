@@ -1,12 +1,14 @@
 package com.palyrobotics.frc2017.vision;
 
+import com.palyrobotics.frc2017.config.Constants;
+
 /**
  * Created by Alvin on 2/15/2017.
  */
 public class AndroidComputerTest {
 
 	public static void main(String[] args) throws InterruptedException {
-		VisionManager.getInstance().start(true);
+		VisionManager.getInstance().start(Constants.kAndroidConnectionUpdateRate,true);
 //		VisionManager.getInstance().StartVisionApp();
 //		String inp = RuntimeExecutor.getInstance().exec("adb devices");
 //		String[] lines = inp.split("\\n");
@@ -19,7 +21,7 @@ public class AndroidComputerTest {
 
 		while(true){
 			if (VisionManager.getInstance().isAppStarted()) {
-				System.out.println(VisionManager.getInstance().getXDist());
+				System.out.println(VisionData.getXData());
 			}
 			Thread.sleep(500);
 		}

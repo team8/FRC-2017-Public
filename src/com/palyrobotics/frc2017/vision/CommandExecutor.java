@@ -22,6 +22,10 @@ public class CommandExecutor{
 		 }
 	 }
 	 
+	 static void setTesting(boolean testing) {
+		 isTesting = testing;
+	 }
+	 
 	 static void addServerInit() {
 		// Initializes RIOdroid usb and RIOadb adb daemon
 					if (!isTesting) {

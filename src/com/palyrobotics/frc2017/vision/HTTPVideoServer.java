@@ -45,7 +45,6 @@ public class HTTPVideoServer extends AbstractVisionServer {
 	 * @throws IOException Thrown by socket
 	 */
 	public void writeImageToServer(byte[] data) throws IOException {
-
 		if (m_client == null) {
 			log("Client is null somehow. Aborting...");
 			setServerState(ServerState.ATTEMPTING_CONNECTION);
@@ -124,9 +123,9 @@ public class HTTPVideoServer extends AbstractVisionServer {
 
 		case OPEN:
 			// Make sure queue has something in it
-			if (AndroidVideoServer.s_frameQueue.size() > 0) {
+			if (VisionData.getVideoQueue().size() > 0) {
 				// Get next frame
-				byte[] frame = AndroidVideoServer.s_frameQueue.remove();
+				byte[] frame = VisionData.getVideoQueue().remove();
 				try {
 					writeImageToServer(frame);
 				} catch (IOException e) {

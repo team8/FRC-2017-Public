@@ -5,6 +5,10 @@ import org.json.simple.parser.ParseException;
 import org.spectrum3847.RIOdroid.RIOdroid;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.util.logger.Logger;
+import com.palyrobotics.frc2017.vision.ReceiverSelector.VisionReceiverType;
+import com.palyrobotics.frc2017.vision.util.VisionUtil;
+
+import java.io.IOException;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -84,13 +88,10 @@ public class VisionManager extends AbstractVisionThread {
 	private ConnectionState m_connectionState = ConnectionState.PRE_INIT;
 
 	// Utility variables
+	private DataReceiverBase mReceiverBaseVideo;
+	private DataReceiverBase mReceiverBaseData;
 	private boolean m_adbServerCreated = false;
 	private boolean m_visionRunning = false;
-	private boolean mTesting = false;
-
-	private String m_androidState = "NONE";
-	private Object m_android_lock = new Object();
-
 
 	/**
 	 * Creates an VisionManager instance
@@ -119,6 +120,16 @@ public class VisionManager extends AbstractVisionThread {
 		m_connectionState = state;
 	}
 
+	@Override
+	@Deprecated
+	public void start(int updateRate) {
+		super.start(updateRate);
+	}
+	
+	public void start(int updateRate, boolean isTesting) {
+		this.start(updateRate);
+		CommandExecutor.setTesting(isTesting);
+	}
 	/**
 	 * Starts the VisionManager thread
 	 * <br>(accounts for running program for testing)
@@ -126,8 +137,10 @@ public class VisionManager extends AbstractVisionThread {
 	 */
 	@Override
 	public void init() {
-		DataThread.getInstance().start(Constants.kAndroidDataSocketUpdateRate);
-
+		mReceiverBaseData.start(Constants.kAndroidDataSocketUpdateRate, VisionReceiverType.JSON);
+		mReceiverBaseVideo.start(Constants.kAndroidVisionSocketUpdateRate, VisionReceiverType.SOCKET);
+		HTTPVideoServer.getInstance().start(Constants.kMJPEGVisionSocketUpdateRate, Constants.kMJPEGServerSocketPort);
+		
 		if(m_connectionState != ConnectionState.PRE_INIT) {    // This should never happen
 			System.out.println("Error: in VisionManager.start(), "
 					+ "connection is already initialized");
@@ -180,27 +193,6 @@ public class VisionManager extends AbstractVisionThread {
 
 		try {
 			CommandExecutor.addServerInit();
-			//			// Initializes RIOdroid usb and RIOadb adb daemon
-			//			if (!this.mTesting) {
-			//				RIOdroid.init();
-			//
-			//				// Forward the port and start the server socket for vision
-			//				RIOdroid.executeCommand("adb reverse tcp:" +
-			//						Constants.kAndroidVisionSocketPort + " tcp:" +
-			//						Constants.kAndroidVisionSocketPort);
-			//				System.out.println("Starting VideoManager");
-			//				//VideoManager.getInstance().start();
-			//			} else {
-			//				RuntimeExecutor.getInstance().init();
-			//
-			//				// Forward the port and start the server socket for vision
-			//				RuntimeExecutor.getInstance().exec("adb reverse tcp:" +
-			//						Constants.kAndroidVisionSocketPort + " tcp:" +
-			//						Constants.kAndroidVisionSocketPort);
-			//				System.out.println("Starting VideoManager");
-			//				//VideoManager.getInstance().start(mTesting);
-			//			}
-
 			connected = true;
 		} catch (Exception e) {
 			System.out.println("Error: in VisionManager.InitializeServer(), "
@@ -215,13 +207,6 @@ public class VisionManager extends AbstractVisionThread {
 			System.out.println("Failed to start adb server");
 			Logger.getInstance().logRobotThread("Failed to start adb server");
 		}
-
-		//		// Let it retry connection for 10 seconds, then give in
-		//		if (m_secondsAlive - m_stateAliveTime > 10 && !connected) {
-		//			System.out.println("Error: in VisionManager.InitializeServer(), "
-		//					+ "connection timed out");
-		//		}
-
 	}
 
 	/**
@@ -303,18 +288,22 @@ public class VisionManager extends AbstractVisionThread {
 	}
 
 	public boolean isAppStarted(){
-		String data = DataThread.getInstance().mReceiverSelector.getReciever().extractData();
-		JSONObject json = DataThread.getInstance().parseJSON(data);
+		String data;
+		try {
+			data = mReceiverBaseData.mReceiverSelector.getReciever().extractData();
+			JSONObject json = VisionUtil.parseJSON(data);
 
-		if (json != null) {
-			String state = (String) json.get("state");
-			if (state != null && !state.equals("")) {
-				if(state.equals("STREAMING")){
-					return true;
+			if (json != null) {
+				String state = (String) json.get("state");
+				if (state != null && !state.equals("")) {
+					if(state.equals("STREAMING")){
+						return true;
+					}
 				}
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-
 		return false;
 	}
 
@@ -326,7 +315,7 @@ public class VisionManager extends AbstractVisionThread {
 	 * Updates the thread at {@link Constants#kAndroidConnectionUpdateRate} ms
 	 */
 	@Override
-	public void run() {
+	public void update() {
 
 		switch(m_connectionState){
 
@@ -344,20 +333,13 @@ public class VisionManager extends AbstractVisionThread {
 			break;
 
 		case STREAMING:
-			this.SetState(this.StreamVision());
 			break;
-
+			
 		case IDLE:
 			break;
 		}
 	}
-
-	@Override
-	protected void update() {
-		// TODO Auto-generated method stub
-
-	}
-
+	
 	@Override
 	protected void tearDown() {
 		// TODO Auto-generated method stub

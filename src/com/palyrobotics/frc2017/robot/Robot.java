@@ -11,6 +11,7 @@ import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.archive.SubsystemLooper;
 import com.palyrobotics.frc2017.util.logger.Logger;
+import com.palyrobotics.frc2017.vision.VisionData;
 import com.palyrobotics.frc2017.vision.VisionManager;
 import com.palyrobotics.frc2017.robot.team254.lib.util.Looper;
 
@@ -52,7 +53,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		System.out.println("Start robotInit() for "+Constants.kRobotName.toString());
 		DashboardManager.getInstance().robotInit();
-		VisionManager.getInstance().start();
+		VisionManager.getInstance().start(Constants.kAndroidConnectionUpdateRate, false);
 		System.out.println("Finished starting");
 		mLogger.setFileName("SF");
 		mLogger.start();
@@ -140,7 +141,7 @@ public class Robot extends IterativeRobot {
 //		System.out.println("Talon mode:"+HardwareAdapter.getInstance().getSlider().sliderTalon.getControlMode());
 		//		logPeriodic();
 //		System.out.println(robotState.sliderEncoder);
-		mLogger.logRobotThread("Nexus xdist: "+ VisionManager.getInstance().getXDist());
+		mLogger.logRobotThread("Nexus xdist: "+ VisionData.getXData());
 		commands = mRoutineManager.update(commands);
 	}
 

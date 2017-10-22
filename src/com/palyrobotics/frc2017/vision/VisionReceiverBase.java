@@ -34,8 +34,8 @@ public interface VisionReceiverBase {
         }
     }
 
-    public abstract String extractData();
+    public abstract String extractData() throws IOException;
     
-    public abstract byte[] extractDataBytes();
+    public abstract byte[] extractDataBytes() throws IOException;
     
 }
