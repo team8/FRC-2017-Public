@@ -9,18 +9,23 @@
     <libelement value="jar://$MODULE_DIR$/res/junit-4.12.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/RIOdroid.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/navx_frc.jar!/" />
-    <varelement var="file://$networktables$" value="networktables" />
-    <varelement var="file://$networktables$" kind="src:" value="/networktables.sources" />
-    <varelement var="file://$opencv.sources$" value="opencv" />
-    <varelement var="file://$opencv.sources$" kind="src:" value="/opencv.sources" />
-    <varelement var="file://$cscore$" value="cscore" />
-    <varelement var="file://$cscore$" kind="src:" value="/cscore.sources" />
-    <varelement var="file://$wpilib$" value="wpilib" />
-    <varelement var="file://$wpilib$" kind="src:" value="wpilib.sources" />
+    <varelement var="file://$MODULE_DIR$/build/jars/NetworkTables.jar" value="networktables" />
+    <varelement var="file://$MODULE_DIR$/build/jars/NetworkTables.jar" kind="src:" value="/networktables.sources" />
+    <varelement var="file://$MODULE_DIR$/build/jars/opencv.jar" value="opencv" />
+    <varelement var="file://$MODULE_DIR$/build/jars/opencv.jar" kind="src:" value="/opencv.sources" />
+    <varelement var="file://$MODULE_DIR$/build/jars/cscore.jar" value="cscore" />
+    <varelement var="file://$MODULE_DIR$/build/jars/cscore.jar" kind="src:" value="/cscore.sources" />
+    <varelement var="file://$MODULE_DIR$/build/jars/WPILib.jar" value="wpilib" />
+    <varelement var="file://$MODULE_DIR$/build/jars/WPILib.jar" kind="src:" value="wpilib.sources" />
     <src_description expected_position="0">
       <src_folder value="file://$MODULE_DIR$/src" expected_position="0" />
       <src_folder value="file://$MODULE_DIR$/test" expected_position="1" />
     </src_description>
+  </component>
+  <component name="FacetManager">
+    <facet type="FRC_FACET" name="FRC">
+      <configuration />
+    </facet>
   </component>
   <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/bin" />
@@ -52,44 +57,44 @@
     <orderEntry type="module-library">
       <library name="networktables">
         <CLASSES>
-          <root url="file://$networktables$" />
+          <root url="file://$MODULE_DIR$/build/jars/NetworkTables.jar" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="file://$networktables$" />
+          <root url="file://$MODULE_DIR$/build/jars/NetworkTables.jar" />
         </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library name="opencv">
         <CLASSES>
-          <root url="file://$opencv.sources$" />
+          <root url="file://$MODULE_DIR$/build/jars/opencv.jar" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="file://$opencv.sources$" />
+          <root url="file://$MODULE_DIR$/build/jars/opencv.jar" />
         </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library name="cscore">
         <CLASSES>
-          <root url="file://$cscore$" />
+          <root url="file://$MODULE_DIR$/build/jars/cscore.jar" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="file://$cscore$" />
+          <root url="file://$MODULE_DIR$/build/jars/cscore.jar" />
         </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library name="wpilib">
         <CLASSES>
-          <root url="file://$wpilib$" />
+          <root url="file://$MODULE_DIR$/build/jars/WPILib.jar" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="file://$wpilib$" />
+          <root url="file://$MODULE_DIR$/build/jars/WPILib.jar" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -149,6 +154,38 @@
         </CLASSES>
         <JAVADOC />
         <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="WPILib Libraries">
+        <CLASSES>
+          <root url="file://$USER_HOME$/wpilib/java/current/lib" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="file://$USER_HOME$/wpilib/java/current/lib" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="file://$USER_HOME$/wpilib/java/current/lib" />
+        </SOURCES>
+        <jarDirectory url="file://$USER_HOME$/wpilib/java/current/lib" recursive="true" />
+        <jarDirectory url="file://$USER_HOME$/wpilib/java/current/lib" recursive="true" type="JAVADOC" />
+        <jarDirectory url="file://$USER_HOME$/wpilib/java/current/lib" recursive="true" type="SOURCES" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="WPILib User Lib Directory">
+        <CLASSES>
+          <root url="file://$USER_HOME$/wpilib/user/java/lib" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="file://$USER_HOME$/wpilib/user/java/lib" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="file://$USER_HOME$/wpilib/user/java/lib" />
+        </SOURCES>
+        <jarDirectory url="file://$USER_HOME$/wpilib/user/java/lib" recursive="true" />
+        <jarDirectory url="file://$USER_HOME$/wpilib/user/java/lib" recursive="true" type="JAVADOC" />
+        <jarDirectory url="file://$USER_HOME$/wpilib/user/java/lib" recursive="true" type="SOURCES" />
       </library>
     </orderEntry>
   </component>

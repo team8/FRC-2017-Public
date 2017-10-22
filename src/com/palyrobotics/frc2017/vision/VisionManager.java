@@ -88,8 +88,8 @@ public class VisionManager extends AbstractVisionThread {
 	private ConnectionState m_connectionState = ConnectionState.PRE_INIT;
 
 	// Utility variables
-	private DataReceiverBase mReceiverBaseVideo;
-	private DataReceiverBase mReceiverBaseData;
+	private DataReceiverBase mReceiverBaseVideo = new VideoReceiver();
+	private DataReceiverBase mReceiverBaseData = new DataThread();
 	private boolean m_adbServerCreated = false;
 	private boolean m_visionRunning = false;
 
