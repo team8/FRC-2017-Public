@@ -17,7 +17,6 @@ import com.palyrobotics.frc2017.util.archive.CheesyDriveHelper;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.palyrobotics.frc2017.util.archive.SubsystemLoop;
 import com.team254.lib.trajectory.Path;
-import com.team254.lib.trajectory.Trajectory;
 
 /**
  * Represents the drivetrain

@@ -22,6 +22,11 @@ public class Constants extends ConstantsBase {
 	public static int kAndroidVisionSocketPort = 8009;
 	public static int kMJPEGServerSocketPort = 1180;
 
+	// Adaptive Pure Pursuit Controller
+
+	public static double kPathFollowingMaxAccel = 80.0;
+	public static double kPathFollowingMaxVel = 120.0;
+
 	// Cheesy Drive
 
 	//Sensitivities for how fast non-quickturn turning is
