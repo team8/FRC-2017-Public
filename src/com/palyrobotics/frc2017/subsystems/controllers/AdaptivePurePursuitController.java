@@ -1,11 +1,15 @@
 package com.palyrobotics.frc2017.subsystems.controllers;
 
+import com.ctre.CANTalon;
 import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.RobotPosition;
+import com.palyrobotics.frc2017.config.Gains;
+import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.robot.RobotPosition;
 import com.palyrobotics.frc2017.subsystems.Drive;
+import com.palyrobotics.frc2017.util.CANTalonOutput;
+import com.palyrobotics.frc2017.util.Pose;
+import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.team254.lib.trajectory.*;
-import com.team254.lib.util.DriveSignal;
-import com.team254.lib.util.Pose;
 import edu.wpi.first.wpilibj.Timer;
 
 import java.util.Optional;
@@ -170,21 +174,25 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
             double scaling = Constants.kPathFollowingMaxVel / max_vel;
             setpoint = new Kinematics.DriveVelocity(setpoint.left * scaling, setpoint.right * scaling);
         }
-        return new DriveSignal(setpoint.left, setpoint.right);
+
+        final CANTalonOutput
+            left  = new CANTalonOutput(CANTalon.TalonControlMode.PercentVbus, new Gains(0, 0, 0, 0, 0, 0), setpoint.left ),
+            right = new CANTalonOutput(CANTalon.TalonControlMode.PercentVbus, new Gains(0, 0, 0, 0, 0, 0), setpoint.right);
+
+        return new DriveSignal(left, right);
     }
-    
-	@Override
-	public DriveSignal update(Pose pose) {
-		return updatePathFollower();
-	}
 
-	@Override
-	public Pose getCurrentSetpoint() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public DriveSignal update(RobotState state) {
+        return updatePathFollower();
+    }
 
-	@Override
+    @Override
+    public Pose getSetpoint() {
+        return null;
+    }
+
+    @Override
 	public boolean onTarget() {
 		// TODO Auto-generated method stub
 		return false;

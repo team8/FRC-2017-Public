@@ -50,6 +50,11 @@ public class Constants extends ConstantsBase {
 //	 //Only set to TRUE when in a match
 //	 public static final boolean compStatus = false;
 
+	// Adaptive Pure Pursuit Controller
+
+	public static double kPathFollowingMaxAccel = 80.0;
+	public static double kPathFollowingMaxVel = 120.0;
+
 	// Cheesy Drive
 
 	//Sensitivities for how fast non-quickturn turning is
