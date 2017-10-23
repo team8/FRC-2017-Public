@@ -7,6 +7,7 @@ import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
+
 import java.util.HashMap;
 import java.util.Optional;
 

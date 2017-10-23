@@ -1,11 +1,10 @@
 package com.palyrobotics.frc2017.vision;
 
-import java.io.IOException;
-
-import org.json.simple.JSONObject;
-
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.vision.util.VisionUtil;
+import org.json.simple.JSONObject;
+
+import java.io.IOException;
 
 public class DataThread extends DataReceiverBase {
 

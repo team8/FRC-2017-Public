@@ -1,12 +1,10 @@
 package com.palyrobotics.frc2017.vision;
 
 import com.palyrobotics.frc2017.vision.util.DataExistsCallback;
-import com.palyrobotics.frc2017.vision.util.VisionDataUnit;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public interface VisionReceiverBase {
 

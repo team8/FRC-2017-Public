@@ -1,9 +1,5 @@
 package com.palyrobotics.frc2017.vision.util;
 
-import com.palyrobotics.frc2017.vision.VisionData;
-
-import java.util.concurrent.locks.Lock;
-
 public class SnychronizedVisionDataUnit<T> extends VisionDataUnit<T> {
 
     private ReadWriteLock mLock;

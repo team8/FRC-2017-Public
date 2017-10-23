@@ -19,7 +19,8 @@ public class AndroidVideoServer extends AbstractVisionServer {
 
 		super("Android Video Server");
 
-		byte[] imageInBytes = null;
+		byte[] imageInBytes;
+		imageInBytes = null;
 
 		try {
 			BufferedImage image = ImageIO.read(new File("default.jpeg"));
