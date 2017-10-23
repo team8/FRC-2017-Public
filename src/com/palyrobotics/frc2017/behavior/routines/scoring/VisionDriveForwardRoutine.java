@@ -8,7 +8,7 @@ import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.subsystems.Subsystem;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
-import com.palyrobotics.frc2017.vision.AndroidConnectionHelper;
+import com.palyrobotics.frc2017.vision.VisionData;
 
 /**
  * Created by EricLiu on 9/5/17.
@@ -51,11 +51,15 @@ public class VisionDriveForwardRoutine extends Routine {
 
         this.startTime = System.currentTimeMillis();
 
-        forwardDist = AndroidConnectionHelper.getInstance().getZDist();
+        if(VisionData.getZData().exists()) {
+            forwardDist = VisionData.getZDataValue();
+        } else {
+            forwardDist = AutoDistances.kVisionDistanceInches;
+        }
 
         if(forwardDist > Constants.kMaxVisionZ || forwardDist < Constants.kMinVisionZ) {
             System.out.println("Faulty Vision Z Dist, reverting to hard-coded value");
-            forwardDist = AutoDistances.kVisionDistanceInches - 0.5*Constants.kRobotLengthInches + Constants.kDriveForwardBufferInches;
+            forwardDist = AutoDistances.kVisionDistanceInches - 0.5*Constants.kRobotLengthInches;
         }
 
         forwardDist += Constants.kDriveForwardBufferInches;

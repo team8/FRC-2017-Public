@@ -1,6 +1,7 @@
 package com.palyrobotics.frc2017.vision;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintStream;
 
 /**
  * Sends video from the robot to the dashboard.

@@ -1,7 +1,6 @@
 package com.palyrobotics.frc2017.auto.modes;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
-import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoPostVariant;
 import com.palyrobotics.frc2017.auto.AutoPathLoader;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
 import com.palyrobotics.frc2017.behavior.ParallelRoutine;
@@ -16,7 +15,6 @@ import com.palyrobotics.frc2017.behavior.routines.scoring.VisionSliderRoutine;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.logger.Logger;
 import com.palyrobotics.frc2017.vision.VisionManager;
-import com.palyrobotics.frc2017.vision.AndroidConnectionHelper;
 import com.team254.lib.trajectory.Path;
 
 import java.util.ArrayList;

@@ -1,10 +1,10 @@
 package com.palyrobotics.frc2017.vision;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import com.palyrobotics.frc2017.vision.util.DataExistsCallback;
 import com.palyrobotics.frc2017.vision.util.SnychronizedVisionDataUnit;
 import com.palyrobotics.frc2017.vision.util.VisionDataUnit;
+
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class VisionData {
 	private static class DoubleExistsCallback extends DataExistsCallback<Double> {

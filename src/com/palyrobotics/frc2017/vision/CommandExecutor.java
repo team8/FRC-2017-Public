@@ -1,8 +1,7 @@
 package com.palyrobotics.frc2017.vision;
 
-import org.spectrum3847.RIOdroid.RIOdroid;
-
 import com.palyrobotics.frc2017.config.Constants;
+import org.spectrum3847.RIOdroid.RIOdroid;
 
 public class CommandExecutor{
 	//these should probably be set as something else to start with?

@@ -13,8 +13,6 @@ import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.logger.Logger;
 import com.palyrobotics.frc2017.vision.VisionData;
 import com.palyrobotics.frc2017.vision.VisionManager;
-import com.palyrobotics.frc2017.robot.team254.lib.util.Looper;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
@@ -31,9 +29,6 @@ public class Robot extends IterativeRobot {
 	
 
 	private OperatorInterface operatorInterface = OperatorInterface.getInstance();
-	// Instantiate separate thread controls
-	//private SubsystemLooper mSubsystemLooper = new SubsystemLooper();
-	// Instantiate hardware updaters
 	private RoutineManager mRoutineManager = new RoutineManager();
 
 	// Subsystem controllers
@@ -129,12 +124,6 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousPeriodic() {
-//		HardwareAdapter.getInstance().getSlider().sliderTalon.changeControlMode(CANTalon.TalonControlMode.Position);
-//		HardwareAdapter.getInstance().getSlider().sliderTalon.set(1);
-//		System.out.println("Talon stpt:"+HardwareAdapter.getInstance().getSlider().sliderTalon.getSetpoint());
-//		System.out.println("Talon mode:"+HardwareAdapter.getInstance().getSlider().sliderTalon.getControlMode());
-		//		logPeriodic();
-//		System.out.println(robotState.sliderEncoder);
 		mLogger.logRobotThread("Nexus xdist: "+ VisionData.getXData());
 		commands = mRoutineManager.update(commands);
 		mHardwareUpdater.updateSensors(robotState);

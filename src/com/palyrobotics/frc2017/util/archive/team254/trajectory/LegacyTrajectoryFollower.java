@@ -1,6 +1,7 @@
 package com.palyrobotics.frc2017.util.archive.team254.trajectory;
 
 import com.palyrobotics.frc2017.config.Constants;
+import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.robot.Robot;
 import com.team254.lib.trajectory.Trajectory;
 
@@ -70,7 +71,16 @@ public class LegacyTrajectoryFollower {
 
             calc_velocity_error = speed - segment.vel;
 
-            double output = kp_ * error + kd_ * calc_velocity_error + kv_ * segment.vel + ka_ * segment.acc;
+            double output;
+            
+            if (this.name.equals("left")) {
+                output = kp_ * error + kd_ * calc_velocity_error + Gains.kSteikLeftTrajectorykV * segment.vel + Gains.kSteikLeftTrajectorykV_0 + ka_ * segment.acc;
+            } else if (this.name.equals("right")) {
+                output = kp_ * error + kd_ * calc_velocity_error + Gains.kSteikRightTrajectorykV * segment.vel + Gains.kSteikRightTrajectorykV_0 + ka_ * segment.acc;
+            } else {
+                output = kp_ * error + kd_ * calc_velocity_error + kv_ * segment.vel + ka_ * segment.acc;
+            }
+            
             setCanTableString(new double[] {
             		output,
             		segment.pos,

@@ -1,6 +1,5 @@
-from networktables import NetworkTable
-import datetime
 import time
+from networktables import NetworkTable
 
 # import colorama
 # from colorama import Fore, Back, Style

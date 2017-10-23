@@ -1,5 +1,5 @@
-import sys
 import matplotlib.pyplot as plt
+import sys
 
 assert len(sys.argv) > 1
 

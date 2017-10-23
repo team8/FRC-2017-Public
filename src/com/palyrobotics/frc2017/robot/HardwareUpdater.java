@@ -6,7 +6,6 @@ import com.kauailabs.navx.frc.AHRS;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants.RobotName;
 import com.palyrobotics.frc2017.config.RobotState;
-import com.palyrobotics.frc2017.robot.team254.lib.util.Loop;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.logger.Logger;
@@ -17,47 +16,7 @@ import java.util.Optional;
  * Should only be used in robot package.
  */
 class HardwareUpdater {
-	public HardwareSensorLoop getHardwareSensorLoop() {
-		return new HardwareSensorLoop();
-	}
-	public HardwareEnabledLoop getHardwareEnabledLoop() {
-		return new HardwareEnabledLoop();
-	}
-	
-	
-	public class HardwareSensorLoop implements Loop {
-		@Override
-		public void update() {
-			updateSensors(mRobot.getRobotState());
-		}
 
-		@Override
-		public void onStart() {
-		}
-
-		@Override
-		public void onStop() {
-		}
-	}
-	
-	public class HardwareEnabledLoop implements Loop {
-		public HardwareEnabledLoop() {
-			
-		}
-		@Override
-		public void update() {
-			updateHardware();
-		}
-
-		@Override
-		public void onStart() {			
-		}
-
-		@Override
-		public void onStop() {
-		}
-	}
-	
 	// Subsystem references
 	
 	private Drive mDrive;

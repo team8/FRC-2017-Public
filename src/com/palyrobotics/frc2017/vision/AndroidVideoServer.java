@@ -1,6 +1,8 @@
 package com.palyrobotics.frc2017.vision;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.EOFException;
+import java.io.IOException;
 import java.net.SocketException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 

@@ -5,7 +5,6 @@ import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.subsystems.Subsystem;
-import com.palyrobotics.frc2017.vision.AndroidConnectionHelper;
 import com.team254.lib.trajectory.Path;
 
 /**
@@ -36,10 +35,6 @@ public class DrivePathRoutine extends Routine {
 	@Override
 	public Commands update(Commands commands) {
 		commands.wantedDriveState = Drive.DriveState.ON_BOARD_CONTROLLER;
-
-		System.out.println("Drive path Z dist: " + AndroidConnectionHelper.getInstance().getZDist());
-		System.out.println("Drive path X dist: " + AndroidConnectionHelper.getInstance().getXDist());
-
 		return commands;
 	}
 

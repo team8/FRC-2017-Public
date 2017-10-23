@@ -209,6 +209,10 @@ public class Drive extends Subsystem {
 		mController = new DriveStraightController(mCachedPose, distance);
 		newController = true;
 	}
+	public void setTimedDrive(double voltage, double time) {
+		mController = new TimedDriveController(voltage, time);
+		newController = true;
+	}
 	
 	// Wipes current controller
 	public void resetController() {

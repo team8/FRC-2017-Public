@@ -20,7 +20,11 @@ public class Gains {
 
 
 	public static double kSteikTrajectorykV = 0.077;//0.077;//0.069;
-	public static double kSteikTrajectorykA = 0.033;//0.037;
+	public static double kSteikLeftTrajectorykV = 0.0489;//0.077;//0.069;
+	public static double kSteikRightTrajectorykV = 0.0499;//0.077;//0.069;
+	public static double kSteikLeftTrajectorykV_0 = 0.0969;
+	public static double kSteikRightTrajectorykV_0 = 0.0946;
+	public static double kSteikTrajectorykA = 0.023;//0.037;
 
 	public static double kSteikLeftTurnTrajectorykP = 0.88;//0.40;//0.38;
 	public static double kSteikLeftTurnTrajectorykD = 0.01946;//0.0155;//0.01;//0.01;
@@ -31,10 +35,10 @@ public class Gains {
 			kSteikLeftTurnTrajectorykD, kSteikTrajectorykV, kSteikTrajectorykA, kSteikLeftTurnTrajectoryTurnkP,
 			kSteikLeftTurnTrajectoryTurnkD);
 
-	public static final double kSteikTrajectoryStraightkP = 1.15; // 1
-	public static final double kSteikTrajectoryStraightkD = 0.021;//0.0097077;//0.025; // 0.02
-	public static double kSteikTrajectoryStraightTurnkP = 0.027;//0.01; //-0.01
-	public static double kSteikTrajectoryStraightTurnkD = 0.01;
+	public static final double kSteikTrajectoryStraightkP = 1.25; // 1
+	public static final double kSteikTrajectoryStraightkD = 0.03;//0.0097077;//0.025; // 0.02
+	public static double kSteikTrajectoryStraightTurnkP = 0;//0.01; //-0.01
+	public static double kSteikTrajectoryStraightTurnkD = 0;
 
 //	public static final double kSteikTrajectoryStraightkP = 1.5; // 1
 //	public static final double kSteikTrajectoryStraightkD = 0.0;//0.0534;//0.0537;//0.02525;//0.025; // 0.02

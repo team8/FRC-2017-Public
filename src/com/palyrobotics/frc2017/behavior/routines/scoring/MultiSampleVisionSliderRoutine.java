@@ -5,10 +5,8 @@ import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.subsystems.Slider;
 import com.palyrobotics.frc2017.subsystems.Spatula;
-import com.palyrobotics.frc2017.vision.VisionData;
-import com.palyrobotics.frc2017.vision.VisionManager;
 import com.palyrobotics.frc2017.subsystems.Subsystem;
-import com.palyrobotics.frc2017.vision.AndroidConnectionHelper;
+import com.palyrobotics.frc2017.vision.VisionData;
 
 import java.util.Arrays;
 import java.util.Optional;
