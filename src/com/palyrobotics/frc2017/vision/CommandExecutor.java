@@ -17,12 +17,15 @@ public class CommandExecutor{
 	 static void setTesting(boolean testing) {
 		 isTesting = testing;
 	 }
-	 
-	 static void addServerInit() {
-		// Initializes RIOdroid usb and RIOadb adb daemon
+
+	 static void adbServerInit() {
+	 	 // Initializes RIOdroid usb and RIOadb adb daemon
+		 // Port forwards so that PC can accept connection from android
+
 		 exec("adb reverse tcp:" +
-				 Constants.kVideoPort + " tcp:" +
-				 Constants.kVideoPort);
+			 Constants.kVideoPort + " tcp:" +
+			 Constants.kVideoPort);
+
 		 System.out.println("Starting VideoManager");
 	 }
 	 

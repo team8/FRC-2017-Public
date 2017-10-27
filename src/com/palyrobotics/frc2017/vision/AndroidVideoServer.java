@@ -118,9 +118,7 @@ public class AndroidVideoServer extends AbstractVisionServer {
 	}
 
 	@Override
-	protected void update() {
-
-		super.update();
+	protected void afterUpdate() {
 
 		switch (m_serverState){
 

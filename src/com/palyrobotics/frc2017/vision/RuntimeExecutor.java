@@ -59,6 +59,7 @@ public class RuntimeExecutor {
 	 * @return Console output of executing the command
 	 */
 	public String exec(String command){
+
 		// Builds the output of the console
 		StringBuilder out = new StringBuilder();
 

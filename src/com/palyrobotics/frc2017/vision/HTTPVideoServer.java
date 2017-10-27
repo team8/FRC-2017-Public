@@ -1,13 +1,12 @@
 package com.palyrobotics.frc2017.vision;
 
 import java.io.*;
-import java.nio.file.Files;
 
 /**
  * Sends video from the robot to the dashboard.
- * Video data is obtained from queue in {@link AndroidVideoServer}
+ * Video data is obtained from queue in {@link VisionData}
  *
- * @author Quintin
+ * @author Quintin Dwight
  */
 public class HTTPVideoServer extends AbstractVisionServer {
 
@@ -23,6 +22,7 @@ public class HTTPVideoServer extends AbstractVisionServer {
 	{
 		if (s_instance == null)
 			s_instance = new HTTPVideoServer();
+
 		return s_instance;
 	}
 
@@ -30,13 +30,13 @@ public class HTTPVideoServer extends AbstractVisionServer {
 
 	private HTTPVideoServer() {
 
-		super("HTTPVideoServer");
+		super("HTTP Video Server");
 	}
 
 	@Override
-	public void init(){
+	public void init() {
 
-		super.init();
+		setServerState(ServerState.ATTEMPTING_CONNECTION);
 	}
 
 	/**
@@ -44,39 +44,14 @@ public class HTTPVideoServer extends AbstractVisionServer {
 	 *
 	 * @throws IOException Thrown by socket
 	 */
-	public void writeImageToServer(byte[] data) throws IOException {
-		if (m_client == null) {
-			log("Client is null somehow. Aborting...");
-			setServerState(ServerState.ATTEMPTING_CONNECTION);
-			return;
-		}
+	private void writeImageToServer(byte[] data) throws IOException {
 
-		BufferedReader reader = null;
-		PrintStream output = null;
+		PrintStream output;
 		try {
-			String route = null;
-
-			// Read HTTP headers and parse out the route.
-			reader = new BufferedReader(new InputStreamReader(m_client.getInputStream()));
-			String line;
-			while (!(line = reader.readLine()).isEmpty()) {
-				if (line.startsWith("GET /")) {
-					int start = line.indexOf('/') + 1;
-					int end = line.indexOf(' ', start);
-					route = line.substring(start, end);
-					break;
-				}
-			}
 
 			// Output stream that we send the response to
 			output = new PrintStream(m_client.getOutputStream());
 
-			// Prepare the content to send
-			if (route == null) {
-				writeServerError(output);
-				setServerState(ServerState.ATTEMPTING_CONNECTION);
-				return;
-			}
 			if (data == null) {
 				writeServerError(output);
 				setServerState(ServerState.ATTEMPTING_CONNECTION);
@@ -85,7 +60,7 @@ public class HTTPVideoServer extends AbstractVisionServer {
 
 			// Send out the content to the javascript client
 			output.println("HTTP/1.1 200 OK");
-			output.println("Cache-Control: no-cache");
+			output.println("Cache-Control: no-cache, no-store, must-revalidate");
 			output.println("Content-Type: image/jpeg"   );
 			output.println("Content-Length: " + data.length);
 			output.println();
@@ -93,14 +68,10 @@ public class HTTPVideoServer extends AbstractVisionServer {
 			output.flush();
 
 		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (output != null)
-				output.close();
-			if (reader != null)
-				reader.close();
 
-			m_client.close();
+			e.printStackTrace();
+
+			closeClient();
 		}
 	}
 
@@ -115,30 +86,24 @@ public class HTTPVideoServer extends AbstractVisionServer {
 	}
 
 	@Override
-	protected void update() {
-
-		super.update();
+	protected void afterUpdate() {
 
 		switch (m_serverState) {
 
-		case OPEN:
-			// Make sure queue has something in it
-			if (VisionData.getVideoQueue().size() > 0) {
-				// Get next frame
-				byte[] frame = VisionData.getVideoQueue().remove();
-				try {
-					writeImageToServer(frame);
-				} catch (IOException e) {
-					e.printStackTrace();
+			case OPEN: {
+
+				// Make sure queue has something in it
+				if (VisionData.getVideoQueue().size() > 0) {
+					// Get next frame
+					byte[] frame = VisionData.getVideoQueue().remove();
+					try {
+						writeImageToServer(frame);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
-			} else {
-				log("Frame queue is empty!");
+				break;
 			}
-			break;
-		case ATTEMPTING_CONNECTION:
-			break;
-		case PRE_INIT:
-			break;
 		}
 	}
 

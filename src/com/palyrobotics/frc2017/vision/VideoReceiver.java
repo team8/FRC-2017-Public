@@ -23,7 +23,7 @@ public class VideoReceiver extends DataReceiverBase{
 			if (image != null && image.length != 0) {
 
 				// Make sure queue does not get too big
-				if (frameQueue.size() < 10)
+				while (frameQueue.size() > 10)
 					frameQueue.remove();
 
 				frameQueue.add(image);

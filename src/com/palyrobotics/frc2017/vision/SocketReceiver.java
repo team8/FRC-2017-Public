@@ -53,4 +53,7 @@ public class SocketReceiver extends AbstractVisionServer implements VisionReceiv
 		}
 		return null;
 	}
+
+	@Override
+	protected void afterUpdate() {}
 }

@@ -17,7 +17,7 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
 
     protected int m_port = 0;
     protected ServerSocket m_server;
-    protected Socket m_client;
+    protected Socket m_client = new Socket();
     protected ServerState m_serverState = ServerState.PRE_INIT;
 
     protected AbstractVisionServer(final String k_threadName) {
@@ -51,17 +51,6 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
             return;
         }
 
-        m_client = new Socket();
-
-        // Try to create the server
-        try {
-            m_server = new ServerSocket(m_port);
-            m_server.setReuseAddress(true);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         setServerState(ServerState.ATTEMPTING_CONNECTION);
     }
 
@@ -72,13 +61,13 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
      */
     protected ServerState checkConnection() {
 
-    	final boolean connected = m_client.isConnected();
+    	final boolean connectedAndOpen = !m_client.isConnected() || m_client.isClosed();
     	
-    	if (!connected) {
+    	if (!connectedAndOpen) {
     		log("Lost connection to socket");
     	}
     	
-    	return connected ? ServerState.OPEN : ServerState.ATTEMPTING_CONNECTION; 
+    	return connectedAndOpen ? ServerState.OPEN : ServerState.ATTEMPTING_CONNECTION;
     }
     /**
      * Sets the state of the server
@@ -98,10 +87,17 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
 
         try {
 
+            log("Trying to connect to client on port: " + Integer.toString(m_port) + "...");
+
+            if (m_server != null) m_server.close();
+            m_server = new ServerSocket(m_port);
+            m_server.setReuseAddress(true);
+
             // Pause thread until we accept from the client
-            log("Trying to connect to client...");
             m_client = m_server.accept();
-            log("Connected to client: " + m_client.getPort());
+
+            log("Connected to client on port: " + m_client.getPort() + "!");
+
             return ServerState.OPEN;
 
         } catch (IOException e) {
@@ -111,10 +107,18 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
         }
     }
 
+    protected void closeClient()
+    {
+        try {
+            m_client.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected void update()
     {
-        System.out.println("UPDATING HERE");
         switch (m_serverState){
             case PRE_INIT:
                 log("Thread is not initialized while in update.");
@@ -126,5 +130,9 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
 				setServerState(checkConnection());
 				break;
         }
+
+        afterUpdate();
     }
+
+    protected abstract void afterUpdate();
 }

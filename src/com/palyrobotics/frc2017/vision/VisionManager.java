@@ -111,6 +111,11 @@ public class VisionManager extends AbstractVisionThread {
 			if (this.m_visionRunning) {
 				System.out.println("Connected to vision app");
 				Logger.getInstance().logRobotThread("Connected to vision app");
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				return ConnectionState.STARTING_SUB_PROCESSES;
 			} else {
 				System.out.println("Could not start vision app, retrying");
@@ -128,7 +133,7 @@ public class VisionManager extends AbstractVisionThread {
 		boolean connected = false;
 
 		try {
-			CommandExecutor.addServerInit();
+			CommandExecutor.adbServerInit();
 			connected = true;
 		} catch (Exception e) {
 			System.out.println("Error: in VisionManager.StartADB(), "
