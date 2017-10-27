@@ -227,8 +227,8 @@ public class Main {
 			// Description of this auto mode path.
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint((kRedCenterPeg - 0.5*kRobotLengthInches - kVisionDistanceInches + kRedCenterPegOffsetX)/12.0,
-					kRedCenterPegOffsetY/12.0, 0));
+			p.addWaypoint(new WaypointSequence.Waypoint((kRedCenterPeg - 0.5*kRobotLengthInches - kVisionDistanceInches + kRedCenterPegOffsetVisionX)/12.0,
+					kRedCenterPegOffsetVisionY/12.0, 0));
 
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);
@@ -412,8 +412,8 @@ public class Main {
 			// Description of this auto mode path.
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-			p.addWaypoint(new WaypointSequence.Waypoint((kBlueCenterPeg - 0.5*kRobotLengthInches - kVisionDistanceInches + kBlueCenterPegOffsetX)/12.0,
-					kBlueCenterPegOffsetY/12.0, 0));
+			p.addWaypoint(new WaypointSequence.Waypoint((kBlueCenterPeg - 0.5*kRobotLengthInches - kVisionDistanceInches + kBlueCenterPegOffsetVisionX)/12.0,
+					kBlueCenterPegOffsetVisionY/12.0, 0));
 
 			Path path = PathGenerator.makePath(p, config,
 					kWheelbaseWidth, path_name);

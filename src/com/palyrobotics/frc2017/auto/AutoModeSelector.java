@@ -61,7 +61,7 @@ public class AutoModeSelector {
   /*3*/	registerAutonomous(new SidePegAutoMode(SideAutoVariant.BLUE_LOADING, // Alliance color and side
 				SideAutoPostVariant.BACKUP)); // Should backup?
   /*4*/ registerAutonomous(new VisionCenterPegAutoMode(VisionCenterPegAutoMode.CenterPegAutoVariant.BLUE)); //alliance
-  /*5*/ registerAutonomous(new VisionSidePegAutoMode(SideAutoVariant.BLUE_LOADING)); // alliance, boiler/loading
+  /*5*/ registerAutonomous(new VisionSidePegAutoMode(SideAutoVariant.BLUE_BOILER)); // alliance, boiler/loading
 
   /*6*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.BLUE, true));
   /*7*/registerAutonomous(new TrajectorySidePegAutoMode(SideAutoVariant.BLUE_LOADING, TrajectorySidePostVariant.BACKUP));

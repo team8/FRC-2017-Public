@@ -1,10 +1,10 @@
 package com.palyrobotics.frc2017.vision.util;
 
-public class SnychronizedVisionDataUnit<T> extends VisionDataUnit<T> {
+public class SynchronizedVisionDataUnit<T> extends VisionDataUnit<T> {
 
     private ReadWriteLock mLock;
 
-    public SnychronizedVisionDataUnit(String name, T value, T defaultValue, DataExistsCallback<T> existsCallback) {
+    public SynchronizedVisionDataUnit(String name, T value, T defaultValue, DataExistsCallback<T> existsCallback) {
 
         super(value, defaultValue, existsCallback);
         mLock = new ReadWriteLock(name);

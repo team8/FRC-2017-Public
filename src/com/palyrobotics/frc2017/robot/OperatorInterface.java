@@ -67,16 +67,16 @@ public class OperatorInterface {
 		newCommands.climberStickInput = new JoystickInput(mClimberStick.getX(), mClimberStick.getY(), mClimberStick.getTrigger());
 
 		// Slider
-		if (mTurnStick.getRawButton(6)){
+		if (mTurnStick.getRawButton(4)){
 			newCommands.wantedSliderState = Slider.SliderState.MANUAL;
 			newCommands.sliderStickInput.x = 1;
-		} else if (mTurnStick.getRawButton(4)){
+		} else if (mTurnStick.getRawButton(6)){
 			newCommands.wantedSliderState = Slider.SliderState.MANUAL;
 			newCommands.sliderStickInput.x = 0.5;
-		} else if (mTurnStick.getRawButton(5)){
+		} else if (mTurnStick.getRawButton(3)){
 			newCommands.wantedSliderState = Slider.SliderState.MANUAL;
 			newCommands.sliderStickInput.x = -1;
-		} else if (mTurnStick.getRawButton(3)){
+		} else if (mTurnStick.getRawButton(5)){
 			newCommands.wantedSliderState = Slider.SliderState.MANUAL;
 			newCommands.sliderStickInput.x = -0.5;
 		} else if (mTurnStick.getRawButton(2)) {
