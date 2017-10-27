@@ -1,7 +1,7 @@
 package com.palyrobotics.frc2017.vision;
 
 import com.palyrobotics.frc2017.vision.util.DataExistsCallback;
-import com.palyrobotics.frc2017.vision.util.SnychronizedVisionDataUnit;
+import com.palyrobotics.frc2017.vision.util.SynchronizedVisionDataUnit;
 import com.palyrobotics.frc2017.vision.util.VisionDataUnit;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -19,8 +19,8 @@ public class VisionData {
 			return !(data == null || data.length == 0);
 		}
 	}
-	private static VisionDataUnit<Double> x_data = new SnychronizedVisionDataUnit<>("x_dist", Double.NaN, Double.NaN, new DoubleExistsCallback());
-	private static VisionDataUnit<Double> z_data = new SnychronizedVisionDataUnit<>("z_dist", Double.NaN, Double.NaN, new DoubleExistsCallback());
+	private static VisionDataUnit<Double> x_data = new SynchronizedVisionDataUnit<>("x_dist", Double.NaN, Double.NaN, new DoubleExistsCallback());
+	private static VisionDataUnit<Double> z_data = new SynchronizedVisionDataUnit<>("z_dist", Double.NaN, Double.NaN, new DoubleExistsCallback());
 	private static ConcurrentLinkedQueue<byte[]> video_queue = new ConcurrentLinkedQueue<>();
 	
 	public static VisionDataUnit<Double> getXData() {
