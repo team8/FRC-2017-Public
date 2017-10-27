@@ -33,9 +33,10 @@ public class VisionSliderRoutine extends Routine {
 
 	@Override
 	public Commands update(Commands commands) {
+
 		commands.robotSetpoints.sliderSetpoint = SliderTarget.CUSTOM;
 		commands.wantedSpatulaState = Spatula.SpatulaState.UP;
-		double visionSetpoint = VisionData.getXData();
+		double visionSetpoint = VisionData.getXDataValue();
 		// out of range of motion, probably false positive, might be on left side
 		if (visionSetpoint >= 1.5) {
 			visionSetpoint = -7;

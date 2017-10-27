@@ -10,16 +10,8 @@ public class CommandExecutor{
 	 static boolean isFlashOn = false;
 	 
 	 static String visionInit(){
-		 if(!isTesting){
-			return RIOdroid.executeCommand(
-						"adb shell am start -n " + Constants.kPackageName + "/" +
-								Constants.kPackageName + "." + Constants.kActivityName);
-		 }
-		 else{
-			 return RuntimeExecutor.getInstance().exec(
-						"adb shell am start -n " + Constants.kPackageName + "/" +
-								Constants.kPackageName + "." + Constants.kActivityName);
-		 }
+	 	return exec("adb shell am start -n " + Constants.kPackageName + "/" +
+				Constants.kPackageName + "." + Constants.kActivityName);
 	 }
 	 
 	 static void setTesting(boolean testing) {
@@ -28,57 +20,39 @@ public class CommandExecutor{
 	 
 	 static void addServerInit() {
 		// Initializes RIOdroid usb and RIOadb adb daemon
-					if (!isTesting) {
-						RIOdroid.init();
-
-						// Forward the port and start the server socket for vision
-						RIOdroid.executeCommand("adb reverse tcp:" +
-								Constants.kAndroidVisionSocketPort + " tcp:" +
-								Constants.kAndroidVisionSocketPort);
-						System.out.println("Starting VideoManager");
-						//VideoManager.getInstance().start();
-					} else {
-						RuntimeExecutor.getInstance().init();
-
-						// Forward the port and start the server socket for vision
-						RuntimeExecutor.getInstance().exec("adb reverse tc"
-								+ "p:" +
-								Constants.kAndroidVisionSocketPort + " tcp:" +
-								Constants.kAndroidVisionSocketPort);
-						System.out.println("Starting VideoManager");
-						//VideoManager.getInstance().start(mTesting);
-					}
+		 exec("adb reverse tcp:" +
+				 Constants.kVideoPort + " tcp:" +
+				 Constants.kVideoPort);
+		 System.out.println("Starting VideoManager");
 	 }
 	 
 	 static String toggleFlash(){
-			if(!isTesting){
-				return RIOdroid.executeCommand("adb shell am broadcast -a "+Constants.kPackageName
-						+".GET_DATA --es type flash --ez isFlash "+isFlashOn);
-			}else{
-				return RuntimeExecutor.getInstance().exec("adb shell am broadcast -a "+Constants.kPackageName
-						+".GET_DATA --es type flash --ez isFlash "+isFlashOn);
-			}
+		return exec("adb shell am broadcast -a "+Constants.kPackageName
+				+".GET_DATA --es type flash --ez isFlash "+isFlashOn);
 	 }
 	 
 	 //first version that seemed to be used
 	 static String catFile(String fileName){
-		 if(!isTesting){
-				return RIOdroid.executeCommand("adb shell run-as "+Constants.kPackageName+
-						" cat /data/data/"+ Constants.kPackageName + "/files/" + fileName);
-			}else{
-				return RuntimeExecutor.getInstance().exec("adb shell run-as "+Constants.kPackageName+
-						" cat /data/data/"+ Constants.kPackageName + "/files/" + fileName);
-			}
+	 	return exec("adb shell run-as "+Constants.kPackageName+
+				" cat /data/data/"+ Constants.kPackageName + "/files/" + fileName);
 	 }
+
+	/**
+	 * @returns the PID of the vision app
+	 */
+	static String appPID(){
+	 	return exec("adb shell pidof " + Constants.kPackageName);
+
+	}
 	 
 	 //second version that takes in a string
 	 //can be used in different versions
-	 static void exec(String string){
+	 static String exec(String string){
 		 if(!isTesting){
-			 RIOdroid.executeCommand(string);
+			 return RIOdroid.executeCommand(string);
 		 }
 		 else{
-			 RuntimeExecutor.getInstance().exec(string);
+			 return RuntimeExecutor.getInstance().exec(string);
 		 }
 	 }
 	 

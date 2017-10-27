@@ -20,8 +20,8 @@ public class Constants extends ConstantsBase {
 	public static int kAndroidDataSocketUpdateRate = 100;
 	public static int kAndroidVisionSocketUpdateRate = 10;
 	public static int kMJPEGVisionSocketUpdateRate = 10;
-	public static int kAndroidDataSocketPort = 8008;
-	public static int kAndroidVisionSocketPort = 8009;
+	public static int kVisionDataPort = 8008;
+	public static int kVideoPort = 8009;
 	public static int kMJPEGServerSocketPort = 1180;
 
 	// Cheesy Drive

@@ -8,12 +8,15 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class VideoReceiver extends DataReceiverBase{
 	
 	byte[] image;
+
 	protected VideoReceiver() {
-		super("Video Receiver", Constants.kVisionVideoFileName, Constants.kAndroidVisionSocketPort, Constants.kAndroidVisionSocketUpdateRate);
+
+		super("Video Receiver", Constants.kVisionVideoFileName, Constants.kVideoPort, Constants.kAndroidVisionSocketUpdateRate);
 	}
 	
 	@Override
 	protected void update() {
+
 		ConcurrentLinkedQueue<byte[]> frameQueue = VisionData.getVideoQueue();
 		try {
 			image = mReceiverSelector.getReciever().extractDataBytes();
@@ -32,8 +35,7 @@ public class VideoReceiver extends DataReceiverBase{
 	
 	@Override
 	protected void tearDown() {
-		// TODO Auto-generated method stub
-		
+
 	}
 	
 	public byte[] getImage() {

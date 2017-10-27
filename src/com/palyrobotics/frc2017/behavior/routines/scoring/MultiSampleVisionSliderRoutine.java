@@ -45,7 +45,7 @@ public class MultiSampleVisionSliderRoutine extends Routine {
 					newState = false;
 				}
 				if (Robot.getRobotState().sliderVelocity==0 && System.currentTimeMillis()-startTime > 200) {
-					visionSetpoints[0] = VisionData.getXData();
+					visionSetpoints[0] = VisionData.getXDataValue();
 					mState = SamplingState.CENTER;
 					newState = true;
 				}
@@ -59,7 +59,7 @@ public class MultiSampleVisionSliderRoutine extends Routine {
 				}
 				if (Robot.getRobotState().sliderVelocity==0 && System.currentTimeMillis()-startTime > 200) {					
 					mState = SamplingState.RIGHT;
-					visionSetpoints[1] = VisionData.getXData();
+					visionSetpoints[1] = VisionData.getXDataValue();
 					mState = SamplingState.RIGHT;
 					newState = true;
 				}
@@ -73,7 +73,7 @@ public class MultiSampleVisionSliderRoutine extends Routine {
 				}
 				if (Robot.getRobotState().sliderVelocity==0 && System.currentTimeMillis()-startTime > 200) {					
 					mState = SamplingState.SCORE;
-					visionSetpoints[2] = VisionData.getXData();
+					visionSetpoints[2] = VisionData.getXDataValue();
 					mState = SamplingState.SCORE;
 					newState = true;
 				}

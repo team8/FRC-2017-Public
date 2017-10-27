@@ -8,7 +8,9 @@ import com.palyrobotics.frc2017.config.Constants;
 public class AndroidComputerTest {
 
 	public static void main(String[] args) throws InterruptedException {
+
 		VisionManager.getInstance().start(Constants.kAndroidConnectionUpdateRate,true);
+
 //		VisionManager.getInstance().StartVisionApp();
 //		String inp = RuntimeExecutor.getInstance().exec("adb devices");
 //		String[] lines = inp.split("\\n");
@@ -19,9 +21,17 @@ public class AndroidComputerTest {
 //		System.out.println(inp);
 //		System.out.println(hasDevice);
 
-		while(true){
+		while (true) {
+
 			if (VisionManager.getInstance().isAppStarted()) {
-				System.out.println(VisionData.getXData());
+
+				//System.out.println(String.format("X: %b, Y: %b", VisionData.getXData().exists(), VisionData.getZData().exists()));
+
+//				final String x = Double.toString(VisionData.getXData()), y = Double.toString(VisionData.getZData());
+//
+//				System.out.println(String.format("X: %s, Y: %s", x, y));
+
+
 			}
 			Thread.sleep(500);
 		}

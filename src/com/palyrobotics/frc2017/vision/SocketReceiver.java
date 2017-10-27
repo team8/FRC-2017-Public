@@ -4,16 +4,12 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.ServerSocket;
-
-import com.palyrobotics.frc2017.config.Constants;
 
 public class SocketReceiver extends AbstractVisionServer implements VisionReceiverBase{
-	
-	ServerSocket mServerSocket;
 
 	public SocketReceiver() {
-		super("Socket Reciever");
+
+		super("Socket Receiver");
 	}
 
 	@Override
@@ -40,17 +36,20 @@ public class SocketReceiver extends AbstractVisionServer implements VisionReceiv
 
 	@Override
 	public byte[] extractDataBytes() {
-		
-		try {
-			DataInputStream dis = new DataInputStream(m_client.getInputStream());
-			int len = dis.readInt();
-			byte[] data = new byte[len];
-			if(len > 0) {
-				dis.readFully(data);
+
+		if (m_client.isConnected()) {
+
+			try {
+				DataInputStream dis = new DataInputStream(m_client.getInputStream());
+				int len = dis.readInt();
+				byte[] data = new byte[len];
+				if(len > 0) {
+					dis.readFully(data);
+				}
+				return data;
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			return data;
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		return null;
 	}

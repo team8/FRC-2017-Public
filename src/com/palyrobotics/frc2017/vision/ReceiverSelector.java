@@ -37,7 +37,7 @@ public class ReceiverSelector {
                     receiver_map.put(type, new JSONReceiver(fileName));
                     break;
                 case SOCKET:
-                	SocketReceiver socketReceiver = new SocketReceiver();
+                    SocketReceiver socketReceiver = new SocketReceiver();
                     receiver_map.put(type, socketReceiver);
                     socketReceiver.start(updateRate, port);
                     break;

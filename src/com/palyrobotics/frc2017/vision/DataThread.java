@@ -3,17 +3,14 @@ package com.palyrobotics.frc2017.vision;
 import java.io.IOException;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.vision.ReceiverSelector.VisionReceiverType;
 import com.palyrobotics.frc2017.vision.util.VisionUtil;
 
 public class DataThread extends DataReceiverBase {
 
 	protected DataThread() {
-		super("Data Thread", Constants.kVisionDataFileName,Constants.kAndroidDataSocketPort, Constants.kAndroidDataSocketUpdateRate);
+		super("Data Thread", Constants.kVisionDataFileName,Constants.kVisionDataPort, Constants.kAndroidDataSocketUpdateRate);
 	}
 
 	private static DataThread s_instance;
@@ -32,19 +29,32 @@ public class DataThread extends DataReceiverBase {
 		try {
 			String raw_data = mReceiverSelector.getReciever().extractData();
 			JSONObject json = VisionUtil.parseJSON(raw_data);
+
 			if (json != null) {
 				String state = (String)json.get("state");
 				if (!(state == null) && !state.equals("")) {	// Handle based on state
-					if (state.equals("STREAMING")) {
-						// Get image data
-						Number data_x = ((Number) json.get("x_displacement"));
-						Number data_z = ((Number) json.get("z_displacement"));
-						
-						if (data_x != null) {
-							VisionData.setXData(data_x.doubleValue());
+					switch (state) {
+
+						case "STREAMING": {
+
+							// Get image data
+							final double
+									data_x = Double.parseDouble((String)json.get("x_displacement")),
+									data_z = Double.parseDouble((String)json.get("z_displacement"));
+
+							VisionData.setXDataValue(data_x);
+							VisionData.setZDataValue(data_z);
+
+							break;
 						}
-						if(data_z != null) {
-							VisionData.setZData(data_z.doubleValue());
+
+						case "STOPPED":
+						case "PAUSED": {
+
+							VisionData.getXData().setToDefault();
+							VisionData.getZData().setToDefault();
+
+							break;
 						}
 					}
 				}

@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * Controls managing client and server sockets.
+ *
+ * @author Quintin Dwight
+ */
 public abstract class AbstractVisionServer extends AbstractVisionThread {
 
     public enum ServerState {
@@ -29,7 +34,6 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
      * Starts the server thread
      *
      * @param k_updateRate Update rate of the thread
-     * @param k_testing Whether or not we are testing
      * @param k_port The port to connect the server to
      */
     public void start(final int k_updateRate, final int k_port)
@@ -47,10 +51,13 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
             return;
         }
 
+        m_client = new Socket();
+
         // Try to create the server
         try {
             m_server = new ServerSocket(m_port);
             m_server.setReuseAddress(true);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -58,10 +65,16 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
         setServerState(ServerState.ATTEMPTING_CONNECTION);
     }
 
+    /**
+     * Check if the client socket is connected
+     *
+     * @return New server state, depends on whether or not we should attempt conncetion
+     */
     protected ServerState checkConnection() {
+
     	final boolean connected = m_client.isConnected();
     	
-    	if(!connected) {
+    	if (!connected) {
     		log("Lost connection to socket");
     	}
     	
@@ -84,12 +97,15 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
     private ServerState acceptConnection(){
 
         try {
+
             // Pause thread until we accept from the client
             log("Trying to connect to client...");
             m_client = m_server.accept();
             log("Connected to client: " + m_client.getPort());
             return ServerState.OPEN;
+
         } catch (IOException e) {
+
             e.printStackTrace();
             return ServerState.ATTEMPTING_CONNECTION;
         }
@@ -98,6 +114,7 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
     @Override
     protected void update()
     {
+        System.out.println("UPDATING HERE");
         switch (m_serverState){
             case PRE_INIT:
                 log("Thread is not initialized while in update.");

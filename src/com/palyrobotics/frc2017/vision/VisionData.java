@@ -19,23 +19,35 @@ public class VisionData {
 			return !(data == null || data.length == 0);
 		}
 	}
-	private static VisionDataUnit<Double> x_data = new SnychronizedVisionDataUnit<Double>("x_dist", Double.NaN, null, new DoubleExistsCallback());
-	private static VisionDataUnit<Double> z_data = new SnychronizedVisionDataUnit<Double>("z_dist", Double.NaN, null, new DoubleExistsCallback());
-	private static ConcurrentLinkedQueue<byte[]> video_queue = new ConcurrentLinkedQueue<byte[]>();
+	private static VisionDataUnit<Double> x_data = new SnychronizedVisionDataUnit<>("x_dist", Double.NaN, Double.NaN, new DoubleExistsCallback());
+	private static VisionDataUnit<Double> z_data = new SnychronizedVisionDataUnit<>("z_dist", Double.NaN, Double.NaN, new DoubleExistsCallback());
+	private static ConcurrentLinkedQueue<byte[]> video_queue = new ConcurrentLinkedQueue<>();
 	
-	public static double getXData() {
-		return x_data.get();
+	public static VisionDataUnit<Double> getXData() {
+
+		return x_data;
 	}
 	
-	public static double getZData() {
+	public static VisionDataUnit<Double> getZData() {
+
+		return z_data;
+	}
+
+	public static Double getXDataValue() {
+
+		return x_data.get();
+	}
+
+	public static Double getZDataValue() {
+
 		return z_data.get();
 	}
 	
-	public static void setXData(Double x) {
+	public static void setXDataValue(Double x) {
 		x_data.set(x);
 	}
 	
-	public static void setZData(Double z) {
+	public static void setZDataValue(Double z) {
 		z_data.set(z);
 	}
 	

@@ -7,6 +7,7 @@ public class JSONReceiver implements VisionReceiverBase{
 	public JSONReceiver(String fileName) {
 		this.fileName = fileName;
 	}
+
 	@Override
 	public String extractData() {
 		String raw_data = CommandExecutor.catFile(fileName);
