@@ -11,7 +11,7 @@ public class VideoReceiver extends DataReceiverBase{
 
 	protected VideoReceiver() {
 
-		super("Video Receiver", Constants.kVisionVideoFileName, Constants.kVideoPort, Constants.kAndroidVisionSocketUpdateRate);
+		super("Video Receiver", Constants.kVisionVideoFileName, Constants.kVideoPort, Constants.kAndroidVisionSocketUpdateRate, false);
 	}
 	
 	@Override
@@ -19,7 +19,7 @@ public class VideoReceiver extends DataReceiverBase{
 
 		ConcurrentLinkedQueue<byte[]> frameQueue = VisionData.getVideoQueue();
 		try {
-			image = mReceiverSelector.getReciever().extractDataBytes();
+			image = mReceiverSelector.getReceiver().extractDataBytes();
 			if (image != null && image.length != 0) {
 
 				// Make sure queue does not get too big

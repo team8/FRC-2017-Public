@@ -16,6 +16,7 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
     }
 
     protected int m_port = 0;
+    protected boolean m_isRestartingSocket;
     protected ServerSocket m_server;
     protected Socket m_client = new Socket();
     protected ServerState m_serverState = ServerState.PRE_INIT;
@@ -35,12 +36,14 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
      *
      * @param k_updateRate Update rate of the thread
      * @param k_port The port to connect the server to
+     * @param k_isRestartingSocket Whether or not this socket constantly restarts
      */
-    public void start(final int k_updateRate, final int k_port)
+    public void start(final int k_updateRate, final int k_port, final boolean k_isRestartingSocket)
     {
         super.start(k_updateRate);
 
         m_port = k_port;
+        m_isRestartingSocket = k_isRestartingSocket;
     }
 
     @Override
@@ -63,11 +66,12 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
 
         final boolean notConnected = !m_client.isConnected(), closed = m_client.isClosed(), shouldRetry = notConnected || closed;
 
-        if (notConnected) log("[Warning] Lost connection to port: " + Integer.toString(m_port));
-        if (closed) log("[Warning] Connection was closed on port: " + Integer.toString(m_port));
+        if (notConnected && !m_isRestartingSocket) log("[Warning] Lost connection to port: " + Integer.toString(m_port));
+        if (closed && !m_isRestartingSocket) log("[Warning] Connection was closed on port: " + Integer.toString(m_port));
 
     	return shouldRetry ? ServerState.ATTEMPTING_CONNECTION : ServerState.OPEN;
     }
+
     /**
      * Sets the state of the server
      *
@@ -86,7 +90,7 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
 
         try {
 
-            log("Trying to connect to client on port: " + Integer.toString(m_port) + "...");
+            if (!m_isRestartingSocket) log("Trying to connect to client on port: " + Integer.toString(m_port) + "...");
 
             if (m_server != null) m_server.close();
             m_server = new ServerSocket(m_port);
@@ -95,7 +99,7 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
             // Pause thread until we accept from the client
             m_client = m_server.accept();
 
-            log("Connected to client on port: " + m_client.getPort() + "!");
+            if (!m_isRestartingSocket) log("Connected to client on port: " + m_client.getPort() + "!");
 
             return ServerState.OPEN;
 

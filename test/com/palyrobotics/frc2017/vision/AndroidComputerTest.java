@@ -8,21 +8,11 @@ public class AndroidComputerTest {
 
 		VisionManager.getInstance().start(Constants.kAndroidConnectionUpdateRate,true);
 
-//		VisionManager.getInstance().StartVisionApp();
-//		String inp = RuntimeExecutor.getInstance().exec("adb devices");
-//		String[] lines = inp.split("\\n");
-//		boolean hasDevice = false;
-//		for(int i=1; i<lines.length && !hasDevice; i++){
-//			hasDevice = lines[i].contains("device");
-//		}
-//		System.out.println(inp);
-//		System.out.println(hasDevice);
-//
 //		while (true) {
 //
 //			if (VisionManager.getInstance().isAppStarted()) {
 //
-////				System.out.println(String.format("X: %b, Y: %b", VisionData.getXData().exists(), VisionData.getZData().exists()));
+////			System.out.println(String.format("X: %b, Y: %b", VisionData.getXData().exists(), VisionData.getZData().exists()));
 ////
 //				final String x = Double.toString(VisionData.getXDataValue()), y = Double.toString(VisionData.getZDataValue());
 //

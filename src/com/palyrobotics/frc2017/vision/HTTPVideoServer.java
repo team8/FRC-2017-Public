@@ -1,5 +1,7 @@
 package com.palyrobotics.frc2017.vision;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 
 /**
@@ -26,11 +28,27 @@ public class HTTPVideoServer extends AbstractVisionServer {
 		return s_instance;
 	}
 
-	private byte[] m_defaultImage;
+	private final byte[] k_defaultImage;
 
 	private HTTPVideoServer() {
 
 		super("HTTP Video Server");
+
+		byte[] imageInBytes = null;
+
+		try {
+			BufferedImage image = ImageIO.read(new File("C:/Users/qhdwi/Documents/GitHub/FRC-2017-Private/test/com/palyrobotics/frc2017/vision/frame.jpg"));
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(image, "jpg", baos);
+
+			imageInBytes = baos.toByteArray();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+
+		k_defaultImage = imageInBytes;
 	}
 
 	@Override
@@ -52,12 +70,6 @@ public class HTTPVideoServer extends AbstractVisionServer {
 			// Output stream that we send the response to
 			output = new PrintStream(m_client.getOutputStream());
 
-			if (data == null) {
-				writeServerError(output);
-				setServerState(ServerState.ATTEMPTING_CONNECTION);
-				return;
-			}
-
 			// Send out the content to the javascript client
 			output.println("HTTP/1.1 200 OK");
 			output.println("Cache-Control: no-cache, no-store, must-revalidate");
@@ -70,6 +82,8 @@ public class HTTPVideoServer extends AbstractVisionServer {
 		} catch (IOException e) {
 
 			e.printStackTrace();
+
+		} finally {
 
 			closeClient();
 		}
@@ -92,16 +106,22 @@ public class HTTPVideoServer extends AbstractVisionServer {
 
 			case OPEN: {
 
-				// Make sure queue has something in it
-				if (VisionData.getVideoQueue().size() > 0) {
-					// Get next frame
-					byte[] frame = VisionData.getVideoQueue().remove();
-					try {
-						writeImageToServer(frame);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+				try {
+					writeImageToServer(k_defaultImage);
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
+
+//				// Make sure queue has something in it
+//				if (VisionData.getVideoQueue().size() > 0) {
+//					// Get next frame
+//					byte[] frame = VisionData.getVideoQueue().remove();
+//					try {
+//						writeImageToServer(frame);
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
+//				}
 				break;
 			}
 		}
