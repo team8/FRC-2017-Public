@@ -63,20 +63,18 @@ public class CommandExecutor{
 		return hasDevice;
 	}
 
-	 static void restartAdbServer() {
+	static void restartAdbServer() {
 
-		 String restartOut;
-		 do {
-			 System.out.println("[Info] Restarting server...");
+		System.out.println("[Info] Restarting server...");
 
-			 System.out.println(exec("adb kill-server"));
-			 restartOut = exec("adb start-server");
+		String outp_ = "";
+		do{
+			outp_ = exec("adb kill-server & adb start-server");
+		}
+		while(!outp_.contains("daemon started successfully"));
 
-			 System.out.println(restartOut);
-		 }
-		 while(!restartOut.contains("daemon started successfully"));
-	 }
-	 
+	}
+
 	 static String toggleFlash(){
 		return exec("adb shell am broadcast -a "+Constants.kPackageName
 				+".GET_DATA --es type flash --ez isFlash "+isFlashOn);

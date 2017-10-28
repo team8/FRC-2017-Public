@@ -87,9 +87,7 @@ public class RuntimeExecutor {
 	 * Initializes this computer as an adb server
 	 */
 	public void init(){
-
 		exec("adb start-server");
-
 		CommandExecutor.restartAdbServer();
 	}
 }
