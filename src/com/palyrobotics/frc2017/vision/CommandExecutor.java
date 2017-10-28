@@ -22,11 +22,21 @@ public class CommandExecutor{
 	 	 // Initializes RIOdroid usb and RIOadb adb daemon
 		 // Port forwards so that PC can accept connection from android
 
+		 System.out.println("[Info] Restarting server...");
+
+		 exec("adb kill-server & adb start-server");
+
+		 System.out.println("[Info] TCP Reversing ports...");
+
 		 exec("adb reverse tcp:" +
 			 Constants.kVideoPort + " tcp:" +
 			 Constants.kVideoPort);
 
-		 System.out.println("Starting VideoManager");
+		 exec("adb reverse tcp:" +
+				 Constants.kVisionDataPort + " tcp:" +
+				 Constants.kVisionDataPort);
+
+		 System.out.println("[Info] Starting Video Manager...");
 	 }
 	 
 	 static String toggleFlash(){

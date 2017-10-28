@@ -35,8 +35,8 @@ public class VisionManager extends AbstractVisionThread {
 	/**
 	 * @return The instance of the ACH
 	 */
-
 	public static VisionManager getInstance(){
+
 		if(s_instance == null){
 			s_instance = new VisionManager();
 		}
@@ -58,7 +58,8 @@ public class VisionManager extends AbstractVisionThread {
 	}
 	
 	public void start(int updateRate, boolean isTesting) {
-		this.start(updateRate);
+
+		super.start(updateRate);
 		CommandExecutor.setTesting(isTesting);
 	}
 	/**
@@ -79,7 +80,7 @@ public class VisionManager extends AbstractVisionThread {
 
 	private ConnectionState StartSubprocesses() {
 
-		mReceiverBaseData.start(Constants.kAndroidDataSocketUpdateRate, VisionReceiverType.JSON);
+		mReceiverBaseData.start(Constants.kAndroidDataSocketUpdateRate, VisionReceiverType.SOCKET);
 		mReceiverBaseVideo.start(Constants.kAndroidVisionSocketUpdateRate, VisionReceiverType.SOCKET);
 		HTTPVideoServer.getInstance().start(Constants.kMJPEGVisionSocketUpdateRate, Constants.kMJPEGServerSocketPort);
 
@@ -100,8 +101,8 @@ public class VisionManager extends AbstractVisionThread {
 
 		if(m_adbServerCreated){
 			if(!this.isAppStarted()){
-				System.out.println("Vision app not started, starting app");
-				Logger.getInstance().logRobotThread("Vision app not started, starting app");
+				System.out.println("[Info] Vision app not started, starting app");
+				Logger.getInstance().logRobotThread("[Info] Vision app not started, starting app");
 
 				this.VisionInit();
 			} else {
@@ -109,16 +110,11 @@ public class VisionManager extends AbstractVisionThread {
 			}
 
 			if (this.m_visionRunning) {
-				System.out.println("Connected to vision app");
+				System.out.println("[Info] Connected to vision app");
 				Logger.getInstance().logRobotThread("Connected to vision app");
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 				return ConnectionState.STARTING_SUB_PROCESSES;
 			} else {
-				System.out.println("Could not start vision app, retrying");
+				System.out.println("[Warning] Could not start vision app, retrying");
 				Logger.getInstance().logRobotThread("Could not start vision app, retrying");
 				return this.m_connectionState;
 			}
@@ -130,23 +126,25 @@ public class VisionManager extends AbstractVisionThread {
 	}
 
 	private void InitializeAdbServer() {
+
 		boolean connected = false;
 
 		try {
 			CommandExecutor.adbServerInit();
 			connected = true;
 		} catch (Exception e) {
-			System.out.println("Error: in VisionManager.StartADB(), "
-					+ "could not connect.\n" + e.getStackTrace());
+			System.out.println("[Error] in VisionManager.StartADB(), "
+					+ "could not connect..");
+			e.printStackTrace();
 		}
 
 		if(connected){      // Adb server started successfully
 			m_adbServerCreated = true;
-			System.out.println("Adb server started");
-			Logger.getInstance().logRobotThread("Adb server started");
+			System.out.println("[Info] Adb server started");
+			Logger.getInstance().logRobotThread("[Info] Adb server started");
 		} else {            // Adb server failed to start
-			System.out.println("Failed to start adb server");
-			Logger.getInstance().logRobotThread("Failed to start adb server");
+			System.out.println("[Error] Failed to start adb server");
+			Logger.getInstance().logRobotThread("[Error] Failed to start adb server");
 		}
 	}
 
@@ -205,7 +203,7 @@ public class VisionManager extends AbstractVisionThread {
 
 		if(connected) {     // App started successfully
 			m_visionRunning = true;
-			System.out.println("Starting Vision Stream");
+			System.out.println("[Info] Starting Vision Stream");
 			return ConnectionState.STREAMING;
 		} else {            // Failed to start app
 			return m_connectionState;

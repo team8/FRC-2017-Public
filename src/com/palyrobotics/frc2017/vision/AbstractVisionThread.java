@@ -32,6 +32,8 @@ public abstract class AbstractVisionThread implements Runnable {
             return;
         }
 
+        System.out.println("[Info] Initializing thread " + k_threadName + "...");
+
         init();
 
         System.out.println("[Info] Starting thread " + k_threadName + "...");

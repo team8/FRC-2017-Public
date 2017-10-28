@@ -15,17 +15,23 @@ public class SocketReceiver extends AbstractVisionServer implements VisionReceiv
 	@Override
 	public String extractData() {
 
-		String data = "";
-		try {
-			String line;
-			BufferedReader mReader = new BufferedReader(new InputStreamReader(m_client.getInputStream()));
-			while((line = mReader.readLine()) != null) {
-				data += line + "\n";
+		if (m_client.isConnected() && !m_client.isClosed()) {
+
+			String data = "";
+			try {
+				String line;
+				BufferedReader mReader = new BufferedReader(new InputStreamReader(m_client.getInputStream()));
+				while((line = mReader.readLine()) != null) {
+					data += line + "\n";
+				}
+				return data;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
-		return data;
+		}
+
+		return null;
 	}
 
 
@@ -37,7 +43,7 @@ public class SocketReceiver extends AbstractVisionServer implements VisionReceiv
 	@Override
 	public byte[] extractDataBytes() {
 
-		if (m_client.isConnected()) {
+		if (m_client.isConnected() && !m_client.isConnected()) {
 
 			try {
 				DataInputStream dis = new DataInputStream(m_client.getInputStream());
@@ -51,6 +57,7 @@ public class SocketReceiver extends AbstractVisionServer implements VisionReceiv
 				e.printStackTrace();
 			}
 		}
+
 		return null;
 	}
 

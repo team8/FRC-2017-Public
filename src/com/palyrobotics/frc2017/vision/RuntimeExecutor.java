@@ -72,7 +72,8 @@ public class RuntimeExecutor {
 			// Read in console output from the process object
 			BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			while ((line = input.readLine()) != null) {
-				out.append(line+"\n");
+				out.append(line);
+				out.append("\n");
 			}
 			input.close();
 		} catch (IOException e) {

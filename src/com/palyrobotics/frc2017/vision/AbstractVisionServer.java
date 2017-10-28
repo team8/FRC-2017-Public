@@ -61,13 +61,12 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
      */
     protected ServerState checkConnection() {
 
-    	final boolean connectedAndOpen = !m_client.isConnected() || m_client.isClosed();
+        final boolean notConnected = !m_client.isConnected(), closed = m_client.isClosed(), shouldRetry = notConnected || closed;
+
+        if (notConnected) log("[Warning] Lost connection to port: " + Integer.toString(m_port));
+        if (closed) log("[Warning] Connection was closed on port: " + Integer.toString(m_port));
     	
-    	if (!connectedAndOpen) {
-    		log("Lost connection to socket");
-    	}
-    	
-    	return connectedAndOpen ? ServerState.OPEN : ServerState.ATTEMPTING_CONNECTION;
+    	return shouldRetry ? ServerState.ATTEMPTING_CONNECTION : ServerState.OPEN;
     }
     /**
      * Sets the state of the server
