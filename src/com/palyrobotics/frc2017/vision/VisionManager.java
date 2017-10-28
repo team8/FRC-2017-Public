@@ -80,7 +80,7 @@ public class VisionManager extends AbstractVisionThread {
 
 	private ConnectionState StartSubprocesses() {
 
-		mReceiverBaseData.start(Constants.kAndroidDataSocketUpdateRate, VisionReceiverType.SOCKET);
+		mReceiverBaseData.start(Constants.kAndroidDataSocketUpdateRate, VisionReceiverType.JSON);
 		mReceiverBaseVideo.start(Constants.kAndroidVisionSocketUpdateRate, VisionReceiverType.SOCKET);
 		HTTPVideoServer.getInstance().start(Constants.kMJPEGVisionSocketUpdateRate, Constants.kMJPEGServerSocketPort);
 
@@ -221,6 +221,7 @@ public class VisionManager extends AbstractVisionThread {
 	}
 
 	public boolean isAppStarted(){
+
 		String pidret = CommandExecutor.appPID();
 		return pidret != null && !pidret.isEmpty() && pidret != "";
 	}
