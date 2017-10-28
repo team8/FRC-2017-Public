@@ -37,8 +37,6 @@ public class DataThread extends DataReceiverBase {
 
 						case "STREAMING": {
 
-							System.out.println(raw_data);
-
 							// Get image data
 							final double
 									data_x = Double.parseDouble((String)json.get("x_displacement")),
