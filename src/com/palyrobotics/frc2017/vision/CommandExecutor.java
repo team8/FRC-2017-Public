@@ -21,9 +21,11 @@ public class CommandExecutor{
 	 	 // Initializes RIOdroid usb and RIOadb adb daemon
 		 // Port forwards so that PC can accept connection from android
 
-		 System.out.println("[Info] Restarting server...");
-
-		 exec("adb kill-server & adb start-server");
+		 if(!isTesting){
+			 RIOdroid.init();
+		 }else{
+			 RuntimeExecutor.getInstance().init();
+		 }
 
 		 System.out.println("[Info] TCP Reversing ports...");
 
@@ -37,6 +39,18 @@ public class CommandExecutor{
 
 		 System.out.println("[Info] Starting Video Manager...");
 	 }
+
+	static void restartAdbServer() {
+
+		System.out.println("[Info] Restarting server...");
+
+		String outp_ = "";
+		do{
+			outp_ = exec("adb kill-server & adb start-server");
+		}
+		while(!outp_.contains("daemon started successfully"));
+
+	}
 	 
 	 static String toggleFlash(){
 		return exec("adb shell am broadcast -a "+Constants.kPackageName
