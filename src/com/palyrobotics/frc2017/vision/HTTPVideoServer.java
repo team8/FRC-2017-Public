@@ -3,6 +3,7 @@ package com.palyrobotics.frc2017.vision;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Sends video from the robot to the dashboard.
@@ -62,13 +63,12 @@ public class HTTPVideoServer extends AbstractVisionServer {
 	 *
 	 * @throws IOException Thrown by socket
 	 */
-	private void writeImageToServer(byte[] data) throws IOException {
+	private void writeImageToServer(byte[] data) {
 
-		PrintStream output;
 		try {
 
 			// Output stream that we send the response to
-			output = new PrintStream(m_client.getOutputStream());
+			final PrintStream output = new PrintStream(m_client.getOutputStream());
 
 			// Send out the content to the javascript client
 			output.println("HTTP/1.1 200 OK");
@@ -95,6 +95,7 @@ public class HTTPVideoServer extends AbstractVisionServer {
 	 * @param output The output stream.
 	 */
 	private void writeServerError(PrintStream output) {
+
 		output.println("HTTP/1.0 500 Internal Server Error");
 		output.flush();
 	}
@@ -106,22 +107,13 @@ public class HTTPVideoServer extends AbstractVisionServer {
 
 			case OPEN: {
 
-				try {
-					writeImageToServer(k_defaultImage);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				final ConcurrentLinkedQueue<byte[]> videoFrames = VisionData.getVideoQueue();
 
-//				// Make sure queue has something in it
-//				if (VisionData.getVideoQueue().size() > 0) {
-//					// Get next frame
-//					byte[] frame = VisionData.getVideoQueue().remove();
-//					try {
-//						writeImageToServer(frame);
-//					} catch (IOException e) {
-//						e.printStackTrace();
-//					}
-//				}
+				// Send frame from nexus if they exist, else show default image
+				final byte[] imageToSend = videoFrames.size() > 0 ? videoFrames.remove() : k_defaultImage;
+
+				writeImageToServer(imageToSend);
+
 				break;
 			}
 		}

@@ -1,7 +1,24 @@
 <html>
 	<head>
-		<script type="text/JavaScript">
+		<title>Nexus Video Viewer</title>
 
+		<style>
+			h1 {
+				text-align: center;
+			}
+			img {
+				display: block;
+				margin: auto;
+			}
+		</style>
+	</head>
+
+	<body onload="init()">
+		<h1>Nexus Viewer</h1>
+		<img id="image">
+
+		<script type="text/JavaScript">
+			
 			var refreshInterval = 350; //in ms
 			var canvas;
 			var context;
@@ -17,6 +34,8 @@
 
 			function init() {
 
+				console.log("Initializing...");
+
 				image = document.getElementById("image");
 				
 				setInterval(refresh, refreshInterval);
@@ -24,16 +43,10 @@
 
 			function refresh() {
 
+
 				image.src = url + "?t=" + counter;
 				counter++;
-			}
-
+			}		
 		</script>
-		<title>Nexus Video Viewer</title>
-	</head>
-
-	<body onload="JavaScript:init();">
-		<img id="image">
 	</body>
-
 </html> 
