@@ -9,7 +9,7 @@ import java.io.IOException;
 public class DataThread extends DataReceiverBase {
 
 	protected DataThread() {
-		super("Data Thread", Constants.kVisionDataFileName,Constants.kVisionDataPort, Constants.kAndroidDataSocketUpdateRate);
+		super("Data Thread", Constants.kVisionDataFileName,Constants.kVisionDataPort, Constants.kAndroidDataSocketUpdateRate, false);
 	}
 
 	private static DataThread s_instance;
@@ -26,7 +26,7 @@ public class DataThread extends DataReceiverBase {
 	protected void update() {
 		
 		try {
-			String raw_data = mReceiverSelector.getReciever().extractData();
+			String raw_data = mReceiverSelector.getReceiver().extractData();
 			JSONObject json = VisionUtil.parseJSON(raw_data);
 
 			if (json != null) {

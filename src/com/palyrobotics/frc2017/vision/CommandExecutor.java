@@ -21,10 +21,12 @@ public class CommandExecutor{
 	 	 // Initializes RIOdroid usb and RIOadb adb daemon
 		 // Port forwards so that PC can accept connection from android
 
-		 if(!isTesting){
-			 RIOdroid.init();
-		 }else{
-			 RuntimeExecutor.getInstance().init();
+		 System.out.println("[Info] Initializing RIODroid...");
+
+		 if (!isTesting) {
+		 	RIOdroid.init();
+		 } else {
+		 	RuntimeExecutor.getInstance().init();
 		 }
 
 		 System.out.println("[Info] TCP Reversing ports...");
@@ -40,17 +42,37 @@ public class CommandExecutor{
 		 System.out.println("[Info] Starting Video Manager...");
 	 }
 
-	static void restartAdbServer() {
+	/**
+	 * Detects if the nexus is connected through the command "adb devices" and looking at the output
+	 *
+	 * @return Whether or not a nexus device is connected
+	 */
+	public static boolean isNexusConnected() {
 
-		System.out.println("[Info] Restarting server...");
+		System.out.println("[Info] Trying to find nexus...");
 
-		String outp_ = "";
-		do{
-			outp_ = exec("adb kill-server & adb start-server");
+		boolean hasDevice = false;
+		String[] outp = RuntimeExecutor.getInstance().exec("adb devices").split("\\n");
+
+		for(int i=1; i<outp.length && !hasDevice; i++){
+			hasDevice = outp[i].contains("device");
 		}
-		while(!outp_.contains("daemon started successfully"));
-
+		return hasDevice;
 	}
+
+	 static void restartAdbServer() {
+
+		 String restartOut;
+		 do {
+			 System.out.println("[Info] Restarting server...");
+
+			 System.out.println(exec("adb kill-server"));
+			 restartOut = exec("adb start-server");
+
+			 System.out.println(restartOut);
+		 }
+		 while(!restartOut.contains("daemon started successfully"));
+	 }
 	 
 	 static String toggleFlash(){
 		return exec("adb shell am broadcast -a "+Constants.kPackageName

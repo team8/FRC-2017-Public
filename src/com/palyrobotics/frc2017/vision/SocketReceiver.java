@@ -54,7 +54,9 @@ public class SocketReceiver extends AbstractVisionServer implements VisionReceiv
 				}
 				return data;
 			} catch (IOException e) {
+
 				e.printStackTrace();
+				closeClient();
 			}
 		}
 

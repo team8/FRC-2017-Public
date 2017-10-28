@@ -9,19 +9,21 @@ public abstract class DataReceiverBase extends AbstractVisionThread {
 	String fileName;
 	int port;
 	int updateRate;
+	boolean isRestartingServer;
 	
-	protected DataReceiverBase(String k_threadName, String fileName, int port, int updateRate) {
+	protected DataReceiverBase(String k_threadName, String fileName, int port, int updateRate, boolean isRestartingServer) {
 
 		super(k_threadName);
 		this.fileName = fileName;
 		this.port = port;
 		this.updateRate = updateRate;
+		this.isRestartingServer = isRestartingServer;
 	}
 	
 	@Override
 	protected void init() {
 
-		mReceiverSelector = new ReceiverSelector(fileName, port, updateRate);
+		mReceiverSelector = new ReceiverSelector(fileName, port, updateRate, isRestartingServer);
 		mReceiverSelector.setReceiver(mReceiverType);
 	}
 	

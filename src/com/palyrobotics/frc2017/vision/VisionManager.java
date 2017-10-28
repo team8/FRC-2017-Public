@@ -82,7 +82,7 @@ public class VisionManager extends AbstractVisionThread {
 
 		mReceiverBaseData.start(Constants.kAndroidDataSocketUpdateRate, VisionReceiverType.JSON);
 		mReceiverBaseVideo.start(Constants.kAndroidVisionSocketUpdateRate, VisionReceiverType.SOCKET);
-		HTTPVideoServer.getInstance().start(Constants.kMJPEGVisionSocketUpdateRate, Constants.kMJPEGServerSocketPort);
+		HTTPVideoServer.getInstance().start(Constants.kMJPEGVisionSocketUpdateRate, Constants.kMJPEGServerSocketPort, true);
 
 		return ConnectionState.STREAMING;
 	}
@@ -93,7 +93,7 @@ public class VisionManager extends AbstractVisionThread {
 	 */
 	private ConnectionState StartADB() {
 
-		if(!this.isNexusConnected()){
+		if(!CommandExecutor.isNexusConnected()){
 			//			System.out.println("Error: in VisionManager.StartADB(), " +
 			//					"nexus is not connected");
 			return this.m_connectionState;
@@ -101,8 +101,8 @@ public class VisionManager extends AbstractVisionThread {
 
 		if(m_adbServerCreated){
 			if(!this.isAppStarted()){
-				System.out.println("[Info] Vision app not started, starting app");
-				Logger.getInstance().logRobotThread("[Info] Vision app not started, starting app");
+				System.out.println("[Warning] Vision app not started, starting app");
+				Logger.getInstance().logRobotThread("[Warning] Vision app not started, starting app");
 
 				this.VisionInit();
 			} else {
@@ -208,16 +208,6 @@ public class VisionManager extends AbstractVisionThread {
 		} else {            // Failed to start app
 			return m_connectionState;
 		}
-	}
-
-	public boolean isNexusConnected(){
-		boolean hasDevice = false;
-		String[] outp = RuntimeExecutor.getInstance().exec("adb devices").split("\\n");
-
-		for(int i=1; i<outp.length && !hasDevice; i++){
-			hasDevice = outp[i].contains("device");
-		}
-		return hasDevice;
 	}
 
 	public boolean isAppStarted(){

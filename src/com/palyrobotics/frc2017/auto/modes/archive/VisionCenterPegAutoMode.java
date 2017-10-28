@@ -11,6 +11,7 @@ import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.palyrobotics.frc2017.util.logger.Logger;
+import com.palyrobotics.frc2017.vision.CommandExecutor;
 import com.palyrobotics.frc2017.vision.VisionManager;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 	public void prestart() {
 		String log = "Starting Vision Center Peg Auto Mode";
 		Logger.getInstance().logRobotThread("Starting Vision Center Peg Auto Mode");
-		if (!VisionManager.getInstance().isServerStarted()  || !VisionManager.getInstance().isNexusConnected()) {
+		if (!VisionManager.getInstance().isServerStarted()  || !CommandExecutor.isNexusConnected()) {
 			System.out.println("Failed to find vision server, revert auto");
 			Logger.getInstance().logRobotThread("Failed to find vision server, revert");
 			CenterPegAutoMode fallback = new CenterPegAutoMode(mAlliance, true);

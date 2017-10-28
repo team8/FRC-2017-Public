@@ -2,9 +2,10 @@
 	<head>
 		<script type="text/JavaScript">
 
-			var refreshInterval = 140; //in ms
+			var refreshInterval = 350; //in ms
 			var canvas;
 			var context;
+			var counter = 0;
 
 			var url;
 			var testing_pc = true;
@@ -23,7 +24,8 @@
 
 			function refresh() {
 
-				image.src = url + "?t=" + new Date().getTime();
+				image.src = url + "?t=" + counter;
+				counter++;
 			}
 
 		</script>
