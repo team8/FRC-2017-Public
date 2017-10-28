@@ -221,6 +221,7 @@ public class VisionManager extends AbstractVisionThread {
 	}
 
 	public boolean isAppStarted(){
+
 		String pidret = CommandExecutor.appPID();
 		return pidret != null && !pidret.isEmpty() && pidret != "";
 	}
