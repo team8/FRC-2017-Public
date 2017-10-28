@@ -49,32 +49,29 @@ public class CommandExecutor{
 	 */
 	public static boolean isNexusConnected() {
 
-		//System.out.println("[Info] Trying to find nexus...");
-
 		boolean hasDevice = false;
-		String[] devicesOutput = RuntimeExecutor.getInstance().exec("adb devices").split("\\n");
+		String[] outp = RuntimeExecutor.getInstance().exec("adb devices").split("\\n");
 
-		for(int i = 1; i < devicesOutput.length && !hasDevice; i++) {
-			hasDevice = devicesOutput[i].contains("device");
+		for(int i=1; i<outp.length && !hasDevice; i++){
+			hasDevice = outp[i].contains("device");
 		}
-
-		//if (!hasDevice) System.out.println("[Warning] No device found with USB scan!");
-
 		return hasDevice;
 	}
 
-	static void restartAdbServer() {
+	 static void restartAdbServer() {
 
-		System.out.println("[Info] Restarting server...");
+		 String restartOut;
+		 do {
+			 System.out.println("[Info] Restarting server...");
 
-		String outp_ = "";
-		do{
-			outp_ = exec("adb kill-server & adb start-server");
-		}
-		while(!outp_.contains("daemon started successfully"));
+			 System.out.println(exec("adb kill-server"));
+			 restartOut = exec("adb start-server");
 
-	}
-
+			 System.out.println(restartOut);
+		 }
+		 while(!restartOut.contains("daemon started successfully"));
+	 }
+	 
 	 static String toggleFlash(){
 		return exec("adb shell am broadcast -a "+Constants.kPackageName
 				+".GET_DATA --es type flash --ez isFlash "+isFlashOn);

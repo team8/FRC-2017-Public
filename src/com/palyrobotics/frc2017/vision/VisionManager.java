@@ -109,7 +109,6 @@ public class VisionManager extends AbstractVisionThread {
 		}
 
 		if(m_adbServerCreated){
-
 			if(!this.isAppStarted()){
 				this.VisionInit();
 			} else {

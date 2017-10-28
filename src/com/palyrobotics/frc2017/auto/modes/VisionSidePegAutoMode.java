@@ -65,6 +65,12 @@ public class VisionSidePegAutoMode extends AutoModeBase {
 
 	@Override
 	public void prestart() {
+		if(VisionManager.getInstance().isServerStarted()){
+			System.out.println("Failed to find vision server, revert auto");
+		}
+		System.out.println("Starting "+this.toString()+" Auto Mode");
+		Logger.getInstance().logRobotThread("Starting "+this.toString()+" Auto Mode");
+
 		if (!VisionManager.getInstance().isServerStarted() || !CommandExecutor.isNexusConnected()) {
 			System.out.println("Vision server not started!");
 			Logger.getInstance().logRobotThread("Vision server not detected, fallback to default side peg");
