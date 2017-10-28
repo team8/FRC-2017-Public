@@ -10,7 +10,7 @@ import com.palyrobotics.frc2017.vision.ReceiverSelector.VisionReceiverType;
 public class VisionManager extends AbstractVisionThread {
 
 	public enum ConnectionState{
-		PRE_INIT, STARTING_ADB, STARTING_SUB_PROCESSES, IDLE, START_VISION_APP, STREAMING
+		PRE_INIT, STARTING_ADB, STARTING_SUB_PROCESSES, IDLE, START_VISION_APP, STREAMING, GIVEN_UP
 	}
 
 
@@ -23,6 +23,9 @@ public class VisionManager extends AbstractVisionThread {
 	private DataReceiverBase mReceiverBaseData = new DataThread();
 	private boolean m_adbServerCreated = false;
 	private boolean m_visionRunning = false;
+
+	private int initAdbRetryCount = 0;
+	private boolean useTimeout = true;
 
 	/**
 	 * Creates an VisionManager instance
@@ -89,6 +92,19 @@ public class VisionManager extends AbstractVisionThread {
 	private ConnectionState StartADB() {
 
 		if (!CommandExecutor.isNexusConnected()){
+
+			initAdbRetryCount++;
+
+			if (useTimeout) {
+				try {
+					Thread.sleep(initAdbRetryCount*40);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+
+					return ConnectionState.GIVEN_UP;
+				}
+			}
+
 			return this.m_connectionState;
 		}
 
