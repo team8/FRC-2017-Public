@@ -30,8 +30,8 @@ public class CommandExecutor{
 		 System.out.println("[Info] TCP Reversing ports...");
 
 		 exec("adb reverse tcp:" +
-			 Constants.kVideoPort + " tcp:" +
-			 Constants.kVideoPort);
+				 Constants.kVideoPort + " tcp:" +
+				 Constants.kVideoPort);
 
 		 exec("adb reverse tcp:" +
 				 Constants.kVisionDataPort + " tcp:" +

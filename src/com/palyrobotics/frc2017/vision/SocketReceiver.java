@@ -43,7 +43,7 @@ public class SocketReceiver extends AbstractVisionServer implements VisionReceiv
 	@Override
 	public byte[] extractDataBytes() {
 
-		if (m_client.isConnected() && !m_client.isConnected()) {
+		if (m_client.isConnected() && !m_client.isClosed()) {
 
 			try {
 				DataInputStream dis = new DataInputStream(m_client.getInputStream());

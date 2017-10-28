@@ -65,7 +65,7 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
 
         if (notConnected) log("[Warning] Lost connection to port: " + Integer.toString(m_port));
         if (closed) log("[Warning] Connection was closed on port: " + Integer.toString(m_port));
-    	
+
     	return shouldRetry ? ServerState.ATTEMPTING_CONNECTION : ServerState.OPEN;
     }
     /**
