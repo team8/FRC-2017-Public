@@ -24,7 +24,7 @@
 
 		<script type="text/JavaScript">
 			
-			var refreshInterval = 350; //in ms
+			var refreshInterval = 100; //in ms
 			var canvas;
 			var context;
 			var counter = 0;
@@ -50,9 +50,6 @@
 
 				image.src = url + "?t=" + counter;
 				counter++;
-
-				if (image.clientHeight == 0)
-					image.src = "default.jpeg";
 			}		
 		</script>
 	</body>

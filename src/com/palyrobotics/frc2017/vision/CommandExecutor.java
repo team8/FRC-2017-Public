@@ -50,7 +50,7 @@ public class CommandExecutor{
 	 */
 	public static boolean isNexusConnected() {
 
-		System.out.println("[Info] Trying to find nexus...");
+		//System.out.println("[Info] Trying to find nexus...");
 
 		boolean hasDevice = false;
 		String[] devicesOutput = RuntimeExecutor.getInstance().exec("adb devices").split("\\n");
@@ -59,7 +59,7 @@ public class CommandExecutor{
 			hasDevice = devicesOutput[i].contains("device");
 		}
 
-		if (!hasDevice) System.out.println("[Warning] No device found with USB scan!");
+		//if (!hasDevice) System.out.println("[Warning] No device found with USB scan!");
 
 		return hasDevice;
 	}

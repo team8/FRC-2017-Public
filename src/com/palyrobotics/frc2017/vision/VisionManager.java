@@ -10,7 +10,7 @@ import com.palyrobotics.frc2017.vision.ReceiverSelector.VisionReceiverType;
 public class VisionManager extends AbstractVisionThread {
 
 	public enum ConnectionState{
-		PRE_INIT, STARTING_ADB, STARTING_SUB_PROCESSES, IDLE, START_VISION_APP, STREAMING;
+		PRE_INIT, STARTING_ADB, STARTING_SUB_PROCESSES, IDLE, START_VISION_APP, STREAMING
 	}
 
 
@@ -68,11 +68,6 @@ public class VisionManager extends AbstractVisionThread {
 	 */
 	@Override
 	public void init() {
-		
-		if(m_connectionState != ConnectionState.PRE_INIT) {    // This should never happen
-			System.out.println("Error: in VisionManager.start(), "
-					+ "connection is already initialized");
-		}
 
 		// Initialize Thread Variables
 		this.SetState(ConnectionState.STARTING_ADB);
@@ -93,29 +88,21 @@ public class VisionManager extends AbstractVisionThread {
 	 */
 	private ConnectionState StartADB() {
 
-		if(!CommandExecutor.isNexusConnected()){
-			//			System.out.println("Error: in VisionManager.StartADB(), " +
-			//					"nexus is not connected");
+		if (!CommandExecutor.isNexusConnected()){
 			return this.m_connectionState;
 		}
 
 		if(m_adbServerCreated){
-			if(!this.isAppStarted()){
-				System.out.println("[Warning] Vision app not started, starting app");
-				Logger.getInstance().logRobotThread("[Warning] Vision app not started, starting app");
 
+			if(!this.isAppStarted()){
 				this.VisionInit();
 			} else {
 				this.m_visionRunning = true;
 			}
 
 			if (this.m_visionRunning) {
-				System.out.println("[Info] Connected to vision app");
-				Logger.getInstance().logRobotThread("Connected to vision app");
 				return ConnectionState.STARTING_SUB_PROCESSES;
 			} else {
-				System.out.println("[Warning] Could not start vision app, retrying");
-				Logger.getInstance().logRobotThread("Could not start vision app, retrying");
 				return this.m_connectionState;
 			}
 		} else {
@@ -133,8 +120,6 @@ public class VisionManager extends AbstractVisionThread {
 			CommandExecutor.adbServerInit();
 			connected = true;
 		} catch (Exception e) {
-			System.out.println("[Error] in VisionManager.StartADB(), "
-					+ "could not connect..");
 			e.printStackTrace();
 		}
 
@@ -197,13 +182,13 @@ public class VisionManager extends AbstractVisionThread {
 
 			connected = true;
 		} catch (Exception e) {
-			log("Could not connect in initialization.");
+
 			e.printStackTrace();
 		}
 
 		if(connected) {     // App started successfully
 			m_visionRunning = true;
-			System.out.println("[Info] Starting Vision Stream");
+
 			return ConnectionState.STREAMING;
 		} else {            // Failed to start app
 			return m_connectionState;
