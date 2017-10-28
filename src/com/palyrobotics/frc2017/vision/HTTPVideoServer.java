@@ -73,7 +73,7 @@ public class HTTPVideoServer extends AbstractVisionServer {
 			// Send out the content to the javascript client
 			output.println("HTTP/1.1 200 OK");
 			output.println("Cache-Control: no-cache, no-store, must-revalidate");
-			output.println("Content-Type: image/jpeg"   );
+			output.println("Content-Type: image/jpeg");
 			output.println("Content-Length: " + data.length);
 			output.println();
 			output.write(data);
