@@ -3,18 +3,23 @@
 		<title>Nexus Video Viewer</title>
 
 		<style>
+			p, h1, h2, h3, h4, h5 {
+				font-family: "Tahoma";
+			}
 			h1 {
 				text-align: center;
 			}
 			img {
 				display: block;
 				margin: auto;
+				margin: 1px solid black;
 			}
 		</style>
 	</head>
 
 	<body onload="init()">
 		<h1>Nexus Viewer</h1>
+		<hr>
 		<img id="image">
 
 		<script type="text/JavaScript">
@@ -43,9 +48,11 @@
 
 			function refresh() {
 
-
 				image.src = url + "?t=" + counter;
 				counter++;
+
+				if (image.clientHeight == 0)
+					image.src = "default.jpeg";
 			}		
 		</script>
 	</body>
