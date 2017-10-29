@@ -122,7 +122,7 @@ public class MJPEGServerSocket implements Runnable{
 	 * (DEBUG) Logs the Socket state
 	 */
 	private void logSocketState(){
-		System.out.println("Debug: DataServerThread AndroidServerState - "+ m_MJPEGServerState);
+//		System.out.println("Debug: DataServerThread AndroidServerState - "+ m_MJPEGServerState);
 	}
 
 	/**
@@ -132,19 +132,19 @@ public class MJPEGServerSocket implements Runnable{
 	public void start(){
 
 		if(!m_MJPEGServerState.equals(MJPEGServerState.PREINIT)){ // This should never happen
-			System.out.println("Error: in DataServerThread.start(), " +
-					"socket is already initialized");
+//			System.out.println("Error: in DataServerThread.start(), " +
+//					"socket is already initialized");
 		}
 
 		if(m_running){  // This should never happen
-			System.out.println("Error: in DataServerThread.start(), " +
-					"thread is already running");
+//			System.out.println("Error: in DataServerThread.start(), " +
+//					"thread is already running");
 		}
 
 		try {
 			m_server = new ServerSocket(m_port);
 			m_server.setReuseAddress(true);
-			System.out.println("Vision stream server started");
+//			System.out.println("Vision stream server started");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -152,7 +152,7 @@ public class MJPEGServerSocket implements Runnable{
 		this.SetState(MJPEGServerState.CONNECTING);
 		m_running = true;
 
-		System.out.println("Starting Thread: MJPEGServerThread on port "+m_port);
+//		System.out.println("Starting Thread: MJPEGServerThread on port "+m_port);
 		(new Thread(this, "MJPEGServerThread")).start();
 	}
 
@@ -195,7 +195,7 @@ public class MJPEGServerSocket implements Runnable{
 			// Prepare the content to send.
 			if (route == null) {
 				writeServerError(output);
-				System.out.println("VISION ERROR, NO ROUTES");
+//				System.out.println("VISION ERROR, NO ROUTES");
 				return;
 			}
 			if (data == null) {
@@ -312,8 +312,8 @@ public class MJPEGServerSocket implements Runnable{
 	 */
 	private MJPEGServerState AcceptConnection(){
 		if(m_socketConnectionState.equals(SocketConnectionState.ALIVE)){
-			System.out.println("Error in VisionServerThread.AcceptConnection(), " +
-					"Socket connection is already Alive");
+//			System.out.println("Error in VisionServerThread.AcceptConnection(), " +
+//					"Socket connection is already Alive");
 			return MJPEGServerState.RECEIVING;
 		}
 
@@ -321,7 +321,7 @@ public class MJPEGServerSocket implements Runnable{
 			// Accept client
 //			System.out.println("Trying to connect to client");
 			m_client = m_server.accept();
-			System.out.println("Connected to client: " + m_client.getPort());
+//			System.out.println("Connected to client: " + m_client.getPort());
 
 			PrintStream writer = new PrintStream(m_client.getOutputStream());
 			writer.println("HTTP/1.0 200 OK");
@@ -349,8 +349,8 @@ public class MJPEGServerSocket implements Runnable{
 			switch (m_MJPEGServerState){
 
 				case PREINIT:   // This should never happen
-					System.out.println("Error: in DataServerThread.run(), " +
-							"thread running on preinit state");
+//					System.out.println("Error: in DataServerThread.run(), " +
+//							"thread running on preinit state");
 					break;
 
 				case RECEIVING:

@@ -20,6 +20,7 @@ import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.palyrobotics.frc2017.util.logger.Logger;
+import com.palyrobotics.frc2017.vision.CommandExecutor;
 import com.palyrobotics.frc2017.vision.VisionManager;
 import com.team254.lib.trajectory.Path;
 
@@ -105,7 +106,7 @@ public class VisionSidePegNeutralAutoMode extends AutoModeBase {
 		System.out.println("Starting "+this.toString()+" Auto Mode");
 		Logger.getInstance().logRobotThread("Starting "+this.toString()+" Auto Mode");
 
-		if (!VisionManager.getInstance().isServerStarted() || !VisionManager.getInstance().isNexusConnected()) {
+		if (!VisionManager.getInstance().isServerStarted() || !CommandExecutor.isNexusConnected()) {
 			System.out.println("Vision server not started!");
 			Logger.getInstance().logRobotThread("Vision server not detected, fallback to default side peg");
 			TrajectorySidePegAutoMode backup = new TrajectorySidePegAutoMode(mVariant, TrajectorySidePegAutoMode.TrajectorySidePostVariant.BACKUP);

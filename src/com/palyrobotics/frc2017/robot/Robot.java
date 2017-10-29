@@ -9,6 +9,8 @@ import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
+import com.palyrobotics.frc2017.robot.team254.lib.util.Loop;
+import com.palyrobotics.frc2017.robot.team254.lib.util.Looper;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.logger.Logger;
 import com.palyrobotics.frc2017.vision.VisionData;
@@ -41,6 +43,8 @@ public class Robot extends IterativeRobot {
 
 	// Hardware Updater
 	private HardwareUpdater mHardwareUpdater;
+
+	private Looper mSubsystemLooper = new Looper();
 	
 	private double mStartTime;
 	private boolean startedClimberRoutine = false;
@@ -83,6 +87,26 @@ public class Robot extends IterativeRobot {
 		}
 
 		mHardwareUpdater.initHardware();
+
+		mSubsystemLooper.register(new Loop() {
+			@Override
+			public void onStart() {
+
+			}
+
+			@Override
+			public void update() {
+				commands = mRoutineManager.update(commands);
+				mHardwareUpdater.updateSensors(robotState);
+				updateSubsystems();
+				mHardwareUpdater.updateHardware();
+			}
+
+			@Override
+			public void onStop() {
+
+			}
+		});
 		System.out.println("Auto: "+AutoModeSelector.getInstance().getAutoMode().toString());
 //		VisionManager.getInstance().StartVisionApp();
 		System.out.println("End robotInit()");
@@ -92,7 +116,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		System.out.println("Start autonomousInit()");
-
 		mLogger.start();
 		mLogger.logRobotThread("Start autonomousInit()");
 		DashboardManager.getInstance().toggleCANTable(true);
@@ -120,15 +143,13 @@ public class Robot extends IterativeRobot {
 		mLogger.logRobotThread("Auto routine", mode.getRoutine().toString());
 		System.out.println("End autonomousInit()");
 		mLogger.logRobotThread("End autonomousInit()");
+		mSubsystemLooper.start();
 	}
 
 	@Override
 	public void autonomousPeriodic() {
-		mLogger.logRobotThread("Nexus xdist: "+ VisionData.getXData());
-		commands = mRoutineManager.update(commands);
-		mHardwareUpdater.updateSensors(robotState);
-		updateSubsystems();
-		mHardwareUpdater.updateHardware();
+//		mLogger.logRobotThread("Nexus xdist: "+ VisionData.getXData());
+
 	}
 
 	@Override
@@ -177,6 +198,7 @@ public class Robot extends IterativeRobot {
 		mLogger.logRobotThread("Start disabledInit()");
 		System.out.println("Current Auto Mode: " + AutoModeSelector.getInstance().getAutoMode().toString());
 		robotState.gamePeriod = RobotState.GamePeriod.DISABLED;
+		mSubsystemLooper.stop();
 		// Stops updating routines
 		mRoutineManager.reset(commands);
 		

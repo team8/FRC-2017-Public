@@ -115,7 +115,7 @@ public class DataServerThread implements Runnable{
 	 * (DEBUG) Logs the Socket state
 	 */
 	private void logSocketState(){
-        System.out.println("Debug: DataServerThread AndroidServerState - "+m_socketState);
+//        System.out.println("Debug: DataServerThread AndroidServerState - "+m_socketState);
     }
 
 	/**
@@ -126,13 +126,13 @@ public class DataServerThread implements Runnable{
 	public void start(int port){
 
         if(!m_socketState.equals(SocketState.PREINIT)){ // This should never happen
-            System.out.println("Error: in DataServerThread.start(), " +
-                    "socket is already initialized");
+//            System.out.println("Error: in DataServerThread.start(), " +
+//                    "socket is already initialized");
         }
 
         if(m_running){  // This should never happen
-            System.out.println("Error: in DataServerThread.start(), " +
-                    "thread is already running");
+//            System.out.println("Error: in DataServerThread.start(), " +
+//                    "thread is already running");
         }
 
         m_port = port;
@@ -146,7 +146,7 @@ public class DataServerThread implements Runnable{
         this.SetState(SocketState.IDLE);
         m_running = true;
 
-        System.out.println("Starting Thread: DataServerThread on port "+port);
+//        System.out.println("Starting Thread: DataServerThread on port "+port);
         (new Thread(this, "DataServerThread")).start();
     }
 
@@ -155,15 +155,15 @@ public class DataServerThread implements Runnable{
 	 */
 	public void AwaitClient() {
         if(!m_socketState.equals(SocketState.IDLE)){
-            System.out.println("Error: in DataServerThread.AwaitClient(), " +
-                    "thread is not in idle state, cannot await for client");
+//            System.out.println("Error: in DataServerThread.AwaitClient(), " +
+//                    "thread is not in idle state, cannot await for client");
            this.logSocketState();
             return;
         }
 
         if(m_awaitingOutput){
-            System.out.println("Error: in DataServerThread.AwaitClient(), " +
-                    "already awaiting output, cannot await another client");
+//            System.out.println("Error: in DataServerThread.AwaitClient(), " +
+//                    "already awaiting output, cannot await another client");
             return;
         }
 
@@ -188,16 +188,16 @@ public class DataServerThread implements Runnable{
 	public String AwaitOutput() {
         String outp = null;
         if(!m_awaitingOutput){
-            System.out.println("Error in DataServerThread.AwaitOutput(), " +
-                    "thread is not awaiting an output");
+//            System.out.println("Error in DataServerThread.AwaitOutput(), " +
+//                    "thread is not awaiting an output");
             return null;
         }
 
         while(m_awaitingOutput){
             switch(m_socketState){
                 case IDLE:
-                    System.out.println("Error in DataServerThread.AwaitOutput(), " +
-                            "thread is in idle state, not awaiting an output");
+//                    System.out.println("Error in DataServerThread.AwaitOutput(), " +
+//                            "thread is in idle state, not awaiting an output");
                     return null;
 
                 case OUTPUTTING:
@@ -260,8 +260,8 @@ public class DataServerThread implements Runnable{
             switch (m_socketState){
 
                 case PREINIT:   // This should never happen
-                    System.out.println("Error: in DataServerThread.run(), " +
-                            "thread running on preinit state");
+//                    System.out.println("Error: in DataServerThread.run(), " +
+//                            "thread running on preinit state");
                     break;
 
 				case RECEIVING:

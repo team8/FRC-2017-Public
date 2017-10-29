@@ -71,6 +71,11 @@ public class VisionManager extends AbstractVisionThread {
 	 */
 	@Override
 	public void init() {
+		
+		if(m_connectionState != ConnectionState.PRE_INIT) {    // This should never happen
+//			System.out.println("Error: in VisionManager.start(), "
+//					+ "connection is already initialized");
+		}
 
 		// Initialize Thread Variables
 		this.SetState(ConnectionState.STARTING_ADB);
@@ -109,6 +114,10 @@ public class VisionManager extends AbstractVisionThread {
 		}
 
 		if(m_adbServerCreated){
+			if(!this.isAppStarted()) {
+//				System.out.println("[Info] Vision app not started, starting app");
+//				Logger.getInstance().logRobotThread("[Info] Vision app not started, starting app");
+			}
 
 			if(!this.isAppStarted()){
 				this.VisionInit();
@@ -117,8 +126,12 @@ public class VisionManager extends AbstractVisionThread {
 			}
 
 			if (this.m_visionRunning) {
+//				System.out.println("[Info] Connected to vision app");
+//				Logger.getInstance().logRobotThread("Connected to vision app");
 				return ConnectionState.STARTING_SUB_PROCESSES;
 			} else {
+//				System.out.println("[Warning] Could not start vision app, retrying");
+//				Logger.getInstance().logRobotThread("Could not start vision app, retrying");
 				return this.m_connectionState;
 			}
 		} else {
@@ -136,16 +149,18 @@ public class VisionManager extends AbstractVisionThread {
 			CommandExecutor.adbServerInit();
 			connected = true;
 		} catch (Exception e) {
+//			System.out.println("[Error] in VisionManager.StartADB(), "
+//					+ "could not connect..");
 			e.printStackTrace();
 		}
 
 		if(connected){      // Adb server started successfully
 			m_adbServerCreated = true;
-			System.out.println("[Info] Adb server started");
-			Logger.getInstance().logRobotThread("[Info] Adb server started");
+//			System.out.println("[Info] Adb server started");
+//			Logger.getInstance().logRobotThread("[Info] Adb server started");
 		} else {            // Adb server failed to start
-			System.out.println("[Error] Failed to start adb server");
-			Logger.getInstance().logRobotThread("[Error] Failed to start adb server");
+//			System.out.println("[Error] Failed to start adb server");
+//			Logger.getInstance().logRobotThread("[Error] Failed to start adb server");
 		}
 	}
 
@@ -198,13 +213,13 @@ public class VisionManager extends AbstractVisionThread {
 
 			connected = true;
 		} catch (Exception e) {
-
+//			log("Could not connect in initialization.");
 			e.printStackTrace();
 		}
 
 		if(connected) {     // App started successfully
 			m_visionRunning = true;
-
+//			System.out.println("[Info] Starting Vision Stream");
 			return ConnectionState.STREAMING;
 		} else {            // Failed to start app
 			return m_connectionState;
@@ -230,8 +245,8 @@ public class VisionManager extends AbstractVisionThread {
 		switch(m_connectionState){
 
 		case PRE_INIT:	// Shouldn't happen, but can due to error
-			System.out.println("Error: in VisionManager.run(), "
-					+ "thread running on preinit state");
+//			System.out.println("Error: in VisionManager.run(), "
+//					+ "thread running on preinit state");
 			break;
 
 		case STARTING_ADB:	// Triggered by start(), should be called externally
