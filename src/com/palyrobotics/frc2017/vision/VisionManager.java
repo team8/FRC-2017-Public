@@ -1,7 +1,6 @@
 package com.palyrobotics.frc2017.vision;
 
 import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.util.logger.Logger;
 import com.palyrobotics.frc2017.vision.ReceiverSelector.VisionReceiverType;
 
 /**
