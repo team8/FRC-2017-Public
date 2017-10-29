@@ -62,6 +62,8 @@ public class AndroidVideoServer extends AbstractVisionServer {
 			e.printStackTrace();
 
 			closeClient();
+		} catch (NullPointerException e){
+			e.printStackTrace();
 		}
 	}
 
