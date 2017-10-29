@@ -1,7 +1,6 @@
 package com.palyrobotics.frc2017.vision;
 
 import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.util.logger.Logger;
 import com.palyrobotics.frc2017.vision.ReceiverSelector.VisionReceiverType;
 
 /**
@@ -85,7 +84,7 @@ public class VisionManager extends AbstractVisionThread {
 
 		mReceiverBaseData.start(Constants.kAndroidDataSocketUpdateRate, VisionReceiverType.JSON);
 		mReceiverBaseVideo.start(Constants.kAndroidVisionSocketUpdateRate, VisionReceiverType.SOCKET);
-		HTTPVideoServer.getInstance().start(Constants.kMJPEGVisionSocketUpdateRate, Constants.kMJPEGServerSocketPort, true);
+		new AndroidVideoServer().start(Constants.kMJPEGVisionSocketUpdateRate, Constants.kMJPEGServerSocketPort, false);
 
 		return ConnectionState.STREAMING;
 	}

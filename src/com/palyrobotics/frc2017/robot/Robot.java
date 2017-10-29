@@ -13,7 +13,6 @@ import com.palyrobotics.frc2017.robot.team254.lib.util.Loop;
 import com.palyrobotics.frc2017.robot.team254.lib.util.Looper;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.logger.Logger;
-import com.palyrobotics.frc2017.vision.VisionData;
 import com.palyrobotics.frc2017.vision.VisionManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
