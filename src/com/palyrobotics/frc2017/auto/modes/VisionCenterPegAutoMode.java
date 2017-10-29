@@ -13,6 +13,7 @@ import com.palyrobotics.frc2017.behavior.routines.scoring.VisionDriveForwardRout
 import com.palyrobotics.frc2017.behavior.routines.scoring.VisionSliderRoutine;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.logger.Logger;
+import com.palyrobotics.frc2017.vision.CommandExecutor;
 import com.palyrobotics.frc2017.vision.VisionManager;
 import com.team254.lib.trajectory.Path;
 
@@ -64,7 +65,7 @@ public class VisionCenterPegAutoMode extends AutoModeBase {
 		System.out.println("Starting " + this.toString() + " Auto Mode");
 		Logger.getInstance().logRobotThread("Starting " + this.toString() + " Auto Mode");
 
-		if (!VisionManager.getInstance().isServerStarted() || !VisionManager.getInstance().isNexusConnected()) {
+		if (!VisionManager.getInstance().isServerStarted() || !CommandExecutor.isNexusConnected()) {
 			System.out.println("Vision server not started!");
 			Logger.getInstance().logRobotThread("Vision server not detected, fallback to default center peg");
 

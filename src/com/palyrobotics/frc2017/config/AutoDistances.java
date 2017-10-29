@@ -39,45 +39,49 @@ public class AutoDistances {
 	// Distances in inches, angles in radians
 
 	// Calibration data
+	//original offsets
 	public static double kBackup = -0.8;
 	public static double kRedCenterPeg = 111.0;
-	public static double kRedCenterPegOffsetX = 1.0;//3.5;
-	public static double kRedCenterPegOffsetY = 5.0;//4.0;
+	public static double kRedCenterPegOffsetX = 1.5;//3.5;
+	public static double kRedCenterPegOffsetY = -0.25;//4.0;
 	public static double kRedCenterPegOffsetVisionX = 0.73;
 	public static double kRedCenterPegOffsetVisionY = 3.635;
 
+	//original offsets
 	public static double kBlueCenterPeg = 110.25;
-	public static double kBlueCenterPegOffsetX = 1.0;
-	public static double kBlueCenterPegOffsetY = 5.0;
+	public static double kBlueCenterPegOffsetX = 1.5;
+	public static double kBlueCenterPegOffsetY = -0.25;
 	public static double kBlueCenterPegOffsetVisionX = 0.73;
 	public static double kBlueCenterPegOffsetVisionY = 3.635;
 
 	// Blue right loading station
+	//original offsets
 	public static double kBlueLoadingPegX = 129.0;
 	public static double kBlueLoadingPegY = 90.5;
 	//Positive increases the magnitude of each dimension
-	public static double kBlueLoadingPegOffsetX = -8.0;//(-2.0-0.75);
-	public static double kBlueLoadingPegOffsetY = 14.5;//(11.0+0.75);
+	public static double kBlueLoadingPegOffsetX = -8.0+7.0/2.0;//(-2.0-0.75);
+	public static double kBlueLoadingPegOffsetY = 14.5-7.0/2.0*Math.sqrt(3);//(11.0+0.75);
 
 	// Red left loading station
 	public static double kRedLoadingPegX = 131.0;
 	public static double kRedLoadingPegY = 89.5;
 	//Positive increases the magnitude of each dimension
-	public static double kRedLoadingPegOffsetX = 1.5;//-1.0;
-	public static double kRedLoadingPegOffsetY = 0.5;//6.5;
+	public static double kRedLoadingPegOffsetX = 0.0-4.25*Math.sqrt(3)+Math.sqrt(3)/2;//-1.0;
+	public static double kRedLoadingPegOffsetY = 0.5+4.25+Math.sqrt(3);//6.5;
 
 	// Blue left boiler
+	//Original offsets
 	public static double kBlueBoilerPegX = 129.0;
 	public static double kBlueBoilerPegY = 92.5;
 	//Positive increases the magnitude of each dimension
-	public static double kBlueBoilerPegOffsetX = 1.5;//-1.67;
-	public static double kBlueBoilerPegOffsetY = 0.5;//6.75;
+	public static double kBlueBoilerPegOffsetX = 0.0-4.25*Math.sqrt(3)+Math.sqrt(3)/2;//-1.67;
+	public static double kBlueBoilerPegOffsetY = 0.5+4.25+Math.sqrt(3);//6.75;
 
 	// Red right boiler
 	// should be positive
 	public static double kRedBoilerPegX = 127.0;
 	public static double kRedBoilerPegY = 91.0;
 	//Positive increases the magnitude of each dimension
-	public static double kRedBoilerPegOffsetX = -8.0;//-2.0;
-	public static double kRedBoilerPegOffsetY = 14.5;//11.0;
+	public static double kRedBoilerPegOffsetX = -8.0+7.0/2.0;//-2.0;
+	public static double kRedBoilerPegOffsetY = 14.5-7.0/2.0*Math.sqrt(3);//11.0;
 }

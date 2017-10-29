@@ -167,7 +167,7 @@ public class Constants extends ConstantsBase {
 	public static double kSidePegTurnAngleDegrees = 60;
 
 	// !!! Loop rate of normal Looper
-	public static double kNormalLoopsDt = 0.01;
+	public static double kNormalLoopsDt = 0.02;
 
 	// !!! Loop rate of subsystem updates
 	public static double kSubsystemLooperDt = 0.01;

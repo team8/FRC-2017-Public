@@ -28,15 +28,15 @@ public abstract class AbstractVisionThread implements Runnable {
         m_updateRate = k_updateRate;
 
         if (m_isRunning) {
-            System.out.println("[Error] Thread " + k_threadName + " is already running! Aborting...");
+//            System.out.println("[Error] Thread " + k_threadName + " is already running! Aborting...");
             return;
         }
 
-        System.out.println("[Info] Initializing thread " + k_threadName + "...");
+//        System.out.println("[Info] Initializing thread " + k_threadName + "...");
 
         init();
 
-        System.out.println("[Info] Starting thread " + k_threadName + "...");
+//        System.out.println("[Info] Starting thread " + k_threadName + "...");
         m_isRunning = true;
         new Thread(this).start();
     }
@@ -83,7 +83,7 @@ public abstract class AbstractVisionThread implements Runnable {
      */
     protected void log(String message) {
 
-        System.out.println("[" + k_threadName + "] " + message);
+//        System.out.println("[" + k_threadName + "] " + message);
     }
 
     /**

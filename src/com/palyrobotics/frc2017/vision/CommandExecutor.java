@@ -29,7 +29,7 @@ public class CommandExecutor{
 		 	RuntimeExecutor.getInstance().init();
 		 }
 
-		 System.out.println("[Info] TCP Reversing ports...");
+//		 System.out.println("[Info] TCP Reversing ports...");
 
 		 exec("adb reverse tcp:" +
 				 Constants.kVideoPort + " tcp:" +
@@ -39,7 +39,7 @@ public class CommandExecutor{
 				 Constants.kVisionDataPort + " tcp:" +
 				 Constants.kVisionDataPort);
 
-		 System.out.println("[Info] Starting Video Manager...");
+//		 System.out.println("[Info] Starting Video Manager...");
 	 }
 
 	/**
