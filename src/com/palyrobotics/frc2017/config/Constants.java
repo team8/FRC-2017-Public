@@ -19,7 +19,7 @@ public class Constants extends ConstantsBase {
 	public static int kAndroidConnectionUpdateRate = 5;	// Update rate in milliseconds
 	public static int kAndroidDataSocketUpdateRate = 100;
 	public static int kAndroidVisionSocketUpdateRate = 10;
-	public static int kMJPEGVisionSocketUpdateRate = 90;
+	public static int kMJPEGVisionSocketUpdateRate = 140;
 	public static int kVisionDataPort = 8008;
 	public static int kVideoPort = 8009;
 	public static int kMJPEGServerSocketPort = 1180;
