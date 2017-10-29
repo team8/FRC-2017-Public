@@ -1,130 +1,86 @@
 package com.palyrobotics.frc2017.vision;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.SocketException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * Receives data from the android and stores it into a queue.
+ * Sends video from the robot to the dashboard.
+ * Video data is obtained from queue in {@link VisionData}
  *
- * @author Quintin
+ * @author Quintin Dwight
  */
 public class AndroidVideoServer extends AbstractVisionServer {
 
-	private static AndroidVideoServer s_instance;
+	private final byte[] k_defaultImage;
 
-	/**
-	 * Gets the singleton for this class from a static context.
-	 * If the instance is null, create a new one
-	 *
-	 * @return The singleton
-	 */
-	public static AndroidVideoServer getInstance() {
-		if (s_instance == null)
-			s_instance = new AndroidVideoServer();
-		return s_instance;
-	}
+	public AndroidVideoServer() {
 
-	// Queue of frames that have been received from the android
-	public static ConcurrentLinkedQueue<byte[]> s_frameQueue;
+		super("Android Video Server");
 
-	private final Object lock = new Object();
-
-	private AndroidVideoServer() {
-
-		super("AndroidVideoServer");
-	}
-
-	/**
-	 * Reads a frame from the connection to the android
-	 *
-	 * @return The frame obtained from reading the socket to the phone
-	 */
-	private byte[] readBytes(){
-
-		if (m_client == null || m_client.isClosed() || !m_client.isConnected()){
-			setServerState(ServerState.ATTEMPTING_CONNECTION);
-			return null;
-		}
+		byte[] imageInBytes = null;
 
 		try {
-			// Initialize client inputs
-			DataInputStream dis = new DataInputStream(m_client.getInputStream());
+			BufferedImage image = ImageIO.read(new File("default.jpeg"));
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(image, "jpg", baos);
 
-			// Get byte data
-			int len = dis.readInt();
-			byte[] data = new byte[len];
-			if (len > 0) {
-				dis.readFully(data);
-			}
+			imageInBytes = baos.toByteArray();
 
-			return data;
-		} catch (SocketException e) {
-			log("Broken connection, attempting to reconnect...");
-			e.printStackTrace();
-			setServerState(ServerState.ATTEMPTING_CONNECTION);
-			return null;
-		} catch (EOFException e) {
-			setServerState(ServerState.ATTEMPTING_CONNECTION);
-			return null;
 		} catch (IOException e) {
+
 			e.printStackTrace();
-			setServerState(ServerState.ATTEMPTING_CONNECTION);
-			return null;
 		}
+
+		k_defaultImage = imageInBytes;
 	}
 
-//	private byte[] compressGZIP(byte[] data){
-//		if(null == data || data.length == 0){
-//			return null;
-//		}
-//
-//		// Initialize data streams
-//		ByteArrayInputStream in = new ByteArrayInputStream(data);
-//		ByteArrayOutputStream out = new ByteArrayOutputStream(data.length/2);
-//		OutputStream compress = null;
-//
-//		try {
-//			compress = new GZIPOutputStream(out);
-//			ByteStreams.copy(in, compress);
-//			compress.close();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			return null;
-//		}
-//
-//		return out.toByteArray();
-//	}
+	@Override
+	public void init() {
+
+		setServerState(ServerState.ATTEMPTING_CONNECTION);
+	}
 
 	/**
-	 * Tries to read the data from the socket to the android
+	 * Writes the image given in a byte array to the output stream for the javascript client to read and display on the dashboard.
+	 *
+	 * @throws IOException Thrown by socket
 	 */
-	private void updateData() {
+	private void writeImageToServer(byte[] data) {
 
-		synchronized (lock) {
-			// Read data from socket
-			byte[] data = readBytes();
+		try {
 
-			// Check if data is legit
-			if (data != null && data.length != 0) {
+			final OutputStream clientOutputStream = m_client.getOutputStream();
+			final DataOutputStream writer = new DataOutputStream(clientOutputStream);
 
-				// Make sure queue does not get too big
-				if (s_frameQueue.size() < 10)
-					s_frameQueue.remove();
+			writer.writeInt(data.length);
+			writer.write(data);
 
-				s_frameQueue.add(data);
-			}
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+			closeClient();
 		}
 	}
 
 	@Override
 	protected void afterUpdate() {
 
-		switch (m_serverState){
+		switch (m_serverState) {
 
-			case OPEN:
-				updateData();
+			case OPEN: {
+
+				final ConcurrentLinkedQueue<byte[]> videoFrames = VisionData.getVideoQueue();
+
+				// Send frame from nexus if they exist, else show default image
+				final byte[] imageToSend = videoFrames.size() > 0 ? videoFrames.remove() : k_defaultImage;
+
+				writeImageToServer(imageToSend);
+
 				break;
+			}
 		}
 	}
 
