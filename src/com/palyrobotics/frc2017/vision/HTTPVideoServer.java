@@ -70,14 +70,17 @@ public class HTTPVideoServer extends AbstractVisionServer {
 			// Output stream that we send the response to
 			final PrintStream output = new PrintStream(m_client.getOutputStream());
 
+			System.out.println(data.length);
+
 			// Send out the content to the javascript client
 			output.println("HTTP/1.1 200 OK");
-			output.println("Cache-Control: no-cache, no-store, must-revalidate");
+			output.println("Cache-Control: no-cache");
 			output.println("Content-Type: image/jpeg");
-			output.println("Content-Length: " + data.length);
+			output.println("Content-Length: " + Integer.toString(data.length));
 			output.println();
 			output.write(data);
 			output.flush();
+			output.close();
 
 		} catch (IOException e) {
 

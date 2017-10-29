@@ -9,10 +9,10 @@
 			h1 {
 				text-align: center;
 			}
-			img {
+			canvas {
 				display: block;
 				margin: auto;
-				margin: 1px solid black;
+				border: 1px solid gray;
 			}
 		</style>
 	</head>
@@ -20,20 +20,21 @@
 	<body onload="init()">
 		<h1>Nexus Viewer</h1>
 		<hr>
-		<img id="image">
+		<canvas id="canvas" width="480" height="640"></canvas>
 
 		<script type="text/JavaScript">
 			
-			var refreshInterval = 100; //in ms
+			var refreshInterval = 100;
 			var canvas;
 			var context;
 			var counter = 0;
+			var image;
 
 			var url;
 			var testing_pc = true;
 			if (testing_pc) {
 				url = "http://localhost:1180/";
-			} else {
+			} else {	
 				url = "http://10.0.8.13:1180/"
 			}
 
@@ -41,7 +42,10 @@
 
 				console.log("Initializing...");
 
-				image = document.getElementById("image");
+				canvas = document.getElementById("canvas");
+				context = canvas.getContext("2d");
+
+				image = new Image(480, 640);
 				
 				setInterval(refresh, refreshInterval);
 			}
@@ -49,7 +53,10 @@
 			function refresh() {
 
 				image.src = url + "?t=" + counter;
+				
 				counter++;
+
+				context.drawImage(image, 0, 0, 480, 640);
 			}		
 		</script>
 	</body>
