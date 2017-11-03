@@ -1,4 +1,6 @@
-package com.palyrobotics.frc2017.vision.util;
+package com.palyrobotics.frc2017.vision.util.data;
+
+import com.palyrobotics.frc2017.vision.util.synchronization.DataExistsCallback;
 
 public class VisionDataUnit<T> {
 

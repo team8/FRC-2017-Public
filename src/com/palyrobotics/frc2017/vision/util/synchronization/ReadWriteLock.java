@@ -1,4 +1,4 @@
-package com.palyrobotics.frc2017.vision.util;
+package com.palyrobotics.frc2017.vision.util.synchronization;
 
 import java.util.HashMap;
 import java.util.Map;

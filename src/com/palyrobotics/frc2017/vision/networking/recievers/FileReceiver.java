@@ -1,10 +1,12 @@
-package com.palyrobotics.frc2017.vision;
+package com.palyrobotics.frc2017.vision.networking.recievers;
 
-public class JSONReceiver implements VisionReceiverBase{
+import com.palyrobotics.frc2017.vision.util.commandline.CommandExecutor;
+
+public class FileReceiver implements VisionReceiverBase {
 	
 	String fileName;
 	
-	public JSONReceiver(String fileName) {
+	public FileReceiver(String fileName) {
 		this.fileName = fileName;
 	}
 

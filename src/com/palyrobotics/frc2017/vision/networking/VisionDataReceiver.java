@@ -1,23 +1,24 @@
-package com.palyrobotics.frc2017.vision;
+package com.palyrobotics.frc2017.vision.networking;
 
 import com.palyrobotics.frc2017.config.Constants;
+import com.palyrobotics.frc2017.vision.VisionData;
 import com.palyrobotics.frc2017.vision.util.VisionUtil;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
 
-public class DataThread extends DataReceiverBase {
+public class VisionDataReceiver extends ReceiverBase {
 
-	protected DataThread() {
+	public  VisionDataReceiver() {
 		super("Data Thread", Constants.kVisionDataFileName,Constants.kVisionDataPort, Constants.kAndroidDataSocketUpdateRate, false);
 	}
 
-	private static DataThread s_instance;
+	private static VisionDataReceiver s_instance;
 
-	public static DataThread getInstance() {
+	public static VisionDataReceiver getInstance() {
 
 		if (s_instance == null)
-			s_instance = new DataThread();
+			s_instance = new VisionDataReceiver();
 
 		return s_instance;
 	}

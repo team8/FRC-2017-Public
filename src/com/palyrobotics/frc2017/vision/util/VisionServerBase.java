@@ -1,4 +1,4 @@
-package com.palyrobotics.frc2017.vision;
+package com.palyrobotics.frc2017.vision.util;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -9,7 +9,7 @@ import java.net.Socket;
  *
  * @author Quintin Dwight
  */
-public abstract class AbstractVisionServer extends AbstractVisionThread {
+public abstract class VisionServerBase extends VisionThreadBase {
 
     public enum ServerState {
         PRE_INIT, ATTEMPTING_CONNECTION, OPEN
@@ -21,7 +21,7 @@ public abstract class AbstractVisionServer extends AbstractVisionThread {
     protected Socket m_client = new Socket();
     protected ServerState m_serverState = ServerState.PRE_INIT;
 
-    protected AbstractVisionServer(final String k_threadName) {
+    protected VisionServerBase(final String k_threadName) {
         super(k_threadName);
     }
 

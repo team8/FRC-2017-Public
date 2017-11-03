@@ -1,4 +1,4 @@
-package com.palyrobotics.frc2017.vision;
+package com.palyrobotics.frc2017.vision.networking.recievers;
 
 import java.util.HashMap;
 
@@ -39,7 +39,7 @@ public class ReceiverSelector {
         if (!receiver_map.containsKey(type)) {
             switch (type) {
                 case JSON:
-                    receiver_map.put(type, new JSONReceiver(fileName));
+                    receiver_map.put(type, new FileReceiver(fileName));
                     break;
                 case SOCKET:
                     SocketReceiver socketReceiver = new SocketReceiver();

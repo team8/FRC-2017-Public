@@ -1,6 +1,6 @@
-package com.palyrobotics.frc2017.vision;
+package com.palyrobotics.frc2017.vision.networking.recievers;
 
-import com.palyrobotics.frc2017.vision.util.DataExistsCallback;
+import com.palyrobotics.frc2017.vision.util.synchronization.DataExistsCallback;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;

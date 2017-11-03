@@ -1,11 +1,11 @@
-package com.palyrobotics.frc2017.vision;
+package com.palyrobotics.frc2017.vision.util;
 
 /**
  * Base class for vision threads
  *
  * @author Quintin Dwight
  */
-public abstract class AbstractVisionThread implements Runnable {
+public abstract class VisionThreadBase implements Runnable {
 
     
     protected double m_timeAlive = 0.0d;
@@ -16,7 +16,7 @@ public abstract class AbstractVisionThread implements Runnable {
     public double getTimeAlive() { return m_timeAlive; }
     public boolean isRunning() { return m_isRunning; }
 
-    protected AbstractVisionThread(final String k_threadName) {
+    protected VisionThreadBase(final String k_threadName) {
         this.k_threadName = k_threadName;
     }
 

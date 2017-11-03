@@ -1,4 +1,7 @@
-package com.palyrobotics.frc2017.vision;
+package com.palyrobotics.frc2017.vision.networking;
+
+import com.palyrobotics.frc2017.vision.util.VisionServerBase;
+import com.palyrobotics.frc2017.vision.VisionData;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -11,11 +14,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * @author Quintin Dwight
  */
-public class AndroidVideoServer extends AbstractVisionServer {
+public class VisionVideoServer extends VisionServerBase {
 
 	private final byte[] k_defaultImage;
 
-	public AndroidVideoServer() {
+	public VisionVideoServer() {
 
 		super("Android Video Server");
 

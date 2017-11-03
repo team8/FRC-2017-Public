@@ -1,15 +1,16 @@
-package com.palyrobotics.frc2017.vision;
+package com.palyrobotics.frc2017.vision.networking;
 
 import com.palyrobotics.frc2017.config.Constants;
+import com.palyrobotics.frc2017.vision.VisionData;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class VideoReceiver extends DataReceiverBase{
+public class VisionVideoReceiver extends ReceiverBase {
 	
 	byte[] image;
 
-	protected VideoReceiver() {
+	public VisionVideoReceiver() {
 
 		super("Video Receiver", Constants.kVisionVideoFileName, Constants.kVideoPort, Constants.kAndroidVisionSocketUpdateRate, false);
 	}

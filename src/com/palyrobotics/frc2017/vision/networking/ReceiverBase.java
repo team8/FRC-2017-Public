@@ -1,17 +1,19 @@
-package com.palyrobotics.frc2017.vision;
+package com.palyrobotics.frc2017.vision.networking;
 
-import com.palyrobotics.frc2017.vision.ReceiverSelector.VisionReceiverType;
+import com.palyrobotics.frc2017.vision.networking.recievers.ReceiverSelector;
+import com.palyrobotics.frc2017.vision.util.VisionThreadBase;
+import com.palyrobotics.frc2017.vision.networking.recievers.ReceiverSelector.VisionReceiverType;
 
-public abstract class DataReceiverBase extends AbstractVisionThread {
+public abstract class ReceiverBase extends VisionThreadBase {
 	
 	VisionReceiverType mReceiverType;
-	ReceiverSelector mReceiverSelector;
+	protected ReceiverSelector mReceiverSelector;
 	String fileName;
 	int port;
 	int updateRate;
 	boolean isRestartingServer;
 	
-	protected DataReceiverBase(String k_threadName, String fileName, int port, int updateRate, boolean isRestartingServer) {
+	protected ReceiverBase(String k_threadName, String fileName, int port, int updateRate, boolean isRestartingServer) {
 
 		super(k_threadName);
 		this.fileName = fileName;

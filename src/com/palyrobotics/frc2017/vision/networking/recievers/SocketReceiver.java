@@ -1,11 +1,13 @@
-package com.palyrobotics.frc2017.vision;
+package com.palyrobotics.frc2017.vision.networking.recievers;
+
+import com.palyrobotics.frc2017.vision.util.VisionServerBase;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class SocketReceiver extends AbstractVisionServer implements VisionReceiverBase{
+public class SocketReceiver extends VisionServerBase implements VisionReceiverBase {
 
 	public SocketReceiver() {
 

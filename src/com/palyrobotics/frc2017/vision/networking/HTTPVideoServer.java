@@ -1,4 +1,7 @@
-package com.palyrobotics.frc2017.vision;
+package com.palyrobotics.frc2017.vision.networking;
+
+import com.palyrobotics.frc2017.vision.util.VisionServerBase;
+import com.palyrobotics.frc2017.vision.VisionData;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -10,7 +13,7 @@ import java.io.*;
  *
  * @author Quintin Dwight
  */
-public class HTTPVideoServer extends AbstractVisionServer {
+public class HTTPVideoServer extends VisionServerBase {
 
 	public static HTTPVideoServer s_instance;
 

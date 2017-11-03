@@ -1,4 +1,4 @@
-package com.palyrobotics.frc2017.vision;
+package com.palyrobotics.frc2017.vision.util.commandline;
 
 import java.io.BufferedReader;
 import java.io.IOException;

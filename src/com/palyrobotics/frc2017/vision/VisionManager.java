@@ -1,12 +1,18 @@
 package com.palyrobotics.frc2017.vision;
 
 import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.vision.ReceiverSelector.VisionReceiverType;
+import com.palyrobotics.frc2017.vision.util.VisionThreadBase;
+import com.palyrobotics.frc2017.vision.util.commandline.CommandExecutor;
+import com.palyrobotics.frc2017.vision.networking.recievers.ReceiverSelector.VisionReceiverType;
+import com.palyrobotics.frc2017.vision.networking.VisionVideoServer;
+import com.palyrobotics.frc2017.vision.networking.ReceiverBase;
+import com.palyrobotics.frc2017.vision.networking.VisionDataReceiver;
+import com.palyrobotics.frc2017.vision.networking.VisionVideoReceiver;
 
 /**
  * @author Alvin
  */
-public class VisionManager extends AbstractVisionThread {
+public class VisionManager extends VisionThreadBase {
 
 	public enum ConnectionState{
 		PRE_INIT, STARTING_ADB, STARTING_SUB_PROCESSES, IDLE, START_VISION_APP, STREAMING, GIVEN_UP
@@ -18,8 +24,8 @@ public class VisionManager extends AbstractVisionThread {
 	private ConnectionState m_connectionState = ConnectionState.PRE_INIT;
 
 	// Utility variables
-	private DataReceiverBase mReceiverBaseVideo = new VideoReceiver();
-	private DataReceiverBase mReceiverBaseData = new DataThread();
+	private ReceiverBase mReceiverBaseVideo = new VisionVideoReceiver();
+	private ReceiverBase mReceiverBaseData = new VisionDataReceiver();
 	private boolean m_adbServerCreated = false;
 	private boolean m_visionRunning = false;
 
@@ -84,7 +90,7 @@ public class VisionManager extends AbstractVisionThread {
 
 		mReceiverBaseData.start(Constants.kAndroidDataSocketUpdateRate, VisionReceiverType.JSON);
 		mReceiverBaseVideo.start(Constants.kAndroidVisionSocketUpdateRate, VisionReceiverType.SOCKET);
-		new AndroidVideoServer().start(Constants.kMJPEGVisionSocketUpdateRate, Constants.kMJPEGServerSocketPort, false);
+		new VisionVideoServer().start(Constants.kMJPEGVisionSocketUpdateRate, Constants.kMJPEGServerSocketPort, false);
 
 		return ConnectionState.STREAMING;
 	}

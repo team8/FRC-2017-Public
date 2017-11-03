@@ -14,7 +14,7 @@ import com.palyrobotics.frc2017.behavior.routines.scoring.VisionDriveForwardRout
 import com.palyrobotics.frc2017.behavior.routines.scoring.VisionSliderRoutine;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.logger.Logger;
-import com.palyrobotics.frc2017.vision.CommandExecutor;
+import com.palyrobotics.frc2017.vision.util.commandline.CommandExecutor;
 import com.palyrobotics.frc2017.vision.VisionManager;
 import com.team254.lib.trajectory.Path;
 

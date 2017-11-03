@@ -1,8 +1,8 @@
 package com.palyrobotics.frc2017.vision;
 
-import com.palyrobotics.frc2017.vision.util.DataExistsCallback;
-import com.palyrobotics.frc2017.vision.util.SynchronizedVisionDataUnit;
-import com.palyrobotics.frc2017.vision.util.VisionDataUnit;
+import com.palyrobotics.frc2017.vision.util.synchronization.DataExistsCallback;
+import com.palyrobotics.frc2017.vision.util.data.SynchronizedVisionDataUnit;
+import com.palyrobotics.frc2017.vision.util.data.VisionDataUnit;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
