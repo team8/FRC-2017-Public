@@ -88,6 +88,5 @@ public class RuntimeExecutor {
 	 */
 	public void init(){
 		exec("adb start-server");
-		CommandExecutor.restartAdbServer();
 	}
 }
