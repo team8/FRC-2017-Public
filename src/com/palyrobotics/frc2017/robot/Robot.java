@@ -25,7 +25,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	// Single instance to be passed around
-	private static Commands commands = new Commands();
+	private static Commands commands = Commands.getInstance();
 	public static Commands getCommands() {return commands;}
 	
 
@@ -54,7 +54,7 @@ public class Robot extends IterativeRobot {
 		DashboardManager.getInstance().robotInit();
 		VisionManager.getInstance().start(Constants.kAndroidConnectionUpdateRate, false);
 		System.out.println("Finished starting");
-		mLogger.setFileName("8/20 testing");
+		mLogger.setFileName("Offseason");
 		mLogger.start();
 		mLogger.logRobotThread("robotInit() start");
 		mLogger.logRobotThread("Robot name: "+Constants.kRobotName);
@@ -201,10 +201,8 @@ public class Robot extends IterativeRobot {
 		// Stops updating routines
 		mRoutineManager.reset(commands);
 		
-		commands = new Commands();
+		Commands.reset();
 		
-		stopSubsystems();
-
 		// Stop controllers
 		mDrive.setNeutral();
 		mHardwareUpdater.configureDriveTalons();

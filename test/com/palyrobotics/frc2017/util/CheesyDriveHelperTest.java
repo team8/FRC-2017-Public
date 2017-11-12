@@ -2,6 +2,8 @@ package com.palyrobotics.frc2017.util;
 
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.robot.Robot;
+import com.palyrobotics.frc2017.robot.RobotTest;
 import com.palyrobotics.frc2017.util.archive.CheesyDriveHelper;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import org.junit.Test;
@@ -32,7 +34,7 @@ public class CheesyDriveHelperTest {
 
 		// Robot state is not used by CDH
 		RobotState testRobotState = new RobotState();
-		Commands testCommands = new Commands();
+		Commands testCommands = RobotTest.getCommands();
 
 		// Test that 0 input leads to 0 output (no negative inertia to start)
 		testCommands.leftStickInput.y = 0;

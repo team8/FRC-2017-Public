@@ -6,6 +6,7 @@ import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.robot.Robot;
+import com.palyrobotics.frc2017.robot.RobotTest;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.subsystems.controllers.CANTalonDriveController;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
@@ -25,7 +26,7 @@ public class CANTalonRoutineTest {
 	public void timeoutTest() throws Exception {
 		Drive.getInstance().start();
 
-		Commands commands = new Commands();
+		Commands commands = RobotTest.getCommands();
 		DriveSignal mSignal = DriveSignal.getNeutralSignal();
 		CANTalonRoutine routine = new CANTalonRoutine(mSignal, false, 2);
 		routine.start();
@@ -56,7 +57,7 @@ public class CANTalonRoutineTest {
 		System.out.println(1);
 		RoutineManager routineManager = new RoutineManager();
 		System.out.println(1);
-		Commands commands = new Commands();
+		Commands commands = RobotTest.getCommands();
 
 		routineManager.addNewRoutine(mRoutine);
 		// Update to actually add and run routine

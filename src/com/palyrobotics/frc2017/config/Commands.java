@@ -16,6 +16,14 @@ import java.util.Optional;
  *
  */
 public class Commands {
+
+	private static Commands instance = new Commands();
+	public static Commands getInstance() {
+		return instance;
+	}
+
+	private Commands() {}
+
 	public ArrayList<Routine> wantedRoutines = new ArrayList<Routine>();
 
 	// Store WantedStates for each subsystem state machine
@@ -34,7 +42,11 @@ public class Commands {
 		}
 		wantedRoutines.add(wantedRoutine);
 	}
-	
+
+	public static void reset() {
+		instance = new Commands();
+	}
+
 	/**
 	 * Stores numeric setpoints
 	 * @author Nihar

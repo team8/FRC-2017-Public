@@ -1,5 +1,6 @@
 package com.palyrobotics.frc2017.config;
 
+import com.palyrobotics.frc2017.robot.RobotTest;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import org.junit.Test;
@@ -15,7 +16,7 @@ import static org.junit.Assert.assertThat;
  * @author Nihar
  */
 public class CommandsTest {
-	private Commands mCommands = new Commands();
+	private Commands mCommands = RobotTest.getCommands();
 
 	/**
 	 * Tests for null pointer exceptions when initially setting values in Commands
@@ -38,7 +39,7 @@ public class CommandsTest {
 	 */
 	@Test
 	public void testCopyMethod() {
-		mCommands = new Commands();
+		mCommands = RobotTest.getCommands();
 		Commands copy = mCommands.copy();
 
 		// Test the

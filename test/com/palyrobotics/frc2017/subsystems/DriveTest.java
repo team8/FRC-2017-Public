@@ -3,6 +3,7 @@ package com.palyrobotics.frc2017.subsystems;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.robot.Robot;
+import com.palyrobotics.frc2017.robot.RobotTest;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import org.junit.Test;
 
@@ -17,7 +18,7 @@ import static org.junit.Assert.assertThat;
 public class DriveTest {
 	@Test
 	public void testOffboard() {
-		Commands commands = new Commands();
+		Commands commands = RobotTest.getCommands();
 		RobotState state = Robot.getRobotState();
 		Drive drive = Drive.getInstance();
 		drive.resetController();

@@ -1,6 +1,7 @@
 package com.palyrobotics.frc2017.behavior;
 
 import com.palyrobotics.frc2017.config.Commands;
+import com.palyrobotics.frc2017.robot.RobotTest;
 import com.palyrobotics.frc2017.subsystems.Climber;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.subsystems.Intake;
@@ -27,7 +28,7 @@ public class RoutineManagerTest {
 	
 	@Test
 	public void testUpdate() {
-		Commands commands = new Commands();
+		Commands commands = RobotTest.getCommands();
 		
 		thrown.expect(NullPointerException.class);
 		mRoutineManager.addNewRoutine(null);
@@ -60,7 +61,7 @@ public class RoutineManagerTest {
 	 */
 	@Test
 	public void testResetMethod() {
-		Commands commands = new Commands();
+		Commands commands = RobotTest.getCommands();
 		mRoutineManager.reset(commands);
 		SampleRoutine mRoutine = new SampleRoutine();
 		DrivetrainRoutine mDriveRoutine = new DrivetrainRoutine();
