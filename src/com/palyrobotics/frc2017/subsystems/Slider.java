@@ -21,6 +21,7 @@ public class Slider extends Subsystem{
 	public static Slider getInstance() {
 		return instance;
 	}
+
 	//Miscellaneous constants
 	private static final int kPotentiometerTolerance = 0;
 	private static final int kEncoderTolerance = 40;
@@ -197,7 +198,6 @@ public class Slider extends Subsystem{
 			return false;
 		}
 		if (mRobotState.sliderClosedLoopError.isPresent()) {
-//			System.out.println(mState+""+mTarget+""+mRobotState.sliderClosedLoopError.get());
 			return Math.abs(mRobotState.sliderClosedLoopError.get()) < kEncoderTolerance && mRobotState.sliderVelocity == 0;
 		} else {
 			return false;

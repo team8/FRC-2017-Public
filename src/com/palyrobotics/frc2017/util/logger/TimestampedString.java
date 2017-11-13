@@ -4,8 +4,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-import com.palyrobotics.frc2017.config.Constants;
-
 /**
  * Created by Nihar on 3/13/17.
  * Stores a String with the timestamp on construction

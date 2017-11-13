@@ -135,13 +135,6 @@ public class OperatorInterface {
 		} else {
 			newCommands.wantedClimberState = Climber.ClimberState.MANUAL;
 		}
-		
-		
-
-//		Logger.getInstance().logRobotThread("Drive stick", newCommands.leftStickInput);
-//		Logger.getInstance().logRobotThread("Turn stick", newCommands.rightStickInput);
-//		Logger.getInstance().logRobotThread("Slider stick", newCommands.sliderStickInput);
-//		Logger.getInstance().logRobotThread("Climber stick", newCommands.climberStickInput);
 
 		return newCommands;
 	}

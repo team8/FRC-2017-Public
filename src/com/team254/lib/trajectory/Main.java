@@ -82,7 +82,6 @@ public class Main {
 			// Outputs to the directory supplied as the first argument.
 			TextFileSerializer js = new TextFileSerializer();
 			String serialized = js.serialize(path);
-//			System.out.print(serialized);
 			String fullpath = joinPath(directory, path_name + ".txt");
 			if (!writeFile(fullpath, serialized)) {
 				System.err.println(fullpath + " could not be written!!!!");
@@ -114,7 +113,6 @@ public class Main {
 			// Outputs to the directory supplied as the first argument.
 			TextFileSerializer js = new TextFileSerializer();
 			String serialized = js.serialize(path);
-//			System.out.print(serialized);
 			String fullpath = joinPath(directory, path_name + ".txt");
 			if (!writeFile(fullpath, serialized)) {
 				System.err.println(fullpath + " could not be written!!!!");
@@ -131,9 +129,9 @@ public class Main {
 			config.max_vel = kLongVel;
 			// Path name must be a valid Java class name.
 			final String path_name = "RedBoiler";
+			//turn left
 
 			// Description of this auto mode path.
-			// turn left
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
 			p.addWaypoint(new WaypointSequence.Waypoint((kRedBoilerPegX - (0.5*kRobotLengthInches + kRobotRotCenterLengthOffset)*Math.cos(kTurnAngle) - 0.5*kRobotLengthInches + kRobotRotCenterLengthOffset + kRedBoilerPegOffsetX)/12.0,
@@ -145,7 +143,6 @@ public class Main {
 			// Outputs to the directory supplied as the first argument.
 			TextFileSerializer js = new TextFileSerializer();
 			String serialized = js.serialize(path);
-			//System.out.print(serialized);
 			String fullpath = joinPath(directory, path_name + ".txt");
 			if (!writeFile(fullpath, serialized)) {
 				System.err.println(fullpath + " could not be written!!!!");
@@ -162,9 +159,9 @@ public class Main {
 			config.max_vel = kLongVel;
 			// Path name must be a valid Java class name.
 			final String path_name = "RedBoilerVision";
+			//turn left
 
 			// Description of this auto mode path.
-			// turn left
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
 			p.addWaypoint(new WaypointSequence.Waypoint((kRedBoilerPegX - (kVisionDistanceInches + kRobotRotCenterLengthOffset)*Math.cos(kTurnAngle) - 0.5*kRobotLengthInches + kRobotRotCenterLengthOffset + kRedBoilerPegOffsetX)/12.0,
@@ -176,7 +173,6 @@ public class Main {
 			// Outputs to the directory supplied as the first argument.
 			TextFileSerializer js = new TextFileSerializer();
 			String serialized = js.serialize(path);
-			//System.out.print(serialized);
 			String fullpath = joinPath(directory, path_name + ".txt");
 			if (!writeFile(fullpath, serialized)) {
 				System.err.println(fullpath + " could not be written!!!!");
@@ -206,7 +202,6 @@ public class Main {
 			// Outputs to the directory supplied as the first argument.
 			TextFileSerializer js = new TextFileSerializer();
 			String serialized = js.serialize(path);
-			//System.out.print(serialized);
 			String fullpath = joinPath(directory, path_name + ".txt");
 			if (!writeFile(fullpath, serialized)) {
 				System.err.println(fullpath + " could not be written!!!!1");
@@ -236,7 +231,6 @@ public class Main {
 			// Outputs to the directory supplied as the first argument.
 			TextFileSerializer js = new TextFileSerializer();
 			String serialized = js.serialize(path);
-			//System.out.print(serialized);
 			String fullpath = joinPath(directory, path_name + ".txt");
 			if (!writeFile(fullpath, serialized)) {
 				System.err.println(fullpath + " could not be written!!!!1");
@@ -256,8 +250,9 @@ public class Main {
 			config.max_vel = kLongAccel;
 			// Path name must be a valid Java class name.
 			final String path_name = "BlueLoading";
+			//turn left
+
 			// Description of this auto mode path.
-			// turn left
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
 			p.addWaypoint(new WaypointSequence.Waypoint((kBlueLoadingPegX - 0.5*kRobotLengthInches - (0.5*kRobotLengthInches + kRobotRotCenterLengthOffset)*Math.cos(kTurnAngle) + kRobotRotCenterLengthOffset + kBlueLoadingPegOffsetX)/12.0,
@@ -269,7 +264,6 @@ public class Main {
 			// Outputs to the directory supplied as the first argument.
 			TextFileSerializer js = new TextFileSerializer();
 			String serialized = js.serialize(path);
-//			System.out.print(serialized);
 			String fullpath = joinPath(directory, path_name + ".txt");
 			if (!writeFile(fullpath, serialized)) {
 				System.err.println(fullpath + " could not be written!!!!");
@@ -286,8 +280,9 @@ public class Main {
 			config.max_vel = kLongAccel;
 			// Path name must be a valid Java class name.
 			final String path_name = "BlueLoadingVision";
+			//turn left
+
 			// Description of this auto mode path.
-			// turn left
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
 			p.addWaypoint(new WaypointSequence.Waypoint((kBlueLoadingPegX - 0.5*kRobotLengthInches - (kVisionDistanceInches + kRobotRotCenterLengthOffset)*Math.cos(kTurnAngle) + kRobotRotCenterLengthOffset + kBlueLoadingPegOffsetX)/12.0,
@@ -299,7 +294,6 @@ public class Main {
 			// Outputs to the directory supplied as the first argument.
 			TextFileSerializer js = new TextFileSerializer();
 			String serialized = js.serialize(path);
-//			System.out.print(serialized);
 			String fullpath = joinPath(directory, path_name + ".txt");
 			if (!writeFile(fullpath, serialized)) {
 				System.err.println(fullpath + " could not be written!!!!");
@@ -316,9 +310,9 @@ public class Main {
 			config.max_vel = kLongVel;
 			// Path name must be a valid Java class name.
 			final String path_name = "BlueBoiler";
+			//turn right
 
 			// Description of this auto mode path.
-			// turn right
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
 			p.addWaypoint(new WaypointSequence.Waypoint((kBlueBoilerPegX - 0.5*kRobotLengthInches - (0.5*kRobotLengthInches + kRobotRotCenterLengthOffset)*Math.cos(kTurnAngle) + kRobotRotCenterLengthOffset + kBlueBoilerPegOffsetX)/12.0,
@@ -330,7 +324,6 @@ public class Main {
 			// Outputs to the directory supplied as the first argument.
 			TextFileSerializer js = new TextFileSerializer();
 			String serialized = js.serialize(path);
-			//System.out.print(serialized);
 			String fullpath = joinPath(directory, path_name + ".txt");
 			if (!writeFile(fullpath, serialized)) {
 				System.err.println(fullpath + " could not be written!!!!");
@@ -347,9 +340,9 @@ public class Main {
 			config.max_vel = kLongVel;
 			// Path name must be a valid Java class name.
 			final String path_name = "BlueBoilerVision";
+			//turn right
 
 			// Description of this auto mode path.
-			// turn right
 			WaypointSequence p = new WaypointSequence(10);
 			p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
 			p.addWaypoint(new WaypointSequence.Waypoint((kBlueBoilerPegX - 0.5*kRobotLengthInches - (kVisionDistanceInches + kRobotRotCenterLengthOffset)*Math.cos(kTurnAngle) + kRobotRotCenterLengthOffset + kBlueBoilerPegOffsetX)/12.0,
@@ -361,7 +354,6 @@ public class Main {
 			// Outputs to the directory supplied as the first argument.
 			TextFileSerializer js = new TextFileSerializer();
 			String serialized = js.serialize(path);
-			//System.out.print(serialized);
 			String fullpath = joinPath(directory, path_name + ".txt");
 			if (!writeFile(fullpath, serialized)) {
 				System.err.println(fullpath + " could not be written!!!!");
@@ -374,9 +366,9 @@ public class Main {
 
 		{
 			config.dt = kDt;
-			config.max_acc = 5;//kLongAccel;
+			config.max_acc = kLongAccel;
 			config.max_jerk = 50.0;
-			config.max_vel = 5;//kLongVel;
+			config.max_vel = kLongVel;
 			// Path name must be a valid Java class name.
 			final String path_name = "BlueCenter";
 
@@ -391,7 +383,6 @@ public class Main {
 			// Outputs to the directory supplied as the first argument.
 			TextFileSerializer js = new TextFileSerializer();
 			String serialized = js.serialize(path);
-			//System.out.print(serialized);
 			String fullpath = joinPath(directory, path_name + ".txt");
 			if (!writeFile(fullpath, serialized)) {
 				System.err.println(fullpath + " could not be written!!!!1");
@@ -421,7 +412,6 @@ public class Main {
 			// Outputs to the directory supplied as the first argument.
 			TextFileSerializer js = new TextFileSerializer();
 			String serialized = js.serialize(path);
-			//System.out.print(serialized);
 			String fullpath = joinPath(directory, path_name + ".txt");
 			if (!writeFile(fullpath, serialized)) {
 				System.err.println(fullpath + " could not be written!!!!1");
@@ -453,7 +443,6 @@ public class Main {
 			// Outputs to the directory supplied as the first argument.
 			TextFileSerializer js = new TextFileSerializer();
 			String serialized = js.serialize(path);
-			//System.out.print(serialized);
 			String fullpath = joinPath(directory, path_name + ".txt");
 			if (!writeFile(fullpath, serialized)) {
 				System.err.println(fullpath + " could not be written!!!!1");

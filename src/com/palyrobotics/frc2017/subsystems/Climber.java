@@ -142,9 +142,7 @@ public class Climber extends Subsystem{
 			break;
 		}
 		
-//		current.updateValue(mOutput);
 		state.updateValue(this.mState.name());
-//		encoder.updateValue(HardwareAdapter.getInstance());
 		DashboardManager.getInstance().publishKVPair(state);
 	}
 

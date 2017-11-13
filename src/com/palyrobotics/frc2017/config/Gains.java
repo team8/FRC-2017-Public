@@ -6,53 +6,37 @@ public class Gains {
 	/*
 	 * STEIK
 	 */
+
 	// Onboard motion profile aka trajectory follower
-
-	/**
-	 * Smooth, good error
-	 * 0.38
-	 * 0
-	 * 0.077
-	 * 0.033
-	 * 0.02
-	 * 0.02
-	 */
-
-
-	public static double kSteikTrajectorykV = 0.077;//0.077;//0.069;
-	public static double kSteikLeftTrajectorykV = 0.0489;//0.077;//0.069;
-	public static double kSteikRightTrajectorykV = 0.0499;//0.077;//0.069;
+	public static double kSteikTrajectorykV = 0.077;
+	public static double kSteikLeftTrajectorykV = 0.0489;
+	public static double kSteikRightTrajectorykV = 0.0499;
 	public static double kSteikLeftTrajectorykV_0 = 0.0969;
 	public static double kSteikRightTrajectorykV_0 = 0.0946;
-	public static double kSteikTrajectorykA = 0.025;//0.037;
+	public static double kSteikTrajectorykA = 0.025;
 
-	public static double kSteikLeftTurnTrajectorykP = 1.5;//0.40;//0.38;
-	public static double kSteikLeftTurnTrajectorykD = 0.03892; //2*0.01946;//0.0155;//0.01;//0.01;
-	public static double kSteikLeftTurnTrajectoryTurnkP = 0.02;//0.01; //-0.01
+	public static double kSteikLeftTurnTrajectorykP = 1.5;
+	public static double kSteikLeftTurnTrajectorykD = 0.03892;
+	public static double kSteikLeftTurnTrajectoryTurnkP = 0.02;
 	public static double kSteikLeftTurnTrajectoryTurnkD = 0.02;
 
 	public static final Gains.TrajectoryGains kLeftTurnTrajectoryGains = new TrajectoryGains(kSteikLeftTurnTrajectorykP,
 			kSteikLeftTurnTrajectorykD, kSteikTrajectorykV, kSteikTrajectorykA, kSteikLeftTurnTrajectoryTurnkP,
 			kSteikLeftTurnTrajectoryTurnkD);
 
-	public static final double kSteikTrajectoryStraightkP = 1.80;//1.25; // 1
-	public static final double kSteikTrajectoryStraightkD = 0.03;//0.0097077;//0.025; // 0.02
-	public static double kSteikTrajectoryStraightTurnkP = 0;//0.01; //-0.01
+	public static final double kSteikTrajectoryStraightkP = 1.80;
+	public static final double kSteikTrajectoryStraightkD = 0.03;
+	public static double kSteikTrajectoryStraightTurnkP = 0;
 	public static double kSteikTrajectoryStraightTurnkD = 0;
-
-//	public static final double kSteikTrajectoryStraightkP = 1.5; // 1
-//	public static final double kSteikTrajectoryStraightkD = 0.0;//0.0534;//0.0537;//0.02525;//0.025; // 0.02
-//	public static double kSteikTrajectoryStraightTurnkP = 0.027;//0.01; //-0.01
-//	public static double kSteikTrajectoryStraightTurnkD = 0.01;
 
 	public static final TrajectoryGains kStraightTrajectoryGains = new TrajectoryGains(kSteikTrajectoryStraightkP,
 			kSteikTrajectoryStraightkD, kSteikTrajectorykV, kSteikTrajectorykA,
 			kSteikTrajectoryStraightTurnkP, kSteikTrajectoryStraightTurnkD);
 
-	public static double kSteikRightTurnTrajectorykP = 1.7;//0.88;	//0.40;//0.38//0.42;
-	public static double kSteikRightTurnTrajectorykD = 0.03;//0.02;	//0.01;//0.01//0.0155;
-	public static double kSteikRightTurnTrajectoryTurnkP = 0.02;	//0.01; //-0.01/0.02
-	public static double kSteikRightTurnTrajectoryTurnkD = 0.02;	//0.02;
+	public static double kSteikRightTurnTrajectorykP = 1.7;
+	public static double kSteikRightTurnTrajectorykD = 0.03;
+	public static double kSteikRightTurnTrajectoryTurnkP = 0.02;
+	public static double kSteikRightTurnTrajectoryTurnkD = 0.02;
 
 	public static final Gains.TrajectoryGains kRightTurnTrajectoryGains = new TrajectoryGains(kSteikRightTurnTrajectorykP,
 			kSteikRightTurnTrajectorykD, kSteikTrajectorykV, kSteikTrajectorykA, kSteikRightTurnTrajectoryTurnkP,
@@ -81,10 +65,10 @@ public class Gains {
 	// Drive Motion Magic offboard control loop
 	// Short distance max speed 45 in/s Max accel 95 in/s^2
 	public static final double kSteikShortDriveMotionMagicCruiseVelocity = 60 * Constants.kDriveSpeedUnitConversion;
-	public static final double kSteikShortDriveMotionMagicMaxAcceleration = 100 * Constants.kDriveSpeedUnitConversion;//72 * Constants.kDriveSpeedUnitConversion;
-	public static final double kSteikShortDriveMotionMagickP = 2.40; //2.5
-	public static final double kSteikShortDriveMotionMagickI = 0.00040; //0.01
-	public static final double kSteikShortDriveMotionMagickD = 275;//360; //250
+	public static final double kSteikShortDriveMotionMagicMaxAcceleration = 100 * Constants.kDriveSpeedUnitConversion;
+	public static final double kSteikShortDriveMotionMagickP = 2.40;
+	public static final double kSteikShortDriveMotionMagickI = 0.00040;
+	public static final double kSteikShortDriveMotionMagickD = 275;
 	public static final double kSteikShortDriveMotionMagickF = 2.075;
 	public static final int kSteikShortDriveMotionMagickIzone = 150;
 	public static final double kSteikShortDriveMotionMagickRampRate = 0.0;
@@ -114,8 +98,6 @@ public class Gains {
 	public static final double kSteikTurnMotionMagickRampRate = 0.0;
 	public static final Gains steikTurnMotionMagicGains = new Gains(kSteikTurnMotionMagickP, kSteikTurnMotionMagickI, kSteikTurnMotionMagickD,
 			kSteikTurnMotionMagickF, kSteikTurnMotionMagickIzone, kSteikTurnMotionMagickRampRate);
-
-	// Slider motion magic offboard control loop
 
 	// Slider position offboard control loop
 	public static final double kSteikSliderEncoderkP = 0.8;

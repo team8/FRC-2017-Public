@@ -32,8 +32,6 @@ public class HardwareAdapter {
 		public final CANTalon rightSlave2Talon;
 
 		// If encoders are wired directly to RIO use the following objects
-//		public final Encoder leftEncoder;
-//		public final Encoder rightEncoder;
 //		public final ADXRS453_Gyro gyro;
 		public AHRS gyro;
 
@@ -62,29 +60,6 @@ public class HardwareAdapter {
 				rightSlave1Talon = new CANTalon(Constants.kSteikRightDriveSlaveDeviceID);
 				rightSlave2Talon = new CANTalon(Constants.kSteikRightDriveOtherSlaveDeviceID);
 				gyro = new AHRS(SPI.Port.kMXP);
-			}
-		}
-	}
-
-	/**
-	 * FLIPPERS - 2 double solenoids
-	 */
-	public static class FlippersHardware {
-		private static FlippersHardware instance = new FlippersHardware();
-		public static FlippersHardware getInstance() {
-			return instance;
-		}
-		public final DoubleSolenoid leftSolenoid, rightSolenoid;
-
-		private FlippersHardware() {
-			if (Constants.kRobotName == Constants.RobotName.STEIK) {
-				leftSolenoid = new DoubleSolenoid(
-						Constants.kSteikLeftFlipperPortExtend, Constants.kSteikLeftFlipperPortRetract);
-				rightSolenoid = new DoubleSolenoid(
-						Constants.kSteikRightFlipperPortExtend, Constants.kSteikRightFlipperPortRetract);
-			} else {
-				leftSolenoid = null;
-				rightSolenoid = null;
 			}
 		}
 	}
@@ -196,9 +171,6 @@ public class HardwareAdapter {
 	// Wrappers to access hardware groups
 	public DrivetrainHardware getDrivetrain() {
 		return DrivetrainHardware.getInstance();
-	}
-	public FlippersHardware getFlippers() {
-		return FlippersHardware.getInstance();
 	}
 	public SliderHardware getSlider() {
 		return SliderHardware.getInstance();

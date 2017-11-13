@@ -2,7 +2,6 @@ package com.palyrobotics.frc2017.util.logger;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
-import com.palyrobotics.frc2017.util.logger.LoggerConstants;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,6 +63,8 @@ public class Logger {
 			return false;
 		}
 		this.fileName = fileName.replaceAll(File.separator, ":");
+		this.fileName = fileName.replaceAll(" ", "_");
+		this.fileName = fileName.replaceAll("/n", "_");
 		return true;
 	}
 	
@@ -173,7 +174,7 @@ public class Logger {
 		try {
 			if(LoggerConstants.writeStackTrace && value instanceof Throwable) {
 				((Throwable) value).printStackTrace(pw);
-				mSubsystemThreadLogs.add(new TimestampedString(key + ": /n" + pw.toString()));
+				mSubsystemThreadLogs.add(new TimestampedString(key + ": " + pw.toString()));
 			}
 			else {
 				mSubsystemThreadLogs.add(new TimestampedString(key + ": " + value.toString()));
@@ -189,7 +190,7 @@ public class Logger {
 		try {
 			if(LoggerConstants.writeStackTrace && value instanceof Throwable && l.intValue() >= 900) {
 				((Throwable) value).printStackTrace(pw);
-				mSubsystemThreadLogs.add(new LeveledString(l, key + ": /n" + pw.toString()));
+				mSubsystemThreadLogs.add(new LeveledString(l, key + ": " + pw.toString()));
 			}
 			else {
 				mSubsystemThreadLogs.add(new LeveledString(l, key + ": " + value.toString()));
@@ -246,7 +247,7 @@ public class Logger {
 		try {
 			if(LoggerConstants.writeStackTrace && value instanceof Throwable) {
 				((Throwable) value).printStackTrace(pw);
-				mRobotThreadLogs.add(new TimestampedString(key + ": /n" + pw.toString()));
+				mRobotThreadLogs.add(new TimestampedString(key + ": " + pw.toString()));
 			}
 			else {
 				mRobotThreadLogs.add(new TimestampedString(key + ": " + value.toString()));
@@ -267,7 +268,7 @@ public class Logger {
 		try {
 			if(LoggerConstants.writeStackTrace && value instanceof Throwable && l.intValue() <= 900) {
 				((Throwable) value).printStackTrace(pw);
-				mRobotThreadLogs.add(new LeveledString(l, key + ": /n" + pw.toString()));
+				mRobotThreadLogs.add(new LeveledString(l, key + ": " + pw.toString()));
 			}
 			else {
 				mRobotThreadLogs.add(new LeveledString(l, key + ": " + value.toString()));

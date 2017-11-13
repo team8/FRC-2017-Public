@@ -72,7 +72,6 @@ public class RoutineManager implements Tappable {
 		for(Routine routine : runningRoutines) {
 			if(routine.finished()) {
 				Logger.getInstance().logRobotThread("Routine "+routine.getName()+" finished, canceled");
-//				System.out.println("Routine cancel called");
 				output = routine.cancel(output);
 				routinesToRemove.add(routine);
 			} else {
@@ -82,7 +81,6 @@ public class RoutineManager implements Tappable {
 		
 		// Remove routines that finished
 		for(Routine routine : routinesToRemove) {
-//			System.out.println("Completed routine: " + routine.getName());
 			runningRoutines.remove(routine);
 		}
 
@@ -94,7 +92,6 @@ public class RoutineManager implements Tappable {
 				Logger.getInstance().logRobotThread("Canceling routine "+routine.getName() +
 						" that conflicts with "+newRoutine.getName());
 				output = routine.cancel(output);
-//				System.out.println("Canceling routine " + routine.getName());
 				runningRoutines.remove(routine);
 			}
 			newRoutine.start();
@@ -151,7 +148,6 @@ public class RoutineManager implements Tappable {
 
 	@Override
 	public void getState(StateHolder states) {
-		//		states.put("mode", mCurrentRoutine != null ? mCurrentRoutine.getName() : "---");
 	}
 
 	@Override

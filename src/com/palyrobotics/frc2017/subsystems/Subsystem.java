@@ -20,17 +20,11 @@ public abstract class Subsystem {
 	public String toString() {
 		return mName;
 	}
-//	public abstract void reloadConstants();
-	public void start() {
-		// TODO Auto-generated method stub
-		
-	}
-	public void stop() {
-		// TODO Auto-generated method stub
-		
-	}
+
+	public void start() {}
+	public void stop() {}
+
 	public String getStatus() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

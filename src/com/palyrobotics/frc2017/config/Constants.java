@@ -1,8 +1,5 @@
 package com.palyrobotics.frc2017.config;
 
-import java.time.ZoneId;
-import java.util.logging.Level;
-
 import com.palyrobotics.frc2017.robot.team254.lib.util.ConstantsBase;
 
 public class Constants extends ConstantsBase {

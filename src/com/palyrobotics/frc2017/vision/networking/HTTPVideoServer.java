@@ -6,6 +6,11 @@ import com.palyrobotics.frc2017.vision.VisionData;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Sends video from the robot to the dashboard.

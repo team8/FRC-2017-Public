@@ -164,44 +164,6 @@ public class VisionManager extends VisionThreadBase {
 		}
 	}
 
-//	/**
-//	 * Starts up the vision app
-//	 */
-//	public void StartVisionApp(){
-//		//		if(!m_adbServerCreated){    // No abd server, can't start app
-//		//			System.out.println("Warning: on call VisionManager.StartVisionApp(), " +
-//		//					"adb server not started, abandoning app startup");
-//		////			return;
-//		//		}
-//
-//		if(m_visionRunning){	// This should never happen, but easily can due to outside calling
-//			System.out.println("Warning: On call VisionManager.StartVisionApp(), "
-//					+ "vision app already running (or function has been called before)");
-//		}else{
-//			if(m_connectionState.equals(ConnectionState.STARTING_ADB)){
-//				int limit = 40;
-//				int count = 0;
-//				while(!m_connectionState.equals(ConnectionState.IDLE)){
-//					try {
-//						Thread.sleep(50);
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//					if(count >= limit){
-//						break;
-//					}
-//					count++;
-//				}
-//
-//			}else if(!m_connectionState.equals(ConnectionState.IDLE)){
-//				System.out.println("Error: in VisionManager.StartVisionApp(), "
-//						+ "connection not in a state to start app");
-//			}
-//
-//			this.SetState(ConnectionState.START_VISION_APP);
-//		}
-//	}
-
 	/**
 	 * Sends command to boot up the vision app
 	 * @return The state after execution
