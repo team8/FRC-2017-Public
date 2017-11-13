@@ -8,8 +8,11 @@ import com.palyrobotics.frc2017.behavior.routines.drive.DrivePathRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.DriveSensorResetRoutine;
 import com.palyrobotics.frc2017.config.Gains;
 import com.team254.lib.trajectory.Path;
-
+import com.team254.lib.trajectory.Translation2d;
+import com.team254.lib.trajectory.Path.Waypoint;
+import com.team254.lib.trajectory.Path.Waypoint;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Nihar on 4/5/17.
@@ -34,11 +37,10 @@ public class TestTrajectoryAutoMode extends AutoModeBase {
 
 	@Override
 	public Routine getRoutine() {
-		ArrayList<Routine> sequence = new ArrayList<>();
-		sequence.add(new DriveSensorResetRoutine());
-		sequence.add(new DrivePathRoutine(mPath, Gains.kStraightTrajectoryGains, true, false));
-		sequence.add(new DriveSensorResetRoutine());
-//		sequence.add(new DrivePathRoutine(AutoPathLoader.get("GoToNeutral"), Gains.steikTrajectory, true, false));
-		return new SequentialRoutine(sequence);
+		List<Waypoint> path = new ArrayList<>();
+		path.add(new Waypoint(new Translation2d(0,0), 36.0));
+		path.add(new Waypoint(new Translation2d(10,0), 36.0));
+		path.add(new Waypoint(new Translation2d(10, 83.05), 36.0));
+		return new DrivePathRoutine(new Path(path), false);
 	}
 }

@@ -52,8 +52,16 @@ public class Constants extends ConstantsBase {
 
 	// Adaptive Pure Pursuit Controller
 
+	public static double kDriveWheelDiameterInches = 7.3;
+	public static double kTrackLengthInches = 8.265;
+	public static double kTrackWidthInches = 23.8;
+	public static double kTrackEffectiveDiameter = (kTrackWidthInches * kTrackWidthInches
+			+ kTrackLengthInches * kTrackLengthInches) / kTrackWidthInches;
+	public static double kTrackScrubFactor = 0.5;
+	public static double kPathFollowingLookahead = 24.0;
 	public static double kPathFollowingMaxAccel = 80.0;
 	public static double kPathFollowingMaxVel = 120.0;
+	public static double kPathFollowingTolerance = 0.25;
 
 	// Cheesy Drive
 

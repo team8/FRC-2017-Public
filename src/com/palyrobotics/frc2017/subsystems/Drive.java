@@ -8,6 +8,15 @@ import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
 import com.palyrobotics.frc2017.subsystems.controllers.*;
 import com.palyrobotics.frc2017.util.Pose;
+import com.palyrobotics.frc2017.subsystems.controllers.CANTalonDriveController;
+import com.palyrobotics.frc2017.subsystems.controllers.DriveStraightController;
+import com.palyrobotics.frc2017.subsystems.controllers.EncoderTurnAngleController;
+import com.palyrobotics.frc2017.subsystems.controllers.GyroMotionMagicTurnAngleController;
+import com.palyrobotics.frc2017.util.*;
+import com.palyrobotics.frc2017.subsystems.controllers.AdaptivePurePursuitController;
+import com.palyrobotics.frc2017.subsystems.controllers.BangBangTurnAngleController;
+import com.palyrobotics.frc2017.config.Constants;
+import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.util.archive.CheesyDriveHelper;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.team254.lib.trajectory.Path;
@@ -198,10 +207,10 @@ public class Drive extends Subsystem {
 	/**
 	 * Motion profile hype
 	 * @param path Path to follow
-	 * @param useGyro Should correct heading using gyro or not
 	 */
-	public void setTrajectoryController(Path path, Gains.TrajectoryGains gains, boolean useGyro, boolean inverted) {
-		mController = new TrajectoryFollowingController(path, gains, useGyro, inverted);
+	public void setTrajectoryController(Path path, boolean inverted) {
+		mController = new AdaptivePurePursuitController(Constants.kPathFollowingLookahead, Constants.kPathFollowingMaxAccel, Constants.kNormalLoopsDt, path, inverted, Constants.kPathFollowingTolerance);
+		mController.update(mCachedRobotState);
 		newController = true;
 	}
 
