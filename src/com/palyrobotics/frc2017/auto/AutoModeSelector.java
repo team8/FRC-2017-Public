@@ -3,7 +3,6 @@ package com.palyrobotics.frc2017.auto;
 import com.palyrobotics.frc2017.auto.modes.*;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoPostVariant;
 import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
-import com.palyrobotics.frc2017.auto.modes.TrajectorySidePegAutoMode.TrajectorySidePostVariant;
 import com.palyrobotics.frc2017.auto.modes.archive.BaseLineAutoMode;
 import com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode;
 import com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode.Alliance;
@@ -21,9 +20,7 @@ public class AutoModeSelector {
 	private enum AutoIndices {
 		DO_NOTHING(0), BASELINE(1),
 		CENTER_PEG(2), SIDE_PEG(3), 
-		VISION_CENTER_PEG(4), VISION_SIDE_PEG(5),
-		TRAJECTORY_CENTER(6), TRAJECTORY_SIDE(7),
-		TEST(8), TEST_TRAJECTORY(9);
+		TEST(4), TEST_TRAJECTORY(5);
 		private final int id;
 		AutoIndices(int id) {this.id = id;}
 		public int get() {return id;}
@@ -33,7 +30,7 @@ public class AutoModeSelector {
 	 * comment for which auto mode the selectedIndex refers to
 	 */
 
-	int selectedIndex = AutoIndices.VISION_SIDE_PEG.get();
+	int selectedIndex = AutoIndices.TEST_TRAJECTORY.get();
 
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
@@ -60,13 +57,8 @@ public class AutoModeSelector {
 		// red left/ blue right = loading station, red right/blue left = boiler
   /*3*/	registerAutonomous(new SidePegAutoMode(SideAutoVariant.BLUE_LOADING, // Alliance color and side
 				SideAutoPostVariant.BACKUP)); // Should backup?
-  /*4*/ registerAutonomous(new VisionCenterPegAutoMode(VisionCenterPegAutoMode.CenterPegAutoVariant.BLUE)); //alliance
-  /*5*/ registerAutonomous(new VisionSidePegAutoMode(SideAutoVariant.RED_BOILER)); // alliance, boiler/loading
-
-  /*6*/ registerAutonomous(new TrajectoryCenterPegAutoMode(Alliance.BLUE, true));
-  /*7*/registerAutonomous(new TrajectorySidePegAutoMode(SideAutoVariant.BLUE_LOADING, TrajectorySidePostVariant.BACKUP));
-  /*8*/registerAutonomous(new TestAutoMode());
-  /*9*/registerAutonomous(new TestTrajectoryAutoMode());
+  /*4*/registerAutonomous(new TestAutoMode());
+  /*5*/registerAutonomous(new TestTrajectoryAutoMode());
 	}
 
 	/**

@@ -1,6 +1,6 @@
 package com.team254.lib.trajectory;
 
-import com.palyrobotics.frc2016.Constants;
+import com.palyrobotics.frc2017.config.Constants;
 
 /**
  * Provides forward and inverse kinematics equations for the robot modeling the

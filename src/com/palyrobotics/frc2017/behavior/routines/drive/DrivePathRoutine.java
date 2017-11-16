@@ -53,6 +53,6 @@ public class DrivePathRoutine extends Routine {
 
 	@Override
 	public String getName() {
-		return "DrivePathRoutine"+((mUseGyro)?"gyro":"noGyro");
+		return "DrivePathRoutine";
 	}
 }

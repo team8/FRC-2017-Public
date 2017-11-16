@@ -1,7 +1,6 @@
 package com.palyrobotics.frc2017.auto.modes;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
-import com.palyrobotics.frc2017.auto.AutoPathLoader;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.DrivePathRoutine;
@@ -22,9 +21,6 @@ public class TestTrajectoryAutoMode extends AutoModeBase {
 	private String mDesired;
 
 	public TestTrajectoryAutoMode() {
-		mDesired = "BlueCenter";
-		AutoPathLoader.loadPaths();
-		mPath = AutoPathLoader.get(mDesired);
 	}
 	@Override
 	public String toString() {

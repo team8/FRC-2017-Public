@@ -1,5 +1,7 @@
 package com.team254.lib.trajectory;
 
+import com.palyrobotics.frc2017.robot.team254.lib.util.ChezyMath;
+
 /**
  * Implementation of a Trajectory using arrays as the underlying storage
  * mechanism.
