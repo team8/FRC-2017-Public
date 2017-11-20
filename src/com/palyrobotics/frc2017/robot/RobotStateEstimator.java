@@ -5,7 +5,7 @@ import com.palyrobotics.frc2017.subsystems.Drive;
 import com.team254.lib.trajectory.Kinematics;
 import com.team254.lib.trajectory.RigidTransform2d;
 import com.team254.lib.trajectory.Rotation2d;
-import com.team254.lib.util.Loop;
+import com.palyrobotics.frc2017.robot.team254.lib.util.Loop;
 import edu.wpi.first.wpilibj.Timer;
 
 /**
@@ -36,7 +36,7 @@ public class RobotStateEstimator implements Loop {
     }
 
     @Override
-    public void onLoop() {
+    public void update() {
 
         RobotState state = Robot.getRobotState();
         double time = Timer.getFPGATimestamp();

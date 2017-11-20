@@ -18,13 +18,12 @@ import java.util.List;
  */
 public class TestTrajectoryAutoMode extends AutoModeBase {
 	private Path mPath;
-	private String mDesired;
 
 	public TestTrajectoryAutoMode() {
 	}
 	@Override
 	public String toString() {
-		return "TestTrajectoryAutoMode"+mDesired;
+		return "TestTrajectoryAutoMode";
 	}
 
 	@Override
@@ -34,9 +33,9 @@ public class TestTrajectoryAutoMode extends AutoModeBase {
 	@Override
 	public Routine getRoutine() {
 		List<Waypoint> path = new ArrayList<>();
-		path.add(new Waypoint(new Translation2d(0,0), 36.0));
-		path.add(new Waypoint(new Translation2d(10,0), 36.0));
-		path.add(new Waypoint(new Translation2d(10, 83.05), 36.0));
+		path.add(new Waypoint(new Translation2d(0,0), 12.0));
+		path.add(new Waypoint(new Translation2d(10,0), 12.0));
+		path.add(new Waypoint(new Translation2d(10, 83.05), 12.0));
 		return new DrivePathRoutine(new Path(path), false);
 	}
 }

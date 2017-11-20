@@ -58,7 +58,7 @@ public class Constants extends ConstantsBase {
 	public static double kTrackEffectiveDiameter = (kTrackWidthInches * kTrackWidthInches
 			+ kTrackLengthInches * kTrackLengthInches) / kTrackWidthInches;
 	public static double kTrackScrubFactor = 0.5;
-	public static double kPathFollowingLookahead = 24.0;
+	public static double kPathFollowingLookahead = 5.0;
 	public static double kPathFollowingMaxAccel = 80.0;
 	public static double kPathFollowingMaxVel = 120.0;
 	public static double kPathFollowingTolerance = 0.25;

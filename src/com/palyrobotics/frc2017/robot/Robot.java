@@ -43,6 +43,7 @@ public class Robot extends IterativeRobot {
 	private HardwareUpdater mHardwareUpdater;
 
 	private Looper mSubsystemLooper = new Looper();
+	private Looper mStateEstimationLooper = new Looper();
 	
 	private double mStartTime;
 	private boolean startedClimberRoutine = false;
@@ -105,6 +106,7 @@ public class Robot extends IterativeRobot {
 
 			}
 		});
+		mStateEstimationLooper.register(RobotStateEstimator.getInstance());
 		System.out.println("Auto: "+AutoModeSelector.getInstance().getAutoMode().toString());
 		System.out.println("End robotInit()");
 		Logger.getInstance().logRobotThread("End robotInit()");
@@ -143,6 +145,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("End autonomousInit()");
 		Logger.getInstance().logRobotThread("End autonomousInit()");
 		mSubsystemLooper.start();
+		mStateEstimationLooper.start();
 	}
 
 	@Override
@@ -196,6 +199,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("Current Auto Mode: " + AutoModeSelector.getInstance().getAutoMode().toString());
 		robotState.gamePeriod = RobotState.GamePeriod.DISABLED;
 		mSubsystemLooper.stop();
+		mStateEstimationLooper.stop();
 
 		// Stops updating routines
 		mRoutineManager.reset(commands);

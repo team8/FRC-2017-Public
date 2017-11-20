@@ -49,11 +49,15 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
         mPathCompletionTolerance = path_completion_tolerance;
     }
 
-    public boolean isDone() {
-        double remainingLength = mPath.getRemainingLength();
-        return remainingLength <= mPathCompletionTolerance;
-    }
-
+    /**
+     * Calculate the robot's required Delta (movement along an arc) based on the
+     * current robot pose and lookahead point.
+     * 
+     * @param robot_pose - 	the current position of the robot denoted by its
+     * 						translation and rotation from the original position
+     * @param now - the current timestamp
+     * @return the target x translation dx, y translation dy, and rotation dtheta
+     */
     public RigidTransform2d.Delta update(RigidTransform2d robot_pose, double now) {
         RigidTransform2d pose = robot_pose;
         if (mReversed) {
@@ -62,12 +66,10 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
         }
 
         double distance_from_path = mPath.update(robot_pose.getTranslation());
-        if (this.isDone()) {
-            return new RigidTransform2d.Delta(0, 0, 0);
-        }
 
         PathSegment.Sample lookahead_point = mPath.getLookaheadPoint(robot_pose.getTranslation(),
                 distance_from_path + mFixedLookahead);
+        System.out.println("Lookahead point: " + lookahead_point.translation.toString());
         Optional<Circle> circle = joinPath(pose, lookahead_point.translation);
 
         double speed = lookahead_point.speed;
@@ -111,13 +113,19 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
         }
         mLastTime = now;
         mLastCommand = rv;
+        System.out.println("dx: " + rv.dx + "	dy: " + rv.dy + "	dtheta: " + rv.dtheta);
         return rv;
     }
 
+    /**
+     * Returns the list of labeled waypoints (markers) that the robot has passed
+     * @return a set of Strings representing each of the crossed markers
+     */
     public Set<String> getMarkersCrossed() {
         return mPath.getMarkersCrossed();
     }
 
+	// An abstraction of a circular arc used for turning motion
     public static class Circle {
         public final Translation2d center;
         public final double radius;
@@ -130,6 +138,12 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
         }
     }
 
+    /**
+     * Connect the current position and lookahead point with a circular arc
+     * @param robot_pose - the current translation and rotation of the robot
+     * @param lookahead_point - the coordinates of the lookahead point
+     * @return - A circular arc representing the path, null if the arc is degenerate
+     */
     public static Optional<Circle> joinPath(RigidTransform2d robot_pose, Translation2d lookahead_point) {
         double x1 = robot_pose.getTranslation().getX();
         double y1 = robot_pose.getTranslation().getY();
@@ -151,7 +165,7 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
         double cross_term = mx * dx + my * dy;
 
         if (Math.abs(cross_term) < kEpsilon) {
-            // Points are colinear
+            // Points are collinear
             return Optional.empty();
         }
 
@@ -160,9 +174,17 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
                         (-my * (-y1 * y1 + y2 * y2 + dx * dx) + 2 * mx * y1 * dx) / (2 * cross_term)),
                 .5 * Math.abs((dx * dx + dy * dy) / cross_term), cross_product > 0));
     }
-    
-    private DriveSignal updatePathFollower() {
-        RigidTransform2d robot_pose = RobotPosition.getInstance().getLatestFieldToVehicle().getValue();
+
+    /**
+     * Calculate the next Delta and convert it to a drive signal
+     * @param state - the current robot state, currently unused
+     * @return the left and right drive voltage outputs needed to move in the
+     * calculated Delta
+     */
+    @Override
+    public DriveSignal update(RobotState state) {
+    		RigidTransform2d robot_pose = RobotPosition.getInstance().getLatestFieldToVehicle().getValue();
+    		System.out.println(robot_pose.toString());
         RigidTransform2d.Delta command = this.update(robot_pose, Timer.getFPGATimestamp());
         Kinematics.DriveVelocity setpoint = Kinematics.inverseKinematics(command);
 
@@ -176,26 +198,25 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
         }
 
         final CANTalonOutput
-            left  = new CANTalonOutput(CANTalon.TalonControlMode.PercentVbus, new Gains(0, 0, 0, 0, 0, 0), setpoint.left ),
-            right = new CANTalonOutput(CANTalon.TalonControlMode.PercentVbus, new Gains(0, 0, 0, 0, 0, 0), setpoint.right);
+            left  = new CANTalonOutput(CANTalon.TalonControlMode.Voltage, new Gains(0, 0, 0, 0, 0, 0), setpoint.left ),
+            right = new CANTalonOutput(CANTalon.TalonControlMode.Voltage, new Gains(0, 0, 0, 0, 0, 0), setpoint.right);
 
+        System.out.println(new DriveSignal(left, right).toString());
+        
         return new DriveSignal(left, right);
     }
 
-    @Override
-    public DriveSignal update(RobotState state) {
-        return updatePathFollower();
-    }
-
+    // HOPING THIS METHOD NEVER GETS CALLED
     @Override
     public Pose getSetpoint() {
-        return null;
+    		Pose setpoint = new Pose(0,0,0,0,0,0,0,0);
+    		return setpoint;
     }
 
     @Override
 	public boolean onTarget() {
-		// TODO Auto-generated method stub
-		return false;
+    		double remainingLength = mPath.getRemainingLength();
+        return remainingLength <= mPathCompletionTolerance;
 	}
 
 }
