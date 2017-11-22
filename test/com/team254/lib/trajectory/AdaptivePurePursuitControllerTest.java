@@ -106,7 +106,7 @@ public class AdaptivePurePursuitControllerTest {
 
         RigidTransform2d robot_pose = new RigidTransform2d(new Translation2d(0.0, 0.0), Rotation2d.fromDegrees(0));
         double t = 0;
-        while (!controller.isDone() && t < 10) {
+        while (!controller.onTarget() && t < 10) {
             // Follow the path
             RigidTransform2d.Delta command = controller.update(robot_pose, t);
             robot_pose = robot_pose.transformBy(new RigidTransform2d(new Translation2d(command.dx * dt, 0),
@@ -116,7 +116,7 @@ public class AdaptivePurePursuitControllerTest {
                     "t = " + t + ", lin vel " + command.dx + ", ang vel " + command.dtheta + ", pose " + robot_pose);
             t += dt;
         }
-        assertTrue(controller.isDone());
+        assertTrue(controller.onTarget());
         assertEquals(5, robot_pose.getTranslation().getX(), .01);
         assertEquals(-2, robot_pose.getTranslation().getY(), .01);
     }
@@ -140,7 +140,7 @@ public class AdaptivePurePursuitControllerTest {
 
         RigidTransform2d robot_pose = RigidTransform2d.fromRotation(Rotation2d.fromRadians(Math.PI));
         double t = 0;
-        while (!controller.isDone() && t < 10) {
+        while (!controller.onTarget() && t < 10) {
             // Follow the path
             RigidTransform2d.Delta command = controller.update(robot_pose, t);
             robot_pose = robot_pose.transformBy(new RigidTransform2d(new Translation2d(command.dx * dt, 0),
@@ -150,7 +150,7 @@ public class AdaptivePurePursuitControllerTest {
                     "t = " + t + ", lin vel " + command.dx + ", ang vel " + command.dtheta + ", pose " + robot_pose);
             t += dt;
         }
-        assertTrue(controller.isDone());
+        assertTrue(controller.onTarget());
         assertEquals(2, controller.getMarkersCrossed().size());
         assertEquals(5, robot_pose.getTranslation().getX(), .01);
         assertEquals(-2, robot_pose.getTranslation().getY(), .01);

@@ -1,5 +1,6 @@
 package com.palyrobotics.frc2017.robot;
 
+import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.team254.lib.trajectory.Kinematics;
@@ -42,9 +43,12 @@ public class RobotStateEstimator implements Loop {
         double time = Timer.getFPGATimestamp();
         double left_distance  = state.drivePose.leftEnc;
         double right_distance = state.drivePose.rightEnc;
-        Rotation2d gyro_angle = Rotation2d.fromDegrees(state.drivePose.heading);
+        System.out.println("left distance: " + (left_distance - left_encoder_prev_distance_) + "\nright distance: " + (right_distance - right_encoder_prev_distance_));
+        Rotation2d gyro_angle = Rotation2d.fromRadians(right_distance - left_distance * Constants.kTrackScrubFactor / Constants.kTrackEffectiveDiameter);
+        System.out.println("gyro angle: " + gyro_angle);
         RigidTransform2d odometry = robot_state_.generateOdometryFromSensors(
             left_distance - left_encoder_prev_distance_, right_distance - right_encoder_prev_distance_, gyro_angle);
+        System.out.println("Odometry is: " + odometry);
         RigidTransform2d.Delta velocity = Kinematics.forwardKinematics(
             state.drivePose.leftEncVelocity,
             state.drivePose.rightEncVelocity

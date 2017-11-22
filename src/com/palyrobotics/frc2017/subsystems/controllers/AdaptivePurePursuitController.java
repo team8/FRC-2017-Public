@@ -40,6 +40,7 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
 
     public AdaptivePurePursuitController(double fixed_lookahead, double max_accel, double nominal_dt, Path path,
                                          boolean reversed, double path_completion_tolerance) {
+    	System.out.println("AAAAAAAAH " +  RobotPosition.getInstance().generateOdometryFromSensors(0, 0, Rotation2d.fromRadians(0)));
         mFixedLookahead = fixed_lookahead;
         mMaxAccel = max_accel;
         mPath = path;
@@ -64,7 +65,7 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
             pose = new RigidTransform2d(robot_pose.getTranslation(),
                     robot_pose.getRotation().rotateBy(Rotation2d.fromRadians(Math.PI)));
         }
-
+        System.out.println("Current point: " + robot_pose.getTranslation());
         double distance_from_path = mPath.update(robot_pose.getTranslation());
 
         PathSegment.Sample lookahead_point = mPath.getLookaheadPoint(robot_pose.getTranslation(),
@@ -183,6 +184,7 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
      */
     @Override
     public DriveSignal update(RobotState state) {
+    	System.out.println("Number of observations during update: " + RobotPosition.getInstance().getNumObservations());
     		RigidTransform2d robot_pose = RobotPosition.getInstance().getLatestFieldToVehicle().getValue();
     		System.out.println(robot_pose.toString());
         RigidTransform2d.Delta command = this.update(robot_pose, Timer.getFPGATimestamp());
@@ -198,7 +200,7 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
         }
 
         final CANTalonOutput
-            left  = new CANTalonOutput(CANTalon.TalonControlMode.Voltage, new Gains(0, 0, 0, 0, 0, 0), setpoint.left ),
+            left  = new CANTalonOutput(CANTalon.TalonControlMode.Voltage, new Gains(0, 0, 0, 0, 0, 0), setpoint.left),
             right = new CANTalonOutput(CANTalon.TalonControlMode.Voltage, new Gains(0, 0, 0, 0, 0, 0), setpoint.right);
 
         System.out.println(new DriveSignal(left, right).toString());
@@ -215,6 +217,8 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
 
     @Override
 	public boolean onTarget() {
+    	/*RigidTransform2d pose = RobotPosition.getInstance().getLatestFieldToVehicle().getValue();
+    	if (pose.getTranslation().getX() > 20) return true;*/
     		double remainingLength = mPath.getRemainingLength();
         return remainingLength <= mPathCompletionTolerance;
 	}

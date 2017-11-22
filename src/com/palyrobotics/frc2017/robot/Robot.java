@@ -200,6 +200,8 @@ public class Robot extends IterativeRobot {
 		robotState.gamePeriod = RobotState.GamePeriod.DISABLED;
 		mSubsystemLooper.stop();
 		mStateEstimationLooper.stop();
+		
+		RobotPosition.resetInstance();
 
 		// Stops updating routines
 		mRoutineManager.reset(commands);

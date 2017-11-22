@@ -51,6 +51,10 @@ public class RobotPosition {
     public static RobotPosition getInstance() {
         return instance_;
     }
+    
+    public static void resetInstance() {
+    	instance_.reset(0, new RigidTransform2d(), new Rotation2d());
+    }
 
     public static final int kObservationBufferSize = 100;
     public static final double kMaxTargetAge = 0.4;
@@ -89,6 +93,8 @@ public class RobotPosition {
 
     public synchronized void addFieldToVehicleObservation(double timestamp, RigidTransform2d observation) {
         field_to_vehicle_.put(new InterpolatingDouble(timestamp), observation);
+        System.out.println("YOU DID IT! number of observations is " + field_to_vehicle_.size());
+        System.out.println("Observation is " + observation);
     }
 
     public synchronized void addObservations(double timestamp, RigidTransform2d field_to_vehicle,
@@ -102,5 +108,9 @@ public class RobotPosition {
         RigidTransform2d last_measurement = getLatestFieldToVehicle().getValue();
         return Kinematics.integrateForwardKinematics(last_measurement, left_encoder_delta_distance,
                 right_encoder_delta_distance, current_gyro_angle);
+    }
+    
+    public int getNumObservations() {
+    	return field_to_vehicle_.size();
     }
 }
