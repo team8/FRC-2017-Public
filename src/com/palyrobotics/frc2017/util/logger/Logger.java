@@ -32,7 +32,7 @@ public class Logger {
 		return instance;
 	}
 
-	private String fileName = null;
+	private String fileName = "DEFAULT";
 
 	private boolean isEnabled = false;
 	
@@ -73,6 +73,9 @@ public class Logger {
 	 * Also sanitizes inputs to prevent unwanted directory creation
 	 */
 	public void start() {
+		if(fileName == "DEFAULT") {
+			System.err.println("WARNING: Using default filename!");
+		}
 		// If initialized before, then recreate the buffered writer and re-enable
 		if (mWritingThread != null) {
 			isEnabled = true;
@@ -216,11 +219,17 @@ public class Logger {
 				mRobotThreadLogs.add(new TimestampedString(value.toString()));
 			}
 		} catch (ConcurrentModificationException e) {
-			System.err.println("Attempted concurrent modification on subsystem logger");
+			System.err.println("Attempted concurrent modification on robot logger");
 		}
 		pw.flush();
 	}
 	
+	/**
+	 * Overloaded function to submit messages to the logger
+	 * SubsystemThread should be used in subsystem package, use robotThread everywhere else
+	 * @param l The level of logger call to be sent 
+	 * @param value Object submitted, call toString() on
+	 */
 	public void logRobotThread(Level l, Object value) {
 		try {
 			if(LoggerConstants.writeStackTrace && value instanceof Throwable && l.intValue() <= 900) {
@@ -231,7 +240,7 @@ public class Logger {
 				mRobotThreadLogs.add(new LeveledString(l, value.toString()));
 			}
 		} catch (ConcurrentModificationException e) {
-			System.err.println("Attempted concurrent modification on subsystem logger");
+			System.err.println("Attempted concurrent modification on robot logger");
 		}
 		pw.flush();
 	}
@@ -253,16 +262,13 @@ public class Logger {
 				mRobotThreadLogs.add(new TimestampedString(key + ": " + value.toString()));
 			}
 		} catch (ConcurrentModificationException e) {
-			System.err.println("Attempted concurrent modification on subsystem logger");
+			System.err.println("Attempted concurrent modification on robot logger");
 		}
 	}
 	
 	/**
-	 * Overloaded function to submit messages to the logger
-	 * SubsystemThread should be used in subsystem package, use robotThread everywhere else
+	 * @
 	 * @param l The level of logger call to be sent 
-	 * @param key Text to provide context to object
-	 * @param value Object submitted, call toString() on
 	 */
 	public void logRobotThread(Level l, String key, Object value) {
 		try {
@@ -274,7 +280,7 @@ public class Logger {
 				mRobotThreadLogs.add(new LeveledString(l, key + ": " + value.toString()));
 			}
 		} catch (ConcurrentModificationException e) {
-			System.err.println("Attempted concurrent modification on subsystem logger");
+			System.err.println("Attempted concurrent modification on robot logger");
 		}
 		pw.flush();
 	}
@@ -357,14 +363,5 @@ public class Logger {
 			}
 			isEnabled = false;
 		}
-		// Try to copy riolog to logging directory if it exists
-//		if (rioLog != null) {
-//			try {
-//				Files.copy(rioLog, new File("/home/lvuser/logs/" + fileName+"/riolog"+duplicatePrevent+".log"));
-//			} catch (IOException e) {
-//				System.out.println("Unable to copy riolog");
-//				e.printStackTrace();
-//			}
-//		}
 	}
 }
