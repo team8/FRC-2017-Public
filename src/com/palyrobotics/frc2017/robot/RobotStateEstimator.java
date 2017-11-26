@@ -41,11 +41,11 @@ public class RobotStateEstimator implements Loop {
 
         RobotState state = Robot.getRobotState();
         double time = Timer.getFPGATimestamp();
-        double left_distance  = state.drivePose.leftEnc;
-        double right_distance = state.drivePose.rightEnc;
-        System.out.println("left distance: " + (left_distance - left_encoder_prev_distance_) + "\nright distance: " + (right_distance - right_encoder_prev_distance_));
-        Rotation2d gyro_angle = Rotation2d.fromRadians(right_distance - left_distance * Constants.kTrackScrubFactor / Constants.kTrackEffectiveDiameter);
-        System.out.println("gyro angle: " + gyro_angle);
+        double left_distance  = state.drivePose.leftEnc / Constants.kDriveTicksPerInch;
+        double right_distance = state.drivePose.rightEnc / Constants.kDriveTicksPerInch;
+        //System.out.println("left distance: " + (left_distance - left_encoder_prev_distance_) + "\nright distance: " + (right_distance - right_encoder_prev_distance_));
+        Rotation2d gyro_angle = Rotation2d.fromRadians((right_distance - left_distance) * Constants.kTrackScrubFactor / Constants.kTrackEffectiveDiameter);
+        //System.out.println("gyro angle: " + gyro_angle);
         RigidTransform2d odometry = robot_state_.generateOdometryFromSensors(
             left_distance - left_encoder_prev_distance_, right_distance - right_encoder_prev_distance_, gyro_angle);
         System.out.println("Odometry is: " + odometry);

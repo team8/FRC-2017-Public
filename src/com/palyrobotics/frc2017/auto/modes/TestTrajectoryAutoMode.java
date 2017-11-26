@@ -33,9 +33,9 @@ public class TestTrajectoryAutoMode extends AutoModeBase {
 	@Override
 	public Routine getRoutine() {
 		List<Waypoint> path = new ArrayList<>();
-		path.add(new Waypoint(new Translation2d(0,0), 12.0));
-		path.add(new Waypoint(new Translation2d(10,0), 12.0));
-		path.add(new Waypoint(new Translation2d(10, 83.05), 12.0));
+		path.add(new Waypoint(new Translation2d(0,0), 6.0));
+		path.add(new Waypoint(new Translation2d(40,0), 6.0));
+		path.add(new Waypoint(new Translation2d(40, 83.05), 6.0));
 		return new DrivePathRoutine(new Path(path), false);
 	}
 }

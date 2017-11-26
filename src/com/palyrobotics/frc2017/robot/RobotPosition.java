@@ -93,8 +93,8 @@ public class RobotPosition {
 
     public synchronized void addFieldToVehicleObservation(double timestamp, RigidTransform2d observation) {
         field_to_vehicle_.put(new InterpolatingDouble(timestamp), observation);
-        System.out.println("YOU DID IT! number of observations is " + field_to_vehicle_.size());
-        System.out.println("Observation is " + observation);
+        //System.out.println("YOU DID IT! number of observations is " + field_to_vehicle_.size());
+        //System.out.println("Observation is " + observation);
     }
 
     public synchronized void addObservations(double timestamp, RigidTransform2d field_to_vehicle,
