@@ -200,11 +200,10 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
         }
 
         final CANTalonOutput
-            left  = new CANTalonOutput(CANTalon.TalonControlMode.Voltage, new Gains(0, 0, 0, 0, 0, 0), setpoint.left),
-            right = new CANTalonOutput(CANTalon.TalonControlMode.Voltage, new Gains(0, 0, 0, 0, 0, 0), setpoint.right);
+            left  = new CANTalonOutput(CANTalon.TalonControlMode.Speed, Gains.steikVelocity, setpoint.left),
+            right = new CANTalonOutput(CANTalon.TalonControlMode.Speed, Gains.steikVelocity, -setpoint.right);
 
-        //System.out.println(new DriveSignal(left, right).toString());
-        
+        System.out.println(new DriveSignal(left, right).toString());
         return new DriveSignal(left, right);
     }
 

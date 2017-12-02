@@ -339,7 +339,7 @@ class HardwareUpdater {
 	 */
 	private void updateCANTalonSRX(CANTalon talon, CANTalonOutput output) {
 		talon.changeControlMode(output.getControlMode());
-		if(output.getControlMode().isPID() || output.getControlMode() == TalonControlMode.MotionMagic) {
+		if(output.getControlMode().isPID() || output.getControlMode() == TalonControlMode.MotionMagic || output.getControlMode() == TalonControlMode.Speed) {
 			talon.setPID(output.gains.P, output.gains.I, output.gains.D, output.gains.F, output.gains.izone, output.gains.rampRate, output.profile);
 		}
 		if (output.getControlMode() == CANTalon.TalonControlMode.MotionMagic) {
