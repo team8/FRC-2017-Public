@@ -292,6 +292,7 @@ public class Logger {
 		mData = new ArrayList<>();
 		mRunnable = () -> {
 			while (true) {
+				writeLogs();
 				try {
 					Thread.sleep(500);
 				} catch (InterruptedException e){
@@ -317,18 +318,15 @@ public class Logger {
 				mData = new ArrayList<>(mRobotThreadLogs);
 				mData.addAll(mSubsystemThreadLogs);
 				mData.sort(TimestampedString::compareTo);
-				mSubsystemThreadLogs.clear();
-				mRobotThreadLogs.clear();
 				mData.forEach((TimestampedString c) -> {
 					try {
+						System.out.println(c.toString());
 						if(c instanceof LeveledString && ((LeveledString) c).getLevel().intValue() >= LoggerConstants.displayLevel.intValue()) {
-							System.out.println(c.toString());
 							if(((LeveledString) c).getLevel().intValue() >= LoggerConstants.writeLevel.intValue()) {
 								Files.append(((LeveledString) c).getLeveledString(), mainLog, Charsets.UTF_8);
 							}
 						}
 						else if(!(c instanceof LeveledString) && c instanceof TimestampedString) {
-							System.out.println(c.toString());
 							Files.append(c.getTimestampedString(), mainLog, Charsets.UTF_8);
 						}
 					} catch (IOException e) {
@@ -336,6 +334,8 @@ public class Logger {
 					}
 				});
 				mData.clear();
+				mSubsystemThreadLogs.clear();
+				mRobotThreadLogs.clear();
 			}
 		}
 	}
