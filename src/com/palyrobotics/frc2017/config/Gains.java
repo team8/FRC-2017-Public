@@ -53,9 +53,9 @@ public class Gains {
 			0, kSteikDriveDistancekIzone, kSteikDriveDistancekRampRate);
 
 	// Drive Velocity offboard control loop
-	public static final double kSteikDriveVelocitykP = 6.0;
+	public static final double kSteikDriveVelocitykP = 3.0;
 	public static final double kSteikDriveVelocitykI = 0.002;
-	public static final double kSteikDriveVelocitykD = 85;
+	public static final double kSteikDriveVelocitykD = 120;
 	public static final double kSteikDriveVelocitykF = 2.624;
 	public static final int kSteikDriveVelocitykIzone = 800;
 	public static final double kSteikDriveVelocitykRampRate = 0.0;
