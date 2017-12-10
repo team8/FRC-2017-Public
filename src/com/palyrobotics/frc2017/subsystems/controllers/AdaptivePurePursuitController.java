@@ -74,6 +74,7 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
         Optional<Circle> circle = joinPath(pose, lookahead_point.translation);
 
         double speed = lookahead_point.speed;
+        //System.out.println("Lookahead point speed is " + speed);
         if (mReversed) {
             speed *= -1;
         }
@@ -200,8 +201,8 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
         }
 
         final CANTalonOutput
-            left  = new CANTalonOutput(CANTalon.TalonControlMode.Speed, Gains.steikVelocity, setpoint.left),
-            right = new CANTalonOutput(CANTalon.TalonControlMode.Speed, Gains.steikVelocity, -setpoint.right);
+            left  = new CANTalonOutput(CANTalon.TalonControlMode.Speed, Gains.steikVelocity, setpoint.left * Constants.kDriveTicksPerInch),
+            right = new CANTalonOutput(CANTalon.TalonControlMode.Speed, Gains.steikVelocity, -setpoint.right * Constants.kDriveTicksPerInch);
 
         System.out.println(new DriveSignal(left, right).toString());
         return new DriveSignal(left, right);

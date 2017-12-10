@@ -46,6 +46,7 @@ public class DashboardManager {
 	 * @param d	The dashboard value.
 	 */
 	public void publishKVPair(DashboardValue d) {
+		
 		if (robotTable == null) {
 			try {
 				this.robotTable = NetworkTable.getTable(TABLE_NAME);
@@ -68,6 +69,7 @@ public class DashboardManager {
 		}
 		if (canTable != null) {
 			canTable.putString("status", string+"\n");
+			System.out.println("SUCCESFULLY STARTED");
 		} else {
 			// try to reach it again
 			try {
@@ -86,8 +88,12 @@ public class DashboardManager {
 	public void toggleCANTable(boolean start) {
 		if (start) {
 			if (canTable != null) {
+				System.out.println("Started");
 				canTable.putString("start", "true");
 				canTable.putString("end", "false");
+			}
+			else {
+				System.out.println("Error");
 			}
 		} else {
 			if (canTable != null) {
