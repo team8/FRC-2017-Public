@@ -190,6 +190,7 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
     		//System.out.println(robot_pose.toString());
         RigidTransform2d.Delta command = this.update(robot_pose, Timer.getFPGATimestamp());
         Kinematics.DriveVelocity setpoint = Kinematics.inverseKinematics(command);
+        setpoint = new Kinematics.DriveVelocity(setpoint.left * Constants.kDriveTicksPerInch, setpoint.right * Constants.kDriveTicksPerInch);
 
         // Scale the command to respect the max velocity limits
         double max_vel = 0.0;
@@ -201,8 +202,8 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
         }
 
         final CANTalonOutput
-            left  = new CANTalonOutput(CANTalon.TalonControlMode.Speed, Gains.steikVelocity, setpoint.left * Constants.kDriveTicksPerInch),
-            right = new CANTalonOutput(CANTalon.TalonControlMode.Speed, Gains.steikVelocity, -setpoint.right * Constants.kDriveTicksPerInch);
+            left  = new CANTalonOutput(CANTalon.TalonControlMode.Speed, Gains.steikVelocity, setpoint.left),
+            right = new CANTalonOutput(CANTalon.TalonControlMode.Speed, Gains.steikVelocity, -setpoint.right);
 
         System.out.println(new DriveSignal(left, right).toString());
         return new DriveSignal(left, right);

@@ -50,18 +50,6 @@ public class Constants extends ConstantsBase {
 //	 //Only set to TRUE when in a match
 //	 public static final boolean compStatus = false;
 
-	// Adaptive Pure Pursuit Controller
-
-	public static double kDriveWheelDiameterInches = 7.3;
-	public static double kTrackLengthInches = 8.265;
-	public static double kTrackWidthInches = 23.8;
-	public static double kTrackEffectiveDiameter = (kTrackWidthInches * kTrackWidthInches
-			+ kTrackLengthInches * kTrackLengthInches) / kTrackWidthInches;
-	public static double kTrackScrubFactor = 0.9;
-	public static double kPathFollowingLookahead = 35.0;
-	public static double kPathFollowingMaxAccel = 80.0;
-	public static double kPathFollowingMaxVel = 120.0;
-	public static double kPathFollowingTolerance = 0.20;
 
 	// Cheesy Drive
 
@@ -212,6 +200,19 @@ public class Constants extends ConstantsBase {
 	public static double kSubsystemLooperDt = 0.01;
 	
 	public static double kSubsystemPrintLooperDt = 0.01;
+	
+	// Adaptive Pure Pursuit Controller
+
+	public static double kDriveWheelDiameterInches = 7.3;
+	public static double kTrackLengthInches = 8.265;
+	public static double kTrackWidthInches = 23.8;
+	public static double kTrackEffectiveDiameter = (kTrackWidthInches * kTrackWidthInches
+			+ kTrackLengthInches * kTrackLengthInches) / kTrackWidthInches;
+	public static double kTrackScrubFactor = 0.9;
+	public static double kPathFollowingLookahead = 35.0;
+	public static double kPathFollowingMaxAccel = 5.0 * kDriveTicksPerInch;
+	public static double kPathFollowingMaxVel = 10.0 * kDriveTicksPerInch;
+	public static double kPathFollowingTolerance = 0.20;
 
 	@Override
 	public String toString() {

@@ -14,6 +14,16 @@ public class Gains {
 	public static double kSteikLeftTrajectorykV_0 = 0.0969;
 	public static double kSteikRightTrajectorykV_0 = 0.0946;
 	public static double kSteikTrajectorykA = 0.025;
+	
+	public static final double kSteikDriveVelocitykP = 6.0;
+	public static final double kSteikDriveVelocitykI = 0.002;
+	public static final double kSteikDriveVelocitykD = 85;
+	public static final double kSteikDriveVelocitykF = 2.624;
+	public static final int kSteikDriveVelocitykIzone = 800;
+	public static final double kSteikDriveVelocitykRampRate = 0.0;
+	public static final Gains steikVelocity = new Gains(kSteikDriveVelocitykP, kSteikDriveVelocitykI, kSteikDriveVelocitykD,
+			kSteikDriveVelocitykF, kSteikDriveVelocitykIzone, kSteikDriveVelocitykRampRate);
+
 
 	public static double kSteikLeftTurnTrajectorykP = 1.5;
 	public static double kSteikLeftTurnTrajectorykD = 0.03892;
@@ -51,16 +61,6 @@ public class Gains {
 	public static final double kSteikDriveDistancekRampRate = 0.0;
 	public static final Gains steikDriveDistance = new Gains(kSteikDriveDistancekP, kSteikDriveDistancekI, kSteikDriveDistancekD,
 			0, kSteikDriveDistancekIzone, kSteikDriveDistancekRampRate);
-
-	// Drive Velocity offboard control loop
-	public static final double kSteikDriveVelocitykP = 3.0;
-	public static final double kSteikDriveVelocitykI = 0.002;
-	public static final double kSteikDriveVelocitykD = 120;
-	public static final double kSteikDriveVelocitykF = 2.624;
-	public static final int kSteikDriveVelocitykIzone = 800;
-	public static final double kSteikDriveVelocitykRampRate = 0.0;
-	public static final Gains steikVelocity = new Gains(kSteikDriveVelocitykP, kSteikDriveVelocitykI, kSteikDriveVelocitykD,
-			kSteikDriveVelocitykF, kSteikDriveVelocitykIzone, kSteikDriveVelocitykRampRate);
 
 	// Drive Motion Magic offboard control loop
 	// Short distance max speed 45 in/s Max accel 95 in/s^2
