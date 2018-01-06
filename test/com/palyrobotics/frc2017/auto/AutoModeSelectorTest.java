@@ -1,8 +1,7 @@
 package com.palyrobotics.frc2017.auto;
 
-import com.palyrobotics.frc2017.auto.modes.archive.BaseLineAutoMode;
-import com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode;
-import com.palyrobotics.frc2017.auto.modes.archive.DoNothingAutoMode;
+import com.palyrobotics.frc2017.auto.modes.TestAutoMode;
+import com.palyrobotics.frc2017.auto.modes.TestTrajectoryAutoMode;
 import com.palyrobotics.frc2017.config.Constants;
 import org.junit.Test;
 
@@ -30,8 +29,7 @@ public class AutoModeSelectorTest {
 		AutoModeSelector auto = AutoModeSelector.getInstance();
 
 		// Using automodes registered in constructor
-		assertThat("Incorrect auto mode retrieved", auto.getAutoMode().getClass(), equalTo(new BaseLineAutoMode(
-				CenterPegAutoMode.Alliance.BLUE).getClass()));
+		assertThat("Incorrect auto mode retrieved", auto.getAutoMode().getClass(), equalTo(new TestAutoMode().getClass()));
 		
 		// Check index out of bounds
 	}
@@ -61,13 +59,13 @@ public class AutoModeSelectorTest {
 	public void testSetAutoModeByName() {
 		AutoModeSelector auto = AutoModeSelector.getInstance();
 		// Intentionally register two copies of the same auto mode class
-		auto.registerAutonomous(new DoNothingAutoMode());
-		auto.registerAutonomous(new DoNothingAutoMode());
-		assertThat("Should not set auto mode when duplicates exist", auto.setAutoModeByName("DoNothing"), equalTo(false));
+		auto.registerAutonomous(new TestTrajectoryAutoMode());
+		auto.registerAutonomous(new TestTrajectoryAutoMode());
+		assertThat("Should not set auto mode when duplicates exist", auto.setAutoModeByName("TestTrajectoryAutoMode"), equalTo(false));
 		assertThat("Found auto mode when none exists", auto.setAutoModeByName("1234"), equalTo(false));
 
 		// TODO: Use a sample auto mode to guarantee it has exactly 1 copy
-		assertThat("Auto mode has been registered", auto.setAutoModeByName("CenterPeg"), equalTo(true));
+		assertThat("Auto mode has been registered", auto.setAutoModeByName("SideAutoMode"), equalTo(true));
 	}
 
 	/**
@@ -78,7 +76,7 @@ public class AutoModeSelectorTest {
 		AutoModeSelector auto = AutoModeSelector.getInstance();
 		int initSize = auto.getAutoModeList().size();
 		ArrayList<String> autoNames = auto.getAutoModeList();
-		AutoModeBase newAuto = new DoNothingAutoMode();
+		AutoModeBase newAuto = new TestTrajectoryAutoMode();
 		autoNames.add(newAuto.toString());
 		auto.registerAutonomous(newAuto);
 

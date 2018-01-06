@@ -1,12 +1,6 @@
 package com.palyrobotics.frc2017.auto;
 
 import com.palyrobotics.frc2017.auto.modes.*;
-import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoPostVariant;
-import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode.SideAutoVariant;
-import com.palyrobotics.frc2017.auto.modes.archive.BaseLineAutoMode;
-import com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode;
-import com.palyrobotics.frc2017.auto.modes.archive.CenterPegAutoMode.Alliance;
-import com.palyrobotics.frc2017.auto.modes.archive.DoNothingAutoMode;
 import org.json.simple.JSONArray;
 
 import java.util.ArrayList;
@@ -18,9 +12,8 @@ public class AutoModeSelector {
 	private static AutoModeSelector instance = null;
 	private ArrayList<AutoModeBase> mAutoModes = new ArrayList<>();
 	private enum AutoIndices {
-		DO_NOTHING(0), BASELINE(1),
-		CENTER_PEG(2), SIDE_PEG(3), 
-		TEST(4), TEST_TRAJECTORY(5);
+		SIDE_PEG(0), 
+		TEST(1), TEST_TRAJECTORY(2);
 		private final int id;
 		AutoIndices(int id) {this.id = id;}
 		public int get() {return id;}
@@ -30,7 +23,7 @@ public class AutoModeSelector {
 	 * comment for which auto mode the selectedIndex refers to
 	 */
 
-	int selectedIndex = AutoIndices.TEST_TRAJECTORY.get();
+	int selectedIndex = AutoIndices.SIDE_PEG.get();
 
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
@@ -48,17 +41,9 @@ public class AutoModeSelector {
 	}
 
 	private AutoModeSelector() {
-  /*0*/ registerAutonomous(new DoNothingAutoMode());
-		
-  /*1*/ registerAutonomous(new BaseLineAutoMode(Alliance.RED));
-
-  /*2*/ registerAutonomous(new CenterPegAutoMode(Alliance.BLUE, // Alliance Color
-				true)); // Backup boolean
-		// red left/ blue right = loading station, red right/blue left = boiler
-  /*3*/	registerAutonomous(new SidePegAutoMode(SideAutoVariant.BLUE_LOADING, // Alliance color and side
-				SideAutoPostVariant.BACKUP)); // Should backup?
-  /*4*/registerAutonomous(new TestAutoMode());
-  /*5*/registerAutonomous(new TestTrajectoryAutoMode());
+  /*0*/	registerAutonomous(new SidePegAutoMode()); // Should backup?
+  /*1*/registerAutonomous(new TestAutoMode());
+  /*2*/registerAutonomous(new TestTrajectoryAutoMode());
 	}
 
 	/**

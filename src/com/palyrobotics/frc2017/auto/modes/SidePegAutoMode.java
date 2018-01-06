@@ -28,8 +28,9 @@ public class SidePegAutoMode extends AutoModeBase {
 		List<Waypoint> path = new ArrayList<>();
 
 		// Description of this auto mode path.
-		path.add(new Waypoint(new Translation2d(0,0), 0));
-		path.add(new Waypoint(new Translation2d(30, Math.sqrt(3)/2*30), 0));
+		path.add(new Waypoint(new Translation2d(0,0), 6.0));
+		path.add(new Waypoint(new Translation2d(40, 0), 6.0));
+		path.add(new Waypoint(new Translation2d(40 + Math.sqrt(3)*30, 30), 0));
 		return new DrivePathRoutine(new Path(path), false);
 	}
 
