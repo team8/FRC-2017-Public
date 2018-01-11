@@ -2,14 +2,11 @@ package com.palyrobotics.frc2017.auto.modes;
 
 import com.palyrobotics.frc2017.auto.AutoModeBase;
 import com.palyrobotics.frc2017.behavior.Routine;
-import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.DrivePathRoutine;
-import com.palyrobotics.frc2017.behavior.routines.drive.DriveSensorResetRoutine;
-import com.palyrobotics.frc2017.config.Gains;
 import com.team254.lib.trajectory.Path;
+import com.team254.lib.trajectory.Path.Waypoint;
 import com.team254.lib.trajectory.Translation2d;
-import com.team254.lib.trajectory.Path.Waypoint;
-import com.team254.lib.trajectory.Path.Waypoint;
+
 import java.util.ArrayList;
 import java.util.List;
 

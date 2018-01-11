@@ -1,8 +1,8 @@
 package com.team254.lib.trajectory;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class KinematicsTest {
     private static final double kEps = 1E-9;

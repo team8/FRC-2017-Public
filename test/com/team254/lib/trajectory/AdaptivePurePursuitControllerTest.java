@@ -1,16 +1,15 @@
 package com.team254.lib.trajectory;
 
-import static org.junit.Assert.*;
+import com.palyrobotics.frc2017.subsystems.controllers.AdaptivePurePursuitController;
+import com.palyrobotics.frc2017.subsystems.controllers.AdaptivePurePursuitController.Circle;
+import com.team254.lib.trajectory.Path.Waypoint;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Test;
-
-import com.palyrobotics.frc2017.subsystems.controllers.AdaptivePurePursuitController;
-import com.palyrobotics.frc2017.subsystems.controllers.AdaptivePurePursuitController.Circle;
-import com.team254.lib.trajectory.Path.Waypoint;
+import static org.junit.Assert.*;
 
 
 public class AdaptivePurePursuitControllerTest {

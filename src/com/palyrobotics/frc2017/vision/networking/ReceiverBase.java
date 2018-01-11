@@ -1,8 +1,8 @@
 package com.palyrobotics.frc2017.vision.networking;
 
 import com.palyrobotics.frc2017.vision.networking.recievers.ReceiverSelector;
-import com.palyrobotics.frc2017.vision.util.VisionThreadBase;
 import com.palyrobotics.frc2017.vision.networking.recievers.ReceiverSelector.VisionReceiverType;
+import com.palyrobotics.frc2017.vision.util.VisionThreadBase;
 
 public abstract class ReceiverBase extends VisionThreadBase {
 	

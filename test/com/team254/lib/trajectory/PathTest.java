@@ -1,13 +1,14 @@
 package com.team254.lib.trajectory;
 
-import static org.junit.Assert.*;
+import com.team254.lib.trajectory.Path.Waypoint;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.team254.lib.trajectory.Path.Waypoint;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class PathTest {
     public static final double kTestEpsilon = 1E-9;

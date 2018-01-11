@@ -2,11 +2,7 @@ package com.palyrobotics.frc2017.config;
 
 import com.ctre.CANTalon.TalonControlMode;
 import com.palyrobotics.frc2017.util.Pose;
-import com.team254.lib.trajectory.InterpolatingDouble;
-import com.team254.lib.trajectory.InterpolatingTreeMap;
-import com.team254.lib.trajectory.Kinematics;
-import com.team254.lib.trajectory.RigidTransform2d;
-import com.team254.lib.trajectory.Rotation2d;
+import com.team254.lib.trajectory.*;
 
 import java.util.Map;
 import java.util.Optional;

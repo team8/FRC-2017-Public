@@ -1,13 +1,13 @@
 package com.palyrobotics.frc2017.vision;
 
 import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.vision.util.VisionThreadBase;
-import com.palyrobotics.frc2017.vision.util.commandline.CommandExecutor;
-import com.palyrobotics.frc2017.vision.networking.recievers.ReceiverSelector.VisionReceiverType;
-import com.palyrobotics.frc2017.vision.networking.VisionVideoServer;
 import com.palyrobotics.frc2017.vision.networking.ReceiverBase;
 import com.palyrobotics.frc2017.vision.networking.VisionDataReceiver;
 import com.palyrobotics.frc2017.vision.networking.VisionVideoReceiver;
+import com.palyrobotics.frc2017.vision.networking.VisionVideoServer;
+import com.palyrobotics.frc2017.vision.networking.recievers.ReceiverSelector.VisionReceiverType;
+import com.palyrobotics.frc2017.vision.util.VisionThreadBase;
+import com.palyrobotics.frc2017.vision.util.commandline.CommandExecutor;
 
 /**
  * @author Alvin

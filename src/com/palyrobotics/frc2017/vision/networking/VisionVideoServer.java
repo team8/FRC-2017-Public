@@ -1,7 +1,7 @@
 package com.palyrobotics.frc2017.vision.networking;
 
-import com.palyrobotics.frc2017.vision.util.VisionServerBase;
 import com.palyrobotics.frc2017.vision.VisionData;
+import com.palyrobotics.frc2017.vision.util.VisionServerBase;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

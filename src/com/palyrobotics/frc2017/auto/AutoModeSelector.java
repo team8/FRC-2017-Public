@@ -1,6 +1,8 @@
 package com.palyrobotics.frc2017.auto;
 
-import com.palyrobotics.frc2017.auto.modes.*;
+import com.palyrobotics.frc2017.auto.modes.SidePegAutoMode;
+import com.palyrobotics.frc2017.auto.modes.TestAutoMode;
+import com.palyrobotics.frc2017.auto.modes.TestTrajectoryAutoMode;
 import org.json.simple.JSONArray;
 
 import java.util.ArrayList;
