@@ -4,7 +4,7 @@ import com.ctre.CANTalon;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
-import com.palyrobotics.frc2017.robot.RobotPosition;
+import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Pose;
@@ -186,7 +186,7 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
     @Override
     public DriveSignal update(RobotState state) {
     	//System.out.println("Number of observations during update: " + RobotPosition.getInstance().getNumObservations());
-    		RigidTransform2d robot_pose = RobotPosition.getInstance().getLatestFieldToVehicle().getValue();
+    		RigidTransform2d robot_pose = Robot.getRobotState().getLatestFieldToVehicle().getValue();
     		//System.out.println(robot_pose.toString());
         RigidTransform2d.Delta command = this.update(robot_pose, Timer.getFPGATimestamp());
         Kinematics.DriveVelocity setpoint = Kinematics.inverseKinematics(command);
