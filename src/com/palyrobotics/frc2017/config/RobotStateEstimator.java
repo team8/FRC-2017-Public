@@ -1,12 +1,9 @@
-package com.palyrobotics.frc2017.robot;
+package com.palyrobotics.frc2017.config;
 
-import com.palyrobotics.frc2017.config.Constants;
-import com.palyrobotics.frc2017.config.RobotState;
-import com.palyrobotics.frc2017.subsystems.Drive;
+import com.palyrobotics.frc2017.robot.Robot;
 import com.team254.lib.trajectory.Kinematics;
 import com.team254.lib.trajectory.RigidTransform2d;
 import com.team254.lib.trajectory.Rotation2d;
-import com.palyrobotics.frc2017.robot.team254.lib.util.Loop;
 import edu.wpi.first.wpilibj.Timer;
 
 /**

@@ -7,6 +7,7 @@ import com.palyrobotics.frc2017.behavior.routines.AutomaticClimberRoutine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.RobotState;
+import com.palyrobotics.frc2017.config.RobotStateEstimator;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
 import com.palyrobotics.frc2017.robot.team254.lib.util.Loop;
