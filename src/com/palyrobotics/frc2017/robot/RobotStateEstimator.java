@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.Timer;
  * traveled (compares two waypoints), gyroscope orientation, and velocity, among
  * various other factors. Similar to a car's odometer.
  */
-public class RobotStateEstimator implements Loop {
+public class RobotStateEstimator {
 
     static RobotStateEstimator instance_ = new RobotStateEstimator();
 
@@ -25,18 +25,16 @@ public class RobotStateEstimator implements Loop {
     RobotStateEstimator() {
     }
 
-    RobotPosition robot_state_ = RobotPosition.getInstance();
+    RobotState robot_state_ = Robot.getRobotState();
     double left_encoder_prev_distance_ = 0;
     double right_encoder_prev_distance_ = 0;
 
-    @Override
-    public void onStart() {
-        RobotState state = Robot.getRobotState();
-        left_encoder_prev_distance_  = state.drivePose.leftEnc ;
-        right_encoder_prev_distance_ = state.drivePose.rightEnc;
+    public void start() {
+        RobotState robot_state = Robot.getRobotState();
+        left_encoder_prev_distance_  = robot_state.drivePose.leftEnc ;
+        right_encoder_prev_distance_ = robot_state.drivePose.rightEnc;
     }
 
-    @Override
     public void update() {
 
         RobotState state = Robot.getRobotState();
@@ -57,10 +55,4 @@ public class RobotStateEstimator implements Loop {
         left_encoder_prev_distance_ = left_distance;
         right_encoder_prev_distance_ = right_distance;
     }
-
-    @Override
-    public void onStop() {
-        // no-op
-    }
-
 }

@@ -14,6 +14,9 @@ import com.palyrobotics.frc2017.robot.team254.lib.util.Looper;
 import com.palyrobotics.frc2017.subsystems.*;
 import com.palyrobotics.frc2017.util.logger.Logger;
 import com.palyrobotics.frc2017.vision.VisionManager;
+import com.team254.lib.trajectory.RigidTransform2d;
+import com.team254.lib.trajectory.Rotation2d;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
@@ -43,7 +46,6 @@ public class Robot extends IterativeRobot {
 	private HardwareUpdater mHardwareUpdater;
 
 	private Looper mSubsystemLooper = new Looper();
-	private Looper mStateEstimationLooper = new Looper();
 	
 	private double mStartTime;
 	private boolean startedClimberRoutine = false;
@@ -90,13 +92,14 @@ public class Robot extends IterativeRobot {
 		mSubsystemLooper.register(new Loop() {
 			@Override
 			public void onStart() {
-
+				RobotStateEstimator.getInstance().start();
 			}
 
 			@Override
 			public void update() {
 				commands = mRoutineManager.update(commands);
 				mHardwareUpdater.updateSensors(robotState);
+				RobotStateEstimator.getInstance().update();
 				updateSubsystems();
 				mHardwareUpdater.updateHardware();
 			}
@@ -106,7 +109,6 @@ public class Robot extends IterativeRobot {
 
 			}
 		});
-		mStateEstimationLooper.register(RobotStateEstimator.getInstance());
 		System.out.println("Auto: "+AutoModeSelector.getInstance().getAutoMode().toString());
 		System.out.println("End robotInit()");
 		Logger.getInstance().logRobotThread("End robotInit()");
@@ -131,6 +133,7 @@ public class Robot extends IterativeRobot {
 
 		mHardwareUpdater.updateSensors(robotState);
 		mRoutineManager.reset(commands);
+		robotState.reset(0, new RigidTransform2d(), new Rotation2d());
 
 		startSubsystems();
 
@@ -145,7 +148,6 @@ public class Robot extends IterativeRobot {
 		System.out.println("End autonomousInit()");
 		Logger.getInstance().logRobotThread("End autonomousInit()");
 		mSubsystemLooper.start();
-		mStateEstimationLooper.start();
 	}
 
 	@Override
@@ -199,9 +201,8 @@ public class Robot extends IterativeRobot {
 		System.out.println("Current Auto Mode: " + AutoModeSelector.getInstance().getAutoMode().toString());
 		robotState.gamePeriod = RobotState.GamePeriod.DISABLED;
 		mSubsystemLooper.stop();
-		mStateEstimationLooper.stop();
 		
-		RobotPosition.resetInstance();
+		robotState.reset(0, new RigidTransform2d(), new Rotation2d());
 
 		// Stops updating routines
 		mRoutineManager.reset(commands);
