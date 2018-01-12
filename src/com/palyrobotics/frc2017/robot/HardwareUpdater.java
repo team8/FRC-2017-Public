@@ -1,6 +1,6 @@
 package com.palyrobotics.frc2017.robot;
 
-import com.ctre.CANTalon.TalonControlMode;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
@@ -212,6 +212,8 @@ class HardwareUpdater {
 
 		// Reverse right side
 		rightMasterTalon.setInverted(true);
+		rightSlave1Talon.setInverted(true);
+		rightSlave2Talon.setInverted(true);
 
 		// Set slave talons to follower mode
 		leftSlave1Talon.set(ControlMode.Follower, leftMasterTalon.getDeviceID());
@@ -262,7 +264,7 @@ class HardwareUpdater {
 		robotState.drivePose.rightEncVelocity = rightMasterTalon.getSelectedSensorVelocity(0);
 		robotState.drivePose.rightSpeed = rightMasterTalon.getSelectedSensorVelocity(0);
 		
-		if (leftMasterTalon.getControlMode().equals(TalonControlMode.MotionMagic)) {
+		if (leftMasterTalon.getControlMode().equals(ControlMode.MotionMagic)) {
 			robotState.drivePose.leftMotionMagicPos = Optional.of(leftMasterTalon.getActiveTrajectoryPosition());
 			robotState.drivePose.leftMotionMagicVel = Optional.of(leftMasterTalon.getActiveTrajectoryVelocity());
 		}
@@ -271,7 +273,7 @@ class HardwareUpdater {
 			robotState.drivePose.leftMotionMagicVel = Optional.empty();
 		}
 		
-		if (rightMasterTalon.getControlMode().equals(TalonControlMode.MotionMagic)) {
+		if (rightMasterTalon.getControlMode().equals(ControlMode.MotionMagic)) {
 			robotState.drivePose.rightMotionMagicPos = Optional.of(rightMasterTalon.getActiveTrajectoryPosition());
 			robotState.drivePose.rightMotionMagicVel = Optional.of(rightMasterTalon.getActiveTrajectoryVelocity());
 		}

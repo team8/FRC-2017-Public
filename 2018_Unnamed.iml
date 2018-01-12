@@ -27,7 +27,7 @@
       <configuration />
     </facet>
   </component>
-  <component name="NewModuleRootManager" inherit-compiler-output="false">
+  <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/bin" />
     <exclude-output />
     <content url="file://$MODULE_DIR$">
@@ -52,72 +52,6 @@
         </CLASSES>
         <JAVADOC />
         <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="networktables">
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/build/jars/NetworkTables.jar" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/build/jars/NetworkTables.jar" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="opencv">
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/build/jars/opencv.jar" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/build/jars/opencv.jar" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="cscore">
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/build/jars/cscore.jar" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/build/jars/cscore.jar" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="wpilib">
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/build/jars/WPILib.jar" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/build/jars/WPILib.jar" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="mindsensors.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/mindsensors.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/lib/mindsensors-javadoc.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library name="CTRLib.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/CTRLib.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/lib/CTRLib-javadoc.jar!/" />
-        </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
@@ -156,7 +90,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library name="WPILib User Lib Directory">
         <CLASSES>
           <root url="file://$USER_HOME$/wpilib/user/java/lib" />
@@ -172,7 +106,7 @@
         <jarDirectory url="file://$USER_HOME$/wpilib/user/java/lib" recursive="true" type="SOURCES" />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library name="WPILib Libraries">
         <CLASSES>
           <root url="file://$USER_HOME$/wpilib/java/current/lib" />
