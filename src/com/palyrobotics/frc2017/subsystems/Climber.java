@@ -61,13 +61,13 @@ public class Climber extends Subsystem{
 	@Override
 	public void start() {
 		mState = ClimberState.IDLE;
-		mOutput.setPercentVBus(0);
+		mOutput.setPercentOutput(0);
 	}
 
 	@Override
 	public void stop() {
 		mState = ClimberState.IDLE;
-		mOutput.setPercentVBus(0);
+		mOutput.setPercentOutput(0);
 	}
 
 	@Override
@@ -123,13 +123,13 @@ public class Climber extends Subsystem{
 		// Calculates output
 		switch (mState) {
 		case IDLE:
-			mOutput.setPercentVBus(0);
+			mOutput.setPercentOutput(0);
 			break;
 		case MANUAL:
-			mOutput.setPercentVBus(-commands.climberStickInput.y * kClimbScaleFactor);
+			mOutput.setPercentOutput(-commands.climberStickInput.y * kClimbScaleFactor);
 			break;
 		case WAITING_FOR_ROPE:	// unused
-			mOutput.setPercentVBus(kRopeGrabSpeed);
+			mOutput.setPercentOutput(kRopeGrabSpeed);
 			break;
 		case CLIMBING_ENCODER_DISTANCE:	// unused
 			// PD loop

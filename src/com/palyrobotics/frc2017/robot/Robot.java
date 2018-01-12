@@ -16,10 +16,11 @@ import com.team254.lib.trajectory.RigidTransform2d;
 import com.team254.lib.trajectory.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.TimedRobot;
 
 import java.util.logging.Level;
 
-public class Robot extends IterativeRobot {
+public class Robot extends TimedRobot {
 	// Instantiate singleton classes
 	private static RobotState robotState = new RobotState();
 	public static RobotState getRobotState() {
@@ -73,7 +74,7 @@ public class Robot extends IterativeRobot {
 
 		if (Constants.kRobotName == Constants.RobotName.STEIK) {
 			try {
-				mHardwareUpdater = new HardwareUpdater(this, mDrive, mSlider, mSpatula, mIntake, mClimber);
+				mHardwareUpdater = new HardwareUpdater(mDrive, mSlider, mSpatula, mIntake, mClimber);
 			} catch (Exception e) {
 				System.exit(1);
 			}

@@ -91,14 +91,14 @@ public class Slider extends Subsystem{
 	public void start() {
 		mState = SliderState.IDLE;
 		mTarget = SliderTarget.NONE;
-		mOutput.setPercentVBus(0);
+		mOutput.setPercentOutput(0);
 	}
 	
 	@Override
 	public void stop() {
 		mState = SliderState.IDLE;
 		mTarget = SliderTarget.NONE;
-		mOutput.setPercentVBus(0);
+		mOutput.setPercentOutput(0);
 	}
 	
 	/**
@@ -120,11 +120,11 @@ public class Slider extends Subsystem{
 
 			case IDLE:
 				mTarget = SliderTarget.NONE;
-				mOutput.setPercentVBus(0);
+				mOutput.setPercentOutput(0);
 				break;
 			case WAITING:
 				mTarget = commands.robotSetpoints.sliderSetpoint;
-				mOutput.setPercentVBus(0);
+				mOutput.setPercentOutput(0);
 				break;
 			case MANUAL:
 				mTarget = SliderTarget.NONE;
@@ -238,7 +238,7 @@ public class Slider extends Subsystem{
 	private void updatePotentiometerAutomaticPositioning() {
 		double potentiometerValue = mRobotState.sliderPotentiometer;
 		if(previousPotentiometer.isPresent() && integralPotentiometer.isPresent()) {
-			mOutput.setPercentVBus(Math.max(-1, Math.min(1, 
+			mOutput.setPercentOutput(Math.max(-1, Math.min(1,
 					mPotentiometerGains.P * (mPotentiometerTargetPositions.get(mTarget) - potentiometerValue) +
 					mPotentiometerGains.I * integralPotentiometer.get() +
 					mPotentiometerGains.D * (previousPotentiometer.get() - potentiometerValue))));
@@ -246,7 +246,7 @@ public class Slider extends Subsystem{
 			previousPotentiometer = Optional.of(potentiometerValue);
 		}
 		else {
-			mOutput.setPercentVBus(Math.max(-1, Math.min(1, 
+			mOutput.setPercentOutput(Math.max(-1, Math.min(1,
 					mPotentiometerGains.P * (mPotentiometerTargetPositions.get(mTarget) - potentiometerValue))));
 			integralPotentiometer = Optional.of(mPotentiometerTargetPositions.get(mTarget) - potentiometerValue);
 			previousPotentiometer = Optional.of(potentiometerValue);

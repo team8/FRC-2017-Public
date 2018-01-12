@@ -2,6 +2,11 @@ package com.palyrobotics.frc2017.robot;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants.RobotName;
@@ -11,6 +16,7 @@ import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.logger.Logger;
 
 import java.util.Optional;
+import java.util.logging.Level;
 
 /**
  * Should only be used in robot package.
@@ -24,18 +30,16 @@ class HardwareUpdater {
 	private Spatula mSpatula;
 	private Intake mIntake;
 	private Climber mClimber;
-	private Robot mRobot;
 
 	/**
 	 * Hardware Updater for Steik
 	 */
-	HardwareUpdater(Robot robot, Drive drive, Slider slider, Spatula spatula, Intake intake, Climber climber)
+	HardwareUpdater(Drive drive, Slider slider, Spatula spatula, Intake intake, Climber climber)
 			throws Exception {
 		if (Constants.kRobotName != Constants.RobotName.STEIK) {
 			System.out.println("Incompatible robot name and hardware!");
 			throw new Exception();
 		}
-		this.mRobot = robot;
 		this.mDrive = drive;
 		this.mSlider = slider;
 		this.mSpatula = spatula;
@@ -78,16 +82,16 @@ class HardwareUpdater {
 	}
 	
 	void disableTalons() {
-		Logger.getInstance().logRobotThread("Disabling talons");
-		HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon.disable();
-		HardwareAdapter.getInstance().getDrivetrain().leftSlave1Talon.disable();
-		HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon.disable();
-		HardwareAdapter.getInstance().getDrivetrain().rightSlave1Talon.disable();
+		Logger.getInstance().logRobotThread(Level.INFO,"Disabling talons");
+		HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon.set(ControlMode.Disabled, 0);
+		HardwareAdapter.getInstance().getDrivetrain().leftSlave1Talon.set(ControlMode.Disabled, 0);
+		HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon.set(ControlMode.Disabled, 0);
+		HardwareAdapter.getInstance().getDrivetrain().rightSlave1Talon.set(ControlMode.Disabled, 0);
 		if(Constants.kRobotName == RobotName.STEIK) {
-			HardwareAdapter.getInstance().getDrivetrain().leftSlave2Talon.disable();
-			HardwareAdapter.getInstance().getDrivetrain().rightSlave2Talon.disable();
-			HardwareAdapter.getInstance().getClimber().climberTalon.disable();
-			HardwareAdapter.getInstance().getSlider().sliderTalon.disable();
+			HardwareAdapter.getInstance().getDrivetrain().leftSlave2Talon.set(ControlMode.Disabled, 0);
+			HardwareAdapter.getInstance().getDrivetrain().rightSlave2Talon.set(ControlMode.Disabled, 0);
+			HardwareAdapter.getInstance().getClimber().climberTalon.set(ControlMode.Disabled, 0);
+			HardwareAdapter.getInstance().getSlider().sliderTalon.set(ControlMode.Disabled, 0);
 		}
 	}
 	
@@ -95,49 +99,45 @@ class HardwareUpdater {
 		configureDriveTalons();
 		if (Constants.kRobotName == RobotName.STEIK) {
 			//Climber setup
-			CANTalon climber = HardwareAdapter.ClimberHardware.getInstance().climberTalon;
-			climber.reset();
-			climber.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
-			climber.setPosition(0);	
-			climber.configMaxOutputVoltage(Constants.kClimberMaxVoltage);
-			climber.configPeakOutputVoltage(Constants.kClimberMaxVoltage, 0); // Should never be used
-			climber.ConfigRevLimitSwitchNormallyOpen(false); // Prevent the motor from spinning backwards
-			climber.ConfigFwdLimitSwitchNormallyOpen(true);
-			climber.enable();
-			
-			CANTalon slider = HardwareAdapter.SliderHardware.getInstance().sliderTalon;
+			TalonSRX climber = HardwareAdapter.ClimberHardware.getInstance().climberTalon;
+			climber.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+			climber.setSensorPhase(false);
+			climber.setSelectedSensorPosition(0, 0, 0);
+			climber.configPeakOutputForward(Constants.kClimberMaxVoltage, 0);
+			climber.configPeakOutputReverse(-Constants.kClimberMaxVoltage, 0);
+			climber.configForwardLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.NormallyOpen, 0);
+			climber.configReverseLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.NormallyClosed, 0);
+
+			TalonSRX slider = HardwareAdapter.SliderHardware.getInstance().sliderTalon;
 			// Reset and turn on the Talon 
-			slider.reset();
-			slider.clearStickyFaults();
-			slider.setStatusFrameRateMs(CANTalon.StatusFrameRate.General, 5);
-			slider.enable();
-			slider.enableControl();
-			slider.configMaxOutputVoltage(Constants.kSliderMaxVoltage);
-			slider.configPeakOutputVoltage(Constants.kSliderPeakOutputVoltage, -Constants.kSliderPeakOutputVoltage);
+			slider.clearStickyFaults(0);
+			slider.setStatusFramePeriod(0, 5, 0);
+			slider.configPeakOutputForward(Constants.kSliderPeakOutputVoltage, 0);
+			slider.configPeakOutputReverse(-Constants.kSliderPeakOutputVoltage, 0);
 			if (calibrateSliderEncoder) {
 				// Set up the Talon to read from a relative CTRE mag encoder sensor
-				slider.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
+				slider.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+				slider.setSensorPhase(false);
 				// Calibrate the encoder
 				double current_pot_pos = HardwareAdapter.SliderHardware.getInstance().sliderPotentiometer.getValue();
 				double distance_to_center = current_pot_pos - Constants.kPotentiometerCenterPos;
-				double position_in_rev = (distance_to_center / 4096.0) * 10.0;
+				int position_in_rev = (int) ((distance_to_center / 4096.0) * 10.0);
 				if (Constants.kCalibrateSliderWithPotentiometer) {
-					slider.setPosition(-position_in_rev);
+					slider.setSelectedSensorPosition(-position_in_rev, 0, 0);
 				} else {
-					slider.setPosition(0);
+					slider.setSelectedSensorPosition(0, 0, 0);
 				}
 			}
 		}
 	}
 	
 	void configureDriveTalons() {
-		CANTalon leftMasterTalon = HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon;
-		CANTalon leftSlave1Talon = HardwareAdapter.getInstance().getDrivetrain().leftSlave1Talon;
-		CANTalon leftSlave2Talon = HardwareAdapter.getInstance().getDrivetrain().leftSlave2Talon;
-		CANTalon rightMasterTalon = HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon;
-		CANTalon rightSlave1Talon = HardwareAdapter.getInstance().getDrivetrain().rightSlave1Talon;
-		CANTalon rightSlave2Talon = HardwareAdapter.getInstance().getDrivetrain().rightSlave2Talon;
-		
+		TalonSRX leftMasterTalon = HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon;
+		TalonSRX leftSlave1Talon = HardwareAdapter.getInstance().getDrivetrain().leftSlave1Talon;
+		TalonSRX leftSlave2Talon = HardwareAdapter.getInstance().getDrivetrain().leftSlave2Talon;
+		TalonSRX rightMasterTalon = HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon;
+		TalonSRX rightSlave1Talon = HardwareAdapter.getInstance().getDrivetrain().rightSlave1Talon;
+		TalonSRX rightSlave2Talon = HardwareAdapter.getInstance().getDrivetrain().rightSlave2Talon;
 		// Enable all talons' brake mode and disables forward and reverse soft
 		// limits
 		leftMasterTalon.enableBrakeMode(true);
@@ -202,9 +202,8 @@ class HardwareUpdater {
 		rightMasterTalon.setPosition(0);
 
 		// Reverse right side
-		rightMasterTalon.reverseOutput(true);
 		rightMasterTalon.setInverted(true);
-		rightMasterTalon.reverseSensor(true);
+		rightMasterTalon.setSensorPhase(true);
 
 		// Set slave talons to follower mode
 		leftSlave1Talon.changeControlMode(CANTalon.TalonControlMode.Follower);
@@ -337,7 +336,7 @@ class HardwareUpdater {
 	/**
 	 * Helper method for processing a CANTalonOutput for an SRX
 	 */
-	private void updateCANTalonSRX(CANTalon talon, CANTalonOutput output) {
+	private void updateCANTalonSRX(TalonSRX talon, CANTalonOutput output) {
 		talon.changeControlMode(output.getControlMode());
 		if(output.getControlMode().isPID() || output.getControlMode() == TalonControlMode.MotionMagic) {
 			talon.setPID(output.gains.P, output.gains.I, output.gains.D, output.gains.F, output.gains.izone, output.gains.rampRate, output.profile);
@@ -351,6 +350,6 @@ class HardwareUpdater {
             talon.setProfile(0);
             talon.setAllowableClosedLoopErr(0);
 		}
-		talon.set(output.getSetpoint());
+		talon.set(output.getControlMode(), output.getSetpoint());
 	}
 }

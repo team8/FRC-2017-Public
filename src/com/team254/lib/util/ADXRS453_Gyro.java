@@ -201,4 +201,19 @@ public class ADXRS453_Gyro extends GyroBase implements Gyro, PIDSource, LiveWind
         }
         return m_spi.getAccumulatorLastValue() * kDegreePerSecondPerLSB;
     }
+
+    @Override
+    public void updateTable() {
+
+    }
+
+    @Override
+    public void startLiveWindowMode() {
+
+    }
+
+    @Override
+    public void stopLiveWindowMode() {
+
+    }
 }

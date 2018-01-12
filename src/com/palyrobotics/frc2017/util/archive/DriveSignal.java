@@ -14,8 +14,8 @@ public class DriveSignal {
 	public static DriveSignal getNeutralSignal() {
 		CANTalonOutput leftNeutral = new CANTalonOutput();
 		CANTalonOutput rightNeutral = new CANTalonOutput();
-		leftNeutral.setPercentVBus(0);
-		rightNeutral.setPercentVBus(0);
+		leftNeutral.setPercentOutput(0);
+		rightNeutral.setPercentOutput(0);
 
 		return new DriveSignal(leftNeutral, rightNeutral);
 	}

@@ -1,6 +1,7 @@
 package com.palyrobotics.frc2017.util;
 
 import com.ctre.CANTalon;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.palyrobotics.frc2017.config.Gains;
 
 /**
@@ -15,7 +16,7 @@ public class CANTalonOutput {
 	/**
 	 * Prevent null pointer exceptions
 	 */
-	private CANTalon.TalonControlMode controlMode;
+	private ControlMode controlMode;
 	// PercentVBus, Speed, Current, Voltage, not Follower, MotionProfile, MotionMagic
 	private double setpoint;	// Encoder ticks
 	public int profile;
@@ -29,7 +30,7 @@ public class CANTalonOutput {
 	 * Default constructor
 	 */
 	public CANTalonOutput() {
-		controlMode = CANTalon.TalonControlMode.Disabled;
+		controlMode = ControlMode.Disabled;
 		setpoint = 0;
 		profile = 0;
 		gains = new Gains(0,0,0,0,0,0);
@@ -53,7 +54,7 @@ public class CANTalonOutput {
 		this.profile = talon.profile;
 	}
 	
-	public CANTalonOutput(CANTalon.TalonControlMode controlMode, Gains gains, double setpoint) {
+	public CANTalonOutput(ControlMode controlMode, Gains gains, double setpoint) {
 		this.controlMode = controlMode;
 		this.setpoint = setpoint;
 		profile = 0;
@@ -63,7 +64,7 @@ public class CANTalonOutput {
 		cruiseVel = 0;
 	}
 
-	public CANTalon.TalonControlMode getControlMode() {
+	public ControlMode getControlMode() {
 		return controlMode;
 	}
 
@@ -76,7 +77,7 @@ public class CANTalonOutput {
 	 * @param speed, target velocity (from -1023019 to 10230?)
 	 */
 	public void setSpeed(double speed, Gains gains) {
-		controlMode = CANTalon.TalonControlMode.Speed;
+		controlMode = ControlMode.Velocity;
 		setpoint = speed;
 		this.gains = gains;
 	}
@@ -86,7 +87,7 @@ public class CANTalonOutput {
 	 * @param setpoint, target distance in native units
 	 */
 	public void setPosition(double setpoint, Gains gains) {
-		controlMode = CANTalon.TalonControlMode.Position;
+		controlMode = ControlMode.Position;
 		this.setpoint = setpoint;
 		this.gains = gains;
 	}
@@ -95,27 +96,17 @@ public class CANTalonOutput {
 	 * Sets Talon to standard -1 to 1 voltage control
 	 * @param power
 	 */
-	public void setPercentVBus(double power) {
-		controlMode = CANTalon.TalonControlMode.PercentVbus;
+	public void setPercentOutput(double power) {
+		controlMode = ControlMode.PercentOutput;
 		setpoint = power;
-	}
-
-	/**
-	 * Sets Talon to TalonControlMode.Voltage
-	 * @param voltage in volts
-	 */
-	public void setVoltage(double voltage) {
-		controlMode = CANTalon.TalonControlMode.Voltage;
-		setpoint = voltage;
 	}
 
 	/**
 	 * Sets Talon to TalonControlMode.Current
 	 * @param current in amps
-	 * @param p,i,d, f, izone, rampRate parameters for control loop
 	 */
 	public void setCurrent(double current) {
-		controlMode = CANTalon.TalonControlMode.Current;
+		controlMode = ControlMode.Current;
 		setpoint = current;
 	}
 
@@ -126,7 +117,7 @@ public class CANTalonOutput {
 	 * @param cruiseVelocity cruise velocity to max out at
 	 */
 	public void setMotionMagic(double setpoint, Gains gains, double cruiseVelocity, double accel) {
-		controlMode = CANTalon.TalonControlMode.MotionMagic;
+		controlMode = ControlMode.MotionMagic;
 		this.setpoint = setpoint;
 		this.gains = gains;
 		this.accel = accel;
@@ -138,7 +129,7 @@ public class CANTalonOutput {
 	 * Sets Talon to TalonControlMode.Disabled
 	 */
 	public void setDisabled() {
-		this.controlMode = CANTalon.TalonControlMode.Disabled;
+		this.controlMode = ControlMode.Disabled;
 	}
 
 	public String toString() {
@@ -157,7 +148,7 @@ public class CANTalonOutput {
 	 */
 	@Override
 	public boolean equals(Object other) {
-		return ((CANTalonOutput) other).getSetpoint() == this.getSetpoint() && 
+		return ((CANTalonOutput) other).getSetpoint() == this.getSetpoint() &&
 				((CANTalonOutput) other).controlMode == this.controlMode &&
 				((CANTalonOutput) other).gains.equals(this.gains);
 	}

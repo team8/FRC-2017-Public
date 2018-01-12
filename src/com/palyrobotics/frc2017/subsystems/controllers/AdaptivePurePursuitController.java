@@ -1,6 +1,7 @@
 package com.palyrobotics.frc2017.subsystems.controllers;
 
 import com.ctre.CANTalon;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
@@ -202,8 +203,8 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
         }
 
         final CANTalonOutput
-            left  = new CANTalonOutput(CANTalon.TalonControlMode.Speed, Gains.steikVelocity, setpoint.left),
-            right = new CANTalonOutput(CANTalon.TalonControlMode.Speed, Gains.steikVelocity, -setpoint.right);
+            left  = new CANTalonOutput(ControlMode.Velocity, Gains.steikVelocity, setpoint.left),
+            right = new CANTalonOutput(ControlMode.Velocity, Gains.steikVelocity, -setpoint.right);
 
         System.out.println(new DriveSignal(left, right).toString());
         return new DriveSignal(left, right);

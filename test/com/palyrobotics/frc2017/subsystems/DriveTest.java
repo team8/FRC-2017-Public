@@ -27,19 +27,19 @@ public class DriveTest {
 		drive.update(commands, state);	// should print error message that controller is missing
 
 		DriveSignal signal = DriveSignal.getNeutralSignal();
-		signal.leftMotor.setPercentVBus(0.5);
-		signal.rightMotor.setPercentVBus(0.5);
+		signal.leftMotor.setPercentOutput(0.5);
+		signal.rightMotor.setPercentOutput(0.5);
 		drive.setCANTalonController(signal);
 		drive.update(commands, state);
 		assertThat("not updating correctly", drive.getDriveSignal(), equalTo(signal));
-		signal.leftMotor.setPercentVBus(1);
+		signal.leftMotor.setPercentOutput(1);
 		drive.update(commands, state);
 		assertFalse("Signal was updated through external reference!", drive.getDriveSignal()==signal);
 
 		// Test that pass by reference is ok
 		DriveSignal newSignal = DriveSignal.getNeutralSignal();
-		newSignal.leftMotor.setPercentVBus(1);
-		newSignal.rightMotor.setPercentVBus(1);
+		newSignal.leftMotor.setPercentOutput(1);
+		newSignal.rightMotor.setPercentOutput(1);
 		drive.setCANTalonController(newSignal);
 		drive.update(commands, state);
 		assertThat("not updating correctly", drive.getDriveSignal(), equalTo(newSignal));

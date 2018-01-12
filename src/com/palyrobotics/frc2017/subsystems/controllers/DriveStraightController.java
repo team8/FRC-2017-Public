@@ -63,8 +63,8 @@ public class DriveStraightController implements DriveController {
 		double throttle = forwardPID.calculate(distanceSoFar);
 //		double turn = headingPID.calculate(state.drivePose.heading) * Constants.kDriveInchesPerDegree;
 		double turn = 0;
-		leftOutput.setPercentVBus(throttle + turn);
-		rightOutput.setPercentVBus(throttle - turn);
+		leftOutput.setPercentOutput(throttle + turn);
+		rightOutput.setPercentOutput(throttle - turn);
 		
 		System.out.println(forwardPID.getError());
 		

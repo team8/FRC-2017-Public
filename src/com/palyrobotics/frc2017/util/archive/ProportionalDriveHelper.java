@@ -11,8 +11,8 @@ public class ProportionalDriveHelper {
 		double rightPwm = throttle - wheel;
 		double leftPwm = throttle + wheel;
 
-		mSignal.leftMotor.setPercentVBus(leftPwm);
-		mSignal.rightMotor.setPercentVBus(rightPwm);
+		mSignal.leftMotor.setPercentOutput(leftPwm);
+		mSignal.rightMotor.setPercentOutput(rightPwm);
 		return mSignal;
 	}
 

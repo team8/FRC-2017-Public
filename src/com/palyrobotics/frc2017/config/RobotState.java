@@ -1,6 +1,7 @@
 package com.palyrobotics.frc2017.config;
 
 import com.ctre.CANTalon.TalonControlMode;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.palyrobotics.frc2017.util.Pose;
 import com.team254.lib.trajectory.*;
 
@@ -21,8 +22,8 @@ public class RobotState {
 	public GamePeriod gamePeriod = GamePeriod.DISABLED;
 
 	// Drivetrain
-	public TalonControlMode leftControlMode = TalonControlMode.Disabled;
-	public TalonControlMode rightControlMode = TalonControlMode.Disabled;
+	public ControlMode leftControlMode = ControlMode.Disabled;
+	public ControlMode rightControlMode = ControlMode.Disabled;
 	
 	public double leftSetpoint = 0;
 	public double rightSetpoint = 0;
