@@ -8,8 +8,8 @@ import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.robot.team254.lib.util.SynchronousPID;
 import com.palyrobotics.frc2017.subsystems.Drive.DriveController;
-import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Pose;
+import com.palyrobotics.frc2017.util.TalonSRXOutput;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
 public class DriveStraightController implements DriveController {
@@ -55,8 +55,8 @@ public class DriveStraightController implements DriveController {
 
 	@Override
 	public DriveSignal update(RobotState state) {
-		CANTalonOutput leftOutput = new CANTalonOutput();
-		CANTalonOutput rightOutput = new CANTalonOutput();
+		TalonSRXOutput leftOutput = new TalonSRXOutput();
+		TalonSRXOutput rightOutput = new TalonSRXOutput();
 		cachedPose = state.drivePose;
 		double distanceSoFar = state.drivePose.leftEnc+state.drivePose.rightEnc;
 		distanceSoFar /= 2;

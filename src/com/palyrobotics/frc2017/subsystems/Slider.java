@@ -6,7 +6,7 @@ import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
-import com.palyrobotics.frc2017.util.CANTalonOutput;
+import com.palyrobotics.frc2017.util.TalonSRXOutput;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -67,7 +67,7 @@ public class Slider extends Subsystem{
 	private static final Gains mPotentiometerGains = Gains.steikSliderPotentiometer;
 	
 	
-	private CANTalonOutput mOutput = new CANTalonOutput();
+	private TalonSRXOutput mOutput = new TalonSRXOutput();
 	
 	private DashboardValue sliderPotentiometer;
 	private DashboardValue sliderDist;
@@ -163,7 +163,7 @@ public class Slider extends Subsystem{
 	 * Encapsulate to use in both run and update methods
 	 */
 	private void setManualOutput(Commands commands) {
-		mOutput.setVoltage(commands.sliderStickInput.x*Constants.kSliderMaxVoltage);
+		mOutput.setPercentOutput(commands.sliderStickInput.x*Constants.kSliderMaxPower);
 	}
 	
 	/**
@@ -268,7 +268,7 @@ public class Slider extends Subsystem{
 	 * Get the output for the slider motor
 	 * @return the output
 	 */
-	public CANTalonOutput getOutput() {
+	public TalonSRXOutput getOutput() {
 		return mOutput;
 	}
 	

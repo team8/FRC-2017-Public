@@ -103,8 +103,8 @@ public class Constants extends ConstantsBase {
 	public static double kAcceptableGyroZeroError = 3;
 	public static double kAcceptableEncoderZeroError = 10;
 
-	public static double kSliderMaxVoltage = 6.0; // open loop limit
-	public static double kSliderPeakOutputVoltage = 4.0; // closed loop limit
+	public static double kSliderMaxPower = 0.5; // open loop limit
+	public static double kSliderPeakOutputPower = 0.333; // closed loop limit
 	public static double kClimberMaxVoltage = 12.0;
 
 	/* !!! End of editable Constants! !!!

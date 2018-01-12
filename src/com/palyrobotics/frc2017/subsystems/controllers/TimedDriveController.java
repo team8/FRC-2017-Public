@@ -4,8 +4,8 @@ import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.subsystems.Drive.DriveController;
-import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Pose;
+import com.palyrobotics.frc2017.util.TalonSRXOutput;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
 public class TimedDriveController implements DriveController {
@@ -29,11 +29,11 @@ public class TimedDriveController implements DriveController {
 	@Override
 	public DriveSignal update(RobotState state) {
 		
-		CANTalonOutput leftOutput = new CANTalonOutput();
-		CANTalonOutput rightOutput = new CANTalonOutput();
+		TalonSRXOutput leftOutput = new TalonSRXOutput();
+		TalonSRXOutput rightOutput = new TalonSRXOutput();
 		
-		leftOutput.setVoltage(voltage);
-		rightOutput.setVoltage(voltage);
+		leftOutput.setPercentOutput(voltage);
+		rightOutput.setPercentOutput(voltage);
 		
 		DashboardManager.getInstance().updateCANTable(voltage + "," + state.drivePose.leftSpeed/(12.0*Constants.kDriveSpeedUnitConversion) + "," + state.drivePose.rightSpeed/(12.0*Constants.kDriveSpeedUnitConversion));
 		

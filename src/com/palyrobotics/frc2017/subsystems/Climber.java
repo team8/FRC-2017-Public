@@ -5,7 +5,7 @@ import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.config.dashboard.DashboardValue;
-import com.palyrobotics.frc2017.util.CANTalonOutput;
+import com.palyrobotics.frc2017.util.TalonSRXOutput;
 
 /**
  * Subsystem that represents the climber
@@ -19,7 +19,7 @@ public class Climber extends Subsystem{
 		return instance;
 	}
 
-	private CANTalonOutput mOutput = new CANTalonOutput();
+	private TalonSRXOutput mOutput = new TalonSRXOutput();
 
 	// TODO Find constants
 
@@ -138,7 +138,7 @@ public class Climber extends Subsystem{
 			}
 			break;
 		case AUTOMATIC_CLIMBING:
-			mOutput.setVoltage(6);
+			mOutput.setPercentOutput(0.5);
 			break;
 		}
 		
@@ -146,7 +146,7 @@ public class Climber extends Subsystem{
 		DashboardManager.getInstance().publishKVPair(state);
 	}
 
-	public CANTalonOutput getOutput() {
+	public TalonSRXOutput getOutput() {
 		return mOutput;
 	}
 

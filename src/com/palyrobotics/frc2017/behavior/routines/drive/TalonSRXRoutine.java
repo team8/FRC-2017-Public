@@ -1,6 +1,6 @@
 package com.palyrobotics.frc2017.behavior.routines.drive;
 
-import com.ctre.CANTalon;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.RobotState;
@@ -8,7 +8,7 @@ import com.palyrobotics.frc2017.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.subsystems.Drive;
 import com.palyrobotics.frc2017.subsystems.Subsystem;
-import com.palyrobotics.frc2017.subsystems.controllers.CANTalonDriveController;
+import com.palyrobotics.frc2017.subsystems.controllers.TalonSRXDriveController;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
 /**
@@ -16,7 +16,7 @@ import com.palyrobotics.frc2017.util.archive.DriveSignal;
  * @author Nihar
  * Should be used to set the drivetrain to an offboard closed loop cantalon
  */
-public class CANTalonRoutine extends Routine {
+public class TalonSRXRoutine extends Routine {
 	private boolean relativeSetpoint = false;
 	private final DriveSignal mSignal;
 	
@@ -24,7 +24,7 @@ public class CANTalonRoutine extends Routine {
 	private double startTime;
 	private static RobotState robotState;
 	
-	public CANTalonRoutine(DriveSignal controller, boolean relativeSetpoint) {
+	public TalonSRXRoutine(DriveSignal controller, boolean relativeSetpoint) {
 		this.mSignal = controller;
 		this.timeout = 1 << 30;
 		this.relativeSetpoint = relativeSetpoint;
@@ -37,7 +37,7 @@ public class CANTalonRoutine extends Routine {
 	  * 
 	  * Timeout is in seconds
 	  */
-	public CANTalonRoutine(DriveSignal controller, boolean relativeSetpoint, double timeout) {
+	public TalonSRXRoutine(DriveSignal controller, boolean relativeSetpoint, double timeout) {
 		this.mSignal = controller;
 		this.relativeSetpoint = relativeSetpoint;
 		this.timeout = timeout * 1000;
@@ -50,7 +50,7 @@ public class CANTalonRoutine extends Routine {
 		startTime = System.currentTimeMillis();
 		
 		if (relativeSetpoint) {
-			if (mSignal.leftMotor.getControlMode() == CANTalon.TalonControlMode.MotionMagic) {
+			if (mSignal.leftMotor.getControlMode().equals(ControlMode.MotionMagic)) {
 
 
 				System.out.println(mSignal.leftMotor.getSetpoint());
@@ -67,7 +67,7 @@ public class CANTalonRoutine extends Routine {
 						mSignal.rightMotor.gains,
 						mSignal.rightMotor.cruiseVel, mSignal.rightMotor.accel);
 			}
-			else if (mSignal.leftMotor.getControlMode() == CANTalon.TalonControlMode.Position) {
+			else if (mSignal.leftMotor.getControlMode().equals(ControlMode.Position)) {
 				mSignal.leftMotor.setPosition(mSignal.leftMotor.getSetpoint()+
 						robotState.drivePose.leftEnc, mSignal.leftMotor.gains);
 				mSignal.rightMotor.setPosition(mSignal.rightMotor.getSetpoint()+
@@ -76,7 +76,7 @@ public class CANTalonRoutine extends Routine {
 
 			}
 		}
-		drive.setCANTalonController(mSignal);
+		drive.setTalonSRXController(mSignal);
 		System.out.println("Sent drivetrain signal "+mSignal.toString());
 	}
 
@@ -84,7 +84,7 @@ public class CANTalonRoutine extends Routine {
 	public Commands update(Commands commands) {
 		Commands output = commands.copy();
 		output.wantedDriveState = Drive.DriveState.OFF_BOARD_CONTROLLER;
-		DashboardManager.getInstance().updateCANTable(((CANTalonDriveController)drive.getController()).getCanTableString());
+		DashboardManager.getInstance().updateCANTable(((TalonSRXDriveController)drive.getController()).getCanTableString());
 		return output;
 	}
 
@@ -120,9 +120,9 @@ public class CANTalonRoutine extends Routine {
 			System.out.println(mSignal.rightMotor.getControlMode()+","+Robot.getRobotState().rightControlMode);
 			return false;
 		}
-		if (!drive.hasController() || (drive.getController().getClass() == CANTalonDriveController.class && drive.controllerOnTarget())) {
+		if (!drive.hasController() || (drive.getController().getClass() == TalonSRXDriveController.class && drive.controllerOnTarget())) {
 		}
-		return !drive.hasController() || System.currentTimeMillis() > this.timeout+startTime || (drive.getController().getClass() == CANTalonDriveController.class && drive.controllerOnTarget());
+		return !drive.hasController() || System.currentTimeMillis() > this.timeout+startTime || (drive.getController().getClass() == TalonSRXDriveController.class && drive.controllerOnTarget());
 	}
 
 	@Override

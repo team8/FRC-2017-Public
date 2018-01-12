@@ -1,18 +1,14 @@
 package com.palyrobotics.frc2017.robot;
 
-import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
-import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
+import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants.RobotName;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.subsystems.*;
-import com.palyrobotics.frc2017.util.CANTalonOutput;
+import com.palyrobotics.frc2017.util.TalonSRXOutput;
 import com.palyrobotics.frc2017.util.logger.Logger;
 
 import java.util.Optional;
@@ -100,6 +96,7 @@ class HardwareUpdater {
 		if (Constants.kRobotName == RobotName.STEIK) {
 			//Climber setup
 			TalonSRX climber = HardwareAdapter.ClimberHardware.getInstance().climberTalon;
+			climber.enableVoltageCompensation(true);
 			climber.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 			climber.setSensorPhase(false);
 			climber.setSelectedSensorPosition(0, 0, 0);
@@ -109,11 +106,12 @@ class HardwareUpdater {
 			climber.configReverseLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.NormallyClosed, 0);
 
 			TalonSRX slider = HardwareAdapter.SliderHardware.getInstance().sliderTalon;
+			slider.enableVoltageCompensation(true);
 			// Reset and turn on the Talon 
 			slider.clearStickyFaults(0);
 			slider.setStatusFramePeriod(0, 5, 0);
-			slider.configPeakOutputForward(Constants.kSliderPeakOutputVoltage, 0);
-			slider.configPeakOutputReverse(-Constants.kSliderPeakOutputVoltage, 0);
+			slider.configPeakOutputForward(Constants.kSliderPeakOutputPower, 0);
+			slider.configPeakOutputReverse(-Constants.kSliderPeakOutputPower, 0);
 			if (calibrateSliderEncoder) {
 				// Set up the Talon to read from a relative CTRE mag encoder sensor
 				slider.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
@@ -140,83 +138,89 @@ class HardwareUpdater {
 		TalonSRX rightSlave2Talon = HardwareAdapter.getInstance().getDrivetrain().rightSlave2Talon;
 		// Enable all talons' brake mode and disables forward and reverse soft
 		// limits
-		leftMasterTalon.enableBrakeMode(true);
-		leftSlave1Talon.enableBrakeMode(true);
-		if (leftSlave2Talon != null) rightSlave2Talon.enableBrakeMode(true);
-		rightMasterTalon.enableBrakeMode(true);
-		rightSlave1Talon.enableBrakeMode(true);
-		if (rightSlave2Talon != null) leftSlave2Talon.enableBrakeMode(true);
 
-		leftMasterTalon.enableForwardSoftLimit(false);
-		leftMasterTalon.enableReverseSoftLimit(false);
-		leftSlave1Talon.enableForwardSoftLimit(false);
-		leftSlave1Talon.enableReverseSoftLimit(false);
-		if (leftSlave2Talon != null) {leftSlave2Talon.enableForwardSoftLimit(false); leftSlave2Talon.enableReverseSoftLimit(false);}
-		rightMasterTalon.enableForwardSoftLimit(false);
-		rightMasterTalon.enableReverseSoftLimit(false);
-		rightSlave1Talon.enableForwardSoftLimit(false);
-		rightSlave1Talon.enableReverseSoftLimit(false);
-		if (rightSlave2Talon != null) {rightSlave2Talon.enableForwardSoftLimit(false); rightSlave2Talon.enableReverseSoftLimit(false);}
-		
-		// Enable all the talons
-		leftMasterTalon.enable();
-		leftSlave1Talon.enable();
-		if (leftSlave2Talon != null) leftSlave2Talon.enable();
-		rightMasterTalon.enable();
-		rightSlave1Talon.enable();
-		if (rightSlave2Talon != null) rightSlave2Talon.enable();
+		leftMasterTalon.setNeutralMode(NeutralMode.Brake);
+		leftSlave1Talon.setNeutralMode(NeutralMode.Brake);
+		if (leftSlave2Talon != null) leftSlave2Talon.setNeutralMode(NeutralMode.Brake);
+		rightMasterTalon.setNeutralMode(NeutralMode.Brake);
+		rightSlave1Talon.setNeutralMode(NeutralMode.Brake);
+		if (rightSlave2Talon != null) rightSlave2Talon.setNeutralMode(NeutralMode.Brake);
+
+		leftMasterTalon.enableVoltageCompensation(true);
+		leftSlave1Talon.enableVoltageCompensation(true);
+		leftSlave2Talon.enableVoltageCompensation(true);
+
+		rightMasterTalon.enableVoltageCompensation(true);
+		rightSlave1Talon.enableVoltageCompensation(true);
+		rightSlave2Talon.enableVoltageCompensation(true);
+
+		leftMasterTalon.configForwardSoftLimitEnable(false, 0);
+		leftMasterTalon.configReverseSoftLimitEnable(false, 0);
+		leftSlave1Talon.configForwardSoftLimitEnable(false, 0);
+		leftSlave1Talon.configReverseSoftLimitEnable(false, 0);
+
+		if (rightSlave2Talon != null) {rightSlave2Talon.configForwardSoftLimitEnable(false, 0); rightSlave2Talon.configReverseSoftLimitEnable(false, 0);}
+
+		rightMasterTalon.configForwardSoftLimitEnable(false, 0);
+		rightMasterTalon.configReverseSoftLimitEnable(false, 0);
+		rightSlave1Talon.configForwardSoftLimitEnable(false, 0);
+		rightSlave1Talon.configReverseSoftLimitEnable(false, 0);
+
+		if (rightSlave2Talon != null) {rightSlave2Talon.configForwardSoftLimitEnable(false, 0); rightSlave2Talon.configReverseSoftLimitEnable(false, 0);}
 		
 		// Allow max voltage for closed loop control
-		leftMasterTalon.configPeakOutputVoltage(Constants.kDriveMaxClosedLoopOutput, -Constants.kDriveMaxClosedLoopOutput);
-		leftSlave1Talon.configPeakOutputVoltage(Constants.kDriveMaxClosedLoopOutput, -Constants.kDriveMaxClosedLoopOutput);
-		if (leftSlave2Talon != null) leftSlave2Talon.configPeakOutputVoltage(Constants.kDriveMaxClosedLoopOutput, -Constants.kDriveMaxClosedLoopOutput);
-		rightMasterTalon.configPeakOutputVoltage(Constants.kDriveMaxClosedLoopOutput, -Constants.kDriveMaxClosedLoopOutput);
-		rightSlave1Talon.configPeakOutputVoltage(Constants.kDriveMaxClosedLoopOutput, -Constants.kDriveMaxClosedLoopOutput);
-		if (rightSlave2Talon != null) rightSlave2Talon.configPeakOutputVoltage(Constants.kDriveMaxClosedLoopOutput, -Constants.kDriveMaxClosedLoopOutput);
+		leftMasterTalon.configPeakOutputForward(Constants.kDriveMaxClosedLoopOutput, 0);
+		leftMasterTalon.configPeakOutputReverse(-Constants.kDriveMaxClosedLoopOutput, 0);
+		leftSlave1Talon.configPeakOutputForward(Constants.kDriveMaxClosedLoopOutput, 0);
+		leftSlave1Talon.configPeakOutputReverse(-Constants.kDriveMaxClosedLoopOutput, 0);
+
+		if (leftSlave2Talon != null) {
+			leftSlave2Talon.configPeakOutputForward(Constants.kDriveMaxClosedLoopOutput, 0);
+			leftSlave2Talon.configPeakOutputReverse(-Constants.kDriveMaxClosedLoopOutput, 0);
+		}
 		
-		// Allow max voltage for open loop control
-		leftMasterTalon.configMaxOutputVoltage(13);
-		leftSlave1Talon.configMaxOutputVoltage(13);
-		if (leftSlave2Talon != null) leftSlave2Talon.configMaxOutputVoltage(13);
-		rightMasterTalon.configMaxOutputVoltage(13);
-		rightSlave1Talon.configMaxOutputVoltage(13);
-		if (rightSlave2Talon != null) rightSlave2Talon.configMaxOutputVoltage(13);
+		rightMasterTalon.configPeakOutputForward(Constants.kDriveMaxClosedLoopOutput, 0);
+		rightMasterTalon.configPeakOutputReverse(-Constants.kDriveMaxClosedLoopOutput, 0);
+		rightSlave1Talon.configPeakOutputForward(Constants.kDriveMaxClosedLoopOutput, 0);
+		rightSlave1Talon.configPeakOutputReverse(-Constants.kDriveMaxClosedLoopOutput, 0);
+
+		if (rightSlave2Talon != null) {
+			rightSlave2Talon.configPeakOutputForward(Constants.kDriveMaxClosedLoopOutput, 0);
+			rightSlave2Talon.configPeakOutputReverse(-Constants.kDriveMaxClosedLoopOutput, 0);
+		}
 		
 		// Configure master talon feedback devices
-		leftMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
-		rightMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+		leftMasterTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+		rightMasterTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
-		leftMasterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 5);
-		rightMasterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 5);
-		
-		leftMasterTalon.SetVelocityMeasurementPeriod(CANTalon.VelocityMeasurementPeriod.Period_50Ms);
-		rightMasterTalon.SetVelocityMeasurementPeriod(CANTalon.VelocityMeasurementPeriod.Period_50Ms);
+		leftMasterTalon.setSensorPhase(false);
+		//TODO:is true or not?
+		rightMasterTalon.setSensorPhase(true);
 
-		leftMasterTalon.SetVelocityMeasurementWindow(16);
-		rightMasterTalon.SetVelocityMeasurementWindow(16);
-		
+		leftMasterTalon.setStatusFramePeriod(0, 5, 0);
+		rightMasterTalon.setStatusFramePeriod(0, 5, 0);
+
+		leftMasterTalon.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_50Ms, 0);
+		rightMasterTalon.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_50Ms, 0);
+
+		leftMasterTalon.configVelocityMeasurementWindow(16, 0);
+		rightMasterTalon.configVelocityMeasurementWindow(16, 0);
+
 		// Zero encoders
-		leftMasterTalon.setEncPosition(0);
-		rightMasterTalon.setEncPosition(0);
-		leftMasterTalon.setPosition(0);
-		rightMasterTalon.setPosition(0);
+		leftMasterTalon.setSelectedSensorPosition(0, 0, 0);
+		rightMasterTalon.setSelectedSensorPosition(0, 0, 0);
 
 		// Reverse right side
 		rightMasterTalon.setInverted(true);
-		rightMasterTalon.setSensorPhase(true);
 
 		// Set slave talons to follower mode
-		leftSlave1Talon.changeControlMode(CANTalon.TalonControlMode.Follower);
-		leftSlave1Talon.set(leftMasterTalon.getDeviceID());
+		leftSlave1Talon.set(ControlMode.Follower, leftMasterTalon.getDeviceID());
 		if (leftSlave2Talon != null) {
-			leftSlave2Talon.changeControlMode(CANTalon.TalonControlMode.Follower);
-			leftSlave2Talon.set(leftMasterTalon.getDeviceID());
+			leftSlave2Talon.set(ControlMode.Follower, leftMasterTalon.getDeviceID());
 		}
-		rightSlave1Talon.changeControlMode(CANTalon.TalonControlMode.Follower);
-		rightSlave1Talon.set(rightMasterTalon.getDeviceID());
+		rightSlave1Talon.set(ControlMode.Follower, rightMasterTalon.getDeviceID());
 		if (rightSlave2Talon != null) {
-			rightSlave2Talon.changeControlMode(CANTalon.TalonControlMode.Follower);
-			rightSlave2Talon.set(rightMasterTalon.getDeviceID());
+			rightSlave2Talon.set(ControlMode.Follower, rightMasterTalon.getDeviceID());
 		}
 	}
 
@@ -224,10 +228,17 @@ class HardwareUpdater {
 	 * Updates all the sensor data taken from the hardware
 	 */
 	void updateSensors(RobotState robotState) {
-		robotState.leftControlMode = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getControlMode();
-		robotState.rightControlMode = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getControlMode();
-		robotState.leftSetpoint = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon.getSetpoint();
-		robotState.rightSetpoint = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon.getSetpoint();
+
+		TalonSRX leftMasterTalon = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon;
+		TalonSRX rightMasterTalon = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon;
+
+		robotState.leftControlMode = leftMasterTalon.getControlMode();
+		robotState.rightControlMode = rightMasterTalon.getControlMode();
+
+		//TODO: sketchy, not exactly setpoint for all modes, do we even need this?
+		robotState.leftSetpoint = leftMasterTalon.getMotorOutputPercent();
+		robotState.rightSetpoint = rightMasterTalon.getMotorOutputPercent();
+
 		AHRS gyro = HardwareAdapter.DrivetrainHardware.getInstance().gyro;
 		if (gyro != null) {
 			robotState.drivePose.heading = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getAngle();
@@ -241,65 +252,48 @@ class HardwareUpdater {
 			robotState.drivePose.heading = -0;
 			robotState.drivePose.headingVelocity = -0;
 		}
-		CANTalon leftMasterTalon = HardwareAdapter.DrivetrainHardware.getInstance().leftMasterTalon;
-		CANTalon rightMasterTalon = HardwareAdapter.DrivetrainHardware.getInstance().rightMasterTalon;
-		robotState.drivePose.leftEnc = leftMasterTalon.getPosition();
-		robotState.drivePose.leftEncVelocity = leftMasterTalon.getEncVelocity();
-		robotState.drivePose.leftSpeed = leftMasterTalon.getSpeed();
-		// rightEnc is not getEncPosition() because that returns the absolute
-		// position, not the inverted one, which we want.
-		robotState.drivePose.rightEnc = rightMasterTalon.getPosition();
-		robotState.drivePose.rightEncVelocity = rightMasterTalon.getEncVelocity();
-		robotState.drivePose.rightSpeed = rightMasterTalon.getSpeed();
+
+
+		//TODO: FIGURE OUT ENC VEL VS SPD
+		robotState.drivePose.leftEnc = leftMasterTalon.getSelectedSensorPosition(0);
+		robotState.drivePose.leftEncVelocity = leftMasterTalon.getSelectedSensorVelocity(0);
+		robotState.drivePose.leftSpeed = leftMasterTalon.getSelectedSensorVelocity(0);
+		robotState.drivePose.rightEnc = rightMasterTalon.getSelectedSensorPosition(0);
+		robotState.drivePose.rightEncVelocity = rightMasterTalon.getSelectedSensorVelocity(0);
+		robotState.drivePose.rightSpeed = rightMasterTalon.getSelectedSensorVelocity(0);
 		
-		if (leftMasterTalon.getControlMode() == TalonControlMode.MotionMagic) {
-			robotState.drivePose.leftMotionMagicPos = Optional.of(leftMasterTalon.getMotionMagicActTrajPosition());
-			robotState.drivePose.leftMotionMagicVel = Optional.of(leftMasterTalon.getMotionMagicActTrajVelocity());
+		if (leftMasterTalon.getControlMode().equals(TalonControlMode.MotionMagic)) {
+			robotState.drivePose.leftMotionMagicPos = Optional.of(leftMasterTalon.getActiveTrajectoryPosition());
+			robotState.drivePose.leftMotionMagicVel = Optional.of(leftMasterTalon.getActiveTrajectoryVelocity());
 		}
 		else {
 			robotState.drivePose.leftMotionMagicPos = Optional.empty();
 			robotState.drivePose.leftMotionMagicVel = Optional.empty();
 		}
 		
-		if (rightMasterTalon.getControlMode() == TalonControlMode.MotionMagic) {
-			robotState.drivePose.rightMotionMagicPos = Optional.of(rightMasterTalon.getMotionMagicActTrajPosition());
-			robotState.drivePose.rightMotionMagicVel = Optional.of(rightMasterTalon.getMotionMagicActTrajVelocity());
+		if (rightMasterTalon.getControlMode().equals(TalonControlMode.MotionMagic)) {
+			robotState.drivePose.rightMotionMagicPos = Optional.of(rightMasterTalon.getActiveTrajectoryPosition());
+			robotState.drivePose.rightMotionMagicVel = Optional.of(rightMasterTalon.getActiveTrajectoryVelocity());
 		}
 		else {
 			robotState.drivePose.rightMotionMagicPos = Optional.empty();
 			robotState.drivePose.rightMotionMagicVel = Optional.empty();
 		}
-		
-		if (leftMasterTalon.getControlMode().isPID() || leftMasterTalon.getControlMode() == TalonControlMode.MotionMagic) {
-			robotState.drivePose.leftError = Optional.of(leftMasterTalon.getError());
-		} else {
-			robotState.drivePose.leftError = Optional.empty();
-		}
-		if (rightMasterTalon.getControlMode().isPID() || rightMasterTalon.getControlMode() == TalonControlMode.MotionMagic) {
-			robotState.drivePose.rightError = Optional.of(rightMasterTalon.getError());
-		} else {
-			robotState.drivePose.rightError = Optional.empty();
-		}
+		robotState.drivePose.leftError = Optional.of(leftMasterTalon.getClosedLoopError(0));
+        robotState.drivePose.rightError = Optional.of(rightMasterTalon.getClosedLoopError(0));
+
 		if (Constants.kRobotName == Constants.RobotName.STEIK) {
-			CANTalon sliderTalon = HardwareAdapter.SliderHardware.getInstance().sliderTalon;
-			robotState.sliderEncoder = sliderTalon.getEncPosition();
+			TalonSRX sliderTalon = HardwareAdapter.SliderHardware.getInstance().sliderTalon;
+			robotState.sliderEncoder = sliderTalon.getSelectedSensorPosition(0);
 			robotState.sliderPotentiometer = HardwareAdapter.SliderHardware.getInstance().sliderPotentiometer.getValue();
-			robotState.sliderVelocity = sliderTalon.getSpeed();
-			if (sliderTalon.getControlMode().isPID()) {
-				if (sliderTalon.getSetpoint() == mSlider.getOutput().getSetpoint()) {
-					robotState.sliderClosedLoopError = Optional.of(sliderTalon.getClosedLoopError());
-				} else {
-					robotState.sliderClosedLoopError = Optional.empty();
-				}
-			} else {
-				robotState.sliderClosedLoopError = Optional.empty();
-			}
+			robotState.sliderVelocity = sliderTalon.getSelectedSensorVelocity(0);
+			robotState.sliderClosedLoopError = Optional.of(sliderTalon.getClosedLoopError(0));
 		}
 		if (HardwareAdapter.getInstance().getClimber().climberTalon != null) {
-			robotState.climberEncoder = HardwareAdapter.ClimberHardware.getInstance().climberTalon.getPosition();
+			robotState.climberEncoder = HardwareAdapter.ClimberHardware.getInstance().climberTalon.getSelectedSensorPosition(0);
 		}
 		if (HardwareAdapter.getInstance().getSlider().sliderTalon != null) {
-			robotState.sliderPosition = HardwareAdapter.SliderHardware.getInstance().sliderTalon.getPosition();
+			robotState.sliderPosition = HardwareAdapter.SliderHardware.getInstance().sliderTalon.getSelectedSensorPosition(0);
 		}
 	}
 
@@ -315,40 +309,42 @@ class HardwareUpdater {
 	}
 
 	private void updateSteikSubsystems() {
-		updateCANTalonSRX(HardwareAdapter.getInstance().getSlider().sliderTalon, mSlider.getOutput());
+		updateTalonSRX(HardwareAdapter.getInstance().getSlider().sliderTalon, mSlider.getOutput());
 		// SPATULA
 		HardwareAdapter.getInstance().getSpatula().spatulaSolenoid.set(mSpatula.getOutput());
 		// INTAKE
 		HardwareAdapter.getInstance().getIntake().intakeMotor.set(mIntake.getOutput());
 		// CLIMBER
-		updateCANTalonSRX(HardwareAdapter.getInstance().getClimber().climberTalon, mClimber.getOutput());
+		updateTalonSRX(HardwareAdapter.getInstance().getClimber().climberTalon, mClimber.getOutput());
 	}
 
 	/**
 	 * Updates the drivetrain on Derica, Steik 
-	 * Uses CANTalonOutput and can run off-board control loops through SRX
+	 * Uses TalonSRXOutput and can run off-board control loops through SRX
 	 */
 	private void updateDrivetrain() {
-		updateCANTalonSRX(HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon, mDrive.getDriveSignal().leftMotor);
-		updateCANTalonSRX(HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon, mDrive.getDriveSignal().rightMotor);
+		updateTalonSRX(HardwareAdapter.getInstance().getDrivetrain().leftMasterTalon, mDrive.getDriveSignal().leftMotor);
+		updateTalonSRX(HardwareAdapter.getInstance().getDrivetrain().rightMasterTalon, mDrive.getDriveSignal().rightMotor);
 	}
 
 	/**
-	 * Helper method for processing a CANTalonOutput for an SRX
+	 * Helper method for processing a TalonSRXOutput for an SRX
 	 */
-	private void updateCANTalonSRX(TalonSRX talon, CANTalonOutput output) {
-		talon.changeControlMode(output.getControlMode());
-		if(output.getControlMode().isPID() || output.getControlMode() == TalonControlMode.MotionMagic) {
-			talon.setPID(output.gains.P, output.gains.I, output.gains.D, output.gains.F, output.gains.izone, output.gains.rampRate, output.profile);
+	private void updateTalonSRX(TalonSRX talon, TalonSRXOutput output) {
+		if(output.getControlMode().equals(ControlMode.Position) || output.getControlMode().equals(ControlMode.Velocity) || output.getControlMode().equals(ControlMode.MotionMagic)) {
+			talon.config_kP(output.profile, output.gains.P, 0);
+			talon.config_kI(output.profile, output.gains.I, 0);
+			talon.config_kD(output.profile, output.gains.D, 0);
+			talon.config_kF(output.profile, output.gains.F, 0);
+			talon.config_IntegralZone(output.profile, output.gains.izone, 0);
+			talon.configClosedloopRamp(output.gains.rampRate, 0);
 		}
-		if (output.getControlMode() == CANTalon.TalonControlMode.MotionMagic) {
-			talon.setMotionMagicAcceleration(output.accel);
-			talon.setMotionMagicCruiseVelocity(output.cruiseVel);
+		if (output.getControlMode().equals(ControlMode.MotionMagic)) {
+		    talon.configMotionAcceleration(output.accel, 0);
+		    talon.configMotionCruiseVelocity(output.cruiseVel, 0);
 		}
-		if (output.getControlMode() == TalonControlMode.Speed) {
-			talon.changeControlMode(CANTalon.TalonControlMode.Speed);
-            talon.setProfile(0);
-            talon.setAllowableClosedLoopErr(0);
+		if (output.getControlMode().equals(ControlMode.Velocity)) {
+		    talon.configAllowableClosedloopError(output.profile, 0, 0);
 		}
 		talon.set(output.getControlMode(), output.getSetpoint());
 	}

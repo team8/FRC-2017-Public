@@ -29,7 +29,7 @@ public class DriveTest {
 		DriveSignal signal = DriveSignal.getNeutralSignal();
 		signal.leftMotor.setPercentOutput(0.5);
 		signal.rightMotor.setPercentOutput(0.5);
-		drive.setCANTalonController(signal);
+		drive.setTalonSRXController(signal);
 		drive.update(commands, state);
 		assertThat("not updating correctly", drive.getDriveSignal(), equalTo(signal));
 		signal.leftMotor.setPercentOutput(1);
@@ -40,7 +40,7 @@ public class DriveTest {
 		DriveSignal newSignal = DriveSignal.getNeutralSignal();
 		newSignal.leftMotor.setPercentOutput(1);
 		newSignal.rightMotor.setPercentOutput(1);
-		drive.setCANTalonController(newSignal);
+		drive.setTalonSRXController(newSignal);
 		drive.update(commands, state);
 		assertThat("not updating correctly", drive.getDriveSignal(), equalTo(newSignal));
 	}

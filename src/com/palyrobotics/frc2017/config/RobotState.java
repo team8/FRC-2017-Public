@@ -1,6 +1,5 @@
 package com.palyrobotics.frc2017.config;
 
-import com.ctre.CANTalon.TalonControlMode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.palyrobotics.frc2017.util.Pose;
 import com.team254.lib.trajectory.*;

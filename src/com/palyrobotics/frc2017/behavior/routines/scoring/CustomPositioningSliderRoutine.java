@@ -1,5 +1,6 @@
 package com.palyrobotics.frc2017.behavior.routines.scoring;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.config.Commands;
 import com.palyrobotics.frc2017.config.Constants;
@@ -79,7 +80,7 @@ public class CustomPositioningSliderRoutine extends Routine {
 	@Override
 	public boolean finished() {
 
-		if(!HardwareAdapter.getInstance().getSlider().sliderTalon.getControlMode().isPID()) {
+		if(!HardwareAdapter.getInstance().getSlider().sliderTalon.getControlMode().equals(ControlMode.Position)) {
 			return false;
 		}
 		// Give up after 1.5 seconds

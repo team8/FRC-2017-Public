@@ -5,8 +5,8 @@ import com.palyrobotics.frc2017.behavior.ParallelRoutine;
 import com.palyrobotics.frc2017.behavior.Routine;
 import com.palyrobotics.frc2017.behavior.SequentialRoutine;
 import com.palyrobotics.frc2017.behavior.routines.SpatulaDownAutocorrectRoutine;
-import com.palyrobotics.frc2017.behavior.routines.drive.CANTalonRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.EncoderTurnAngleRoutine;
+import com.palyrobotics.frc2017.behavior.routines.drive.TalonSRXRoutine;
 import com.palyrobotics.frc2017.behavior.routines.drive.TimedDriveRoutine;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
@@ -56,7 +56,7 @@ public class TestAutoMode extends AutoModeBase {
 //		signal.rightMotor.setMotionMagic(dist*Constants.kDriveTicksPerInch, Gains.steikShortDriveMotionMagicGains,
 //				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 //		
-//		sequence.add(new CANTalonRoutine(signal, true, 100000));
+//		sequence.add(new TalonSRXRoutine(signal, true, 100000));
 		
 		
 //		sequence.add(new TimedRoutine(1, new AutocorrectPositioningSliderRoutine(Slider.SliderTarget.CENTER)));
@@ -83,14 +83,14 @@ public class TestAutoMode extends AutoModeBase {
 		DriveSignal driveBackup = DriveSignal.getNeutralSignal();
 		double driveBackupSetpoint = -30 * Constants.kDriveTicksPerInch;
 		driveBackup.leftMotor.setMotionMagic(driveBackupSetpoint, mShortGains,
-				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+				(int )Gains.kSteikShortDriveMotionMagicCruiseVelocity, (int) Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 		driveBackup.rightMotor.setMotionMagic(driveBackupSetpoint, mShortGains,
-				Gains.kSteikShortDriveMotionMagicCruiseVelocity, Gains.kSteikShortDriveMotionMagicMaxAcceleration);
+				(int) Gains.kSteikShortDriveMotionMagicCruiseVelocity, (int) Gains.kSteikShortDriveMotionMagicMaxAcceleration);
 
 		ArrayList<Routine> sequence = new ArrayList<>();
 		ArrayList<Routine> parallelDrop = new ArrayList<>();
 
-		parallelDrop.add(new CANTalonRoutine(driveBackup, true));
+		parallelDrop.add(new TalonSRXRoutine(driveBackup, true));
 		parallelDrop.add(new SpatulaDownAutocorrectRoutine());
 		sequence.add(new ParallelRoutine(parallelDrop));
 		sequence.add(new EncoderTurnAngleRoutine(180));

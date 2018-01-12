@@ -173,8 +173,8 @@ public class Drive extends Subsystem {
 		setDriveOutputs(DriveSignal.getNeutralSignal());
 	}
 
-	public void setCANTalonController(DriveSignal signal) {
-		mController = new CANTalonDriveController(signal);
+	public void setTalonSRXController(DriveSignal signal) {
+		mController = new TalonSRXDriveController(signal);
 		newController = true;
 	}
 

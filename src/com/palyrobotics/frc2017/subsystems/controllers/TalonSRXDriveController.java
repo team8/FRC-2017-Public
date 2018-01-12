@@ -1,14 +1,14 @@
 package com.palyrobotics.frc2017.subsystems.controllers;
 
-import com.ctre.CANTalon;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.subsystems.Drive;
-import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Pose;
+import com.palyrobotics.frc2017.util.TalonSRXOutput;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
 /**
@@ -16,7 +16,7 @@ import com.palyrobotics.frc2017.util.archive.DriveSignal;
  * @author Nihar
  * Controller used for running an offboard can talon srx control loop
  */
-public class CANTalonDriveController implements Drive.DriveController {
+public class TalonSRXDriveController implements Drive.DriveController {
 	private final DriveSignal mSignal;
 
 	private RobotState mCachedState = null;
@@ -27,9 +27,9 @@ public class CANTalonDriveController implements Drive.DriveController {
 	 * Constructs a drive controller to store a signal <br />
 	 * @param signal
 	 */
-	public CANTalonDriveController(DriveSignal signal) {
+	public TalonSRXDriveController(DriveSignal signal) {
 		// Use copy constructors and prevent the signal passed in from being modified externally
-		this.mSignal = new DriveSignal(new CANTalonOutput(signal.leftMotor), new CANTalonOutput(signal.rightMotor));
+		this.mSignal = new DriveSignal(new TalonSRXOutput(signal.leftMotor), new TalonSRXOutput(signal.rightMotor));
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class CANTalonDriveController implements Drive.DriveController {
 				output.leftEnc = mSignal.leftMotor.getSetpoint();
 				output.leftEncVelocity = 0;
 				output.leftSpeed = 0;
-			case Speed:
+			case Velocity:
 				output.leftSpeed = mSignal.leftMotor.getSetpoint();
 		}
 		switch (mSignal.rightMotor.getControlMode()) {
@@ -78,7 +78,7 @@ public class CANTalonDriveController implements Drive.DriveController {
 				output.rightEnc = mSignal.rightMotor.getSetpoint();
 				output.rightEncVelocity = 0;
 				output.rightSpeed = 0;
-			case Speed:
+			case Velocity:
 				output.rightSpeed = mSignal.rightMotor.getSetpoint();
 		}
 		return output;
@@ -97,7 +97,7 @@ public class CANTalonDriveController implements Drive.DriveController {
 				Constants.kAcceptableShortDriveVelocityError : Constants.kAcceptableDriveVelocityError;
 
 		// Motion magic is not PID so ignore whether talon closed loop error is around
-		if (mSignal.leftMotor.getControlMode() == CANTalon.TalonControlMode.MotionMagic) {
+		if (mSignal.leftMotor.getControlMode().equals(ControlMode.MotionMagic)) {
 			return (Math.abs(mCachedState.drivePose.leftEnc - mSignal.leftMotor.getSetpoint()) < positionTolerance) &&
 					(Math.abs(mCachedState.drivePose.leftSpeed) < velocityTolerance) &&
 					(Math.abs(mCachedState.drivePose.rightEnc - mSignal.rightMotor.getSetpoint()) < positionTolerance) &&

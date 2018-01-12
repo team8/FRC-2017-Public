@@ -1,6 +1,5 @@
 package com.palyrobotics.frc2017.util;
 
-import com.ctre.CANTalon;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.palyrobotics.frc2017.config.Gains;
 
@@ -11,7 +10,7 @@ import com.palyrobotics.frc2017.config.Gains;
  * Allows configuration for offboard SRX calculations
  * @author Nihar
  */
-public class CANTalonOutput {
+public class TalonSRXOutput {
 
 	/**
 	 * Prevent null pointer exceptions
@@ -23,13 +22,13 @@ public class CANTalonOutput {
 	public Gains gains;
 
 	// Used for motion magic
-	public double accel;
-	public double cruiseVel;
+	public int accel;
+	public int cruiseVel;
 
 	/**
 	 * Default constructor
 	 */
-	public CANTalonOutput() {
+	public TalonSRXOutput() {
 		controlMode = ControlMode.Disabled;
 		setpoint = 0;
 		profile = 0;
@@ -43,7 +42,7 @@ public class CANTalonOutput {
 	 * Copy constructor
 	 * @param talon output to copy
 	 */
-	public CANTalonOutput(CANTalonOutput talon) {
+	public TalonSRXOutput(TalonSRXOutput talon) {
 		this.controlMode = talon.getControlMode();
 		this.setpoint = talon.getSetpoint();
 		this.profile = talon.profile;
@@ -54,7 +53,7 @@ public class CANTalonOutput {
 		this.profile = talon.profile;
 	}
 	
-	public CANTalonOutput(ControlMode controlMode, Gains gains, double setpoint) {
+	public TalonSRXOutput(ControlMode controlMode, Gains gains, double setpoint) {
 		this.controlMode = controlMode;
 		this.setpoint = setpoint;
 		profile = 0;
@@ -116,7 +115,7 @@ public class CANTalonOutput {
 	 * @param accel max acceleration and deceleration
 	 * @param cruiseVelocity cruise velocity to max out at
 	 */
-	public void setMotionMagic(double setpoint, Gains gains, double cruiseVelocity, double accel) {
+	public void setMotionMagic(double setpoint, Gains gains, int cruiseVelocity, int accel) {
 		controlMode = ControlMode.MotionMagic;
 		this.setpoint = setpoint;
 		this.gains = gains;
@@ -148,9 +147,9 @@ public class CANTalonOutput {
 	 */
 	@Override
 	public boolean equals(Object other) {
-		return ((CANTalonOutput) other).getSetpoint() == this.getSetpoint() &&
-				((CANTalonOutput) other).controlMode == this.controlMode &&
-				((CANTalonOutput) other).gains.equals(this.gains);
+		return ((TalonSRXOutput) other).getSetpoint() == this.getSetpoint() &&
+				((TalonSRXOutput) other).controlMode == this.controlMode &&
+				((TalonSRXOutput) other).gains.equals(this.gains);
 	}
 
 	/* Should not be used as talon's should be set to slave mode when initialized

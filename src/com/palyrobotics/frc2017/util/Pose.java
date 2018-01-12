@@ -20,13 +20,13 @@ public class Pose {
 	public double rightEncVelocity;
 	public double rightSpeed;
 
-	public Optional<Double> leftError;
-	public Optional<Double> rightError;
+	public Optional<Integer> leftError;
+	public Optional<Integer> rightError;
 	
-	public Optional<Double> leftMotionMagicPos = Optional.empty();
-	public Optional<Double> rightMotionMagicPos = Optional.empty();
-	public Optional<Double> leftMotionMagicVel = Optional.empty();
-	public Optional<Double> rightMotionMagicVel = Optional.empty();
+	public Optional<Integer> leftMotionMagicPos = Optional.empty();
+	public Optional<Integer> rightMotionMagicPos = Optional.empty();
+	public Optional<Integer> leftMotionMagicVel = Optional.empty();
+	public Optional<Integer> rightMotionMagicVel = Optional.empty();
 
 
 	public Pose() {
@@ -38,7 +38,7 @@ public class Pose {
 	}
 	public Pose(double leftEnc, double leftEncVelocity, double leftSpeed,
 				double rightEnc, double rightEncVelocity, double rightSpeed,
-				double leftError, double rightError, double heading, double headingVelocity) {
+				int leftError, int rightError, double heading, double headingVelocity) {
 		this.leftEnc = leftEnc;
 		this.leftEncVelocity = leftEncVelocity;
 		this.leftSpeed = leftSpeed;

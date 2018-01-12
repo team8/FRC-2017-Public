@@ -1,14 +1,13 @@
 package com.palyrobotics.frc2017.subsystems.controllers;
 
-import com.ctre.CANTalon;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.subsystems.Drive;
-import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Pose;
+import com.palyrobotics.frc2017.util.TalonSRXOutput;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 import com.team254.lib.trajectory.*;
 import edu.wpi.first.wpilibj.Timer;
@@ -202,9 +201,9 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
             setpoint = new Kinematics.DriveVelocity(setpoint.left * scaling, setpoint.right * scaling);
         }
 
-        final CANTalonOutput
-            left  = new CANTalonOutput(ControlMode.Velocity, Gains.steikVelocity, setpoint.left),
-            right = new CANTalonOutput(ControlMode.Velocity, Gains.steikVelocity, -setpoint.right);
+        final TalonSRXOutput
+            left  = new TalonSRXOutput(ControlMode.Velocity, Gains.steikVelocity, setpoint.left),
+            right = new TalonSRXOutput(ControlMode.Velocity, Gains.steikVelocity, -setpoint.right);
 
         System.out.println(new DriveSignal(left, right).toString());
         return new DriveSignal(left, right);

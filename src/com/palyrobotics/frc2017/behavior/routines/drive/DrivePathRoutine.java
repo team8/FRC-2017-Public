@@ -15,7 +15,6 @@ public class DrivePathRoutine extends Routine {
 	/**
 	 *
 	 * @param path Path to follow
-	 * @param useGyro Whether to correct variations using gyro
 	 */
 	public DrivePathRoutine(Path path, boolean inverted) {
 		this.mPath = path;

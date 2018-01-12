@@ -1,12 +1,13 @@
 package com.palyrobotics.frc2017.subsystems.controllers;
+
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
 import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.subsystems.Drive.DriveController;
-import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Pose;
+import com.palyrobotics.frc2017.util.TalonSRXOutput;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
 public class EncoderTurnAngleController implements DriveController {
@@ -17,8 +18,8 @@ public class EncoderTurnAngleController implements DriveController {
 	private double maxAccel;
 	private double maxVel;
 	private Gains mGains;
-	private CANTalonOutput leftOutput;
-	private CANTalonOutput rightOutput;
+	private TalonSRXOutput leftOutput;
+	private TalonSRXOutput rightOutput;
 	
 	public EncoderTurnAngleController(Pose priorSetpoint, double angle) {
 		leftTarget = priorSetpoint.leftEnc + (angle * Constants.kDriveInchesPerDegree * Constants.kDriveTicksPerInch);
@@ -35,10 +36,10 @@ public class EncoderTurnAngleController implements DriveController {
 			mGains = Gains.dericaPosition;
 		}
 
-		leftOutput = new CANTalonOutput();
-		leftOutput.setMotionMagic(leftTarget, mGains, maxVel, maxAccel);
-		rightOutput = new CANTalonOutput();
-		rightOutput.setMotionMagic(rightTarget, mGains, maxVel, maxAccel);
+		leftOutput = new TalonSRXOutput();
+		leftOutput.setMotionMagic(leftTarget, mGains, (int )maxVel, (int ) maxAccel);
+		rightOutput = new TalonSRXOutput();
+		rightOutput.setMotionMagic(rightTarget, mGains, (int )maxVel, (int) maxAccel);
 	}
 
 	@Override

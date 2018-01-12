@@ -1,19 +1,19 @@
 package com.palyrobotics.frc2017.util.archive;
 
-import com.palyrobotics.frc2017.util.CANTalonOutput;
+import com.palyrobotics.frc2017.util.TalonSRXOutput;
 
 public class DriveSignal {
-	public CANTalonOutput leftMotor;
-	public CANTalonOutput rightMotor;
+	public TalonSRXOutput leftMotor;
+	public TalonSRXOutput rightMotor;
 
-	public DriveSignal(CANTalonOutput left, CANTalonOutput right) {
+	public DriveSignal(TalonSRXOutput left, TalonSRXOutput right) {
 		this.leftMotor = left;
 		this.rightMotor = right;
 	}
 
 	public static DriveSignal getNeutralSignal() {
-		CANTalonOutput leftNeutral = new CANTalonOutput();
-		CANTalonOutput rightNeutral = new CANTalonOutput();
+		TalonSRXOutput leftNeutral = new TalonSRXOutput();
+		TalonSRXOutput rightNeutral = new TalonSRXOutput();
 		leftNeutral.setPercentOutput(0);
 		rightNeutral.setPercentOutput(0);
 

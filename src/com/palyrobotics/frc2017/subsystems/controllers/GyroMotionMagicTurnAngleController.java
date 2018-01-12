@@ -6,18 +6,18 @@ import com.palyrobotics.frc2017.config.Gains;
 import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.robot.Robot;
 import com.palyrobotics.frc2017.subsystems.Drive.DriveController;
-import com.palyrobotics.frc2017.util.CANTalonOutput;
 import com.palyrobotics.frc2017.util.Pose;
+import com.palyrobotics.frc2017.util.TalonSRXOutput;
 import com.palyrobotics.frc2017.util.archive.DriveSignal;
 
 public class GyroMotionMagicTurnAngleController implements DriveController {
 	private Pose mCachedPose;
 	private final double mTargetHeading;	// Absolute setpoint in degrees
 	private double mLeftTarget, mRightTarget;
-	private CANTalonOutput mLeftOutput, mRightOutput;
+	private TalonSRXOutput mLeftOutput, mRightOutput;
 	
 	private final Gains mGains;
-	private final double mCruiseVel, mMaxAccel;
+	private final int mCruiseVel, mMaxAccel;
 	
 	private final double kInchesPerDegree, kTicksPerInch;
 	private final double kTolerance;
@@ -33,15 +33,15 @@ public class GyroMotionMagicTurnAngleController implements DriveController {
 		
 		if (Constants.kRobotName == Constants.RobotName.DERICA) {
 			mGains = Gains.dericaPosition;
-			mCruiseVel = Gains.kDericaTurnMotionMagicCruiseVelocity;
-			mMaxAccel = Gains.kDericaTurnMotionMagicCruiseAccel;
+			mCruiseVel = (int) Gains.kDericaTurnMotionMagicCruiseVelocity;
+			mMaxAccel = (int) Gains.kDericaTurnMotionMagicCruiseAccel;
 			kInchesPerDegree = 1 / Constants2016.kDericaInchesToDegrees;
 			kTicksPerInch = Constants2016.kDericaInchesToTicks;
 			kTolerance = Constants2016.kAcceptableGyroTurnError;
 		} else {
 			mGains = Gains.steikTurnMotionMagicGains;
-			mCruiseVel = Gains.kSteikTurnMotionMagicCruiseVelocity;
-			mMaxAccel = Gains.kSteikTurnMotionMagicMaxAcceleration;
+			mCruiseVel = (int) Gains.kSteikTurnMotionMagicCruiseVelocity;
+			mMaxAccel = (int) Gains.kSteikTurnMotionMagicMaxAcceleration;
 			kInchesPerDegree = Constants.kDriveInchesPerDegree;
 			kTicksPerInch = Constants.kDriveTicksPerInch;
 			kTolerance = Constants.kAcceptableTurnAngleError;
@@ -54,9 +54,9 @@ public class GyroMotionMagicTurnAngleController implements DriveController {
 		mRightTarget = priorSetpoint.rightEnc + (angle * kInchesPerDegree * kTicksPerInch);
 //		System.out.println("Right target: " + mRightTarget);
 		
-		mLeftOutput = new CANTalonOutput();
+		mLeftOutput = new TalonSRXOutput();
 		mLeftOutput.setMotionMagic(mLeftTarget, mGains, mCruiseVel, mMaxAccel);
-		mRightOutput = new CANTalonOutput();
+		mRightOutput = new TalonSRXOutput();
 		mRightOutput.setMotionMagic(mRightTarget, mGains, mCruiseVel, mMaxAccel);
 	}
 

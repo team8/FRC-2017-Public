@@ -1,6 +1,5 @@
 package com.palyrobotics.frc2017.robot;
 
-import com.ctre.CANTalon;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import com.palyrobotics.frc2017.config.Constants;
