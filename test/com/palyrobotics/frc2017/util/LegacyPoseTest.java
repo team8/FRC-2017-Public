@@ -1,7 +1,8 @@
 package com.palyrobotics.frc2017.util;
 
-import com.palyrobotics.frc2017.robot.team254.lib.util.LegacyPose;
 import org.junit.Test;
+
+import com.palyrobotics.frc2018.robot.team254.lib.util.LegacyPose;
 
 import static org.junit.Assert.assertTrue;
 

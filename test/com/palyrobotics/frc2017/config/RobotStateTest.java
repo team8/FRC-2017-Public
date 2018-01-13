@@ -1,7 +1,8 @@
 package com.palyrobotics.frc2017.config;
 
-import com.palyrobotics.frc2017.robot.Robot;
 import org.junit.Test;
+
+import com.palyrobotics.frc2018.robot.Robot;
 
 import static org.junit.Assert.assertTrue;
 

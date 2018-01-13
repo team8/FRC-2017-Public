@@ -1,8 +1,10 @@
 package com.palyrobotics.frc2017.subsystems;
 
-import com.palyrobotics.frc2017.config.Commands;
-import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.robot.RobotTest;
+import com.palyrobotics.frc2018.config.Commands;
+import com.palyrobotics.frc2018.config.RobotState;
+import com.palyrobotics.frc2018.subsystems.Drive;
+
 import org.junit.Test;
 
 /**
@@ -19,10 +21,6 @@ public class SubsystemUpdateTest {
 		RobotState r = new RobotState();
 		
 		Drive.getInstance().update(c, r);
-		Climber.getInstance().update(c, r);
-		Spatula.getInstance().update(c, r);
-		Slider.getInstance().update(c, r);
-		Spatula.getInstance().update(c, r);
 	}
 	
 }

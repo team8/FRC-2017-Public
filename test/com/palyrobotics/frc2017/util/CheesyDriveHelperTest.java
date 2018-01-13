@@ -1,10 +1,11 @@
 package com.palyrobotics.frc2017.util;
 
-import com.palyrobotics.frc2017.config.Commands;
-import com.palyrobotics.frc2017.config.RobotState;
 import com.palyrobotics.frc2017.robot.RobotTest;
-import com.palyrobotics.frc2017.util.archive.CheesyDriveHelper;
-import com.palyrobotics.frc2017.util.archive.DriveSignal;
+import com.palyrobotics.frc2018.config.Commands;
+import com.palyrobotics.frc2018.config.RobotState;
+import com.palyrobotics.frc2018.util.archive.CheesyDriveHelper;
+import com.palyrobotics.frc2018.util.archive.DriveSignal;
+
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertFalse;

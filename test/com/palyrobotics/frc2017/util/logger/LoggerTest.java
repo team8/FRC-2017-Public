@@ -1,10 +1,11 @@
 package com.palyrobotics.frc2017.util.logger;
 
-import com.palyrobotics.frc2017.config.RobotState;
-import com.palyrobotics.frc2017.robot.Robot;
-import com.palyrobotics.frc2017.subsystems.Drive;
-import com.palyrobotics.frc2017.subsystems.Slider;
 import org.junit.Test;
+
+import com.palyrobotics.frc2018.config.RobotState;
+import com.palyrobotics.frc2018.robot.Robot;
+import com.palyrobotics.frc2018.subsystems.Drive;
+import com.palyrobotics.frc2018.util.logger.Logger;
 
 public class LoggerTest {
 	@Test
@@ -39,8 +40,6 @@ public class LoggerTest {
 		logger.start();
 		Drive.getInstance().start();
 		Robot.getRobotState().gamePeriod = RobotState.GamePeriod.TELEOP;
-		Slider.getInstance().start();
-		Slider.getInstance().update(Robot.getCommands(), Robot.getRobotState());
 		Drive.getInstance().update(Robot.getCommands(), Robot.getRobotState());
 //		logger.logSubsystemThread(Drive.getInstance().getStatus());
 //		logger.logSubsystemThread(Slider.getInstance().getStatus());

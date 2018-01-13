@@ -1,7 +1,8 @@
 package com.palyrobotics.frc2017.util.archive.team254.trajectory;
 
-import com.palyrobotics.frc2017.robot.team254.lib.util.BinaryInputDecoder;
 import org.junit.Test;
+
+import com.palyrobotics.frc2018.robot.team254.lib.util.BinaryInputDecoder;
 
 import static org.junit.Assert.assertEquals;
 

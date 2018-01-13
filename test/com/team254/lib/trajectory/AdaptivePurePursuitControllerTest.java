@@ -1,7 +1,7 @@
 package com.team254.lib.trajectory;
 
-import com.palyrobotics.frc2017.subsystems.controllers.AdaptivePurePursuitController;
-import com.palyrobotics.frc2017.subsystems.controllers.AdaptivePurePursuitController.Circle;
+import com.palyrobotics.frc2018.subsystems.controllers.AdaptivePurePursuitController;
+import com.palyrobotics.frc2018.subsystems.controllers.AdaptivePurePursuitController.Circle;
 import com.team254.lib.trajectory.Path.Waypoint;
 import org.junit.Test;
 
