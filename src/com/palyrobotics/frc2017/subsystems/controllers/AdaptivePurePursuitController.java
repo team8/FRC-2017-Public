@@ -187,11 +187,11 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
     public DriveSignal update(RobotState state) {
     	//System.out.println("Number of observations during update: " + RobotPosition.getInstance().getNumObservations());
     		RigidTransform2d robot_pose = Robot.getRobotState().getLatestFieldToVehicle().getValue();
-    		//System.out.println(robot_pose.toString());
+    		System.out.println(robot_pose.toString());
         RigidTransform2d.Delta command = this.update(robot_pose, Timer.getFPGATimestamp());
         Kinematics.DriveVelocity setpoint = Kinematics.inverseKinematics(command);
         setpoint = new Kinematics.DriveVelocity(setpoint.left * Constants.kDriveTicksPerInch, setpoint.right * Constants.kDriveTicksPerInch);
-
+        
         // Scale the command to respect the max velocity limits
         double max_vel = 0.0;
         max_vel = Math.max(max_vel, Math.abs(setpoint.left));
@@ -203,7 +203,7 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
 
         final TalonSRXOutput
             left  = new TalonSRXOutput(ControlMode.Velocity, Gains.steikVelocity, setpoint.left),
-            right = new TalonSRXOutput(ControlMode.Velocity, Gains.steikVelocity, -setpoint.right);
+            right = new TalonSRXOutput(ControlMode.Velocity, Gains.steikVelocity, setpoint.right);
 
         System.out.println(new DriveSignal(left, right).toString());
         return new DriveSignal(left, right);
