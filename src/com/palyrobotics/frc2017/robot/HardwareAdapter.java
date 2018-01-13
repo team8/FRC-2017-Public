@@ -1,6 +1,6 @@
 package com.palyrobotics.frc2017.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import com.palyrobotics.frc2017.config.Constants;
 import com.palyrobotics.frc2017.config.Constants2016;
@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.*;
 public class HardwareAdapter {
 	// Hardware components at the top for maintenance purposes, variables and getters at bottom
 	/* 
-	 * DRIVETRAIN - 6 TalonSRX's
+	 * DRIVETRAIN - 6 WPI_TalonSRX's
 	 */
 	public static class DrivetrainHardware {
 		private static DrivetrainHardware instance = new DrivetrainHardware();
@@ -24,12 +24,12 @@ public class HardwareAdapter {
 		protected static DrivetrainHardware getInstance() {
 			return instance;
 		}
-		public final TalonSRX leftSlave1Talon;
-		public final TalonSRX leftMasterTalon;
-		public final TalonSRX leftSlave2Talon;
-		public final TalonSRX rightSlave1Talon;
-		public final TalonSRX rightMasterTalon;
-		public final TalonSRX rightSlave2Talon;
+		public final WPI_TalonSRX leftSlave1Talon;
+		public final WPI_TalonSRX leftMasterTalon;
+		public final WPI_TalonSRX leftSlave2Talon;
+		public final WPI_TalonSRX rightSlave1Talon;
+		public final WPI_TalonSRX rightMasterTalon;
+		public final WPI_TalonSRX rightSlave2Talon;
 
 		// If encoders are wired directly to RIO use the following objects
 //		public final ADXRS453_Gyro gyro;
@@ -43,20 +43,20 @@ public class HardwareAdapter {
 
 		private DrivetrainHardware() {
 			if(Constants.kRobotName == Constants.RobotName.DERICA) {
-				leftMasterTalon = new TalonSRX(Constants2016.kDericaLeftDriveMasterDeviceID);
-				leftSlave1Talon = new TalonSRX(Constants2016.kDericaLeftDriveSlaveDeviceID);
+				leftMasterTalon = new WPI_TalonSRX(Constants2016.kDericaLeftDriveMasterDeviceID);
+				leftSlave1Talon = new WPI_TalonSRX(Constants2016.kDericaLeftDriveSlaveDeviceID);
 				leftSlave2Talon = null;
-				rightMasterTalon = new TalonSRX(Constants2016.kDericaRightDriveMasterDeviceID);
-				rightSlave1Talon = new TalonSRX(Constants2016.kDericaRightDriveSlaveDeviceID);
+				rightMasterTalon = new WPI_TalonSRX(Constants2016.kDericaRightDriveMasterDeviceID);
+				rightSlave1Talon = new WPI_TalonSRX(Constants2016.kDericaRightDriveSlaveDeviceID);
 				rightSlave2Talon = null;
 				gyro = new AHRS(SerialPort.Port.kMXP);
 			} else {
-				leftMasterTalon = new TalonSRX(Constants.kSteikLeftDriveMasterDeviceID);
-				leftSlave1Talon = new TalonSRX(Constants.kSteikLeftDriveSlaveDeviceID);
-				leftSlave2Talon = new TalonSRX(Constants.kSteikLeftDriveOtherSlaveDeviceID);
-				rightMasterTalon = new TalonSRX(Constants.kSteikRightDriveMasterDeviceID);
-				rightSlave1Talon = new TalonSRX(Constants.kSteikRightDriveSlaveDeviceID);
-				rightSlave2Talon = new TalonSRX(Constants.kSteikRightDriveOtherSlaveDeviceID);
+				leftMasterTalon = new WPI_TalonSRX(Constants.kSteikLeftDriveMasterDeviceID);
+				leftSlave1Talon = new WPI_TalonSRX(Constants.kSteikLeftDriveSlaveDeviceID);
+				leftSlave2Talon = new WPI_TalonSRX(Constants.kSteikLeftDriveOtherSlaveDeviceID);
+				rightMasterTalon = new WPI_TalonSRX(Constants.kSteikRightDriveMasterDeviceID);
+				rightSlave1Talon = new WPI_TalonSRX(Constants.kSteikRightDriveSlaveDeviceID);
+				rightSlave2Talon = new WPI_TalonSRX(Constants.kSteikRightDriveOtherSlaveDeviceID);
 				gyro = new AHRS(SPI.Port.kMXP);
 			}
 		}
@@ -71,7 +71,7 @@ public class HardwareAdapter {
 		protected static SliderHardware getInstance() {
 			return instance;
 		}
-		public final TalonSRX sliderTalon;
+		public final WPI_TalonSRX sliderTalon;
 		public final AnalogInput sliderPotentiometer;
 
 		public static void resetEncoder() {
@@ -80,7 +80,7 @@ public class HardwareAdapter {
 
 		private SliderHardware() {
 			if (Constants.kRobotName == Constants.RobotName.STEIK){
-				sliderTalon = new TalonSRX(Constants.kSteikSliderMotorDeviceID);
+				sliderTalon = new WPI_TalonSRX(Constants.kSteikSliderMotorDeviceID);
 				sliderPotentiometer = new AnalogInput(Constants.kSteikSliderPotentiometerPort);
 			}
 			else {
@@ -138,11 +138,11 @@ public class HardwareAdapter {
 		protected static ClimberHardware getInstance(){
 			return instance;
 		}
-		public final TalonSRX climberTalon;
+		public final WPI_TalonSRX climberTalon;
 		
 		private ClimberHardware() {
 			if (Constants.kRobotName == Constants.RobotName.STEIK) {
-				climberTalon = new TalonSRX(Constants.kSteikClimberMotorDeviceID);
+				climberTalon = new WPI_TalonSRX(Constants.kSteikClimberMotorDeviceID);
 			} else {
 				climberTalon = null;
 			}
