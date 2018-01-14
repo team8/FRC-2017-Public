@@ -1,10 +1,10 @@
 package com.palyrobotics.frc2018.vision.networking;
 
-import java.io.IOException;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import com.palyrobotics.frc2018.config.Constants;
 import com.palyrobotics.frc2018.vision.VisionData;
+
+import java.io.IOException;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class VisionVideoReceiver extends ReceiverBase {
 	

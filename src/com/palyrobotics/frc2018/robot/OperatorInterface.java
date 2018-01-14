@@ -3,8 +3,7 @@ package com.palyrobotics.frc2018.robot;
 import com.palyrobotics.frc2018.behavior.Routine;
 import com.palyrobotics.frc2018.config.Commands;
 import com.palyrobotics.frc2018.config.Commands.JoystickInput;
-import com.palyrobotics.frc2018.subsystems.*;
-
+import com.palyrobotics.frc2018.subsystems.Drive;
 import edu.wpi.first.wpilibj.Joystick;
 
 /**

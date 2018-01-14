@@ -1,8 +1,7 @@
 package com.palyrobotics.frc2018.config.dashboard;
 
-import com.palyrobotics.frc2018.config.Gains;
-
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class DashboardManager {
 
@@ -17,7 +16,9 @@ public class DashboardManager {
 	public static final String TABLE_NAME = "RobotTable";
 	public static final String CAN_TABLE_NAME = "data_table";
 	
-	public NetworkTable robotTable;
+	public NetworkTableInstance net_instance;
+	
+	private NetworkTable robotTable;
 	private NetworkTable canTable;
 	
 	public static DashboardManager getInstance() {
@@ -28,12 +29,9 @@ public class DashboardManager {
 	
 	public void robotInit() {
 		try {
-			this.robotTable = NetworkTable.getTable(TABLE_NAME);
-			Gains.initNetworkTableGains();
-			if (enableCANTable) {
-				this.canTable = NetworkTable.getTable(CAN_TABLE_NAME);
-				NetworkTable.setUpdateRate(.015);
-			}
+			initializeRobotTable();
+			initializeCANTable();
+			System.out.println("Succesfully initialized cantables");
 		}
 		catch (UnsatisfiedLinkError e) {
 			// Catch the error that occurs during unit tests.
@@ -42,15 +40,27 @@ public class DashboardManager {
 		}
 	}
 	
+	public void initializeRobotTable() {
+		this.net_instance = NetworkTableInstance.getDefault();
+		this.robotTable = net_instance.getTable(TABLE_NAME);
+	}
+	
+	public void initializeCANTable() {
+//		Gains.initNetworkTableGains();
+		if (enableCANTable) {
+			this.canTable = net_instance.getTable(CAN_TABLE_NAME);
+			net_instance.setUpdateRate(.015);
+		}
+	}
+	
 	/**
 	 * Publishes a KV pair to the Network Table.
 	 * @param d	The dashboard value.
 	 */
 	public void publishKVPair(DashboardValue d) {
-		
 		if (robotTable == null) {
 			try {
-				this.robotTable = NetworkTable.getTable(TABLE_NAME);
+				initializeRobotTable();
 			}
 			catch (UnsatisfiedLinkError e) {
 				// Block the error in a unit test and don't publish the value.
@@ -60,27 +70,29 @@ public class DashboardManager {
 		
 		// If we are now connected
 		if (robotTable != null) {
-			robotTable.putString(d.getKey(), d.getValue());
+			this.robotTable.getEntry(d.getKey()).setString(d.getValue());
 		}
 	}
 	
-	public void updateCANTable(String string) {
+	public void updateCANTable(String key, String value) {
 		if (!enableCANTable) {
 			return;
 		}
 		if (canTable != null) {
-			canTable.putString("status", string+"\n");
-			System.out.println("SUCCESFULLY STARTED");
+			this.canTable.getEntry(key).setString(value + "\n");
 		} else {
 			// try to reach it again
 			try {
-				this.canTable = NetworkTable.getTable(CAN_TABLE_NAME);
+				initializeCANTable();
 			}
 			catch (UnsatisfiedLinkError e) {
+				System.out.println("Unsatisfied Link Error");
 			}
-			catch (NoClassDefFoundError e) {}
+			catch (NoClassDefFoundError e) {
+				System.out.println("Class NO DEF Error");
+			}
 		}
-	}
+	}	
 
 	/**
 	 * Start or stop sending cantable data
@@ -90,16 +102,16 @@ public class DashboardManager {
 		if (start) {
 			if (canTable != null) {
 				System.out.println("Started");
-				canTable.putString("start", "true");
-				canTable.putString("end", "false");
+				this.canTable.getEntry("start").setString("true");
+				this.canTable.getEntry("end").setString("false");
 			}
 			else {
 				System.out.println("Error");
 			}
 		} else {
 			if (canTable != null) {
-				canTable.putString("start", "false");
-				canTable.putString("end", "true");
+				this.canTable.getEntry("start").setString("false");
+				this.canTable.getEntry("end").setString("true");
 			}
 		}
 	}

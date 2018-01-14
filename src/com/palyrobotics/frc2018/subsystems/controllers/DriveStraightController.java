@@ -3,7 +3,6 @@ package com.palyrobotics.frc2018.subsystems.controllers;
 import com.palyrobotics.frc2018.config.Constants;
 import com.palyrobotics.frc2018.config.Gains;
 import com.palyrobotics.frc2018.config.RobotState;
-import com.palyrobotics.frc2018.config.Constants.RobotName;
 import com.palyrobotics.frc2018.robot.Robot;
 import com.palyrobotics.frc2018.robot.team254.lib.util.SynchronousPID;
 import com.palyrobotics.frc2018.subsystems.Drive.DriveController;

@@ -1,15 +1,16 @@
 package com.palyrobotics.frc2018.behavior;
 
+import com.palyrobotics.frc2018.config.Commands;
+import com.palyrobotics.frc2018.robot.team254.lib.util.StateHolder;
+import com.palyrobotics.frc2018.robot.team254.lib.util.Tappable;
+import com.palyrobotics.frc2018.subsystems.Drive;
+import com.palyrobotics.frc2018.subsystems.Subsystem;
+import com.palyrobotics.frc2018.util.logger.Logger;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-
-import com.palyrobotics.frc2018.config.Commands;
-import com.palyrobotics.frc2018.robot.team254.lib.util.StateHolder;
-import com.palyrobotics.frc2018.robot.team254.lib.util.Tappable;
-import com.palyrobotics.frc2018.subsystems.*;
-import com.palyrobotics.frc2018.util.logger.Logger;
 
 /**
  * Handles the updating of commands by passing them to each running routine. <br />

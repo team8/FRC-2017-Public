@@ -1,11 +1,11 @@
 package com.palyrobotics.frc2018.config;
 
+import com.palyrobotics.frc2018.behavior.Routine;
+import com.palyrobotics.frc2018.subsystems.Drive;
+import com.palyrobotics.frc2018.util.archive.DriveSignal;
+
 import java.util.ArrayList;
 import java.util.Optional;
-
-import com.palyrobotics.frc2018.behavior.Routine;
-import com.palyrobotics.frc2018.subsystems.*;
-import com.palyrobotics.frc2018.util.archive.DriveSignal;
 
 /**
  * Commands represent the desired setpoints and subsystem states for the robot. <br />

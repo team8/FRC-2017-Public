@@ -1,8 +1,6 @@
 package com.palyrobotics.frc2018.subsystems.controllers;
 
-import com.palyrobotics.frc2018.config.Constants;
 import com.palyrobotics.frc2018.config.RobotState;
-import com.palyrobotics.frc2018.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2018.subsystems.Drive.DriveController;
 import com.palyrobotics.frc2018.util.Pose;
 import com.palyrobotics.frc2018.util.TalonSRXOutput;
@@ -35,7 +33,7 @@ public class TimedDriveController implements DriveController {
 		leftOutput.setPercentOutput(voltage);
 		rightOutput.setPercentOutput(voltage);
 		
-		DashboardManager.getInstance().updateCANTable(voltage + "," + state.drivePose.leftSpeed/(12.0*Constants.kDriveSpeedUnitConversion) + "," + state.drivePose.rightSpeed/(12.0*Constants.kDriveSpeedUnitConversion));
+//		DashboardManager.getInstance().updateCANTable(voltage + "," + state.drivePose.leftSpeed/(12.0*Constants.kDriveSpeedUnitConversion) + "," + state.drivePose.rightSpeed/(12.0*Constants.kDriveSpeedUnitConversion));
 		
 		return new DriveSignal(leftOutput, rightOutput);
 		

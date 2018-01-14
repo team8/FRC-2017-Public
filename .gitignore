@@ -50,10 +50,9 @@ hs_err_pid*
 .idea/copyright
 /out/
 
-<<<<<<< HEAD
 sysProps.xml
-=======
 .classpath
 
 sysProps.xml
->>>>>>> 2c11d5f... Added vision
+
+cantables.gp

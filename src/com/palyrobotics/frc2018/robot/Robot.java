@@ -8,7 +8,7 @@ import com.palyrobotics.frc2018.config.Constants;
 import com.palyrobotics.frc2018.config.RobotState;
 import com.palyrobotics.frc2018.config.RobotStateEstimator;
 import com.palyrobotics.frc2018.config.dashboard.DashboardManager;
-import com.palyrobotics.frc2018.subsystems.*;
+import com.palyrobotics.frc2018.subsystems.Drive;
 import com.palyrobotics.frc2018.util.logger.Logger;
 import com.palyrobotics.frc2018.vision.VisionManager;
 import com.team254.lib.trajectory.RigidTransform2d;
@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
 		Logger.getInstance().logRobotThread(Level.INFO, "Start robotInit() for "+Constants.kRobotName.toString());
 
 		DashboardManager.getInstance().robotInit();
-		VisionManager.getInstance().start(Constants.kAndroidConnectionUpdateRate, false);
+//		VisionManager.getInstance().start(Constants.kAndroidConnectionUpdateRate, false);
 
 		Logger.getInstance().logRobotThread(Level.CONFIG, "Startup sucessful");
 		Logger.getInstance().logRobotThread(Level.CONFIG, "Robot name: "+Constants.kRobotName);

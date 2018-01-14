@@ -1,8 +1,8 @@
 package com.palyrobotics.frc2018.auto;
-import org.json.simple.JSONArray;
 
 import com.palyrobotics.frc2018.auto.modes.TestAutoMode;
 import com.palyrobotics.frc2018.auto.modes.TestTrajectoryAutoMode;
+import org.json.simple.JSONArray;
 
 import java.util.ArrayList;
 

@@ -4,7 +4,6 @@ import com.palyrobotics.frc2017.robot.RobotTest;
 import com.palyrobotics.frc2018.config.Commands;
 import com.palyrobotics.frc2018.config.RobotState;
 import com.palyrobotics.frc2018.subsystems.Drive;
-
 import org.junit.Test;
 
 /**

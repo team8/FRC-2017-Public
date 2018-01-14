@@ -1,12 +1,12 @@
 package com.palyrobotics.frc2018.behavior.routines.drive;
 
-import java.util.Optional;
-
 import com.palyrobotics.frc2018.behavior.Routine;
 import com.palyrobotics.frc2018.config.Commands;
 import com.palyrobotics.frc2018.subsystems.Drive;
 import com.palyrobotics.frc2018.subsystems.Subsystem;
 import com.palyrobotics.frc2018.util.archive.DriveSignal;
+
+import java.util.Optional;
 
 public class DriveTimeRoutine extends Routine {
 	private long mEndTime;

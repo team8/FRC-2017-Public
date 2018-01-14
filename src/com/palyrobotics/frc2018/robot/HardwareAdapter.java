@@ -3,8 +3,9 @@ package com.palyrobotics.frc2018.robot;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import com.palyrobotics.frc2018.config.Constants;
-
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.SPI;
 /**
  * Represents all hardware components of the robot.
  * Singleton class. Should only be used in robot package, and 254lib.

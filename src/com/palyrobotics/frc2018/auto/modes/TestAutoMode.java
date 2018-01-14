@@ -1,7 +1,5 @@
 package com.palyrobotics.frc2018.auto.modes;
 
-import java.util.ArrayList;
-
 import com.palyrobotics.frc2018.auto.AutoModeBase;
 import com.palyrobotics.frc2018.behavior.ParallelRoutine;
 import com.palyrobotics.frc2018.behavior.Routine;
@@ -12,6 +10,8 @@ import com.palyrobotics.frc2018.behavior.routines.drive.TimedDriveRoutine;
 import com.palyrobotics.frc2018.config.Constants;
 import com.palyrobotics.frc2018.config.Gains;
 import com.palyrobotics.frc2018.util.archive.DriveSignal;
+
+import java.util.ArrayList;
 
 /**
  * Created by Nihar on 1/11/17.

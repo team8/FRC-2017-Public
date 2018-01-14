@@ -1,7 +1,6 @@
 package com.palyrobotics.frc2018.robot.team254.lib.util;
 
 import com.palyrobotics.frc2018.robot.HardwareAdapter;
-
 import edu.wpi.first.wpilibj.Timer;
 
 public class RobotData implements Tappable {

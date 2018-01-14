@@ -1,7 +1,8 @@
 package com.palyrobotics.frc2018.behavior;
 
 import com.palyrobotics.frc2018.config.Commands;
-import com.palyrobotics.frc2018.subsystems.*;
+import com.palyrobotics.frc2018.subsystems.Drive;
+import com.palyrobotics.frc2018.subsystems.Subsystem;
 
 
 /**

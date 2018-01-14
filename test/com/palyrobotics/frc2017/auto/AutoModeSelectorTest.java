@@ -1,12 +1,11 @@
 package com.palyrobotics.frc2017.auto;
 
-import org.junit.Test;
-
 import com.palyrobotics.frc2018.auto.AutoModeBase;
 import com.palyrobotics.frc2018.auto.AutoModeSelector;
 import com.palyrobotics.frc2018.auto.modes.TestAutoMode;
 import com.palyrobotics.frc2018.auto.modes.TestTrajectoryAutoMode;
 import com.palyrobotics.frc2018.config.Constants;
+import org.junit.Test;
 
 import java.util.ArrayList;
 

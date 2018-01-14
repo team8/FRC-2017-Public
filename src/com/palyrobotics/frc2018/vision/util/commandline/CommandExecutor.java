@@ -1,8 +1,7 @@
 package com.palyrobotics.frc2018.vision.util.commandline;
 
-import org.spectrum3847.RIOdroid.RIOdroid;
-
 import com.palyrobotics.frc2018.config.Constants;
+import org.spectrum3847.RIOdroid.RIOdroid;
 
 public class CommandExecutor{
 	 private static boolean isTesting = false;

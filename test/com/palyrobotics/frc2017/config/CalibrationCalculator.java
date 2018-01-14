@@ -1,8 +1,7 @@
 package com.palyrobotics.frc2017.config;
 
-import org.junit.Test;
-
 import com.palyrobotics.frc2018.config.Constants;
+import org.junit.Test;
 
 public class CalibrationCalculator {	
 	public boolean blue = false;

@@ -1,8 +1,7 @@
 package com.palyrobotics.frc2017.util.archive.team254.trajectory;
 
-import org.junit.Test;
-
 import com.palyrobotics.frc2018.robot.team254.lib.util.Latch;
+import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

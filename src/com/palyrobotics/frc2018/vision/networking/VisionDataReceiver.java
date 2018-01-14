@@ -1,10 +1,9 @@
 package com.palyrobotics.frc2018.vision.networking;
 
-import org.json.simple.JSONObject;
-
 import com.palyrobotics.frc2018.config.Constants;
 import com.palyrobotics.frc2018.vision.VisionData;
 import com.palyrobotics.frc2018.vision.util.VisionUtil;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
 

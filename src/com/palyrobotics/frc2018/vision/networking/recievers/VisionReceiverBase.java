@@ -1,8 +1,7 @@
 package com.palyrobotics.frc2018.vision.networking.recievers;
 
-import org.json.simple.JSONObject;
-
 import com.palyrobotics.frc2018.vision.util.synchronization.DataExistsCallback;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.net.Socket;

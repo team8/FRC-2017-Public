@@ -5,7 +5,6 @@ import com.palyrobotics.frc2018.util.Pose;
 import com.team254.lib.trajectory.*;
 
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Holds all hardware input, such as sensors. <br />
