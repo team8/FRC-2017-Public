@@ -1,11 +1,10 @@
 package com.palyrobotics.frc2018.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.kauailabs.navx.frc.AHRS;
+import com.ctre.phoenix.sensors.PigeonIMU;
 import com.palyrobotics.frc2018.config.Constants;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.SPI;
 /**
  * Represents all hardware components of the robot.
  * Singleton class. Should only be used in robot package, and 254lib.
@@ -32,12 +31,10 @@ public class HardwareAdapter {
 		public final WPI_TalonSRX rightMasterTalon;
 		public final WPI_TalonSRX rightSlave2Talon;
 
-		// If encoders are wired directly to RIO use the following objects
-//		public final ADXRS453_Gyro gyro;
-		public AHRS gyro;
+		public final PigeonIMU gyro;
 
 		public static void resetSensors() {
-			instance.gyro.zeroYaw();
+			instance.gyro.setYaw(0, 0);
 			instance.leftMasterTalon.setSelectedSensorPosition(0, 0, 0);
 			instance.rightMasterTalon.setSelectedSensorPosition(0, 0, 0);
 		}
@@ -49,7 +46,7 @@ public class HardwareAdapter {
 				rightMasterTalon = new WPI_TalonSRX(Constants.k2018_UnnamedRightDriveMasterDeviceID);
 				rightSlave1Talon = new WPI_TalonSRX(Constants.k2018_UnnamedRightDriveSlaveDeviceID);
 				rightSlave2Talon = new WPI_TalonSRX(Constants.k2018_UnnamedRightDriveOtherSlaveDeviceID);
-				gyro = new AHRS(SPI.Port.kMXP);
+				gyro = new PigeonIMU(leftSlave2Talon);
 		}
 	}
 

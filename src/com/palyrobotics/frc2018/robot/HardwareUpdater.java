@@ -5,7 +5,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.kauailabs.navx.frc.AHRS;
+import com.ctre.phoenix.sensors.PigeonIMU;
 import com.palyrobotics.frc2018.config.Constants;
 import com.palyrobotics.frc2018.config.RobotState;
 import com.palyrobotics.frc2018.subsystems.Drive;
@@ -25,7 +25,7 @@ class HardwareUpdater {
 	private Drive mDrive;
 
 	/**
-	 * Hardware Updater for Steik
+	 * Hardware Updater for 2018_Unnamed
 	 */
 	HardwareUpdater(Drive drive) throws Exception {
 
@@ -36,20 +36,11 @@ class HardwareUpdater {
 	 * Initialize all hardware
 	 */
 	void initHardware() {
-		Logger.getInstance().logRobotThread("Init hardware");
+		Logger.getInstance().logRobotThread(Level.INFO,"Init hardware");
 		configureTalons(true);
-		AHRS gyro = HardwareAdapter.getInstance().getDrivetrain().gyro;
-		if (gyro != null) {
-			int i = 0;
-			while (!gyro.isConnected()) {
-				i++;
-				if (i > 1000) {
-					System.out.println("waited for gyro to connect, didn't find");
-					break;
-				}
-			}
-		}
-		gyro.zeroYaw();
+		PigeonIMU gyro = HardwareAdapter.DrivetrainHardware.getInstance().gyro;
+		gyro.setYaw(0, 0);
+		gyro.setFusedHeading(0, 0);
 	}
 
 	void disableTalons() {
@@ -178,11 +169,11 @@ class HardwareUpdater {
 		robotState.leftSetpoint = leftMasterTalon.getMotorOutputPercent();
 		robotState.rightSetpoint = rightMasterTalon.getMotorOutputPercent();
 
-		AHRS gyro = HardwareAdapter.DrivetrainHardware.getInstance().gyro;
+		PigeonIMU gyro = HardwareAdapter.DrivetrainHardware.getInstance().gyro;
 		if (gyro != null) {
-			robotState.drivePose.heading = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getAngle();
-			robotState.drivePose.headingVelocity = HardwareAdapter.DrivetrainHardware.getInstance().gyro.getRate();
-			// Invert Steik gyros
+			robotState.drivePose.heading = gyro.getFusedHeading();
+			robotState.drivePose.headingVelocity = (robotState.drivePose.heading - robotState.drivePose.lastHeading)/Constants.kNormalLoopsDt;
+			robotState.drivePose.lastHeading = gyro.getFusedHeading();
 		} else {
 			robotState.drivePose.heading = -0;
 			robotState.drivePose.headingVelocity = -0;
@@ -228,11 +219,10 @@ class HardwareUpdater {
 	}
 
 	private void update2018_UnnamedSubsystems() {
-		
 	}
 
 	/**
-	 * Updates the drivetrain on Derica, Steik
+	 * Updates the drivetrain
 	 * Uses TalonSRXOutput and can run off-board control loops through SRX
 	 */
 	private void updateDrivetrain() {

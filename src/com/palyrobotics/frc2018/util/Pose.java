@@ -10,6 +10,7 @@ import java.util.Optional;
  */
 public class Pose {
 	public double heading;
+	public double lastHeading;
 	public double headingVelocity;
 
 	public double leftEnc;
@@ -32,7 +33,7 @@ public class Pose {
 	public Pose() {
 		this.leftEnc = 0; this.leftEncVelocity = 0; this.leftSpeed = 0;
 		this.rightEnc = 0; this.rightEncVelocity = 0; this.rightSpeed = 0;
-		this.heading = 0; this.headingVelocity = 0;
+		this.heading = 0; this.lastHeading = 0; this.headingVelocity = 0;
 		this.leftError = Optional.empty();
 		this.rightError = Optional.empty();
 	}
@@ -72,6 +73,7 @@ public class Pose {
 		copy.leftEncVelocity = this.leftEncVelocity;
 		copy.leftSpeed = this.leftSpeed;
 		copy.heading = this.heading;
+		copy.lastHeading = this.lastHeading;
 		copy.headingVelocity = this.headingVelocity;
 		copy.rightEnc = this.rightEnc;
 		copy.rightEncVelocity = this.rightEncVelocity;
@@ -96,6 +98,7 @@ public class Pose {
 				this.leftError.equals(other.leftError) &&
 				this.rightError.equals(other.rightError) &&
 				this.heading == other.heading &&
+				this.lastHeading == other.lastHeading &&
 				this.headingVelocity == other.headingVelocity &&
 				this.leftMotionMagicPos == other.leftMotionMagicPos &&
 				this.rightMotionMagicPos == other.rightMotionMagicPos &&
