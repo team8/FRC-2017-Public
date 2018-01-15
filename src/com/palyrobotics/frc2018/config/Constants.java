@@ -85,7 +85,7 @@ public class Constants extends ConstantsBase {
 	 * ************************************
 	 */
 	// PDP
-	public static int k2018_UnnamedPDPDeviceID = 11;
+	public static int k2018_UnnamedPDPDeviceID = 0;
 	
 	// DRIVETRAIN
 	// PDP slots for drivetrain 0, 1, 2, 3, 12, 13
