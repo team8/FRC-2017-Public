@@ -5,6 +5,7 @@ import com.palyrobotics.frc2018.auto.AutoModeSelector;
 import com.palyrobotics.frc2018.behavior.RoutineManager;
 import com.palyrobotics.frc2018.config.Commands;
 import com.palyrobotics.frc2018.config.Constants;
+import com.palyrobotics.frc2018.config.DriverProfiles;
 import com.palyrobotics.frc2018.config.RobotState;
 import com.palyrobotics.frc2018.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2018.subsystems.Drive;
@@ -68,7 +69,9 @@ public class Robot extends TimedRobot {
 		}
 
 		mHardwareUpdater.initHardware();
-
+		
+		DriverProfiles.configConstants();
+		
 		Logger.getInstance().logRobotThread(Level.INFO, "Auto" + AutoModeSelector.getInstance().getAutoMode().toString());
 		Logger.getInstance().logRobotThread(Level.INFO, "End robotInit()");
 	}

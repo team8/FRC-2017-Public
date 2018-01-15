@@ -6,10 +6,15 @@ public class Constants extends ConstantsBase {
 	public enum RobotName {
 		UNNAMED
 	}
-
+	
+	public enum DriverName {
+		ERIC
+	}
+	
 	// Initialization constants
 	public static final RobotName kRobotName = RobotName.UNNAMED;
-	
+	public static final DriverName kDriverName = DriverName.ERIC;
+
 	// Android app information
 	public static String kPackageName = "com.frc8.team8vision";
 	public static String kActivityName = "MainActivity";
@@ -22,29 +27,28 @@ public class Constants extends ConstantsBase {
 	public static int kVisionDataPort = 8008;
 	public static int kVideoPort = 8009;
 	public static int kMJPEGServerSocketPort = 1180;
-	
+
+	/**
+	 * Cheesy Drive Constants
+	 * Set by DriverProfiles
+	 */
 	//Threshold for quickturn sensitivity change
-	public static double kQuickTurnSensitivityThreshold = 0.90;
-
+	public static double kQuickTurnSensitivityThreshold;
 	//Sensitivities for how fast non-quickturn turning is
-	public static double kDriveSensitivity = .70;
-	
+	public static double kDriveSensitivity;
 	//Sensitivities for quickturn
-	public static double kQuickTurnSensitivity = 0.8;
-	public static double kPreciseQuickTurnSensitivity = 0.35;
+	public static double kQuickTurnSensitivity;
+	public static double kPreciseQuickTurnSensitivity;
 	//The rate at which the QuickStopAccumulator will decrease
-	public static double kQuickStopAccumulatorDecreaseRate = 0.8;
-
+	public static double kQuickStopAccumulatorDecreaseRate;
 	//The value at which the QuickStopAccumulator will begin to decrease
-	public static double kQuickStopAccumulatorDecreaseThreshold = 1.2;
-	public static double kNegativeInertiaScalar = 5.0;
-	
+	public static double kQuickStopAccumulatorDecreaseThreshold;
+	public static double kNegativeInertiaScalar;
 	//How much the QuickStopAccumulator is affected by the wheel
 	//(1-alpha) is how much the QuickStopAccumulator is affected by the previous QuickStopAccumulator
 	//Range: (0, 1)
-	public static double kAlpha = 0.45;
-
-	public static double kCyclesUntilStop = 50;
+	public static double kAlpha;
+	public static double kCyclesUntilStop;
 
 	/*
 	 * Control loop constants for both robots
