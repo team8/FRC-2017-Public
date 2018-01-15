@@ -46,8 +46,8 @@ public class DriveStraightController implements DriveController {
 		
 		return Math.abs(Robot.getRobotState().drivePose.heading) < kTolerance &&
 				Math.abs((Robot.getRobotState().drivePose.leftEnc + Robot.getRobotState().drivePose.rightEnc)/2  - target) < kTolerance
-				&& Math.abs(Robot.getRobotState().drivePose.leftSpeed)<0.05
-				&& Math.abs(Robot.getRobotState().drivePose.rightSpeed)<0.05;
+				&& Math.abs(Robot.getRobotState().drivePose.leftEncVelocity)<0.05
+				&& Math.abs(Robot.getRobotState().drivePose.rightEncVelocity)<0.05;
 	}
 	
 
@@ -73,7 +73,7 @@ public class DriveStraightController implements DriveController {
 
 	@Override
 	public Pose getSetpoint() {
-		return new Pose(target, 0, 0, target, 0, 0, 0, 0, 0, 0);
+		return new Pose(target, 0,  0, target,  0, 0, 0, 0);
 	}
 
 }

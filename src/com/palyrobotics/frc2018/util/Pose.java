@@ -14,12 +14,12 @@ public class Pose {
 	public double headingVelocity;
 
 	public double leftEnc;
+	public double lastLeftEnc;
 	public double leftEncVelocity;
-	public double leftSpeed;
 
 	public double rightEnc;
+	public double lastRightEnc;
 	public double rightEncVelocity;
-	public double rightSpeed;
 
 	public Optional<Integer> leftError;
 	public Optional<Integer> rightError;
@@ -31,35 +31,35 @@ public class Pose {
 
 
 	public Pose() {
-		this.leftEnc = 0; this.leftEncVelocity = 0; this.leftSpeed = 0;
-		this.rightEnc = 0; this.rightEncVelocity = 0; this.rightSpeed = 0;
+		this.leftEnc = 0; this.lastLeftEnc = 0; this.leftEncVelocity = 0;
+		this.rightEnc = 0; this.lastRightEnc = 0; this.rightEncVelocity = 0;
 		this.heading = 0; this.lastHeading = 0; this.headingVelocity = 0;
 		this.leftError = Optional.empty();
 		this.rightError = Optional.empty();
 	}
-	public Pose(double leftEnc, double leftEncVelocity, double leftSpeed,
-				double rightEnc, double rightEncVelocity, double rightSpeed,
+	public Pose(double leftEnc, double lastLeftEnc, double leftEncVelocity,
+				double rightEnc, double lastRightEnc, double rightEncVelocity,
 				int leftError, int rightError, double heading, double headingVelocity) {
 		this.leftEnc = leftEnc;
+		this.lastLeftEnc = lastLeftEnc;
 		this.leftEncVelocity = leftEncVelocity;
-		this.leftSpeed = leftSpeed;
 		this.rightEnc = rightEnc;
+		this.lastRightEnc = lastRightEnc;
 		this.rightEncVelocity = rightEncVelocity;
-		this.rightSpeed = rightSpeed;
 		this.heading = heading;
 		this.headingVelocity = headingVelocity;
 		this.leftError = Optional.of(leftError);
 		this.rightError = Optional.of(rightError);
 	}
-	public Pose(double leftEnc, double leftEncVelocity, double leftSpeed,
-				double rightEnc, double rightEncVelocity, double rightSpeed,
+	public Pose(double leftEnc, double lastLeftEnc, double leftEncVelocity,
+				double rightEnc, double lastRightEnc, double rightEncVelocity,
 				double heading, double headingVelocity) {
 		this.leftEnc = leftEnc;
+		this.lastLeftEnc = lastLeftEnc;
 		this.leftEncVelocity = leftEncVelocity;
-		this.leftSpeed = leftSpeed;
 		this.rightEnc = rightEnc;
+		this.lastRightEnc = lastRightEnc;
 		this.rightEncVelocity = rightEncVelocity;
-		this.rightSpeed = rightSpeed;
 		this.heading = heading;
 		this.headingVelocity = headingVelocity;
 		this.leftError = Optional.empty();
@@ -70,14 +70,14 @@ public class Pose {
 	public Pose copy() {
 		Pose copy = new Pose();
 		copy.leftEnc = this.leftEnc;
+		copy.lastLeftEnc = this.lastLeftEnc;
 		copy.leftEncVelocity = this.leftEncVelocity;
-		copy.leftSpeed = this.leftSpeed;
 		copy.heading = this.heading;
 		copy.lastHeading = this.lastHeading;
 		copy.headingVelocity = this.headingVelocity;
 		copy.rightEnc = this.rightEnc;
+		copy.lastRightEnc = this.lastRightEnc;
 		copy.rightEncVelocity = this.rightEncVelocity;
-		copy.rightSpeed = this.rightSpeed;
 		copy.leftError = (this.leftError.isPresent()) ? Optional.of(this.leftError.get()) : Optional.empty();
 		copy.rightError = (this.rightError.isPresent()) ? Optional.of(this.rightError.get()) : Optional.empty();
 		copy.leftMotionMagicPos = (this.leftMotionMagicPos.isPresent()) ? Optional.of(this.leftMotionMagicPos.get()) : Optional.empty();
@@ -90,11 +90,11 @@ public class Pose {
 	
 	public boolean equals(Pose other) {
 		return this.leftEnc == other.leftEnc &&
+                this.lastLeftEnc == other.lastLeftEnc &&
 				this.leftEncVelocity == other.leftEncVelocity &&
-				this.leftSpeed == other.leftSpeed &&
 				this.rightEnc == other.rightEnc &&
+                this.lastRightEnc == other.lastRightEnc &&
 				this.rightEncVelocity == other.rightEncVelocity &&
-				this.rightSpeed == other.rightSpeed &&
 				this.leftError.equals(other.leftError) &&
 				this.rightError.equals(other.rightError) &&
 				this.heading == other.heading &&

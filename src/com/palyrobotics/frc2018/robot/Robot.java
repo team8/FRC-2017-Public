@@ -6,13 +6,11 @@ import com.palyrobotics.frc2018.behavior.RoutineManager;
 import com.palyrobotics.frc2018.config.Commands;
 import com.palyrobotics.frc2018.config.Constants;
 import com.palyrobotics.frc2018.config.RobotState;
-import com.palyrobotics.frc2018.config.RobotStateEstimator;
 import com.palyrobotics.frc2018.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2018.subsystems.Drive;
 import com.palyrobotics.frc2018.util.logger.Logger;
 import com.palyrobotics.frc2018.vision.VisionManager;
 import com.team254.lib.trajectory.RigidTransform2d;
-import com.team254.lib.trajectory.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 
@@ -63,13 +61,11 @@ public class Robot extends TimedRobot {
 			Logger.getInstance().logRobotThread(Level.SEVERE, "Auto", e);
 		}
 
-		
 		try {
 			mHardwareUpdater = new HardwareUpdater(mDrive);
 		} catch (Exception e) {
 			System.exit(1);
 		}
-
 
 		mHardwareUpdater.initHardware();
 
@@ -84,7 +80,7 @@ public class Robot extends TimedRobot {
 
 		DashboardManager.getInstance().toggleCANTable(true);
 		robotState.gamePeriod = RobotState.GamePeriod.AUTO;
-		mHardwareUpdater.configureTalons(false);
+		mHardwareUpdater.configureTalons();
 
 		// Wait for talons to update
 		try {
@@ -96,7 +92,7 @@ public class Robot extends TimedRobot {
 
 		mHardwareUpdater.updateSensors(robotState);
 		mRoutineManager.reset(commands);
-		robotState.reset(0, new RigidTransform2d(), new Rotation2d());
+		robotState.reset(0, new RigidTransform2d());
 
 		startSubsystems();
 
@@ -106,7 +102,6 @@ public class Robot extends TimedRobot {
 		// Prestart and run the auto mode
 		mode.prestart();
 		mRoutineManager.addNewRoutine(mode.getRoutine());
-		RobotStateEstimator.getInstance().start();
 
 		Logger.getInstance().logRobotThread(Level.INFO, "End autoInit()");
 	}
@@ -115,7 +110,6 @@ public class Robot extends TimedRobot {
 	public void autonomousPeriodic() {
 		commands = mRoutineManager.update(commands);
 		mHardwareUpdater.updateSensors(robotState);
-		RobotStateEstimator.getInstance().update();
 		updateSubsystems();
 		mHardwareUpdater.updateHardware();
 
@@ -128,7 +122,7 @@ public class Robot extends TimedRobot {
 		Logger.getInstance().logRobotThread(Level.INFO, "Start teleopInit()");
 
 		robotState.gamePeriod = RobotState.GamePeriod.TELEOP;
-		mHardwareUpdater.configureTalons(false);
+		mHardwareUpdater.configureTalons();
 		mHardwareUpdater.updateSensors(robotState);
 		mHardwareUpdater.updateHardware();
 		mRoutineManager.reset(commands);
@@ -159,7 +153,7 @@ public class Robot extends TimedRobot {
 
 		robotState.gamePeriod = RobotState.GamePeriod.DISABLED;
 
-		robotState.reset(0, new RigidTransform2d(), new Rotation2d());
+		robotState.reset(0, new RigidTransform2d());
 
 		// Stops updating routines
 		mRoutineManager.reset(commands);

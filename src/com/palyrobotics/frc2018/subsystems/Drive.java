@@ -140,7 +140,6 @@ public class Drive extends Subsystem {
 		DashboardManager.getInstance().publishKVPair(leftEncoder);
 		DashboardManager.getInstance().publishKVPair(rightEncoder);
 
-		motors.updateValue(state.drivePose.leftSpeed + ", " + state.drivePose.rightSpeed);
 		DashboardManager.getInstance().publishKVPair(motors);
 	}
 

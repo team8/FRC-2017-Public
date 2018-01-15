@@ -11,6 +11,10 @@ import com.palyrobotics.frc2018.config.RobotState;
 import com.palyrobotics.frc2018.subsystems.Drive;
 import com.palyrobotics.frc2018.util.TalonSRXOutput;
 import com.palyrobotics.frc2018.util.logger.Logger;
+import com.team254.lib.trajectory.Kinematics;
+import com.team254.lib.trajectory.RigidTransform2d;
+import com.team254.lib.trajectory.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
 
 import java.util.Optional;
 import java.util.logging.Level;
@@ -37,7 +41,7 @@ class HardwareUpdater {
 	 */
 	void initHardware() {
 		Logger.getInstance().logRobotThread(Level.INFO,"Init hardware");
-		configureTalons(true);
+		configureTalons();
 		PigeonIMU gyro = HardwareAdapter.DrivetrainHardware.getInstance().gyro;
 		gyro.setYaw(0, 0);
 		gyro.setFusedHeading(0, 0);
@@ -53,7 +57,7 @@ class HardwareUpdater {
 		HardwareAdapter.getInstance().getDrivetrain().rightSlave2Talon.set(ControlMode.Disabled, 0);
 	}
 
-	void configureTalons(boolean calibrateSliderEncoder) {
+	void configureTalons() {
 		configureDriveTalons();
 	}
 
@@ -168,7 +172,7 @@ class HardwareUpdater {
 		//TODO: sketchy, not exactly setpoint for all modes, do we even need this?
 		robotState.leftSetpoint = leftMasterTalon.getMotorOutputPercent();
 		robotState.rightSetpoint = rightMasterTalon.getMotorOutputPercent();
-
+		
 		PigeonIMU gyro = HardwareAdapter.DrivetrainHardware.getInstance().gyro;
 		if (gyro != null) {
 			robotState.drivePose.heading = gyro.getFusedHeading();
@@ -179,14 +183,12 @@ class HardwareUpdater {
 			robotState.drivePose.headingVelocity = -0;
 		}
 
-
-		//TODO: FIGURE OUT ENC VEL VS SPD
+		robotState.drivePose.lastLeftEnc = robotState.drivePose.leftEnc;
 		robotState.drivePose.leftEnc = leftMasterTalon.getSelectedSensorPosition(0);
 		robotState.drivePose.leftEncVelocity = leftMasterTalon.getSelectedSensorVelocity(0);
-		robotState.drivePose.leftSpeed = leftMasterTalon.getSelectedSensorVelocity(0);
+		robotState.drivePose.lastRightEnc = robotState.drivePose.rightEnc;
 		robotState.drivePose.rightEnc = rightMasterTalon.getSelectedSensorPosition(0);
 		robotState.drivePose.rightEncVelocity = rightMasterTalon.getSelectedSensorVelocity(0);
-		robotState.drivePose.rightSpeed = rightMasterTalon.getSelectedSensorVelocity(0);
 
 		if (leftMasterTalon.getControlMode().equals(ControlMode.MotionMagic)) {
 			robotState.drivePose.leftMotionMagicPos = Optional.of(leftMasterTalon.getActiveTrajectoryPosition());
@@ -205,9 +207,24 @@ class HardwareUpdater {
 			robotState.drivePose.rightMotionMagicPos = Optional.empty();
 			robotState.drivePose.rightMotionMagicVel = Optional.empty();
 		}
+
 		robotState.drivePose.leftError = Optional.of(leftMasterTalon.getClosedLoopError(0));
         robotState.drivePose.rightError = Optional.of(rightMasterTalon.getClosedLoopError(0));
 
+        double time = Timer.getFPGATimestamp();
+        double left_distance = robotState.drivePose.leftEnc / Constants.kDriveTicksPerInch;
+        double right_distance = robotState.drivePose.rightEnc / Constants.kDriveTicksPerInch;
+
+        Rotation2d gyro_angle = Rotation2d.fromRadians((right_distance - left_distance) * Constants.kTrackScrubFactor / Constants.kTrackEffectiveDiameter);
+        RigidTransform2d odometry = robotState.generateOdometryFromSensors(
+                left_distance - robotState.drivePose.lastLeftEnc / Constants.kDriveTicksPerInch,
+				right_distance - robotState.drivePose.lastRightEnc / Constants.kDriveTicksPerInch, gyro_angle);
+        RigidTransform2d.Delta velocity = Kinematics.forwardKinematics(
+        		robotState.drivePose.leftEncVelocity,
+        		robotState.drivePose.rightEncVelocity
+        );
+
+        robotState.addObservations(time, odometry, velocity);
 	}
 
 	/**

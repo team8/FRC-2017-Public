@@ -22,9 +22,7 @@ public class EncoderTurnAngleController implements DriveController {
 	
 	public EncoderTurnAngleController(Pose priorSetpoint, double angle) {
 		leftTarget = priorSetpoint.leftEnc + (angle * Constants.kDriveInchesPerDegree * Constants.kDriveTicksPerInch);
-		System.out.println("Left target: "+leftTarget);
 		rightTarget = priorSetpoint.rightEnc - (angle * Constants.kDriveInchesPerDegree * Constants.kDriveTicksPerInch);
-		System.out.println("Right target: "+rightTarget);
 		cachedPose = priorSetpoint;
 		this.maxAccel = 72 * Constants.kDriveSpeedUnitConversion; 
 		this.maxVel = 36 * Constants.kDriveSpeedUnitConversion;
@@ -56,7 +54,7 @@ public class EncoderTurnAngleController implements DriveController {
 		}
 //		System.out.println("Left: " + Math.abs(leftTarget - cachedPose.leftEnc) + 
 //				"Right: " + Math.abs(rightTarget - cachedPose.rightEnc));
-		if(Math.abs(cachedPose.leftSpeed) < velocityTolerance && Math.abs(cachedPose.rightSpeed) < velocityTolerance &&
+		if(Math.abs(cachedPose.leftEncVelocity) < velocityTolerance && Math.abs(cachedPose.rightEncVelocity) < velocityTolerance &&
 				Math.abs(leftTarget - cachedPose.leftEnc) < positionTolerance && Math.abs(rightTarget - cachedPose.rightEnc) < positionTolerance) {
 			System.out.println("turn angle done");
 			return true;
@@ -72,7 +70,7 @@ public class EncoderTurnAngleController implements DriveController {
 
 	@Override
 	public Pose getSetpoint() {
-		return new Pose(leftTarget, 0, 0, rightTarget, 0, 0, 0, 0, 0, 0);
+		return new Pose(leftTarget, 0, 0, rightTarget, 0, 0, 0, 0);
 	}
 
 }

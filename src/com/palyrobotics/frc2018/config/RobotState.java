@@ -30,7 +30,7 @@ public class RobotState {
 	public double totalVoltageDraw = 0;
 
 	// Pose stores drivetrain sensor data
-	public Pose drivePose = new Pose(0,0,0,0,0, 0, 0,0,0,0);
+	public Pose drivePose = new Pose(0,0,0, 0, 0,0,0,0);
 
 	//Robot position
     public static final int kObservationBufferSize = 100;
@@ -41,8 +41,7 @@ public class RobotState {
     protected double differential_height_;
     protected InterpolatingTreeMap<InterpolatingDouble, RigidTransform2d> field_to_vehicle_;
     
-    public synchronized void reset(double start_time, RigidTransform2d initial_field_to_vehicle,
-            Rotation2d initial_turret_rotation) {
+    public synchronized void reset(double start_time, RigidTransform2d initial_field_to_vehicle) {
         field_to_vehicle_ = new InterpolatingTreeMap<>(kObservationBufferSize);
         field_to_vehicle_.put(new InterpolatingDouble(start_time), initial_field_to_vehicle);
         vehicle_velocity_ = new RigidTransform2d.Delta(0, 0, 0);
@@ -64,8 +63,6 @@ public class RobotState {
 
     public synchronized void addFieldToVehicleObservation(double timestamp, RigidTransform2d observation) {
         field_to_vehicle_.put(new InterpolatingDouble(timestamp), observation);
-        //System.out.println("YOU DID IT! number of observations is " + field_to_vehicle_.size());
-        //System.out.println("Observation is " + observation);
     }
 
     public synchronized void addObservations(double timestamp, RigidTransform2d field_to_vehicle,

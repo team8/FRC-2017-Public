@@ -41,7 +41,7 @@ public class TimedDriveController implements DriveController {
 	
 	@Override
 	public Pose getSetpoint() {
-		return new Pose(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+		return new Pose(0, 0, 0, 0, 0, 0, 0, 0);
 	}
 
 }

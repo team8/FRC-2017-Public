@@ -10,6 +10,8 @@ import com.palyrobotics.frc2018.util.Pose;
 import com.palyrobotics.frc2018.util.TalonSRXOutput;
 import com.palyrobotics.frc2018.util.archive.DriveSignal;
 
+import java.util.Optional;
+
 /**
  * Created by Nihar on 2/12/17.
  * @author Nihar
@@ -41,12 +43,10 @@ public class TalonSRXDriveController implements Drive.DriveController {
 				(drivePose.leftMotionMagicPos.isPresent()) ? drivePose.leftMotionMagicPos.get() : 0,
 				(drivePose.leftMotionMagicVel.isPresent()) ? drivePose.leftMotionMagicVel.get() : 0,
 				drivePose.leftEnc,
-				drivePose.leftSpeed,
 				mSignal.leftMotor.getSetpoint() - drivePose.leftEnc,
 				(drivePose.rightMotionMagicPos.isPresent()) ? drivePose.rightMotionMagicPos.get() : 0,
 				(drivePose.rightMotionMagicVel.isPresent()) ? drivePose.rightMotionMagicVel.get() : 0,
 				drivePose.rightEnc,
-				drivePose.rightSpeed,
 				mSignal.rightMotor.getSetpoint() - drivePose.rightEnc,
 		});
 
@@ -60,25 +60,75 @@ public class TalonSRXDriveController implements Drive.DriveController {
 			case MotionMagic:
 				output.leftEnc = mSignal.leftMotor.getSetpoint();
 				output.leftEncVelocity = 0;
-				output.leftSpeed = 0;
+				break;
 			case Position:
 				output.leftEnc = mSignal.leftMotor.getSetpoint();
 				output.leftEncVelocity = 0;
-				output.leftSpeed = 0;
+				break;
 			case Velocity:
-				output.leftSpeed = mSignal.leftMotor.getSetpoint();
+				output.leftEncVelocity = mSignal.leftMotor.getSetpoint();
+				break;
+            case PercentOutput:
+                //Open loop motor
+                break;
+            case Follower:
+                //Not Applicable
+                break;
+            case Current:
+                //Open loop motor
+                break;
+            case MotionProfile:
+                output.leftMotionMagicPos = Optional.of((int) mSignal.leftMotor.getSetpoint());
+                output.leftMotionMagicVel = Optional.of(0);
+                break;
+            case MotionProfileArc:
+                output.leftMotionMagicPos = Optional.of((int) mSignal.leftMotor.getSetpoint());
+                output.leftMotionMagicVel = Optional.of(0);
+                break;
+            case MotionMagicArc:
+                output.leftMotionMagicPos = Optional.of((int) mSignal.leftMotor.getSetpoint());
+                output.leftMotionMagicVel = Optional.of(0);
+                break;
+            case Disabled:
+                output = new Pose();
+                break;
 		}
 		switch (mSignal.rightMotor.getControlMode()) {
-			case MotionMagic:
-				output.rightEnc = mSignal.rightMotor.getSetpoint();
-				output.rightEncVelocity = 0;
-				output.rightSpeed = 0;
-			case Position:
-				output.rightEnc = mSignal.rightMotor.getSetpoint();
-				output.rightEncVelocity = 0;
-				output.rightSpeed = 0;
-			case Velocity:
-				output.rightSpeed = mSignal.rightMotor.getSetpoint();
+            case MotionMagic:
+                output.rightEnc = mSignal.rightMotor.getSetpoint();
+                output.rightEncVelocity = 0;
+                break;
+            case Position:
+                output.rightEnc = mSignal.rightMotor.getSetpoint();
+                output.rightEncVelocity = 0;
+                break;
+            case Velocity:
+                output.rightEncVelocity = mSignal.rightMotor.getSetpoint();
+                break;
+            case PercentOutput:
+                //Open loop motor
+                break;
+            case Follower:
+                //Not Applicable
+                break;
+            case Current:
+                //Open loop motor
+                break;
+            case MotionProfile:
+                output.rightMotionMagicPos = Optional.of((int) mSignal.rightMotor.getSetpoint());
+                output.rightMotionMagicVel = Optional.of(0);
+                break;
+            case MotionProfileArc:
+                output.rightMotionMagicPos = Optional.of((int) mSignal.rightMotor.getSetpoint());
+                output.rightMotionMagicVel = Optional.of(0);
+                break;
+            case MotionMagicArc:
+                output.rightMotionMagicPos = Optional.of((int) mSignal.rightMotor.getSetpoint());
+                output.rightMotionMagicVel = Optional.of(0);
+                break;
+            case Disabled:
+                output = new Pose();
+                break;
 		}
 		return output;
 	}
@@ -96,9 +146,9 @@ public class TalonSRXDriveController implements Drive.DriveController {
 		// Motion magic is not PID so ignore whether talon closed loop error is around
 		if (mSignal.leftMotor.getControlMode().equals(ControlMode.MotionMagic)) {
 			return (Math.abs(mCachedState.drivePose.leftEnc - mSignal.leftMotor.getSetpoint()) < positionTolerance) &&
-					(Math.abs(mCachedState.drivePose.leftSpeed) < velocityTolerance) &&
+					(Math.abs(mCachedState.drivePose.leftEncVelocity) < velocityTolerance) &&
 					(Math.abs(mCachedState.drivePose.rightEnc - mSignal.rightMotor.getSetpoint()) < positionTolerance) &&
-					(Math.abs(mCachedState.drivePose.rightSpeed) < velocityTolerance);
+					(Math.abs(mCachedState.drivePose.rightEncVelocity) < velocityTolerance);
 		}
 		if (!mCachedState.drivePose.leftError.isPresent() || !mCachedState.drivePose.rightError.isPresent()) {
 //			System.err.println("Talon closed loop error not found!");
@@ -106,8 +156,8 @@ public class TalonSRXDriveController implements Drive.DriveController {
 		}
 		return (Math.abs(mCachedState.drivePose.leftError.get()) < positionTolerance) &&
 				(Math.abs(mCachedState.drivePose.rightError.get()) < positionTolerance && 
-				Math.abs(mCachedState.drivePose.leftSpeed) < velocityTolerance &&
-				Math.abs(mCachedState.drivePose.rightSpeed) < velocityTolerance);
+				Math.abs(mCachedState.drivePose.leftEncVelocity) < velocityTolerance &&
+				Math.abs(mCachedState.drivePose.rightEncVelocity) < velocityTolerance);
 	}
 	
 	private void setCanTableString(double[] a) {
