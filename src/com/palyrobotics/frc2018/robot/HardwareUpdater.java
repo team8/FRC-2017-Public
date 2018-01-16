@@ -125,9 +125,8 @@ class HardwareUpdater {
 		leftMasterTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		rightMasterTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
-		leftMasterTalon.setSensorPhase(true);
-		//TODO:is true or not?
-		rightMasterTalon.setSensorPhase(true);
+		leftMasterTalon.setSensorPhase(false);
+		rightMasterTalon.setSensorPhase(false);
 
 		leftMasterTalon.setStatusFramePeriod(0, 5, 0);
 		rightMasterTalon.setStatusFramePeriod(0, 5, 0);
