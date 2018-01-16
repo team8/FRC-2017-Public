@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
+import com.palyrobotics.frc2018.util.logger.LoggerConstants.*;
 
 /**
  * Log is at /home/lvuser/logs/fileName directory
@@ -160,7 +161,7 @@ public class Logger {
 	 */
 	public void logSubsystemThread(Level l, Object value) {
 		try {
-			if(LoggerConstants.writeStackTrace && value instanceof Throwable && l.intValue() >= 900) {
+			if(LoggerConstants.writeStackTrace && value instanceof Throwable && l.intValue() >= LoggerConstants.traceLevel.intValue()) {
 				((Throwable) value).printStackTrace(pw);
 				mSubsystemThreadLogs.add(new LeveledString(l, pw.toString()));
 			}
@@ -202,7 +203,7 @@ public class Logger {
 	 */
 	public void logSubsystemThread(Level l, String key, Object value) {
 		try {
-			if(LoggerConstants.writeStackTrace && value instanceof Throwable && l.intValue() >= 900) {
+			if(LoggerConstants.writeStackTrace && value instanceof Throwable && l.intValue() >= LoggerConstants.traceLevel.intValue()) {
 				((Throwable) value).printStackTrace(pw);
 				mSubsystemThreadLogs.add(new LeveledString(l, key + ": " + pw.toString()));
 			}
@@ -242,7 +243,7 @@ public class Logger {
 	 */
 	public void logRobotThread(Level l, Object value) {
 		try {
-			if(LoggerConstants.writeStackTrace && value instanceof Throwable && l.intValue() <= 900) {
+			if(LoggerConstants.writeStackTrace && value instanceof Throwable && l.intValue() <= LoggerConstants.traceLevel.intValue()) {
 				((Throwable) value).printStackTrace(pw);
 				mRobotThreadLogs.add(new LeveledString(l, pw.toString()));
 			}
@@ -284,7 +285,7 @@ public class Logger {
 	 */
 	public void logRobotThread(Level l, String key, Object value) {
 		try {
-			if(LoggerConstants.writeStackTrace && value instanceof Throwable && l.intValue() <= 900) {
+			if(LoggerConstants.writeStackTrace && value instanceof Throwable && l.intValue() <= LoggerConstants.traceLevel.intValue()) {
 				((Throwable) value).printStackTrace(pw);
 				mRobotThreadLogs.add(new LeveledString(l, key + ": " + pw.toString()));
 			}
@@ -332,13 +333,14 @@ public class Logger {
 				mData.sort(TimestampedString::compareTo);
 				mData.forEach((TimestampedString c) -> {
 					try {
-						System.out.println(c.toString());
 						if(c instanceof LeveledString && ((LeveledString) c).getLevel().intValue() >= LoggerConstants.displayLevel.intValue()) {
+							System.out.println(c.toString());
 							if(((LeveledString) c).getLevel().intValue() >= LoggerConstants.writeLevel.intValue()) {
 								Files.append(((LeveledString) c).getLeveledString(), mainLog, Charsets.UTF_8);
 							}
 						}
 						else if(!(c instanceof LeveledString) && c instanceof TimestampedString) {
+							System.out.println(c.toString());
 							Files.append(c.getTimestampedString(), mainLog, Charsets.UTF_8);
 						}
 					} catch (IOException e) {
