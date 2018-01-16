@@ -85,11 +85,11 @@ public class Logger {
 			mWritingThread.start();
 			return;
 		}
-		String cDate = ZonedDateTime.now(LoggerConstants.tZone).format(DateTimeFormatter.ofPattern(" MM-dd-yy"));
-		String cTime = ZonedDateTime.now(LoggerConstants.tZone).format(DateTimeFormatter.ofPattern(" HH:mm"));
+		String cDate = ZonedDateTime.now(LoggerConstants.tZone).format(DateTimeFormatter.ofPattern("MM-dd-yy"));
+		String cTime = ZonedDateTime.now(LoggerConstants.tZone).format(DateTimeFormatter.ofPattern("HH:mm"));
 		String os = System.getProperty("os.name");
 		//TODO: Check if this is a useable system or if it results in excessive clutter
-		String filePath = fileName + File.separatorChar + cDate + File.separatorChar + fileName + cTime;
+		String filePath = fileName + File.separatorChar + cDate + File.separatorChar + fileName + " " + cTime;
 		if(LoggerConstants.compStatus) {
 			filePath = "COMPETITIONS" + File.separatorChar + filePath;
 		}
