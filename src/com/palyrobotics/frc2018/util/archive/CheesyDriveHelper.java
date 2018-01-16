@@ -34,7 +34,8 @@ public class CheesyDriveHelper {
 		mOldWheel = wheel;
 
 		wheelNonLinearity = 0.5;
-		// Apply a sin function that's scaled to make it feel better.
+		
+		//Applies a sin function that is scaled 
 		wheel = Math.sin(Math.PI / 2.0 * wheelNonLinearity * wheel)
 				/ Math.sin(Math.PI / 2.0 * wheelNonLinearity);
 		wheel = Math.sin(Math.PI / 2.0 * wheelNonLinearity * wheel)
@@ -48,7 +49,7 @@ public class CheesyDriveHelper {
 		double angularPower;
 		double linearPower = remapThrottle(throttle);;
 
-		// Negative inertia!
+		//Negative inertia
 		double negInertiaAccumulator = 0.0;
 		double negInertiaScalar;
 		
@@ -61,6 +62,7 @@ public class CheesyDriveHelper {
 				negInertiaScalar = 3.0;
 			}
 		}
+		
 		sensitivity = Constants.kDriveSensitivity;
 		
 		//neginertia is difference in wheel
@@ -84,10 +86,8 @@ public class CheesyDriveHelper {
 			//Set up braking rates for linear deceleration in a set amount of time
 			if(mInitialBrake) {
 				mInitialBrake = false;
-
 				//Old throttle initially set to throttle
 				mOldThrottle = linearPower;
-
 				//Braking rate set
 				mBrakeRate = mOldThrottle/Constants.kCyclesUntilStop;
 			}
@@ -104,9 +104,9 @@ public class CheesyDriveHelper {
 			mInitialBrake = true;
 		}
 
-		// Quickturn!
+		//Quickturn
 		if (isQuickTurn) {
-			// Can be tuned
+			//Can be tuned
 			double alpha = Constants.kAlpha;
 			mQuickStopAccumulator = (1 - alpha) * mQuickStopAccumulator
 					+ alpha * limit(wheel, 1.0) * 5;
@@ -121,13 +121,11 @@ public class CheesyDriveHelper {
 			
 			angularPower = wheel * sensitivity;
 			
-			
 		} else {
 			overPower = 0.0;
 
 			//Sets turn amount
-			angularPower = Math.abs(throttle) * wheel * sensitivity
-					- mQuickStopAccumulator;
+			angularPower = Math.abs(throttle) * wheel * sensitivity - mQuickStopAccumulator;
 
 			if (mQuickStopAccumulator > Constants.kQuickStopAccumulatorDecreaseThreshold) {
 				mQuickStopAccumulator -= Constants.kQuickStopAccumulatorDecreaseRate;
@@ -137,9 +135,8 @@ public class CheesyDriveHelper {
 				mQuickStopAccumulator = 0.0;
 			}
 		}
-
-		rightPwm = leftPwm = linearPower;
 		
+		rightPwm = leftPwm = linearPower;
 		leftPwm += angularPower;
 		rightPwm -= angularPower;
 
@@ -156,6 +153,7 @@ public class CheesyDriveHelper {
 			leftPwm += overPower * (-1.0 - rightPwm);
 			rightPwm = -1.0;
 		}
+		
 		DriveSignal mSignal = DriveSignal.getNeutralSignal();
 		mSignal.leftMotor.setPercentOutput(leftPwm);
 		mSignal.rightMotor.setPercentOutput(rightPwm);
@@ -177,20 +175,12 @@ public class CheesyDriveHelper {
 	 */
 	public double remapThrottle(double initialThrottle) {
 		double x = Math.abs(initialThrottle);
-		double eric = 0.7*x + 1/(1/(0.15)+Math.pow(Math.E,-64*(x-0.35)))
-		+1/(1/(0.15)+Math.pow(Math.E,-64*(x-0.75)));
-		double nihar;
-		if(x < 0.3) {
-			nihar = x*x;
-		} else if(x < 0.75) {
-			nihar = 2*0.3*x;
-		} else {
-			nihar = (1-0.45)/(1-0.75)*(x-0.75) + 0.45; 
-		}
-//		return Math.signum(initialThrottle)*nihar;
-//		return Math.signum(initialThrottle)*(Math.pow(x, 2));
-//		return Math.signum(initialThrottle)*eric;
-		return Math.signum(initialThrottle)*x;
+		switch(Constants.kDriverName) {
+			case ERIC:
+				x = Math.signum(initialThrottle) * x;
+				break;
+			}
+		return x;
 	}
 
 	/**
