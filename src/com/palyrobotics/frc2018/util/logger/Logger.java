@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
-import com.palyrobotics.frc2018.util.logger.LoggerConstants.*;
 
 /**
  * Log is at /home/lvuser/logs/fileName directory
