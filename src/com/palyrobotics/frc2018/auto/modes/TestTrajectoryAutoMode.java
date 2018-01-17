@@ -3,9 +3,9 @@ package com.palyrobotics.frc2018.auto.modes;
 import com.palyrobotics.frc2018.auto.AutoModeBase;
 import com.palyrobotics.frc2018.behavior.Routine;
 import com.palyrobotics.frc2018.behavior.routines.drive.DrivePathRoutine;
-import com.team254.lib.trajectory.Path;
-import com.team254.lib.trajectory.Path.Waypoint;
-import com.team254.lib.trajectory.Translation2d;
+import com.palyrobotics.frc2018.util.trajectory.Path;
+import com.palyrobotics.frc2018.util.trajectory.Path.Waypoint;
+import com.palyrobotics.frc2018.util.trajectory.Translation2d;
 
 import java.util.ArrayList;
 import java.util.List;

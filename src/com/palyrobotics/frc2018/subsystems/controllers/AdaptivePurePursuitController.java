@@ -9,7 +9,7 @@ import com.palyrobotics.frc2018.subsystems.Drive;
 import com.palyrobotics.frc2018.util.Pose;
 import com.palyrobotics.frc2018.util.TalonSRXOutput;
 import com.palyrobotics.frc2018.util.archive.DriveSignal;
-import com.team254.lib.trajectory.*;
+import com.palyrobotics.frc2018.util.trajectory.*;
 import edu.wpi.first.wpilibj.Timer;
 
 import java.util.Optional;
@@ -40,7 +40,6 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
 
     public AdaptivePurePursuitController(double fixed_lookahead, double max_accel, double nominal_dt, Path path,
                                          boolean reversed, double path_completion_tolerance) {
-    	//System.out.println("AAAAAAAAH " +  RobotPosition.getInstance().generateOdometryFromSensors(0, 0, Rotation2d.fromRadians(0)));
         mFixedLookahead = fixed_lookahead;
         mMaxAccel = max_accel;
         mPath = path;

@@ -9,7 +9,7 @@ import com.palyrobotics.frc2018.subsystems.controllers.*;
 import com.palyrobotics.frc2018.util.Pose;
 import com.palyrobotics.frc2018.util.archive.CheesyDriveHelper;
 import com.palyrobotics.frc2018.util.archive.DriveSignal;
-import com.team254.lib.trajectory.Path;
+import com.palyrobotics.frc2018.util.trajectory.Path;
 
 /**
  * Represents the drivetrain

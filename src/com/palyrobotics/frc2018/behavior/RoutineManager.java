@@ -1,8 +1,6 @@
 package com.palyrobotics.frc2018.behavior;
 
 import com.palyrobotics.frc2018.config.Commands;
-import com.palyrobotics.frc2018.robot.team254.lib.util.StateHolder;
-import com.palyrobotics.frc2018.robot.team254.lib.util.Tappable;
 import com.palyrobotics.frc2018.subsystems.Drive;
 import com.palyrobotics.frc2018.subsystems.Subsystem;
 import com.palyrobotics.frc2018.util.logger.Logger;
@@ -16,7 +14,7 @@ import java.util.HashSet;
  * Handles the updating of commands by passing them to each running routine. <br />
  * @author Nihar, Ailyn
  */
-public class RoutineManager implements Tappable {
+public class RoutineManager {
 	// Routines that are being run
 	private ArrayList<Routine> runningRoutines = new ArrayList<>();
 	private ArrayList<Routine> routinesToRemove = new ArrayList<>();
@@ -147,11 +145,6 @@ public class RoutineManager implements Tappable {
 		return conflicts;
 	}
 
-	@Override
-	public void getState(StateHolder states) {
-	}
-
-	@Override
 	public String getName() {
 		return "RoutineManager";
 	}

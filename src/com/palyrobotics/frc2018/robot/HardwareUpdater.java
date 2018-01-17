@@ -11,9 +11,9 @@ import com.palyrobotics.frc2018.config.RobotState;
 import com.palyrobotics.frc2018.subsystems.Drive;
 import com.palyrobotics.frc2018.util.TalonSRXOutput;
 import com.palyrobotics.frc2018.util.logger.Logger;
-import com.team254.lib.trajectory.Kinematics;
-import com.team254.lib.trajectory.RigidTransform2d;
-import com.team254.lib.trajectory.Rotation2d;
+import com.palyrobotics.frc2018.util.trajectory.Kinematics;
+import com.palyrobotics.frc2018.util.trajectory.RigidTransform2d;
+import com.palyrobotics.frc2018.util.trajectory.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
 
 import java.util.Optional;

@@ -2,7 +2,7 @@ package com.palyrobotics.frc2018.config;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.palyrobotics.frc2018.util.Pose;
-import com.team254.lib.trajectory.*;
+import com.palyrobotics.frc2018.util.trajectory.*;
 
 import java.util.Map;
 

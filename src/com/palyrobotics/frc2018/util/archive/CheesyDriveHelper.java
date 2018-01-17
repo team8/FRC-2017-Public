@@ -3,7 +3,6 @@ package com.palyrobotics.frc2018.util.archive;
 import com.palyrobotics.frc2018.config.Commands;
 import com.palyrobotics.frc2018.config.Constants;
 import com.palyrobotics.frc2018.config.RobotState;
-import com.palyrobotics.frc2018.robot.team254.lib.util.Util;
 
 /**
  * CheesyDriveHelper implements the calculations used in CheesyDrive for teleop control.
@@ -110,7 +109,7 @@ public class CheesyDriveHelper {
 			// Can be tuned
 			double alpha = Constants.kAlpha;
 			mQuickStopAccumulator = (1 - alpha) * mQuickStopAccumulator
-					+ alpha * Util.limit(wheel, 1.0) * 5;
+					+ alpha * limit(wheel, 1.0) * 5;
 			
 			overPower = 1.0;
 			
@@ -192,5 +191,12 @@ public class CheesyDriveHelper {
 //		return Math.signum(initialThrottle)*(Math.pow(x, 2));
 //		return Math.signum(initialThrottle)*eric;
 		return Math.signum(initialThrottle)*x;
+	}
+
+	/**
+	 * Limits the given input to the given magnitude.
+	 */
+	public double limit(double v, double limit) {
+		return (Math.abs(v) < limit) ? v : limit * (v < 0 ? -1 : 1);
 	}
 }

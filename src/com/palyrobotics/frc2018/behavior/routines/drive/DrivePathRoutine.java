@@ -4,7 +4,7 @@ import com.palyrobotics.frc2018.behavior.Routine;
 import com.palyrobotics.frc2018.config.Commands;
 import com.palyrobotics.frc2018.subsystems.Drive;
 import com.palyrobotics.frc2018.subsystems.Subsystem;
-import com.team254.lib.trajectory.Path;
+import com.palyrobotics.frc2018.util.trajectory.Path;
 
 /**
  * Created by Nihar on 4/5/17.

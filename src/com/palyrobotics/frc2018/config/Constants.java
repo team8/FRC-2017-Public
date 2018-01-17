@@ -1,8 +1,6 @@
 package com.palyrobotics.frc2018.config;
 
-import com.palyrobotics.frc2018.robot.team254.lib.util.ConstantsBase;
-
-public class Constants extends ConstantsBase {
+public class Constants {
 	public enum RobotName {
 		UNNAMED
 	}
@@ -132,14 +130,5 @@ public class Constants extends ConstantsBase {
 	"kDriveInchesPerDegree" + kDriveInchesPerDegree +
 	"kDriveSpeedUnitConversion "+kDriveSpeedUnitConversion
 	;
-	}
-	
-	@Override
-	public String getFileLocation() {
-		return "~/constants.txt";
-	}
-
-	static {
-		new Constants().loadFromFile();
 	}
 }

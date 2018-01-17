@@ -13,7 +13,7 @@ public class AutoModeSelector {
 	private static AutoModeSelector instance = null;
 	private ArrayList<AutoModeBase> mAutoModes = new ArrayList<>();
 	private enum AutoIndices {
-		TEST(1), TEST_TRAJECTORY(2);
+		TEST(0), TEST_TRAJECTORY(1);
 		private final int id;
 		AutoIndices(int id) {this.id = id;}
 		public int get() {return id;}
@@ -23,7 +23,7 @@ public class AutoModeSelector {
 	 * comment for which auto mode the selectedIndex refers to
 	 */
 
-	int selectedIndex = AutoIndices.TEST.get();
+	int selectedIndex = AutoIndices.TEST_TRAJECTORY.get();
 
 	public static AutoModeSelector getInstance() {
 		if (instance == null) {
