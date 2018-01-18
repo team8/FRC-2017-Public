@@ -30,7 +30,7 @@ public class LoggerConstants {
 	 
 	 //Controls if stack traces will be written
 	 public static boolean writeStackTrace = true;
-	 public static Level traceLevel = Level.WARNING;
+	 public static Level traceLevel = Level.ALL;
 	 
 	 //Only set to TRUE when in a match
 	 public static final boolean compStatus = false;
