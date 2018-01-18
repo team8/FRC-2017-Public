@@ -1,10 +1,12 @@
 package com.palyrobotics.frc2018.vision.networking.recievers;
 
+import com.palyrobotics.frc2018.util.logger.Logger;
 import com.palyrobotics.frc2018.vision.util.synchronization.DataExistsCallback;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.logging.Level;
 
 public interface VisionReceiverBase {
 
@@ -25,7 +27,7 @@ public interface VisionReceiverBase {
                     exists = false;
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                Logger.getInstance().logRobotThread(Level.FINEST, e);
             }
 
             return exists;

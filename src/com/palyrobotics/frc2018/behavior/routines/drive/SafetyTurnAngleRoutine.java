@@ -1,9 +1,12 @@
 package com.palyrobotics.frc2018.behavior.routines.drive;
 
+import java.util.logging.Level;
+
 import com.palyrobotics.frc2018.behavior.Routine;
 import com.palyrobotics.frc2018.config.Commands;
 import com.palyrobotics.frc2018.config.RobotState;
 import com.palyrobotics.frc2018.subsystems.Subsystem;
+import com.palyrobotics.frc2018.util.logger.Logger;
 
 /**
  * @author Nihar
@@ -20,10 +23,10 @@ public class SafetyTurnAngleRoutine extends Routine {
 	@Override
 	public void start() {
 		if(robotState.drivePose.heading == -0.0) {
-			System.out.println("Gyro broken");
+			Logger.getInstance().logRobotThread(Level.WARNING, "Gyro broken");
 			mRoutine = new EncoderTurnAngleRoutine(targetAngle);
         } else {
-        	System.out.println("Gyro working!");
+			Logger.getInstance().logRobotThread(Level.INFO, "Gyro working!");
             mRoutine = new BBTurnAngleRoutine(targetAngle);
         }
 		mRoutine.start();
@@ -31,7 +34,7 @@ public class SafetyTurnAngleRoutine extends Routine {
 
 	@Override
 	public Commands update(Commands commands) {
-		System.out.println("angle: "+ robotState.drivePose.heading);
+		Logger.getInstance().logRobotThread(Level.FINEST, "Angle", robotState.drivePose.heading);
 		return mRoutine.update(commands);
 	}
 

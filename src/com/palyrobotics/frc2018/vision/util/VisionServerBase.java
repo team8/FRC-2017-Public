@@ -3,6 +3,9 @@ package com.palyrobotics.frc2018.vision.util;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+
+import com.palyrobotics.frc2018.util.logger.Logger;
 
 /**
  * Controls managing client and server sockets.
@@ -105,7 +108,7 @@ public abstract class VisionServerBase extends VisionThreadBase {
 
         } catch (IOException e) {
 
-            e.printStackTrace();
+            Logger.getInstance().logRobotThread(Level.FINEST, e);
             return ServerState.ATTEMPTING_CONNECTION;
         }
     }
@@ -115,7 +118,7 @@ public abstract class VisionServerBase extends VisionThreadBase {
         try {
             m_client.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getInstance().logRobotThread(Level.FINEST, e);
         }
     }
 

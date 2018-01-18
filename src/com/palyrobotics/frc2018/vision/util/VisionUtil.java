@@ -1,8 +1,12 @@
 package com.palyrobotics.frc2018.vision.util;
 
+import java.util.logging.Level;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import com.palyrobotics.frc2018.util.logger.Logger;
 
 public class VisionUtil {
 	/**
@@ -22,7 +26,7 @@ public class VisionUtil {
 			json = (JSONObject) parser.parse(raw_data);
 		} catch (ParseException e) {
 			// This is spammy
-			//			e.printStackTrace();
+			//			Logger.getInstance().logRobotThread(Level.FINEST, e);
 		}
 
 		return json;

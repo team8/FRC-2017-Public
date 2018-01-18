@@ -35,6 +35,10 @@ public class HardwareAdapter {
 
 		public static void resetSensors() {
 			instance.gyro.setYaw(0, 0);
+			instance.gyro.setFusedHeading(0, 0);
+			instance.gyro.setCompassAngle(0, 0);
+			instance.gyro.setCompassDeclination(0, 0);
+			instance.gyro.setAccumZAngle(0, 0);
 			instance.leftMasterTalon.setSelectedSensorPosition(0, 0, 0);
 			instance.rightMasterTalon.setSelectedSensorPosition(0, 0, 0);
 		}

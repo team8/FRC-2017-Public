@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.logging.Level;
 
 /**
  * Handles the updating of commands by passing them to each running routine. <br />
@@ -27,7 +28,7 @@ public class RoutineManager {
 	 */
 	public void addNewRoutine(Routine newRoutine) {
 		if(newRoutine == null) {
-			System.err.println("Tried to add null routine to routine manager!");
+			Logger.getInstance().logRobotThread(Level.WARNING, "Tried to add null routine to routine manager!");
 			throw new NullPointerException();
 		}
 		routinesToAdd.add(newRoutine);
@@ -43,12 +44,12 @@ public class RoutineManager {
 	 * @return modified commands if needed
 	 */
 	public Commands reset(Commands commands) {
-		Logger.getInstance().logRobotThread("Routine manager reset");
+		Logger.getInstance().logRobotThread(Level.FINE, "Routine manager reset");
 		Commands output = commands.copy();
 		// Cancel all running routines
 		if(runningRoutines.size() != 0) {
 			for(Routine routine : runningRoutines) {
-				System.out.println("Canceling "+routine.getName());
+				Logger.getInstance().logRobotThread(Level.FINE, "Canceling", routine.getName());
 				output = routine.cancel(output);
 			}
 		}
@@ -70,7 +71,7 @@ public class RoutineManager {
 		// Update all running routines
 		for(Routine routine : runningRoutines) {
 			if(routine.finished()) {
-				Logger.getInstance().logRobotThread("Routine "+routine.getName()+" finished, canceled");
+				Logger.getInstance().logRobotThread(Level.INFO, "Routine", routine.getName()+" finished, canceled");
 				output = routine.cancel(output);
 				routinesToRemove.add(routine);
 			} else {
@@ -88,7 +89,7 @@ public class RoutineManager {
 			// combine running routines w/ new routine to check for shared subsystems
 			ArrayList<Routine> conflicts = conflictingRoutines(runningRoutines, newRoutine);
 			for(Routine routine : conflicts) {
-				Logger.getInstance().logRobotThread("Canceling routine "+routine.getName() +
+				Logger.getInstance().logRobotThread(Level.WARNING, "Canceling routine "+routine.getName() +
 						" that conflicts with "+newRoutine.getName());
 				output = routine.cancel(output);
 				runningRoutines.remove(routine);
@@ -101,8 +102,7 @@ public class RoutineManager {
 		routinesToAdd.clear();
 
 		if (output.cancelCurrentRoutines) {
-			System.out.println("Cancel routine button");
-			Logger.getInstance().logRobotThread("Cancel routine button");
+			Logger.getInstance().logRobotThread(Level.FINE, "Cancel routine button");
 			output = this.reset(output);
 		} else if(!output.wantedRoutines.isEmpty()) {
 			// Routines requested by newly added routines

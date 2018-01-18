@@ -1,5 +1,7 @@
 package com.palyrobotics.frc2018.subsystems;
 
+import java.util.logging.Level;
+
 import com.palyrobotics.frc2018.config.Commands;
 import com.palyrobotics.frc2018.config.Constants;
 import com.palyrobotics.frc2018.config.RobotState;
@@ -9,6 +11,7 @@ import com.palyrobotics.frc2018.subsystems.controllers.*;
 import com.palyrobotics.frc2018.util.Pose;
 import com.palyrobotics.frc2018.util.archive.CheesyDriveHelper;
 import com.palyrobotics.frc2018.util.archive.DriveSignal;
+import com.palyrobotics.frc2018.util.logger.Logger;
 import com.palyrobotics.frc2018.util.trajectory.Path;
 
 /**
@@ -98,14 +101,14 @@ public class Drive extends Subsystem {
 			case OFF_BOARD_CONTROLLER:
 				if (mController == null) {
 					setDriveOutputs(DriveSignal.getNeutralSignal());
-					System.err.println("No offboard controller to use!");
+					Logger.getInstance().logSubsystemThread(Level.WARNING, "No offboard controller to use!");
 					break;
 				}
 				setDriveOutputs(mController.update(mCachedRobotState));
 				break;
 			case ON_BOARD_CONTROLLER:
 				if (mController == null) {
-					System.err.println("No onboard controller to use!");
+					Logger.getInstance().logSubsystemThread(Level.WARNING, "No onboard controller to use!");
 					commands.wantedDriveState = DriveState.NEUTRAL;
 				} else {
 					setDriveOutputs(mController.update(mCachedRobotState));
@@ -171,7 +174,7 @@ public class Drive extends Subsystem {
 	}
 	
 	public void setTurnAngleEncoderSetpoint(double angle) {
-		System.out.println("Encoder angle "+angle);
+		Logger.getInstance().logSubsystemThread(Level.FINE, "Encoder angle", angle);
 		mController = new EncoderTurnAngleController(mCachedPose, angle);
 		newController = true;
 	}

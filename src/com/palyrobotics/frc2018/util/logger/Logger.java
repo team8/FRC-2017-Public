@@ -3,6 +3,8 @@ package com.palyrobotics.frc2018.util.logger;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
+import edu.wpi.first.wpilibj.DriverStation;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,10 +18,15 @@ import java.util.logging.Level;
 /**
  * Log is at /home/lvuser/logs/ directory
  * Unit test safe, creates diff file directory for Mac/Windows/Linux
+ * fileName defaults to ex: "Mar13 13-29" using 24-hr-time
  * Can set desired filename manually
  * If log file exists on first start, automatically creates new file
  *
- * */
+ * If run on roboRIO, will attempt to copy the driverstation console log to this directory to save it
+ * No longer uses bufferedwriter, uses Guava Files to append to file
+ *
+ * FYI, buffered writer closes the underlying filewriter and flushes the buffer
+ */
 public class Logger {
 	private static Logger instance = new Logger();
 	public static Logger getInstance() {
@@ -31,7 +38,9 @@ public class Logger {
 
 	private boolean isEnabled = false;
 	
-	//Array containing current log calls
+	private ArrayList<TimestampedString> mData;
+	// Separates to prevent concurrent modification exception
+	private ArrayList<TimestampedString> mSubsystemThreadLogs = new ArrayList<>();
 	private ArrayList<TimestampedString> mRobotThreadLogs = new ArrayList<>();
 
 	// synchronized lock for writing out the latest data
@@ -46,15 +55,14 @@ public class Logger {
 	private int duplicatePrevent = 0;
 	private File mainLog;
 
+	// Finds the driver station console output
+
 	public boolean setFileName(String fileName) {
 		if (mainLog != null) {
 			System.err.println("Already created log file");
 			return false;
 		}
-		//Attempts to sanitize file names for ease of use
-		this.fileName = fileName.replaceAll(File.separator, ":");
-		this.fileName = fileName.replaceAll(" ", "_");
-		this.fileName = fileName.replaceAll("/n", "_");
+		this.fileName = fileName;
 		return true;
 	}
 	
@@ -66,6 +74,10 @@ public class Logger {
 		if(fileName == "DEFAULT") {
 			System.err.println("WARNING: Using default filename!");
 		}
+		//Verifying file names
+		this.fileName = fileName.replaceAll(File.separator, ":");
+		this.fileName = fileName.replaceAll(" ", "_");
+		this.fileName = fileName.replaceAll("/n", "_");
 		// If initialized before, then recreate the buffered writer and re-enable
 		if (mWritingThread != null) {
 			isEnabled = true;
@@ -77,30 +89,26 @@ public class Logger {
 		String cTime = ZonedDateTime.now(LoggerConstants.tZone).format(DateTimeFormatter.ofPattern("HH:mm"));
 		String os = System.getProperty("os.name");
 		String filePath = fileName + File.separatorChar + cDate + File.separatorChar + fileName + " " + cTime;
-		//Checks if the robot is in competition mode or not
-		//Logs in different locations
-		if(LoggerConstants.compStatus) {
-			filePath = "COMPETITION" + File.separatorChar + filePath;
+		//Changes directory based on competition status
+		if(LoggerConstants.compStatus || DriverStation.getInstance().isFMSAttached()) {
+			filePath = "COMPETITIONS" + File.separatorChar + filePath;
 		}
 		else {
 			filePath = "PRACTICE" + File.separatorChar + filePath;
 		}
-		//Checks the OS name to determine where to save the log
 		if (os.startsWith("Mac")) {
 			filePath = "logs" + File.separatorChar + filePath;
 		}
 		else if (os.startsWith("Windows")) {
 			filePath = "C:" + File.separatorChar + "logs" + File.separatorChar + filePath;
-		} else if (os.startsWith("NI")){
+		} else  if (os.startsWith("Linux")){
 			// Pray that this is a roborio
-			filePath = "/home/lvuser/logs/" + filePath;
-		}
+			filePath = "/home/lvuser/logs/" + filePath;		}
 		else {
-			System.err.println("Error in determining OS name, reverting to roboRIO base");
+			System.err.println("Error in determining OS name, reverting to RIO base");
 			filePath = "/home/lvuser/logs/" + filePath;
 		}
 		mainLog = new File(filePath + ".log");
-		//Prevents the creation of duplicate logs
 		while (mainLog.exists()) {
 			duplicatePrevent++;
 			mainLog = new File(filePath + duplicatePrevent + ".log");
@@ -123,21 +131,42 @@ public class Logger {
 	}
 
 	/**
-	 * Called on robot thread
+	 * Called on subsystem thread
+	 * @param l Sets level of log message; determines writing to console and file
 	 * @param value Object used for input; stores .toString() value
 	 */
-	@Deprecated
-	public void logRobotThread(Object value) {
+	public void logSubsystemThread(Level l, Object value) {
 		try {
-			if(LoggerConstants.writeStackTrace && value instanceof Throwable) {
+			if(LoggerConstants.writeStackTrace && value instanceof Throwable && l.intValue() >= LoggerConstants.traceLevel.intValue()) {
 				((Throwable) value).printStackTrace(pw);
-				mRobotThreadLogs.add(new TimestampedString(pw.toString()));
+				mSubsystemThreadLogs.add(new LeveledString(l, pw.toString()));
 			}
 			else {
-				mRobotThreadLogs.add(new TimestampedString(value.toString()));
+				mSubsystemThreadLogs.add(new LeveledString(l, value.toString()));
 			}
 		} catch (ConcurrentModificationException e) {
-			System.err.println("Attempted concurrent modification on robot logger");
+			System.err.println("Attempted concurrent modification on subsystem logger");
+		}
+		pw.flush();
+	}
+	
+	/**
+	 * Called on subsystem thread
+	 * @param l Sets level of log message; determines writing to console and file
+	 * @param key String added to input object
+	 * @param value Object used for input; stores .toString() value
+	 */
+	public void logSubsystemThread(Level l, String key, Object value) {
+		try {
+			if(LoggerConstants.writeStackTrace && value instanceof Throwable && l.intValue() >= LoggerConstants.traceLevel.intValue()) {
+				((Throwable) value).printStackTrace(pw);
+				mSubsystemThreadLogs.add(new LeveledString(l, key + ": " + pw.toString()));
+			}
+			else {
+				mSubsystemThreadLogs.add(new LeveledString(l, key + ": " + value.toString()));
+			}
+		} catch (ConcurrentModificationException e) {
+			System.err.println("Attempted concurrent modification on subsystem logger");
 		}
 		pw.flush();
 	}
@@ -160,27 +189,6 @@ public class Logger {
 			System.err.println("Attempted concurrent modification on robot logger");
 		}
 		pw.flush();
-	}
-	
-	
-	/**
-	 * Called on robot thread
-	 * @param key String added to input object
-	 * @param value Object used for input; stores .toString() value
-	 */
-	@Deprecated
-	public void logRobotThread(String key, Object value) {
-		try {
-			if(LoggerConstants.writeStackTrace && value instanceof Throwable) {
-				((Throwable) value).printStackTrace(pw);
-				mRobotThreadLogs.add(new TimestampedString(key + ": " + pw.toString()));
-			}
-			else {
-				mRobotThreadLogs.add(new TimestampedString(key + ": " + value.toString()));
-			}
-		} catch (ConcurrentModificationException e) {
-			System.err.println("Attempted concurrent modification on robot logger");
-		}
 	}
 	
 	/**
@@ -208,6 +216,7 @@ public class Logger {
 		mWritingThread.interrupt();
 	}
 	private Logger() {
+		mData = new ArrayList<>();
 		mRunnable = () -> {
 			while (true) {
 				writeLogs();
@@ -233,31 +242,28 @@ public class Logger {
 	private void writeLogs() {
 		synchronized(writingLock) {
 			if(isEnabled) {
-				mRobotThreadLogs.sort(TimestampedString::compareTo);
-				mRobotThreadLogs.forEach((TimestampedString c) -> {
+				mData = new ArrayList<>(mRobotThreadLogs);
+				mData.addAll(mSubsystemThreadLogs);
+				mData.sort(TimestampedString::compareTo);
+				mData.forEach((TimestampedString c) -> {
 					try {
-						if(c instanceof LeveledString && ((LeveledString) c).getLevel().intValue() >= LoggerConstants.writeLevel.intValue()) {
-							Files.append(((LeveledString) c).getLeveledString(), mainLog, Charsets.UTF_8);
-							//Only writes to console if above required level
-							if(((LeveledString) c).getLevel().intValue() >= LoggerConstants.displayLevel.intValue()) {
-								System.out.println(c.toString());
-							}
-						}
-						//Support for deprecated methods
-						else if(!(c instanceof LeveledString) && c instanceof TimestampedString) {
+						if(c instanceof LeveledString && ((LeveledString) c).getLevel().intValue() >= LoggerConstants.displayLevel.intValue()) {
 							System.out.println(c.toString());
-							Files.append(c.getTimestampedString(), mainLog, Charsets.UTF_8);
+							if(((LeveledString) c).getLevel().intValue() >= LoggerConstants.writeLevel.intValue()) {
+								Files.append(((LeveledString) c).getLeveledString(), mainLog, Charsets.UTF_8);
+							}
 						}
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				});
+				mData.clear();
+				mSubsystemThreadLogs.clear();
 				mRobotThreadLogs.clear();
 			}
 		}
 	}
 	
-	//Used to get current path
 	public String getLogPath() {
 		if (mainLog != null) {
 			return mainLog.getAbsolutePath();
@@ -271,6 +277,8 @@ public class Logger {
 		System.out.println("Shutting down");
 		synchronized (writingLock) {
 			writeLogs();
+			mRobotThreadLogs.clear();
+			mSubsystemThreadLogs.clear();
 			try {
 				Files.append("Logger stopped \n", mainLog, Charsets.UTF_8);
 			} catch (IOException e) {

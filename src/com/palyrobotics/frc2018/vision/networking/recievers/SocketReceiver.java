@@ -1,11 +1,13 @@
 package com.palyrobotics.frc2018.vision.networking.recievers;
 
+import com.palyrobotics.frc2018.util.logger.Logger;
 import com.palyrobotics.frc2018.vision.util.VisionServerBase;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.logging.Level;
 
 public class SocketReceiver extends VisionServerBase implements VisionReceiverBase {
 
@@ -28,7 +30,7 @@ public class SocketReceiver extends VisionServerBase implements VisionReceiverBa
 				}
 				return data;
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.getInstance().logRobotThread(Level.FINEST, e);
 				return null;
 			}
 		}
@@ -57,7 +59,7 @@ public class SocketReceiver extends VisionServerBase implements VisionReceiverBa
 				return data;
 			} catch (IOException e) {
 
-				e.printStackTrace();
+				Logger.getInstance().logRobotThread(Level.FINEST, e);
 				closeClient();
 			}
 		}

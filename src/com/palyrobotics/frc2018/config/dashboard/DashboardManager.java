@@ -1,5 +1,9 @@
 package com.palyrobotics.frc2018.config.dashboard;
 
+import java.util.logging.Level;
+
+import com.palyrobotics.frc2018.util.logger.Logger;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
@@ -31,7 +35,7 @@ public class DashboardManager {
 		try {
 			initializeRobotTable();
 			initializeCANTable();
-			System.out.println("Succesfully initialized cantables");
+			Logger.getInstance().logRobotThread(Level.FINE, "Succesfully initialized cantables");
 		}
 		catch (UnsatisfiedLinkError e) {
 			// Catch the error that occurs during unit tests.
@@ -86,10 +90,10 @@ public class DashboardManager {
 				initializeCANTable();
 			}
 			catch (UnsatisfiedLinkError e) {
-				System.out.println("Unsatisfied Link Error");
+				Logger.getInstance().logRobotThread(Level.WARNING, e);
 			}
 			catch (NoClassDefFoundError e) {
-				System.out.println("Class NO DEF Error");
+				Logger.getInstance().logRobotThread(Level.WARNING, e);
 			}
 		}
 	}	
@@ -101,12 +105,12 @@ public class DashboardManager {
 	public void toggleCANTable(boolean start) {
 		if (start) {
 			if (canTable != null) {
-				System.out.println("Started");
+				Logger.getInstance().logRobotThread(Level.FINER, "Started CANTables");
 				this.canTable.getEntry("start").setString("true");
 				this.canTable.getEntry("end").setString("false");
 			}
 			else {
-				System.out.println("Error");
+				Logger.getInstance().logRobotThread(Level.WARNING, "Error in CANTables");
 			}
 		} else {
 			if (canTable != null) {

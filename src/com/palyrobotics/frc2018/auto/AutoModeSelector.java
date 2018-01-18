@@ -3,9 +3,12 @@ package com.palyrobotics.frc2018.auto;
 import com.palyrobotics.frc2018.auto.modes.TestAutoMode;
 import com.palyrobotics.frc2018.auto.modes.TestMotionMagicAutoMode;
 import com.palyrobotics.frc2018.auto.modes.TestTrajectoryAutoMode;
+import com.palyrobotics.frc2018.util.logger.Logger;
+
 import org.json.simple.JSONArray;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 /**
  * @author Nihar, based off Team 254 2015
@@ -43,7 +46,7 @@ public class AutoModeSelector {
 
 	private AutoModeSelector() {
   /*1*/registerAutonomous(new TestAutoMode());
-  /*2*/registerAutonomous(new TestMotionMagicAutoMode());
+  /*2*/registerAutonomous(new TestTrajectoryAutoMode());
 	}
 
 	/**
@@ -101,12 +104,9 @@ public class AutoModeSelector {
 		if(numOccurrences == 1) {
 			setAutoModeByIndex(index);
 			return true;
-		} else if(numOccurrences == 0) {
-			System.out.println("Couldn't find AutoMode " + name);
-		} else {
-			System.out.println("Found multiple AutoModes " + name);
 		}
-		System.err.println("Didn't select AutoMode");
+		Logger.getInstance().logRobotThread(Level.FINE, ((numOccurrences == 0) ? "Couldn't find AutoMode" : "Found multiple AutoModes"), name);
+		Logger.getInstance().logRobotThread(Level.WARNING, "Didn't set AutoMode");
 		return false;
 	}
 
@@ -116,7 +116,7 @@ public class AutoModeSelector {
 	 */
 	public boolean setFromDashboard(String selection) {
 		if(!setAutoModeByName(selection)) {
-			System.err.println("Did not find requested auto mode");
+			Logger.getInstance().logRobotThread(Level.WARNING, "Did not find requested auto mode");
 			return false;
 		}
 		return true;
@@ -127,7 +127,7 @@ public class AutoModeSelector {
 			which = 0;
 		}
 		selectedIndex = which;
-		System.out.println("Selected AutoMode " + mAutoModes.get(selectedIndex).toString());
+		Logger.getInstance().logRobotThread(Level.INFO, "Selected AutoMode", mAutoModes.get(selectedIndex));
 	}
 
 }

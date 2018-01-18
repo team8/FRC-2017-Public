@@ -1,9 +1,12 @@
 package com.palyrobotics.frc2018.behavior.routines.drive;
 
+import java.util.logging.Level;
+
 import com.palyrobotics.frc2018.behavior.Routine;
 import com.palyrobotics.frc2018.config.Commands;
 import com.palyrobotics.frc2018.subsystems.Drive;
 import com.palyrobotics.frc2018.subsystems.Subsystem;
+import com.palyrobotics.frc2018.util.logger.Logger;
 
 public class DriveStraightRoutine extends Routine {
 
@@ -61,7 +64,7 @@ public class DriveStraightRoutine extends Routine {
 	
 	@Override
 	public Commands cancel(Commands commands) {
-		System.out.println("Cancelling DriveStraightRoutine");
+		Logger.getInstance().logRobotThread(Level.FINE, "Cancelling DriveStraightRoutine");
 		state = DriveStraightRoutineState.DONE;
 		commands.wantedDriveState = Drive.DriveState.NEUTRAL;
 		drive.resetController();

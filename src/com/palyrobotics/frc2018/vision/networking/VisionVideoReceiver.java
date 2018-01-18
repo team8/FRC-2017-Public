@@ -1,10 +1,12 @@
 package com.palyrobotics.frc2018.vision.networking;
 
 import com.palyrobotics.frc2018.config.Constants;
+import com.palyrobotics.frc2018.util.logger.Logger;
 import com.palyrobotics.frc2018.vision.VisionData;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Level;
 
 public class VisionVideoReceiver extends ReceiverBase {
 	
@@ -30,7 +32,7 @@ public class VisionVideoReceiver extends ReceiverBase {
 				frameQueue.add(image);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.getInstance().logRobotThread(Level.FINEST, e);
 		}
 	}
 	

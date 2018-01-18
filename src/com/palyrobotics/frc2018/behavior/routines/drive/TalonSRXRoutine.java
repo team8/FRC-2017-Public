@@ -1,5 +1,7 @@
 package com.palyrobotics.frc2018.behavior.routines.drive;
 
+import java.util.logging.Level;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.palyrobotics.frc2018.behavior.Routine;
 import com.palyrobotics.frc2018.config.Commands;
@@ -9,6 +11,7 @@ import com.palyrobotics.frc2018.subsystems.Drive;
 import com.palyrobotics.frc2018.subsystems.Subsystem;
 import com.palyrobotics.frc2018.subsystems.controllers.TalonSRXDriveController;
 import com.palyrobotics.frc2018.util.archive.DriveSignal;
+import com.palyrobotics.frc2018.util.logger.Logger;
 
 /**
  * Created by Nihar on 2/12/17.
@@ -69,6 +72,7 @@ public class TalonSRXRoutine extends Routine {
 			}
 		}
 		drive.setTalonSRXController(mSignal);
+		Logger.getInstance().logRobotThread(Level.FINE, "Sent drivetrain signal", mSignal);
 	}
 
 	@Override
@@ -91,24 +95,24 @@ public class TalonSRXRoutine extends Routine {
 	@Override
 	public boolean finished() {
 		// Wait for controller to be added before finishing routine
-		if (Math.abs(mSignal.leftMotor.getSetpoint() - Robot.getRobotState().leftSetpoint) > 1) {
-			System.out.println("Mismatched desired talon and actual talon setpoints! desired, actual");
-			System.out.println("Left: " + mSignal.leftMotor.getSetpoint()+", "+Robot.getRobotState().leftSetpoint);
+		if (mSignal.leftMotor.getSetpoint() != Robot.getRobotState().leftSetpoint) {
+			Logger.getInstance().logRobotThread(Level.WARNING, "Mismatched desired talon and actual talon setpoints! desired, actual");
+			Logger.getInstance().logRobotThread(Level.WARNING, "Left", mSignal.leftMotor.getSetpoint()+", "+Robot.getRobotState().leftSetpoint);
 			return false;
 		}
-		else if (Math.abs(mSignal.rightMotor.getSetpoint() - Robot.getRobotState().rightSetpoint) > 1) {
-			System.out.println("Mismatched desired talon and actual talon setpoints! desired, actual");
-			System.out.println("Right: " + mSignal.rightMotor.getSetpoint()+", "+Robot.getRobotState().rightSetpoint);
+		else if (mSignal.rightMotor.getSetpoint() != Robot.getRobotState().rightSetpoint) {
+			Logger.getInstance().logRobotThread(Level.WARNING, "Mismatched desired talon and actual talon setpoints! desired, actual");
+			Logger.getInstance().logRobotThread(Level.WARNING, "Right", mSignal.rightMotor.getSetpoint()+", "+Robot.getRobotState().rightSetpoint);
 			return false;
 		}
 		else if (mSignal.leftMotor.getControlMode() != Robot.getRobotState().leftControlMode) {
-			System.out.println("Mismatched desired talon and actual talon states!");
-			System.out.println(mSignal.leftMotor.getControlMode() + ", "+Robot.getRobotState().leftControlMode);
+			Logger.getInstance().logRobotThread(Level.WARNING, "Mismatched desired talon and actual talon states!");
+			Logger.getInstance().logRobotThread(Level.WARNING, mSignal.leftMotor.getControlMode()+", "+Robot.getRobotState().leftControlMode);
 			return false;
 		}
 		else if (mSignal.rightMotor.getControlMode() != Robot.getRobotState().rightControlMode) {
-			System.out.println("Mismatched desired talon and actual talon states!");
-			System.out.println(mSignal.rightMotor.getControlMode()+","+Robot.getRobotState().rightControlMode);
+			Logger.getInstance().logRobotThread(Level.WARNING, "Mismatched desired talon and actual talon states!");
+			Logger.getInstance().logRobotThread(Level.WARNING, mSignal.rightMotor.getControlMode()+", "+Robot.getRobotState().rightControlMode);
 			return false;
 		}
 		if (!drive.hasController() || (drive.getController().getClass() == TalonSRXDriveController.class && drive.controllerOnTarget())) {

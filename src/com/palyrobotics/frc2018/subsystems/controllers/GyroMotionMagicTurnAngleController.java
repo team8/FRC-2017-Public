@@ -1,5 +1,7 @@
 package com.palyrobotics.frc2018.subsystems.controllers;
 
+import java.util.logging.Level;
+
 import com.palyrobotics.frc2018.config.Constants;
 import com.palyrobotics.frc2018.config.Gains;
 import com.palyrobotics.frc2018.config.RobotState;
@@ -8,6 +10,7 @@ import com.palyrobotics.frc2018.subsystems.Drive.DriveController;
 import com.palyrobotics.frc2018.util.Pose;
 import com.palyrobotics.frc2018.util.TalonSRXOutput;
 import com.palyrobotics.frc2018.util.archive.DriveSignal;
+import com.palyrobotics.frc2018.util.logger.Logger;
 
 public class GyroMotionMagicTurnAngleController implements DriveController {
 	private Pose mCachedPose;
@@ -37,8 +40,8 @@ public class GyroMotionMagicTurnAngleController implements DriveController {
 		kTicksPerInch = Constants.kDriveTicksPerInch;
 		kTolerance = Constants.kAcceptableTurnAngleError;
 		
-		System.out.println("Current heading: " + mCachedPose.heading);
-		System.out.println("Target heading: " + mTargetHeading);
+		Logger.getInstance().logSubsystemThread(Level.FINE, "Current heading", mCachedPose.heading);
+		Logger.getInstance().logSubsystemThread(Level.FINE, "Target heading", mTargetHeading);
 		mLeftTarget = priorSetpoint.leftEnc - (angle * kInchesPerDegree * kTicksPerInch);
 //		System.out.println("Left target: " + mLeftTarget);
 		mRightTarget = priorSetpoint.rightEnc + (angle * kInchesPerDegree * kTicksPerInch);
@@ -93,11 +96,11 @@ public class GyroMotionMagicTurnAngleController implements DriveController {
 //			return false;
 //		}
 		if (mCachedPose == null) {
-			System.out.println("Cached pose is null");
+			Logger.getInstance().logSubsystemThread(Level.FINER, "Cached pose is null");
 			return false;
 		}
-		System.out.println("On target "+(Math.abs(Robot.getRobotState().drivePose.heading - mTargetHeading) < 3.4));
-		System.out.println(Robot.getRobotState().drivePose.heading);
+		Logger.getInstance().logSubsystemThread(Level.FINEST, "On target", (Math.abs(Robot.getRobotState().drivePose.heading - mTargetHeading) < 3.4));
+		Logger.getInstance().logSubsystemThread(Level.FINEST, Robot.getRobotState().drivePose.heading);
 		return Math.abs(Robot.getRobotState().drivePose.heading - mTargetHeading) < kTolerance
 				&& Math.abs(Robot.getRobotState().drivePose.headingVelocity)<0.05;
 	}

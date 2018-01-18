@@ -3,9 +3,11 @@ package com.palyrobotics.frc2018.config;
 import com.palyrobotics.frc2018.behavior.Routine;
 import com.palyrobotics.frc2018.subsystems.Drive;
 import com.palyrobotics.frc2018.util.archive.DriveSignal;
+import com.palyrobotics.frc2018.util.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.logging.Level;
 
 /**
  * Commands represent the desired setpoints and subsystem states for the robot. <br />
@@ -32,7 +34,7 @@ public class Commands {
 	public void addWantedRoutine(Routine wantedRoutine) {
 		for(Routine routine : wantedRoutines) {
 			if(routine.getClass().equals(wantedRoutine.getClass())) {
-				System.out.println("tried to add duplicate routine!" + routine.getName());
+				Logger.getInstance().logRobotThread(Level.WARNING, "tried to add duplicate routine", routine.getName());
 				return;
 			}
 		}

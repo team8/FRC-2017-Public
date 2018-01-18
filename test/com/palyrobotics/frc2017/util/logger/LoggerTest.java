@@ -6,6 +6,8 @@ import com.palyrobotics.frc2018.subsystems.Drive;
 import com.palyrobotics.frc2018.util.logger.Logger;
 import org.junit.Test;
 
+import java.util.logging.Level;
+
 public class LoggerTest {
 	@Test
 	public void testFileCreation() {
@@ -18,12 +20,12 @@ public class LoggerTest {
 	public void testWriting() {
 		Logger logger = Logger.getInstance();
 		logger.start();
-		logger.logRobotThread("Testing");
-		logger.logRobotThread("asdf");
-		logger.logRobotThread("number", 1);
+		logger.logRobotThread(Level.INFO, "Testing");
+		logger.logRobotThread(Level.INFO,"asdf");
+		logger.logRobotThread(Level.INFO,"number", 1);
 		logger.cleanup();
 		logger.start();
-		logger.logRobotThread("New message");
+		logger.logRobotThread(Level.INFO,"New message");
 		// messages should be flushed
 		logger.cleanup();
 		try {
@@ -42,13 +44,13 @@ public class LoggerTest {
 		Drive.getInstance().update(Robot.getCommands(), Robot.getRobotState());
 //		logger.logSubsystemThread(Drive.getInstance().getStatus());
 //		logger.logSubsystemThread(Slider.getInstance().getStatus());
-		logger.logRobotThread("Robot start");
+		logger.logRobotThread(Level.INFO,"Robot start");
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		logger.logRobotThread("Pre cleanup 1");
+		logger.logRobotThread(Level.INFO,"Pre cleanup 1");
 		logger.cleanup();
 		logger.start();
 		try {
@@ -56,7 +58,7 @@ public class LoggerTest {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		logger.logRobotThread("Post cleanup 1");
+		logger.logRobotThread(Level.INFO,"Post cleanup 1");
 		logger.cleanup();
 		try {
 			Thread.sleep(1000);

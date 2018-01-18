@@ -1,5 +1,7 @@
 package com.palyrobotics.frc2018.subsystems.controllers;
 
+import java.util.logging.Level;
+
 import com.palyrobotics.frc2018.config.Constants;
 import com.palyrobotics.frc2018.config.Gains;
 import com.palyrobotics.frc2018.config.RobotState;
@@ -8,6 +10,7 @@ import com.palyrobotics.frc2018.subsystems.Drive.DriveController;
 import com.palyrobotics.frc2018.util.Pose;
 import com.palyrobotics.frc2018.util.TalonSRXOutput;
 import com.palyrobotics.frc2018.util.archive.DriveSignal;
+import com.palyrobotics.frc2018.util.logger.Logger;
 
 public class EncoderTurnAngleController implements DriveController {
 
@@ -41,7 +44,7 @@ public class EncoderTurnAngleController implements DriveController {
 	public boolean onTarget() {
 		if(Robot.getRobotState().leftSetpoint != leftOutput.getSetpoint() || Robot.getRobotState().rightSetpoint != rightOutput.getSetpoint() ||
 				Robot.getRobotState().leftControlMode != leftOutput.getControlMode() || Robot.getRobotState().rightControlMode != rightOutput.getControlMode()) {
-			System.out.println("Mismatched desired talon and actual talon states!");
+			Logger.getInstance().logSubsystemThread(Level.FINER, "Mismatched desired talon and actual talon states!");
 			return false;
 		}
 
@@ -49,14 +52,14 @@ public class EncoderTurnAngleController implements DriveController {
 		double velocityTolerance = Constants.kAcceptableDriveVelocityError;
 
 		if(cachedPose == null) {
-			System.out.println("Cached pose is null");
+			Logger.getInstance().logSubsystemThread(Level.FINER, "Cached pose is null");
 			return false;
 		}
 //		System.out.println("Left: " + Math.abs(leftTarget - cachedPose.leftEnc) + 
 //				"Right: " + Math.abs(rightTarget - cachedPose.rightEnc));
 		if(Math.abs(cachedPose.leftEncVelocity) < velocityTolerance && Math.abs(cachedPose.rightEncVelocity) < velocityTolerance &&
 				Math.abs(leftTarget - cachedPose.leftEnc) < positionTolerance && Math.abs(rightTarget - cachedPose.rightEnc) < positionTolerance) {
-			System.out.println("turn angle done");
+			Logger.getInstance().logSubsystemThread(Level.FINER, "turn angle done");
 			return true;
 		}
 		else return false;

@@ -1,5 +1,6 @@
 package com.palyrobotics.frc2018.vision.networking;
 
+import com.palyrobotics.frc2018.util.logger.Logger;
 import com.palyrobotics.frc2018.vision.VisionData;
 import com.palyrobotics.frc2018.vision.util.VisionServerBase;
 
@@ -7,6 +8,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Level;
 
 /**
  * Sends video from the robot to the dashboard.
@@ -33,7 +35,7 @@ public class VisionVideoServer extends VisionServerBase {
 
 		} catch (IOException e) {
 
-			e.printStackTrace();
+			Logger.getInstance().logRobotThread(Level.FINEST, e);
 		}
 
 		k_defaultImage = imageInBytes;
@@ -62,11 +64,11 @@ public class VisionVideoServer extends VisionServerBase {
 
 		} catch (IOException e) {
 
-			e.printStackTrace();
+			Logger.getInstance().logRobotThread(Level.FINEST, e);
 
 			closeClient();
 		} catch (NullPointerException e){
-			e.printStackTrace();
+			Logger.getInstance().logRobotThread(Level.FINEST, e);
 		}
 	}
 

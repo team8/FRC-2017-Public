@@ -1,6 +1,10 @@
 package com.palyrobotics.frc2018.vision.util.commandline;
 
 import com.palyrobotics.frc2018.config.Constants;
+import com.palyrobotics.frc2018.util.logger.Logger;
+
+import java.util.logging.Level;
+
 import org.spectrum3847.RIOdroid.RIOdroid;
 
 public class CommandExecutor{
@@ -17,7 +21,7 @@ public class CommandExecutor{
 	 }
 
 	 public static void adbServerInit() {
-		 System.out.println("[Info] Initializing RIODroid...");
+		 Logger.getInstance().logRobotThread(Level.INFO, "Initializing RIODroid...");
 
 		 if (!isTesting) {
 		 	RIOdroid.init();
@@ -64,12 +68,12 @@ public class CommandExecutor{
 
 		 String restartOut;
 		 do {
-			 System.out.println("[Info] Restarting server...");
+			 Logger.getInstance().logRobotThread(Level.INFO, "Restarting server...");
 
-			 System.out.println(exec("adb kill-server"));
+			 Logger.getInstance().logRobotThread(Level.FINER, exec("adb kill-server"));
 			 restartOut = exec("adb start-server");
 
-			 System.out.println(restartOut);
+			 Logger.getInstance().logRobotThread(Level.FINER, restartOut);
 		 }
 		 while(!restartOut.contains("daemon started successfully"));
 	 }

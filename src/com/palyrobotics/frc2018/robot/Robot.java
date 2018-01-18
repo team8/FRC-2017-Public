@@ -54,7 +54,6 @@ public class Robot extends TimedRobot {
 		Logger.getInstance().logRobotThread(Level.CONFIG, "FMS connected: "+DriverStation.getInstance().isFMSAttached());
 		Logger.getInstance().logRobotThread(Level.CONFIG, "Alliance station: "+DriverStation.getInstance().getLocation());
 		try {
-			DriverStation.reportWarning("Auto is "+AutoModeSelector.getInstance().getAutoMode().toString(), false);
 			Logger.getInstance().logRobotThread((VisionManager.getInstance().isServerStarted()) ? Level.CONFIG : Level.WARNING,
 					(VisionManager.getInstance().isServerStarted()) ? "Nexus streaming": "Nexus not streaming");
 			Logger.getInstance().logRobotThread(Level.INFO, "Auto", AutoModeSelector.getInstance().getAutoMode().toString());
@@ -65,6 +64,7 @@ public class Robot extends TimedRobot {
 		try {
 			mHardwareUpdater = new HardwareUpdater(mDrive);
 		} catch (Exception e) {
+			Logger.getInstance().logRobotThread(Level.SEVERE, e);
 			System.exit(1);
 		}
 
@@ -81,13 +81,14 @@ public class Robot extends TimedRobot {
 		Logger.getInstance().start();
 		Logger.getInstance().logRobotThread(Level.INFO, "Start autoInit()");
 
+
 		DashboardManager.getInstance().toggleCANTable(true);
 		robotState.gamePeriod = RobotState.GamePeriod.AUTO;
 		mHardwareUpdater.configureTalons();
 
 		// Wait for talons to update
 		try {
-			System.out.println("Sleeping thread for 200 ms");
+			Logger.getInstance().logRobotThread(Level.FINEST, "Sleeping thread for 200 ms");
 			Thread.sleep(200);
 		} catch (InterruptedException e) {
 
@@ -175,7 +176,6 @@ public class Robot extends TimedRobot {
 		// Manually run garbage collector
 		System.gc();
 
-		System.out.println("Log file: "+Logger.getInstance().getLogPath());
 		Logger.getInstance().logRobotThread(Level.INFO, "End disabledInit()");
 	}
 

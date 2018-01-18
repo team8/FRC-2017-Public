@@ -1,9 +1,12 @@
 package com.palyrobotics.frc2018.behavior.routines.drive;
 
+import java.util.logging.Level;
+
 import com.palyrobotics.frc2018.behavior.Routine;
 import com.palyrobotics.frc2018.config.Commands;
 import com.palyrobotics.frc2018.subsystems.Drive;
 import com.palyrobotics.frc2018.subsystems.Subsystem;
+import com.palyrobotics.frc2018.util.logger.Logger;
 
 public class TimedDriveRoutine extends Routine {
 
@@ -63,7 +66,7 @@ public class TimedDriveRoutine extends Routine {
 	
 	@Override
 	public Commands cancel(Commands commands) {
-		System.out.println("Cancelling TimedDriveRoutine");
+		Logger.getInstance().logRobotThread(Level.FINE, "Cancelling TimedDriveRoutine");
 		state = DriveStraightRoutineState.DONE;
 		commands.wantedDriveState = Drive.DriveState.NEUTRAL;
 		drive.resetController();

@@ -10,8 +10,10 @@ import com.palyrobotics.frc2018.behavior.routines.drive.TimedDriveRoutine;
 import com.palyrobotics.frc2018.config.Constants;
 import com.palyrobotics.frc2018.config.Gains;
 import com.palyrobotics.frc2018.util.archive.DriveSignal;
+import com.palyrobotics.frc2018.util.logger.Logger;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 /**
  * Created by Nihar on 1/11/17.
@@ -35,7 +37,7 @@ public class TestAutoMode extends AutoModeBase {
 
 	@Override
 	public void prestart() {
-		System.out.println("Starting TestAutoMode");
+		Logger.getInstance().logRobotThread(Level.FINE, "Starting TestAutoMode");
 	}
 
 	private SequentialRoutine getDrop() {

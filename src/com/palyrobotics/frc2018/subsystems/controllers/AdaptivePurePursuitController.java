@@ -9,11 +9,13 @@ import com.palyrobotics.frc2018.subsystems.Drive;
 import com.palyrobotics.frc2018.util.Pose;
 import com.palyrobotics.frc2018.util.TalonSRXOutput;
 import com.palyrobotics.frc2018.util.archive.DriveSignal;
+import com.palyrobotics.frc2018.util.logger.Logger;
 import com.palyrobotics.frc2018.util.trajectory.*;
 import edu.wpi.first.wpilibj.Timer;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Level;
 
 /**
  * Implements an adaptive pure pursuit controller. See:
@@ -64,12 +66,13 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
             pose = new RigidTransform2d(robot_pose.getTranslation(),
                     robot_pose.getRotation().rotateBy(Rotation2d.fromRadians(Math.PI)));
         }
-        System.out.println("Current point: " + robot_pose.getTranslation());
+        Logger.getInstance().logSubsystemThread(Level.FINEST, "Current point", robot_pose.getTranslation());
         double distance_from_path = mPath.update(robot_pose.getTranslation());
 
         PathSegment.Sample lookahead_point = mPath.getLookaheadPoint(robot_pose.getTranslation(),
                 distance_from_path + mFixedLookahead);
-        System.out.println("Lookahead point: " + lookahead_point.translation.toString());
+        Logger.getInstance().logSubsystemThread(Level.FINEST, "Lookahead point", lookahead_point.translation);
+
         Optional<Circle> circle = joinPath(pose, lookahead_point.translation);
 
         double speed = lookahead_point.speed;
@@ -186,7 +189,7 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
     public DriveSignal update(RobotState state) {
     	//System.out.println("Number of observations during update: " + RobotPosition.getInstance().getNumObservations());
     		RigidTransform2d robot_pose = Robot.getRobotState().getLatestFieldToVehicle().getValue();
-    		System.out.println(robot_pose.toString());
+    		Logger.getInstance().logSubsystemThread(Level.FINEST, robot_pose);
         RigidTransform2d.Delta command = this.update(robot_pose, Timer.getFPGATimestamp());
         Kinematics.DriveVelocity setpoint = Kinematics.inverseKinematics(command);
         setpoint = new Kinematics.DriveVelocity(setpoint.left * Constants.kDriveTicksPerInch, setpoint.right * Constants.kDriveTicksPerInch);
@@ -202,6 +205,7 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
         final TalonSRXOutput
             left  = new TalonSRXOutput(ControlMode.Velocity, Gains.unnamedVelocity, setpoint.left),
             right = new TalonSRXOutput(ControlMode.Velocity, Gains.unnamedVelocity, setpoint.right);
+        System.out.println(robot_pose);
         return new DriveSignal(left, right);
     }
 

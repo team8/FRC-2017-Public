@@ -1,5 +1,7 @@
 package com.palyrobotics.frc2018.subsystems.controllers;
 
+import java.util.logging.Level;
+
 import com.palyrobotics.frc2018.config.Constants;
 import com.palyrobotics.frc2018.config.Gains;
 import com.palyrobotics.frc2018.config.RobotState;
@@ -9,6 +11,7 @@ import com.palyrobotics.frc2018.util.Pose;
 import com.palyrobotics.frc2018.util.SynchronousPID;
 import com.palyrobotics.frc2018.util.TalonSRXOutput;
 import com.palyrobotics.frc2018.util.archive.DriveSignal;
+import com.palyrobotics.frc2018.util.logger.Logger;
 
 public class DriveStraightController implements DriveController {
 
@@ -23,7 +26,7 @@ public class DriveStraightController implements DriveController {
 	
 	public DriveStraightController(Pose priorSetpoint, double distance) {
 		target = (priorSetpoint.leftEnc + priorSetpoint.rightEnc)/2 + (distance * Constants.kDriveTicksPerInch);
-		System.out.println("Target: "+target);
+		Logger.getInstance().logSubsystemThread(Level.INFO, "Target", target);
 		cachedPose = priorSetpoint;
 		
 		mGains = new Gains(.00035, 0.000004, 0.002, 0, 200, 0);
@@ -40,7 +43,7 @@ public class DriveStraightController implements DriveController {
 	@Override
 	public boolean onTarget() {
 		if (cachedPose == null) {
-			System.out.println("Cached pose is null");
+			Logger.getInstance().logSubsystemThread(Level.FINER, "Cached pose is null");
 			return false;
 		}
 		
@@ -64,8 +67,7 @@ public class DriveStraightController implements DriveController {
 		leftOutput.setPercentOutput(throttle + turn);
 		rightOutput.setPercentOutput(throttle - turn);
 		
-		System.out.println(forwardPID.getError());
-		
+		Logger.getInstance().logSubsystemThread(Level.FINEST, "Error", forwardPID.getError());		
 		return new DriveSignal(leftOutput, rightOutput);
 		
 		

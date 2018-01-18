@@ -1,5 +1,9 @@
 package com.palyrobotics.frc2018.vision.util;
 
+import java.util.logging.Level;
+
+import com.palyrobotics.frc2018.util.logger.Logger;
+
 /**
  * Base class for vision threads
  *
@@ -57,8 +61,7 @@ public abstract class VisionThreadBase implements Runnable {
                 Thread.sleep(m_updateRate);
                 m_timeAlive += m_updateRate / 1000.0;
             } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            	Logger.getInstance().logRobotThread(Level.FINEST, e);            }
         }
     }
 

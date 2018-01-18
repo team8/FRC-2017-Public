@@ -1,6 +1,9 @@
 package com.palyrobotics.frc2018.vision;
 
+import java.util.logging.Level;
+
 import com.palyrobotics.frc2018.config.Constants;
+import com.palyrobotics.frc2018.util.logger.Logger;
 import com.palyrobotics.frc2018.vision.networking.ReceiverBase;
 import com.palyrobotics.frc2018.vision.networking.VisionDataReceiver;
 import com.palyrobotics.frc2018.vision.networking.VisionVideoReceiver;
@@ -109,7 +112,7 @@ public class VisionManager extends VisionThreadBase {
 				try {
 					Thread.sleep(initAdbRetryCount*40);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					Logger.getInstance().logRobotThread(Level.FINEST, e);
 
 					return ConnectionState.GIVEN_UP;
 				}
@@ -151,7 +154,7 @@ public class VisionManager extends VisionThreadBase {
 		} catch (Exception e) {
 //			System.out.println("[Error] in VisionManager.StartADB(), "
 //					+ "could not connect..");
-			e.printStackTrace();
+			Logger.getInstance().logRobotThread(Level.FINEST, e);
 		}
 
 		if(connected){      // Adb server started successfully
@@ -176,7 +179,7 @@ public class VisionManager extends VisionThreadBase {
 			connected = true;
 		} catch (Exception e) {
 //			log("Could not connect in initialization.");
-			e.printStackTrace();
+			Logger.getInstance().logRobotThread(Level.FINEST, e);
 		}
 
 		if(connected) {     // App started successfully

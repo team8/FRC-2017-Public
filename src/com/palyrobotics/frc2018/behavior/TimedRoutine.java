@@ -2,9 +2,11 @@ package com.palyrobotics.frc2018.behavior;
 
 import com.palyrobotics.frc2018.config.Commands;
 import com.palyrobotics.frc2018.subsystems.Subsystem;
+import com.palyrobotics.frc2018.util.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Level;
 
 /**
  * Created by Nihar on 12/27/16.
@@ -45,7 +47,7 @@ public class TimedRoutine extends Routine {
 	@Override
 	public boolean finished() {
 		if (System.currentTimeMillis() > startTime + time) {
-			System.out.println("Timed out routine");
+			Logger.getInstance().logRobotThread(Level.FINE, "Timed out routine");
 			return true;
 		}
 		for (Routine r : mRoutines) {

@@ -1,10 +1,13 @@
 package com.palyrobotics.frc2018.subsystems.controllers;
 
+import java.util.logging.Level;
+
 import com.palyrobotics.frc2018.config.Constants;
 import com.palyrobotics.frc2018.config.RobotState;
 import com.palyrobotics.frc2018.subsystems.Drive;
 import com.palyrobotics.frc2018.util.Pose;
 import com.palyrobotics.frc2018.util.archive.DriveSignal;
+import com.palyrobotics.frc2018.util.logger.Logger;
 
 /**
  * Turns drivetrain using the gyroscope and bang-bang control loop
@@ -25,8 +28,9 @@ public class BangBangTurnAngleController implements Drive.DriveController {
 		this.mPower = Constants.kTurnInPlacePower;
 		this.mCachedPose = currentPose;
 		this.mTargetHeading = this.mCachedPose.heading + heading;
-		System.out.println("Starting Heading " + this.mCachedPose.heading);
-		System.out.println("Target heading: "+this.mTargetHeading);
+		Logger.getInstance().logSubsystemThread(Level.INFO, "Starting Heading", this.mCachedPose.heading);
+		Logger.getInstance().logSubsystemThread(Level.INFO, "Target Heading", this.mTargetHeading);
+
 	}
 	
 	@Override

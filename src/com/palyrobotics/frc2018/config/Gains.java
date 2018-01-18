@@ -1,6 +1,9 @@
 package com.palyrobotics.frc2018.config;
 
+import java.util.logging.Level;
+
 import com.palyrobotics.frc2018.config.dashboard.DashboardManager;
+import com.palyrobotics.frc2018.util.logger.Logger;
 
 public class Gains {
 	// Onboard motion profile aka trajectory follower
@@ -105,13 +108,13 @@ public class Gains {
 	
 	public static void initNetworkTableGains() {
 		if (DashboardManager.getInstance().pidTuning) {
-			System.out.println("Dashboard tuning currently removed");
+			Logger.getInstance().logRobotThread(Level.INFO, "Dashboard tuning currently removed");
 		}
 	}
 	
 	public static void updateNetworkTableGains() {
 		if (DashboardManager.getInstance().pidTuning) {
-			System.out.println("Dashboard tuning currently removed");
+			Logger.getInstance().logRobotThread(Level.INFO, "Dashboard tuning currently removed");
 		}
 	}
 }

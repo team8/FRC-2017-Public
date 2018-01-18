@@ -1,11 +1,13 @@
 package com.palyrobotics.frc2018.vision.networking;
 
 import com.palyrobotics.frc2018.config.Constants;
+import com.palyrobotics.frc2018.util.logger.Logger;
 import com.palyrobotics.frc2018.vision.VisionData;
 import com.palyrobotics.frc2018.vision.util.VisionUtil;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 public class VisionDataReceiver extends ReceiverBase {
 
@@ -61,7 +63,7 @@ public class VisionDataReceiver extends ReceiverBase {
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getInstance().logRobotThread(Level.FINEST, e);
 		}
 		
 	}

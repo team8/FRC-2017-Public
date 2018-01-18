@@ -5,8 +5,10 @@ import com.palyrobotics.frc2018.config.Commands;
 import com.palyrobotics.frc2018.subsystems.Drive;
 import com.palyrobotics.frc2018.subsystems.Subsystem;
 import com.palyrobotics.frc2018.util.archive.DriveSignal;
+import com.palyrobotics.frc2018.util.logger.Logger;
 
 import java.util.Optional;
+import java.util.logging.Level;
 
 public class DriveTimeRoutine extends Routine {
 	private long mEndTime;
@@ -40,7 +42,7 @@ public class DriveTimeRoutine extends Routine {
 
 	@Override
 	public Commands cancel(Commands commands) {
-		System.out.println("Cancelling");
+		Logger.getInstance().logRobotThread(Level.FINE, "Cancelling");
 		commands.wantedDriveState = Drive.DriveState.NEUTRAL;
 		drive.resetController();
 		drive.setNeutral();
