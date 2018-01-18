@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.palyrobotics.frc2018.config.Constants;
 import com.palyrobotics.frc2018.config.Gains;
 import com.palyrobotics.frc2018.config.RobotState;
+import com.palyrobotics.frc2018.config.dashboard.DashboardManager;
 import com.palyrobotics.frc2018.robot.Robot;
 import com.palyrobotics.frc2018.subsystems.Drive;
 import com.palyrobotics.frc2018.util.Pose;
@@ -39,16 +40,23 @@ public class TalonSRXDriveController implements Drive.DriveController {
 		
 		Pose drivePose = Robot.getRobotState().drivePose;
 		
-		setCanTableString(new double[] {
-				(drivePose.leftMotionMagicPos.isPresent()) ? drivePose.leftMotionMagicPos.get() : 0,
-				(drivePose.leftMotionMagicVel.isPresent()) ? drivePose.leftMotionMagicVel.get() : 0,
-				drivePose.leftEnc,
-				mSignal.leftMotor.getSetpoint() - drivePose.leftEnc,
-				(drivePose.rightMotionMagicPos.isPresent()) ? drivePose.rightMotionMagicPos.get() : 0,
-				(drivePose.rightMotionMagicVel.isPresent()) ? drivePose.rightMotionMagicVel.get() : 0,
-				drivePose.rightEnc,
-				mSignal.rightMotor.getSetpoint() - drivePose.rightEnc,
-		});
+		DashboardManager.getInstance().updateCANTable("dt_left_dist", Integer.toString((drivePose.leftMotionMagicPos.isPresent()) ? drivePose.leftMotionMagicPos.get() : 0));
+		DashboardManager.getInstance().updateCANTable("dt_velocity_left", Integer.toString((drivePose.leftMotionMagicVel.isPresent()) ? drivePose.leftMotionMagicVel.get() : 0));
+
+		DashboardManager.getInstance().updateCANTable("dt_right_dist", Integer.toString((drivePose.rightMotionMagicPos.isPresent()) ? drivePose.rightMotionMagicPos.get() : 0));
+		DashboardManager.getInstance().updateCANTable("dt_velocity_right", Integer.toString((drivePose.rightMotionMagicVel.isPresent()) ? drivePose.rightMotionMagicVel.get() : 0));
+
+		DashboardManager.getInstance().updateCANTable("dt_error_left", Double.toString(mSignal.leftMotor.getSetpoint() - drivePose.leftEnc));
+		DashboardManager.getInstance().updateCANTable("dt_error_right", Double.toString(mSignal.rightMotor.getSetpoint() - drivePose.rightEnc));
+
+//		(drivePose.leftMotionMagicVel.isPresent()) ? drivePose.leftMotionMagicVel.get() : 0,
+//				drivePose.leftEnc,
+//				mSignal.leftMotor.getSetpoint() - drivePose.leftEnc,
+//				(drivePose.rightMotionMagicPos.isPresent()) ? drivePose.rightMotionMagicPos.get() : 0,
+//				(drivePose.rightMotionMagicVel.isPresent()) ? drivePose.rightMotionMagicVel.get() : 0,
+//				drivePose.rightEnc,
+//				mSignal.rightMotor.getSetpoint() - drivePose.rightEnc,
+//		});
 
 		return this.mSignal;
 	}

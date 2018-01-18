@@ -1,6 +1,7 @@
 package com.palyrobotics.frc2018.auto;
 
 import com.palyrobotics.frc2018.auto.modes.TestAutoMode;
+import com.palyrobotics.frc2018.auto.modes.TestMotionMagicAutoMode;
 import com.palyrobotics.frc2018.auto.modes.TestTrajectoryAutoMode;
 import org.json.simple.JSONArray;
 
@@ -42,7 +43,7 @@ public class AutoModeSelector {
 
 	private AutoModeSelector() {
   /*1*/registerAutonomous(new TestAutoMode());
-  /*2*/registerAutonomous(new TestTrajectoryAutoMode());
+  /*2*/registerAutonomous(new TestMotionMagicAutoMode());
 	}
 
 	/**

@@ -224,6 +224,8 @@ class HardwareUpdater {
 		robotState.drivePose.lastRightEnc = robotState.drivePose.rightEnc;
 		robotState.drivePose.rightEnc = rightMasterTalon.getSelectedSensorPosition(0);
 		robotState.drivePose.rightEncVelocity = rightMasterTalon.getSelectedSensorVelocity(0);
+		System.out.println(robotState.drivePose.lastLeftEnc);
+		System.out.println(robotState.drivePose.lastRightEnc);
 
 		if (leftMasterTalon.getControlMode().equals(ControlMode.MotionMagic)) {
 			robotState.drivePose.leftMotionMagicPos = Optional.of(leftMasterTalon.getActiveTrajectoryPosition());
