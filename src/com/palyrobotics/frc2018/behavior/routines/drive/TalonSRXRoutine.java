@@ -50,13 +50,6 @@ public class TalonSRXRoutine extends Routine {
 		
 		if (relativeSetpoint) {
 			if (mSignal.leftMotor.getControlMode().equals(ControlMode.MotionMagic)) {
-
-
-				System.out.println(mSignal.leftMotor.getSetpoint());
-				System.out.println(robotState.drivePose.leftEnc);
-				System.out.println(mSignal.leftMotor.gains);
-				System.out.println(mSignal.leftMotor.cruiseVel);
-				System.out.println(mSignal.leftMotor.accel);
 				mSignal.leftMotor.setMotionMagic(mSignal.leftMotor.getSetpoint()+
 								robotState.drivePose.leftEnc,
 						mSignal.leftMotor.gains,
@@ -76,7 +69,6 @@ public class TalonSRXRoutine extends Routine {
 			}
 		}
 		drive.setTalonSRXController(mSignal);
-		System.out.println("Sent drivetrain signal "+mSignal.toString());
 	}
 
 	@Override
@@ -99,12 +91,12 @@ public class TalonSRXRoutine extends Routine {
 	@Override
 	public boolean finished() {
 		// Wait for controller to be added before finishing routine
-		if (mSignal.leftMotor.getSetpoint() != Robot.getRobotState().leftSetpoint) {
+		if (Math.abs(mSignal.leftMotor.getSetpoint() - Robot.getRobotState().leftSetpoint) > 1) {
 			System.out.println("Mismatched desired talon and actual talon setpoints! desired, actual");
 			System.out.println("Left: " + mSignal.leftMotor.getSetpoint()+", "+Robot.getRobotState().leftSetpoint);
 			return false;
 		}
-		else if (mSignal.rightMotor.getSetpoint() != Robot.getRobotState().rightSetpoint) {
+		else if (Math.abs(mSignal.rightMotor.getSetpoint() - Robot.getRobotState().rightSetpoint) > 1) {
 			System.out.println("Mismatched desired talon and actual talon setpoints! desired, actual");
 			System.out.println("Right: " + mSignal.rightMotor.getSetpoint()+", "+Robot.getRobotState().rightSetpoint);
 			return false;

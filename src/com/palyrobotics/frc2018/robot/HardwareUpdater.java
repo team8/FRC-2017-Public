@@ -168,9 +168,45 @@ class HardwareUpdater {
 		robotState.leftControlMode = leftMasterTalon.getControlMode();
 		robotState.rightControlMode = rightMasterTalon.getControlMode();
 
-		//TODO: sketchy, not exactly setpoint for all modes, do we even need this?
-		robotState.leftSetpoint = leftMasterTalon.getMotorOutputPercent();
-		robotState.rightSetpoint = rightMasterTalon.getMotorOutputPercent();
+        switch (robotState.leftControlMode) {
+            //Fall through
+            case Position:
+            case Velocity:
+            case MotionProfileArc:
+            case MotionProfile:
+            case MotionMagicArc:
+            case MotionMagic:
+                robotState.leftSetpoint = leftMasterTalon.getClosedLoopTarget(0);
+                break;
+            case Current:
+                robotState.leftSetpoint = leftMasterTalon.getOutputCurrent();
+                break;
+            //Fall through
+            case Follower:
+            case PercentOutput:
+                robotState.leftSetpoint = leftMasterTalon.getMotorOutputPercent();
+                break;
+        }
+
+        switch (robotState.rightControlMode) {
+            //Fall through
+            case Position:
+            case Velocity:
+            case MotionProfileArc:
+            case MotionProfile:
+            case MotionMagicArc:
+            case MotionMagic:
+                robotState.rightSetpoint = rightMasterTalon.getClosedLoopTarget(0);
+                break;
+            case Current:
+                robotState.rightSetpoint = rightMasterTalon.getOutputCurrent();
+                break;
+            //Fall through
+            case Follower:
+            case PercentOutput:
+                robotState.rightSetpoint = rightMasterTalon.getMotorOutputPercent();
+                break;
+        }
 		
 		PigeonIMU gyro = HardwareAdapter.DrivetrainHardware.getInstance().gyro;
 		if (gyro != null) {
