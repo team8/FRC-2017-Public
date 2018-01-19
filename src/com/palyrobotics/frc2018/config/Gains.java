@@ -11,11 +11,11 @@ public class Gains {
 	public static double k2018_UnnamedRightTrajectorykV_0 = 0.0946;
 	public static double k2018_UnnamedTrajectorykA = 0.025;
 	
-	public static final double k2018_UnnamedDriveVelocitykP = 6.0;
-	public static final double k2018_UnnamedDriveVelocitykI = 0.002;
-	public static final double k2018_UnnamedDriveVelocitykD = 85;
-	public static final double k2018_UnnamedDriveVelocitykF = 2.624;
-	public static final int k2018_UnnamedDriveVelocitykIzone = 800;
+	public static final double k2018_UnnamedDriveVelocitykP = 6.0/2;
+	public static final double k2018_UnnamedDriveVelocitykI = 0.002/2;
+	public static final double k2018_UnnamedDriveVelocitykD = 85/2;
+	public static final double k2018_UnnamedDriveVelocitykF = 2.624/2;
+	public static final int k2018_UnnamedDriveVelocitykIzone = 800/2;
 	public static final double k2018_UnnamedDriveVelocitykRampRate = 0.0;
 	public static final Gains unnamedVelocity = new Gains(k2018_UnnamedDriveVelocitykP, k2018_UnnamedDriveVelocitykI, k2018_UnnamedDriveVelocitykD,
 			k2018_UnnamedDriveVelocitykF, k2018_UnnamedDriveVelocitykIzone, k2018_UnnamedDriveVelocitykRampRate);

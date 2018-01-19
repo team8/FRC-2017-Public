@@ -34,7 +34,7 @@ public class TestTrajectoryAutoMode extends AutoModeBase {
 		// Path 1: Forward and left
 		path.add(new Waypoint(new Translation2d(0,0), 6.0));
 		path.add(new Waypoint(new Translation2d(40,0), 6.0));
-		path.add(new Waypoint(new Translation2d(40, 83.05), 0.0));
+		path.add(new Waypoint(new Translation2d(40, 40), 0.0));
 		
 		// Path 2: Lollipop
 		/*path.add(new Waypoint(new Translation2d(0,0), 6.0));

@@ -214,8 +214,9 @@ class HardwareUpdater {
         double left_distance = robotState.drivePose.leftEnc / Constants.kDriveTicksPerInch;
         double right_distance = robotState.drivePose.rightEnc / Constants.kDriveTicksPerInch;
 
-        Rotation2d gyro_angle = Rotation2d.fromRadians((right_distance - left_distance) * Constants.kTrackScrubFactor / Constants.kTrackEffectiveDiameter);
-        RigidTransform2d odometry = robotState.generateOdometryFromSensors(
+//        Rotation2d gyro_angle = Rotation2d.fromRadians((right_distance - left_distance) * Constants.kTrackScrubFactor / Constants.kTrackEffectiveDiameter);
+        Rotation2d gyro_angle = Rotation2d.fromDegrees(-robotState.drivePose.heading);
+		RigidTransform2d odometry = robotState.generateOdometryFromSensors(
                 left_distance - robotState.drivePose.lastLeftEnc / Constants.kDriveTicksPerInch,
 				right_distance - robotState.drivePose.lastRightEnc / Constants.kDriveTicksPerInch, gyro_angle);
         RigidTransform2d.Delta velocity = Kinematics.forwardKinematics(

@@ -202,7 +202,6 @@ public class AdaptivePurePursuitController implements Drive.DriveController {
         final TalonSRXOutput
             left  = new TalonSRXOutput(ControlMode.Velocity, Gains.unnamedVelocity, setpoint.left),
             right = new TalonSRXOutput(ControlMode.Velocity, Gains.unnamedVelocity, setpoint.right);
-
         return new DriveSignal(left, right);
     }
 
